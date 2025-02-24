@@ -1,6 +1,7 @@
 "use client";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import SecureLS from "secure-ls";
+import API_URL from "@/config";
 
 // Initialize SecureLS
 const ls = new SecureLS({
@@ -10,7 +11,7 @@ const ls = new SecureLS({
 
 // Create Axios instance
 export const instance = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: API_URL,
   // timeout: 2500,
 });
 
