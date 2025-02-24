@@ -1,0 +1,199 @@
+[33mcommit 3613713fecac0a1c7417411a9a40c74eab1cfa78[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: hermanpouokam <85396309+hermanpouokam@users.noreply.github.com>
+Date:   Thu Feb 13 09:52:39 2025 +0100
+
+    Initial commit
+
+[1mdiff --git a/.eslintrc.json b/.eslintrc.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..bffb357[m
+[1m--- /dev/null[m
+[1m+++ b/.eslintrc.json[m
+[36m@@ -0,0 +1,3 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "extends": "next/core-web-vitals"[m
+[32m+[m[32m}[m
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mnew file mode 100644[m
+[1mindex 0000000..fd3dbb5[m
+[1m--- /dev/null[m
+[1m+++ b/.gitignore[m
+[36m@@ -0,0 +1,36 @@[m
+[32m+[m[32m# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.[m
+[32m+[m
+[32m+[m[32m# dependencies[m
+[32m+[m[32m/node_modules[m
+[32m+[m[32m/.pnp[m
+[32m+[m[32m.pnp.js[m
+[32m+[m[32m.yarn/install-state.gz[m
+[32m+[m
+[32m+[m[32m# testing[m
+[32m+[m[32m/coverage[m
+[32m+[m
+[32m+[m[32m# next.js[m
+[32m+[m[32m/.next/[m
+[32m+[m[32m/out/[m
+[32m+[m
+[32m+[m[32m# production[m
+[32m+[m[32m/build[m
+[32m+[m
+[32m+[m[32m# misc[m
+[32m+[m[32m.DS_Store[m
+[32m+[m[32m*.pem[m
+[32m+[m
+[32m+[m[32m# debug[m
+[32m+[m[32mnpm-debug.log*[m
+[32m+[m[32myarn-debug.log*[m
+[32m+[m[32myarn-error.log*[m
+[32m+[m
+[32m+[m[32m# local env files[m
+[32m+[m[32m.env*.local[m
+[32m+[m
+[32m+[m[32m# vercel[m
+[32m+[m[32m.vercel[m
+[32m+[m
+[32m+[m[32m# typescript[m
+[32m+[m[32m*.tsbuildinfo[m
+[32m+[m[32mnext-env.d.ts[m
+[1mdiff --git a/README.md b/README.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c403366[m
+[1m--- /dev/null[m
+[1m+++ b/README.md[m
+[36m@@ -0,0 +1,36 @@[m
+[32m+[m[32mThis is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).[m
+[32m+[m
+[32m+[m[32m## Getting Started[m
+[32m+[m
+[32m+[m[32mFirst, run the development server:[m
+[32m+[m
+[32m+[m[32m```bash[m
+[32m+[m[32mnpm run dev[m
+[32m+[m[32m# or[m
+[32m+[m[32myarn dev[m
+[32m+[m[32m# or[m
+[32m+[m[32mpnpm dev[m
+[32m+[m[32m# or[m
+[32m+[m[32mbun dev[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32mOpen [http://localhost:3000](http://localhost:3000) with your browser to see the result.[m
+[32m+[m
+[32m+[m[32mYou can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.[m
+[32m+[m
+[32m+[m[32mThis project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.[m
+[32m+[m
+[32m+[m[32m## Learn More[m
+[32m+[m
+[32m+[m[32mTo learn more about Next.js, take a look at the following resources:[m
+[32m+[m
+[32m+[m[32m- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.[m
+[32m+[m[32m- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.[m
+[32m+[m
+[32m+[m[32mYou can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome![m
+[32m+[m
+[32m+[m[32m## Deploy on Vercel[m
+[32m+[m
+[32m+[m[32mThe easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.[m
+[32m+[m
+[32m+[m[32mCheck out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.[m
+[1mdiff --git a/components.json b/components.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8c574b7[m
+[1m--- /dev/null[m
+[1m+++ b/components.json[m
+[36m@@ -0,0 +1,17 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "$schema": "https://ui.shadcn.com/schema.json",[m
+[32m+[m[32m  "style": "default",[m
+[32m+[m[32m  "rsc": true,[m
+[32m+[m[32m  "tsx": true,[m
+[32m+[m[32m  "tailwind": {[m
+[32m+[m[32m    "config": "tailwind.config.ts",[m
+[32m+[m[32m    "css": "src/app/globals.css",[m
+[32m+[m[32m    "baseColor": "slate",[m
+[32m+[m[32m    "cssVariables": true,[m
+[32m+[m[32m    "prefix": ""[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "aliases": {[m
+[32m+[m[32m    "components": "@/components",[m
+[32m+[m[32m    "utils": "@/lib/utils"[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/next.config.mjs b/next.config.mjs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..4678774[m
+[1m--- /dev/null[m
+[1m+++ b/next.config.mjs[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32m/** @type {import('next').NextConfig} */[m
+[32m+[m[32mconst nextConfig = {};[m
+[32m+[m
+[32m+[m[32mexport default nextConfig;[m
+[1mdiff --git a/package-lock.json b/package-lock.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8971c92[m
+[1m--- /dev/null[m
+[1m+++ b/package-lock.json[m
+[36m@@ -0,0 +1,9759 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "name": "inventoryflow_client",[m
+[32m+[m[32m  "version": "0.1.0",[m
+[32m+[m[32m  "lockfileVersion": 3,[m
+[32m+[m[32m  "requires": true,[m
+[32m+[m[32m  "packages": {[m
+[32m+[m[32m    "": {[m
+[32m+[m[32m      "name": "inventoryflow_client",[m
+[32m+[m[32m      "version": "0.1.0",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "@emotion/react": "^11.13.0",[m
+[32m+[m[32m        "@emotion/styled": "^11.13.0",[m
+[32m+[m[32m        "@mui/icons-material": "^5.16.6",[m
+[32m+[m[32m        "@mui/material": "^5.16.6",[m
+[32m+[m[32m        "@radix-ui/react-alert-dialog": "^1.1.1",[m
+[32m+[m[32m        "@radix-ui/react-checkbox": "^1.1.1",[m
+[32m+[m[32m        "@radix-ui/react-dialog": "^1.1.1",[m
+[32m+[m[32m        "@radix-ui/react-dropdown-menu": "^2.1.1",[m
+[32m+[m[32m        "@radix-ui/react-navigation-menu": "^1.2.0",[m
+[32m+[m[32m        "@radix-ui/react-popover": "^1.1.1",[m
+[32m+[m[32m        "@radix-ui/react-scroll-area": "^1.1.0",[m
+[32m+[m[32m        "@radix-ui/react-select": "^2.1.1",[m
+[32m+[m[32m        "@radix-ui/react-slot": "^1.1.0",[m
+[32m+[m[32m        "@radix-ui/react-switch": "^1.1.0",[m
+[32m+[m[32m        "@radix-ui/react-toast": "^1.2.1",[m
+[32m+[m[32m        "@react-pdf/renderer": "^4.1.6",[m
+[32m+[m[32m        "@reduxjs/toolkit": "^2.2.7",[m
+[32m+[m[32m        "@stripe/react-stripe-js": "^3.1.1",[m
+[32m+[m[32m        "@stripe/stripe-js": "^5.6.0",[m
+[32m+[m[32m        "@tanstack/react-table": "^8.20.1",[m
+[32m+[m[32m        "@types/react-redux": "^7.1.33",[m
+[32m+[m[32m        "@types/styled-components": "^5.1.34",[m
+[32m+[m[32m        "axios": "^1.7.3",[m
+[32m+[m[32m        "blob-stream": "^0.1.3",[m
+[32m+[m[32m        "class-variance-authority": "^0.7.0",[m
+[32m+[m[32m        "clsx": "^2.1.1",[m
+[32m+[m[32m        "cmdk": "1.0.0",[m
+[32m+[m[32m        "date-fns": "^3.6.0",[m
+[32m+[m[32m        "file-saver": "^2.0.5",[m
+[32m+[m[32m        "framer-motion": "^12.4.2",[m
+[32m+[m[32m        "html-to-pdf": "^0.1.11",[m
+[32m+[m[32m        "json2csv": "^6.0.0-alpha.2",[m
+[32m+[m[32m        "jsonwebtoken": "^9.0.2",[m
+[32m+[m[32m        "libphonenumber-js": "^1.11.19",[m
+[32m+[m[32m        "lucide-react": "^0.424.0",[m
+[32m+[m[32m        "moment": "^2.30.1",[m
+[32m+[m[32m        "next": "14.2.5",[m
+[32m+[m[32m        "nookies": "^2.5.2",[m
+[32m+[m[32m        "pdf-lib": "^1.17.1",[m
+[32m+[m[32m        "pdfkit": "^0.15.0",[m
+[32m+[m[32m        "react": "^18",[m
+[32m+[m[32m        "react-day-picker": "8.10.1",[m
+[32m+[m[32m        "react-dom": "^18",[m
+[32m+[m[32m        "react-hook-form": "^7.54.2",[m
+[32m+[m[32m        "react-imask": "^7.6.1",[m
+[32m+[m[32m        "react-input-mask": "^2.0.4",[m
+[32m+[m[32m        "react-phone-input-2": "^2.15.1",[m
+[32m+[m[32m        "react-phone-number-input": "^3.4.11",[m
+[32m+[m[32m        "react-redux": "^9.1.2",[m
+[32m+[m[32m        "recharts": "
