@@ -1,0 +1,12 @@
+[
+  {
+    "customer": 1,
+    "delivery_date": "2023-10-10T00:00:00Z",
+    "state": "created",
+    "product_bills": [
+      { "product": 1, "sell_price": 1, "quantity": 2 },
+      { "product": 1, "sell_price": 1, "quantity": 3 },
+      { "product": 2, "sell_price": 2, "quantity": 1 }
+    ]
+  }
+]
