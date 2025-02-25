@@ -596,9 +596,8 @@ export default function Page() {
               )}
               {inputs.map((input) => {
                 if (input.type === "select" && Array.isArray(input.options)) {
-                  console.log(input.options);
                   return (
-                    <div>
+                    <div key={input.name}>
                       <Combobox
                         RightIcon={ChevronDown}
                         options={
@@ -667,6 +666,7 @@ export default function Page() {
                 ) {
                   return (
                     <TextField
+                      key={input.name}
                       fullWidth
                       margin="dense"
                       label={input.label}

@@ -452,7 +452,7 @@ function Page() {
         </div>
       </div>
       <div className="space-y-5  yshadow border select-none border-neutral-300 rounded-lg bg-white p-5">
-        <h3 className="font-medium text-lg">Historique d'achat</h3>
+        <h3 className="font-medium text-lg">Historique d&apos;achat</h3>
         <DataTableDemo
           setTableData={setTable}
           columns={columns}

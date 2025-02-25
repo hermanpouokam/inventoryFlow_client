@@ -288,7 +288,7 @@ export const ActionComponent = ({
                           employee.is_deliverer == true
                       ),
                     ].map((employee) => (
-                      <MenuItem value={employee.id}>{employee.name}</MenuItem>
+                      <MenuItem key={employee.id} value={employee.id}>{employee.name}</MenuItem>
                     ))}
                   </MuiSelect>
                 </FormControl>

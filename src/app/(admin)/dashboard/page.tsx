@@ -226,7 +226,8 @@ export default function Page() {
         bill.total_amount_with_taxes_fees > parseFloat(bill?.paid)
     );
     const unpaidBillAmount = unpaidBills.reduce(
-      (acc, curr) => acc + (curr.total_amount_with_taxes_fees - (curr.paid ?? 0)),
+      (acc, curr) =>
+        acc + (curr.total_amount_with_taxes_fees - (curr.paid ?? 0)),
       0
     );
 
@@ -591,8 +592,7 @@ export default function Page() {
   const [loadingData, setLoadingData] = React.useState(false);
 
   useEffect(() => {
-
-    document.title = 'Tableau de bord'
+    document.title = "Tableau de bord";
     setLoadingData(true);
     const groupedBills = groupBillsBy(
       bills.filter((bill) => bill.state !== "created"),
@@ -836,7 +836,7 @@ export default function Page() {
                 <div className="flex flex-col justify-center items-center">
                   <BadgeX className="w-12 h-12 text-muted-foreground" />
                   <h2 className="text-base font-semibold">
-                    Vous n'avez aucun employé
+                    Vous n&aquos;avez aucun employé
                   </h2>
                 </div>
               </div>

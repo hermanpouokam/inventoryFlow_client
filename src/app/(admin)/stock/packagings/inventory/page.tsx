@@ -122,7 +122,7 @@ export default function Page() {
             className="text-center w-[180px]"
             // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            N<sup>o</sup> d'inventaire
+            N<sup>o</sup> d&apos;inventaire
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
           </div>
         );
@@ -347,13 +347,13 @@ export default function Page() {
                   onClick={handleValidateInventory}
                 >
                   <ArrowDown size={14} className="mr-3 w-4 h-4" />
-                  Validé l'inventaire
+                  Validé l&apos;inventaire
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem onClick={handleOpenPDF}>
                 {" "}
                 <Printer className="mr-3 w-4 h-4" size={14} />
-                Imprimer l'inventaire
+                Imprimer l&apos;inventaire
               </DropdownMenuItem>
               {!row.original.is_validated && (
                 <>
@@ -364,7 +364,7 @@ export default function Page() {
                   >
                     {" "}
                     <Trash className="mr-3 w-4 h-4" size={14} />
-                    Supprimer l'inventaire
+                    Supprimer l&apos;inventaire
                   </DropdownMenuItem>
                 </>
               )}
@@ -444,7 +444,7 @@ export default function Page() {
         </div>
       </div>
       <CardBodyContent>
-        <h3>Liste d'inventaire</h3>
+        <h3>Liste d&apos;inventaire</h3>
         <DataTableDemo
           setTableData={setTable}
           columns={columns}

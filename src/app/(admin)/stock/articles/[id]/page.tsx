@@ -182,7 +182,7 @@ export default function Page({ params }: { params: { id: string } }) {
   };
   if (error) {
     <div className="flex justify-center items-center h-full w-full">
-      Impossile d'afficher les details de produits
+      Impossile d&apos;afficher les details de produits
     </div>;
   }
 
@@ -266,6 +266,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {inputData.map((input) => (
             <InputComponent
+              key={input?.name}
               input={input}
               isSelected={selectedInput === input?.name}
               onSelect={(el) => setSelectedInput(el)}
@@ -292,6 +293,7 @@ export default function Page({ params }: { params: { id: string } }) {
             ?.sort((a, b) => a.price - b.price)
             ?.map((price) => (
               <InputPrice
+                key={price.id}
                 isSelected={selectedInput === `price${price.id}`}
                 input={price}
                 onSelect={(el) => setSelectedInput(el)}
@@ -354,6 +356,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <DialogContent className="md:w-[500px]">
             {inputs.map((input) => (
               <TextField
+                key={input.name}
                 autoFocus
                 required={input.required}
                 margin="dense"

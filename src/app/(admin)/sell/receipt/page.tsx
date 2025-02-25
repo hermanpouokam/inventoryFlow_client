@@ -178,6 +178,149 @@ export default function Page() {
     }
   }, [dispatch, selectedSalespoint]);
 
+  const ActionComponent = ({ row }: { row: any }) => {
+    const bill = row.original;
+    const [open, setOpen] = React.useState(false);
+    const [openPopup, setOpenPopup] = React.useState(false);
+
+    const PopUp = ({ isOpen }: { isOpen: boolean }) => {
+      const handleClose = () => {
+        setOpenPopup(false);
+      };
+
+      return (
+        <MuiDialog
+          open={isOpen}
+          onClose={handleClose}
+          PaperProps={{
+            component: "form",
+            onSubmit: onSubmit,
+          }}
+        >
+          <MuiDialogTitle>
+            Encaisser la facture {bill.bill_number}
+          </MuiDialogTitle>
+          <MuiDialogContent>
+            <DialogContentText>
+              Entrez le montant verser pour cette facture et validez
+            </DialogContentText>
+            <div className="mt-2"></div>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              name="total_amount"
+              label="Montant total"
+              value={bill.total_amount_with_taxes_fees}
+              type="number"
+              size="small"
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              name="paid_amount"
+              label="Montant payé"
+              type="number"
+              size="small"
+              defaultValue={bill.total_amount_with_taxes_fees}
+              fullWidth
+            />
+            <input type="text" hidden={true} name="bill_id" value={bill.id} />
+          </MuiDialogContent>
+          <DialogActions>
+            <MuiButton disabled={loading} onClick={handleClose} color="error">
+              Annuler
+            </MuiButton>
+            <MuiButton disabled={loading} type="submit" color="success">
+              {loading ? "Veuillez patienter..." : "Encaisser"}
+            </MuiButton>
+          </DialogActions>
+        </MuiDialog>
+      );
+    };
+
+    const handleOpenPdf = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/generate-pdf", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ bill }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Error fetching PDF");
+        }
+
+        const pdfBlob = await response.blob();
+
+        const blobUrl = URL.createObjectURL(pdfBlob);
+
+        window.open(blobUrl, "_blank");
+      } catch (error) {
+        console.error("Failed to fetch PDF:", error);
+      } finally {
+      }
+    };
+
+    return (
+      <>
+        <PopUp isOpen={openPopup} />
+        <Dialog open={open}>
+          <DialogContent className="sm:max-w-full max-h-full overflow-auto p-5">
+            <DialogHeader>
+              <DialogTitle>{bill.bill_number}</DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+            <div className="">
+              <BillDetails bill={bill} setClose={() => setOpen(false)} />
+            </div>
+            <DialogFooter className="sm:justify-start">
+              <DialogClose asChild>
+                <Button
+                  onClick={() => setOpen(false)}
+                  type="button"
+                  variant="destructive"
+                >
+                  Fermer
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <EllipsisVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => handleOpenPdf()}>
+              <EyeIcon size={14} className="mr-3" />
+              Voir les details
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpenPopup(true)}>
+              {" "}
+              <ArrowDownToLine className="mr-3" size={14} />
+              Retour d&apos;emballage
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpenPopup(true)}>
+              {" "}
+              <WalletCards className="mr-3" size={14} />
+              Encaisser la facture
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </>
+    );
+  };
+
   const columns: ColumnDef<Bill>[] = [
     {
       id: "select",
@@ -342,157 +485,7 @@ export default function Page() {
       id: "actions",
       enableHiding: false,
       header: () => <div className="text-left w-[50px]">Actions</div>,
-      cell: ({ row }) => {
-        const bill = row.original;
-        const [open, setOpen] = React.useState(false);
-        const [openPopup, setOpenPopup] = React.useState(false);
-
-        const PopUp = ({ isOpen }: { isOpen: boolean }) => {
-          const handleClose = () => {
-            setOpenPopup(false);
-          };
-
-          return (
-            <MuiDialog
-              open={isOpen}
-              onClose={handleClose}
-              PaperProps={{
-                component: "form",
-                onSubmit: onSubmit,
-              }}
-            >
-              <MuiDialogTitle>
-                Encaisser la facture {bill.bill_number}
-              </MuiDialogTitle>
-              <MuiDialogContent>
-                <DialogContentText>
-                  Entrez le montant verser pour cette facture et validez
-                </DialogContentText>
-                <div className="mt-2"></div>
-                <TextField
-                  autoFocus
-                  required
-                  margin="dense"
-                  name="total_amount"
-                  label="Montant total"
-                  value={bill.total_amount_with_taxes_fees}
-                  type="number"
-                  size="small"
-                  fullWidth
-                />
-                <TextField
-                  autoFocus
-                  required
-                  margin="dense"
-                  name="paid_amount"
-                  label="Montant payé"
-                  type="number"
-                  size="small"
-                  defaultValue={bill.total_amount_with_taxes_fees}
-                  fullWidth
-                />
-                <input
-                  type="text"
-                  hidden={true}
-                  name="bill_id"
-                  value={bill.id}
-                />
-              </MuiDialogContent>
-              <DialogActions>
-                <MuiButton
-                  disabled={loading}
-                  onClick={handleClose}
-                  color="error"
-                >
-                  Annuler
-                </MuiButton>
-                <MuiButton disabled={loading} type="submit" color="success">
-                  {loading ? "Veuillez patienter..." : "Encaisser"}
-                </MuiButton>
-              </DialogActions>
-            </MuiDialog>
-          );
-        };
-
-        const handleOpenPdf = async () => {
-          try {
-            const response = await fetch("http://localhost:5000/generate-pdf", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ bill }),
-            });
-
-            if (!response.ok) {
-              throw new Error("Error fetching PDF");
-            }
-
-            const pdfBlob = await response.blob();
-
-            const blobUrl = URL.createObjectURL(pdfBlob);
-
-            window.open(blobUrl, "_blank");
-          } catch (error) {
-            console.error("Failed to fetch PDF:", error);
-          } finally {
-          }
-        };
-
-        return (
-          <>
-            <PopUp isOpen={openPopup} />
-            <Dialog open={open}>
-              <DialogContent className="sm:max-w-full max-h-full overflow-auto p-5">
-                <DialogHeader>
-                  <DialogTitle>{bill.bill_number}</DialogTitle>
-                  <DialogDescription></DialogDescription>
-                </DialogHeader>
-                <div className="">
-                  <BillDetails bill={bill} setClose={() => setOpen(false)} />
-                </div>
-                <DialogFooter className="sm:justify-start">
-                  <DialogClose asChild>
-                    <Button
-                      onClick={() => setOpen(false)}
-                      type="button"
-                      variant="destructive"
-                    >
-                      Fermer
-                    </Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <EllipsisVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleOpenPdf()}>
-                  <EyeIcon size={14} className="mr-3" />
-                  Voir les details
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setOpenPopup(true)}>
-                  {" "}
-                  <ArrowDownToLine className="mr-3" size={14} />
-                  Retour d'emballage
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setOpenPopup(true)}>
-                  {" "}
-                  <WalletCards className="mr-3" size={14} />
-                  Encaisser la facture
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </>
-        );
-      },
+      cell: ({ row }) => <ActionComponent row={row} />,
     },
   ];
 

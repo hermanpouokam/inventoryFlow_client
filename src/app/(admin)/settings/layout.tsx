@@ -53,7 +53,7 @@ export default function RootLayout({
             {menu.map((el, i) => {
               const Icon = el.icon;
               return (
-                <div className="w-full">
+                <div key={i} className="w-full">
                   <Link
                     href={el.link}
                     className={cn(

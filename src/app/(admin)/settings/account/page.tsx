@@ -153,7 +153,7 @@ export default function Page() {
         </div>
       </div>
       <div className="">
-        <label htmlFor="username">Nom d'utilisateur</label>
+        <label htmlFor="username">Nom d&apos;utilisateur</label>
         <TextField
           type="text"
           id="username"

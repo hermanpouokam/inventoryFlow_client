@@ -918,7 +918,7 @@ export default function Page() {
         </MuiDialogTitle>
         <MuiDialogContent>
           <DialogContentText>
-            Voulez-vous ajouter "{age?.price}" comme prix par defaut de{" "}
+            Voulez-vous ajouter &quot;{age?.price}&quot; comme prix par defaut de{" "}
             <b>{customer?.name}</b>
           </DialogContentText>
         </MuiDialogContent>

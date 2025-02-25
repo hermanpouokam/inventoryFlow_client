@@ -368,11 +368,11 @@ export default function Page() {
         <CardBodyContent className="space-y-5">
           <ul className="px-1 text-sm font-medium text-orange-700">
             <li>
-              Vous ne pouvez faire qu'un inventaire par jour de préférence le
+              Vous ne pouvez faire qu&apos;un inventaire par jour de préférence le
               matin.
             </li>
             <li>
-              Vous ne pouvez faire un inventaire que si vous n'avez pas aucune
+              Vous ne pouvez faire un inventaire que si vous n&apos;avez pas aucune
               facture pour la journée.
             </li>
             <li>
@@ -384,9 +384,9 @@ export default function Page() {
               lendemain
             </li>
             <li>
-              Vous ne pouvez faire d'inventaire que sur les emballages vides car
-              les emballages pleins s'ajustent automatiment avec les inventaires
-              d'articles.
+              Vous ne pouvez faire d&apos;inventaire que sur les emballages vides car
+              les emballages pleins s&apos;ajustent automatiment avec les inventaires
+              d&apos;articles.
             </li>
           </ul>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-5">
@@ -493,7 +493,7 @@ export default function Page() {
                     <Save className="h-4 w-4" />
                   </>
                 )}
-                <span className="">Enregister l'inventaire </span>
+                <span className="">Enregister l&apos;inventaire </span>
               </Button>
             </div>
           </div>

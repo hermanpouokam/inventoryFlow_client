@@ -424,8 +424,8 @@ export default function Page() {
       <form autoComplete="off" action={handleAddProduct}>
         <CardBodyContent className="space-y-5">
           <h2 className="text-red-500 text-base font-medium">
-            NB: Pour tout article possedant un emballage assurez vous d'avoir le
-            nombre d'emballages vides correspondant.
+            NB: Pour tout article possedant un emballage assurez vous d&aquos;avoir le
+            nombre d&aquos;emballages vides correspondant.
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-5">
             <Combobox

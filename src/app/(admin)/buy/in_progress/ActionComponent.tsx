@@ -247,6 +247,7 @@ export const ActionComponent = ({
 
                   return (
                     <AlertDialogDescription
+                      key={key}
                       className={cn(
                         key == "balance" ? "text-red-500" : "text-neutral-800"
                       )}

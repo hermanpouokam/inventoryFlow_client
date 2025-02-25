@@ -218,7 +218,7 @@ export default function Page({ params }: { params: { id: string } }) {
         )}
         <div className="mb-3">
           {bill?.taxes.map((tax) => (
-            <div className="grid grid-cols-2 items-center">
+            <div key={tax.tax_name} className="grid grid-cols-2 items-center">
               <div className="">
                 <h2 className="text-base text-right font-semibold">
                   {tax.tax_name}
