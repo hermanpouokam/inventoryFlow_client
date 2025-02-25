@@ -1,6 +1,6 @@
 "use client";
 import SecureLS from "secure-ls";
-import { instance } from "./fetch";
+import { instance } from "./fetch"; 
 
 // Initialisation conditionnelle côté client
 let ls: SecureLS | null = null;
