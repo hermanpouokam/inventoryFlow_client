@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-export const dynamic = "force-dynamic"; // ⬅️ Empêche le prerendering
-
 import { TextField, LinearProgress } from "@mui/material";
 import { inputs } from "./inputs";
 import { FormEvent, useCallback, useLayoutEffect, useState } from "react";
