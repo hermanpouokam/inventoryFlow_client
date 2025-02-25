@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { instance } from "@/components/auth";
+import { instance } from "@/components/fetch";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface PackagingsState {

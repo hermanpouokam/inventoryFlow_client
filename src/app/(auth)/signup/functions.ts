@@ -1,4 +1,4 @@
-import { instance } from "@/components/auth";
+import { instance } from "@/components/fetch";
 
 const handlePaymentSuccess = async (paymentIntentId, amount, planId) => {
   try {

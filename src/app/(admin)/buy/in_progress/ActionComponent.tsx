@@ -1,25 +1,12 @@
-import InvoicePDF from "@/app/pdf/invoiceA4Pdf";
-import InvoiceSmallPDF from "@/app/pdf/invoiceSmallPDF";
+//@ts-nocheck
 import {
-  AlertDialogAction,
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { BlobProvider } from "@react-pdf/renderer";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -41,10 +28,6 @@ import {
 } from "lucide-react";
 import {
   CircularProgress,
-  FormControl,
-  InputLabel,
-  Select as MuiSelect,
-  MenuItem,
   DialogTitle as MuiDialogTitle,
   Dialog as MuiDialog,
   DialogContent as MuiDialogContent,
@@ -56,7 +39,6 @@ import {
 
 import ReactDOM from "react-dom/client";
 import { useToast } from "@/components/ui/use-toast";
-import { updateDeliverer } from "@/components/fetch";
 import { check_warnings, receiptSupply } from "./functions";
 import { cn } from "@/lib/utils";
 import SupplyPdf from "@/app/pdf/supplyPdf";
@@ -76,7 +58,7 @@ export const ActionComponent = ({
   const [open, setOpen] = useState(false);
   const [openModalDelete, setOpenModalDelete] = React.useState(false);
   const [Muiopen, setMuiOpen] = React.useState(false);
-  const [warnings, setWarnings] = React.useState(null);
+  const [warnings, setWarnings] = React.useState({});
   const [loadingState, setLoadingState] = useState(false);
 
   const { toast } = useToast();
@@ -241,8 +223,8 @@ export const ActionComponent = ({
                   {/*  @ts-ignore */}
                   {warnings?.message}
                 </AlertDialogDescription>
-              ) : (
-                warnings.warnings.map((warning) => {
+              ) : warnings?.warnings ? (
+                warnings?.warnings.map((warning: any) => {
                   const key = Object.keys(warning)[0];
 
                   return (
@@ -256,7 +238,7 @@ export const ActionComponent = ({
                     </AlertDialogDescription>
                   );
                 })
-              )
+              ) : null
             ) : (
               <></>
             )}

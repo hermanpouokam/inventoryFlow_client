@@ -1,4 +1,3 @@
-import { instance } from "@/components/auth";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface State {

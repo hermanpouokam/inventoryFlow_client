@@ -1,5 +1,5 @@
 // redux/yourSlice.ts
-import { getUserData, instance } from "@/components/auth";
+import { instance } from "@/components/fetch";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface YourState {
@@ -29,8 +29,8 @@ const initialState: YourState = {
 export const getCurrentUser = createAsyncThunk(
   "user/getCurrentUser",
   async () => {
-    const user = await getUserData();
-    return user;
+    const user = await instance.get(`/current-user/`);
+    return user.data;
   }
 );
 

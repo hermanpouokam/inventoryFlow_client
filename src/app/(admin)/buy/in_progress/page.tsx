@@ -40,9 +40,9 @@ function Page() {
   const [selectedSalesPoints, setSelectedSalesPoints] = React.useState<
     SalesPoint[]
   >([]);
-  const [selectedSuppliers, setSelectedSuppliers] = React.useState<
-    Supplier[]
-  >([]);
+  const [selectedSuppliers, setSelectedSuppliers] = React.useState<Supplier[]>(
+    []
+  );
 
   const dispatch: AppDispatch = useDispatch();
 
@@ -308,6 +308,7 @@ function Page() {
       header: () => <div className="text-left w-[50px]">Actions</div>,
       cell: ({ row }) => (
         <ActionComponent
+          page="in_progress"
           supply={row.original}
           onGetData={getData}
           onSetLoading={(el) => setLoading(el)}
@@ -346,8 +347,8 @@ function Page() {
 
   React.useEffect(() => {
     getData();
-    if(salespointStatus== 'idle'){
-      dispatch(fetchSalesPoints())
+    if (salespointStatus == "idle") {
+      dispatch(fetchSalesPoints());
     }
   }, []);
 
@@ -391,14 +392,14 @@ function Page() {
       <div className="space-y-5  yshadow border select-none border-neutral-300 rounded-lg bg-white p-5">
         <h3 className="font-medium text-lg">Bon de commande en attente</h3>
         <h3 className="font-medium text-base text-red-600">
-          NB: si pour chaque article possedant des emballages vous n&apos;en disposez
-          pas suffisament des frais supplementaires y afférent s'appliqueront
-          lors du paiment.
+          NB: si pour chaque article possedant des emballages vous n&apos;en
+          disposez pas suffisament des frais supplementaires y afférent
+          s'appliqueront lors du paiment.
         </h3>
         <DataTableDemo
           setTableData={setTable}
           columns={columns}
-          filterAttributes={['number']}
+          filterAttributes={["number"]}
           searchText=""
           data={data.map((el, index) => {
             return { ...el, number: index + 1 };
@@ -454,4 +455,4 @@ function Page() {
   );
 }
 
-export default page;
+export default Page;

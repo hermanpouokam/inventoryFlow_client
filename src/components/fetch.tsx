@@ -3,53 +3,62 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import SecureLS from "secure-ls";
 import API_URL from "@/config";
 
-// Initialize SecureLS
-const ls = new SecureLS({
-  encodingType: "aes",
-  encryptionSecret: "interact-app",
-});
+// Vérifier si on est côté client avant d'initialiser SecureLS
+let ls: SecureLS | null = null;
 
-// Create Axios instance
+if (typeof window !== "undefined") {
+  ls = new SecureLS({
+    encodingType: "aes",
+    encryptionSecret: "interact-app",
+  });
+}
+
+// Créer une instance Axios
 export const instance = axios.create({
   baseURL: API_URL,
   // timeout: 2500,
 });
 
-// Request Interceptor
+// Intercepteur de requêtes
 instance.interceptors.request.use(
   (config) => {
-    const token = ls.get("accessToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (typeof window !== "undefined" && ls) {
+      const token = ls.get("accessToken");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor
+// Intercepteur de réponses
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      try {
-        const refreshToken = ls.get("refreshToken");
-        if (!refreshToken) throw new Error("No refresh token found");
+    if (typeof window !== "undefined" && ls) {
+      const originalRequest = error.config;
 
-        const response = await instance.post(`/token/refresh/`, {
-          refresh: refreshToken,
-        });
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
 
-        const { access } = response.data;
-        ls.set("accessToken", access);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${access}`;
-        originalRequest.headers["Authorization"] = `Bearer ${access}`;
+        try {
+          const refreshToken = ls.get("refreshToken");
+          if (!refreshToken) throw new Error("No refresh token found");
 
-        return instance(originalRequest);
-      } catch (err) {
-        console.error("Refresh token failed:", err);
+          const response = await instance.post(`/token/refresh/`, {
+            refresh: refreshToken,
+          });
+
+          const { access } = response.data;
+          ls.set("accessToken", access);
+          originalRequest.headers["Authorization"] = `Bearer ${access}`;
+
+          return instance(originalRequest);
+        } catch (err) {
+          console.error("Refresh token failed:", err);
+        }
       }
     }
     return Promise.reject(error);
@@ -251,7 +260,10 @@ export const createPackaging = async (packaging: any) => {
 
 export const createSalesPoint = async (salesPoint: any) => {
   try {
-    const response = await instance.post<AxiosResponse<SalesPoint[]>>("/sales-points/", { ...salesPoint });
+    const response = await instance.post<AxiosResponse<SalesPoint[]>>(
+      "/sales-points/",
+      { ...salesPoint }
+    );
     return response;
   } catch (error) {
     if (error.response) {

@@ -1,4 +1,4 @@
-import { instance } from "../../sell/functions";
+import { instance } from "@/components/fetch";
 
 const check_warnings = async ({ supplyId }: { supplyId: number }) => {
   try {

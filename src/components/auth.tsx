@@ -1,66 +1,32 @@
 "use client";
-import axios from "axios";
 import SecureLS from "secure-ls";
-import { startInactivityTracking } from "@/utils/inactivityTracker";
-import { useRouter } from "next/navigation";
-import { setCookie } from "nookies";
+import { instance } from "./fetch";
 
-// Initialize SecureLS
-const ls = new SecureLS({
-  encodingType: "aes",
-  encryptionSecret: "interact-app",
-});
+// Initialisation conditionnelle côté client
+let ls: SecureLS | null = null;
 
-// Create Axios instance
-export const instance = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
-  // timeout: 2500,
-});
-
-// Request Interceptor
-instance.interceptors.request.use(
-  (config) => {
-    const token = ls.get("accessToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// Response Interceptor
-instance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      try {
-        const refreshToken = ls.get("refreshToken");
-        const response = await instance.post(`/token/refresh/`, {
-          refresh: refreshToken,
-        });
-        const { access } = response.data;
-        ls.set("accessToken", access);
-        return instance(originalRequest);
-      } catch (err) {
-        console.error("Refresh token failed:", err);
-      }
-    }
-    return Promise.reject(error);
-  }
-);
+if (typeof window !== "undefined") {
+  ls = new SecureLS({
+    encodingType: "aes",
+    encryptionSecret: "interact-app",
+  });
+}
 
 // Token Management
-export const storeToken = async (token: string) => ls.set("accessToken", token);
-export const getToken = () => ls.get("accessToken");
-export const storeRefreshToken = async (token: string) =>
-  ls.set("refreshToken", token);
-export const getRefreshToken = () => ls.get("refreshToken");
-export const storeUserData = async (userData: any) =>
-  ls.set("userData", userData);
-export const getUserData = async () => ls.get("userData");
+export const storeToken = async (token: string) => {
+  if (ls) ls.set("accessToken", token);
+};
+export const getToken = () => (ls ? ls.get("accessToken") : null);
+
+export const storeRefreshToken = async (token: string) => {
+  if (ls) ls.set("refreshToken", token);
+};
+export const getRefreshToken = () => (ls ? ls.get("refreshToken") : null);
+
+export const storeUserData = async (userData: any) => {
+  if (ls) ls.set("userData", userData);
+};
+export const getUserData = async () => (ls ? ls.get("userData") : null);
 
 // Register User
 export const registerUser = async ({

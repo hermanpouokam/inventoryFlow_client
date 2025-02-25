@@ -424,8 +424,8 @@ export default function Page() {
       <form autoComplete="off" action={handleAddProduct}>
         <CardBodyContent className="space-y-5">
           <h2 className="text-red-500 text-base font-medium">
-            NB: Pour tout article possedant un emballage assurez vous d&aquos;avoir le
-            nombre d&aquos;emballages vides correspondant.
+            NB: Pour tout article possedant un emballage assurez vous
+            d&aquos;avoir le nombre d&aquos;emballages vides correspondant.
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-5">
             <Combobox
@@ -478,7 +478,13 @@ export default function Page() {
           "shadow border mt-5 select-none border-neutral-300 rounded-lg bg-white p-5"
         }
       >
-        <DataTableDemo setTableData={setTable} columns={columns} data={data}>
+        <DataTableDemo
+          filterAttributes={["article"]}
+          searchText=""
+          setTableData={setTable}
+          columns={columns}
+          data={data}
+        >
           <div className="flex items-center justify-between py-4">
             <div className="flex space-x-5">
               <Input

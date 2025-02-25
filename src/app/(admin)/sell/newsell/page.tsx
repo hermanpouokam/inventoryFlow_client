@@ -53,7 +53,7 @@ import { fetchClients } from "@/redux/clients";
 import { fetchProducts } from "@/redux/productsSlicer";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
 import { formatteCurrency } from "../../stock/functions";
-import { instance } from "@/components/auth";
+import { instance } from "@/components/fetch";
 
 export default function Page() {
   const dispatch: AppDispatch = useDispatch();

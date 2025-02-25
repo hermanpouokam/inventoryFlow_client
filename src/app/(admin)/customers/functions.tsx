@@ -1,48 +1,6 @@
 'use client'
-import axios from "axios";
-import SecureLS from 'secure-ls';
+import { instance } from "@/components/fetch";
 
-// Initialize SecureLS
-const ls = new SecureLS({ encodingType: 'aes', encryptionSecret: 'interact-app' });
-
-// Create Axios instance
-const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api',
-    // timeout: 2500,
-});
-
-// Request Interceptor
-instance.interceptors.request.use(config => {
-    const token = ls.get('accessToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-}, error => Promise.reject(error));
-
-// Response Interceptor
-instance.interceptors.response.use(response => response,
-    async error => {
-        const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
-            try {
-                const refreshToken = ls.get('refreshToken');
-                const response = await instance.post(`/token/refresh/`, {
-                    refresh: refreshToken,
-                });
-                const { access } = response.data;
-                ls.set('accessToken', access);
-                return instance(originalRequest);
-            } catch (err) {
-                console.error('Refresh token failed:', err);
-                // Redirect to login or notify the user
-                window.location.href = '/login';
-            }
-        }
-        return Promise.reject(error);
-    }
-);
 
 export async function getClientCategories() {
     try {

@@ -54,12 +54,10 @@ import { formatteCurrency } from "../../stock/functions";
 import { updatePaid } from "@/components/fetch";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchClients } from "@/redux/clients";
-import { useSearchParams } from "next/navigation";
 import SelectPopover from "@/components/SelectPopover";
 import { getBill } from "../functions";
 
 export default function Page() {
-  const searchParams = useSearchParams();
   const [pickedDateRange, setPickedDateRange] = React.useState<{
     from: Date | null;
     to: Date | null;
@@ -490,76 +488,81 @@ export default function Page() {
   ];
 
   return (
-    <main className="space-y-5">
-      <Backdrop
-        sx={{ color: "#8b5cf6", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={status == "loading" || statusCustomer == "loading" || loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <CardBodyContent className="space-y-3">
-        <h2 className="text-base font-semibold">Encaisser une facture</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-          <DateRangePicker
-            //@ts-ignore
-            defaultDateRange={pickedDateRange}
-            //@ts-ignore
-            datesData={datesData}
-            onDateRangeChange={(date) => {
-              if (date.from && date.to) {
-                handleDateRangeChange(date);
-              }
-            }}
-          />
-          <SelectPopover
-            selectedItems={selectedSalespoint}
-            items={salesPoints}
-            onSelect={handleSelect}
-            getOptionLabel={(el) => `${el.name} - ${el.address}`}
-            placeholder="Points de vente"
-          />
-          <SelectPopover
-            selectedItems={customer}
-            items={customers}
-            onSelect={handleSelectCustomers}
-            getOptionLabel={(el) => `${el.name}`}
-            placeholder="Clients"
-          />
-          <Button
-            variant={"outline"}
-            onClick={getData}
-            className={cn(
-              "w-full bg-green-600 hover:bg-green-700 hover:text-white text-white"
-            )}
-          >
-            Rechercher
-          </Button>
-        </div>
-      </CardBodyContent>
-      <CardBodyContent className="spaec-y-3">
-        <h2 className="text-base font-semibold">Factures non encaissées</h2>
-        <DataTableDemo
-          setTableData={setTable}
-          columns={columns}
-          data={data.map((el, index) => {
-            return { ...el, number: index + 1 };
-          })}
+    <React.Suspense fallback={<div>Veuillez patienter</div>}>
+      <main className="space-y-5">
+        <Backdrop
+          sx={{ color: "#8b5cf6", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={status == "loading" || statusCustomer == "loading" || loading}
         >
-          <div className="flex items-center justify-between py-4">
-            <div className="flex space-x-5">
-              <Input
-                placeholder="Filtrer par client..."
-                value={
-                  table?.getColumn("customer_name")?.getFilterValue() as string
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <CardBodyContent className="space-y-3">
+          <h2 className="text-base font-semibold">Encaisser une facture</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+            <DateRangePicker
+              //@ts-ignore
+              defaultDateRange={pickedDateRange}
+              //@ts-ignore
+              datesData={datesData}
+              onDateRangeChange={(date) => {
+                if (date.from && date.to) {
+                  handleDateRangeChange(date);
                 }
-                onChange={(event) =>
-                  table
-                    ?.getColumn("customer_name")
-                    ?.setFilterValue(event.target.value)
-                }
-                className="max-w-sm"
-              />
-              {/* <DropdownMenu>
+              }}
+            />
+            <SelectPopover
+              selectedItems={selectedSalespoint}
+              items={salesPoints}
+              onSelect={handleSelect}
+              getOptionLabel={(el) => `${el.name} - ${el.address}`}
+              placeholder="Points de vente"
+            />
+            <SelectPopover
+              selectedItems={customer}
+              items={customers}
+              onSelect={handleSelectCustomers}
+              getOptionLabel={(el) => `${el.name}`}
+              placeholder="Clients"
+            />
+            <Button
+              variant={"outline"}
+              onClick={getData}
+              className={cn(
+                "w-full bg-green-600 hover:bg-green-700 hover:text-white text-white"
+              )}
+            >
+              Rechercher
+            </Button>
+          </div>
+        </CardBodyContent>
+        <CardBodyContent className="spaec-y-3">
+          <h2 className="text-base font-semibold">Factures non encaissées</h2>
+          <DataTableDemo
+            filterAttributes={["bill_number"]}
+            searchText=""
+            setTableData={setTable}
+            columns={columns}
+            data={data.map((el, index) => {
+              return { ...el, number: index + 1 };
+            })}
+          >
+            <div className="flex items-center justify-between py-4">
+              <div className="flex space-x-5">
+                <Input
+                  placeholder="Filtrer par client..."
+                  value={
+                    table
+                      ?.getColumn("customer_name")
+                      ?.getFilterValue() as string
+                  }
+                  onChange={(event) =>
+                    table
+                      ?.getColumn("customer_name")
+                      ?.setFilterValue(event.target.value)
+                  }
+                  className="max-w-sm"
+                />
+                {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="ml-auto">
                     Colonnes <ChevronDown className="ml-2 h-4 w-4" />
@@ -585,10 +588,11 @@ export default function Page() {
                     })}
                 </DropdownMenuContent>
               </DropdownMenu> */}
+              </div>
             </div>
-          </div>
-        </DataTableDemo>
-      </CardBodyContent>
-    </main>
+          </DataTableDemo>
+        </CardBodyContent>
+      </main>
+    </React.Suspense>
   );
 }
