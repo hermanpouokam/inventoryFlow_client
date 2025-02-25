@@ -332,7 +332,7 @@ function Page() {
       cell: ({ row }) => {
         return (
           <div className="text-center font-medium">
-            {moment(row.original.received_at ?? undefined).format(
+            {moment(row.original.received_at ?? "").format(
               "DD/MM/YYYY HH:mm:ss"
             )}
           </div>
