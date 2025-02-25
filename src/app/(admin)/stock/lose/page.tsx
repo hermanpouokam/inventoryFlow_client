@@ -60,7 +60,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function page() {
+export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
     from: new Date().toString(),
     to: new Date().toString(),

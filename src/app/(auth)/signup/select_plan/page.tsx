@@ -21,7 +21,7 @@ import { plansData, plansDataTranslate } from "@/utils/constants";
 import { encryptParam } from "@/utils/encryptURL";
 import { clearStorageAndCookies } from "../functions";
 
-export default function page() {
+export default function Page() {
   const [user, setUser] = useState<User | null>(null);
   const [plans, setPlans] = useState<Plan[]>([]);
 

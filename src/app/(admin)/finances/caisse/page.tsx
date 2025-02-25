@@ -12,7 +12,7 @@ import moment from "moment";
 import React from "react";
 import { useSelector } from "react-redux";
 
-export default function page() {
+export default function Page() {
   const [selectedSalesPoints, setSelectedSalesPoints] = React.useState<
     SalesPoint[]
   >([]);

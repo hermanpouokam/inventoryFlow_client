@@ -37,7 +37,7 @@ import InputComponent from "./input";
 import InputPrice from "./SellPriceInput";
 import { PlusOneTwoTone } from "@mui/icons-material";
 
-export default function page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   const decryptedParam = decryptParam(decodeURIComponent(params.id));
   const [product, setProduct] = React.useState<Product | null>(null);
   const [error, setError] = React.useState(null);

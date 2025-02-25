@@ -56,7 +56,7 @@ interface InventoryPackage {
   empty_quantity: number;
 }
 
-export default function page() {
+export default function Page() {
   const dispatch: AppDispatch = useDispatch();
   const [salespoint, setSalespoint] = React.useState(null);
   const [data, setData] = React.useState<InventoryPackage[]>([]);

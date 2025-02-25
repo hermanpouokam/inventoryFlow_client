@@ -17,7 +17,7 @@ import useTimer from "@/utils/useTimer";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
-export default function page() {
+export default function Page() {
   const [checked, setChecked] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);

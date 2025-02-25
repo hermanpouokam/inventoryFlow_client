@@ -44,7 +44,7 @@ import ReactDOM from "react-dom/client";
 import InventoryPDF from "@/app/pdf/inventorPDF";
 import { Inventory } from "@mui/icons-material";
 
-export default function page() {
+export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
     from: new Date().toString(),
     to: new Date().toString(),

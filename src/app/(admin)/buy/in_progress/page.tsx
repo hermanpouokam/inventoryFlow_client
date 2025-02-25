@@ -27,7 +27,7 @@ import { getBill, getSupplies } from "../../sell/functions";
 import { formatteCurrency } from "../../stock/functions";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
 
-function page() {
+function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
     from: new Date().toString(),
     to: new Date().toString(),

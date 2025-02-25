@@ -49,7 +49,7 @@ import {
 } from "../../inventory/functions";
 import { fetchPackagingInventory } from "@/redux/packagingInventory";
 
-export default function page() {
+export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
     from: new Date().toString(),
     to: new Date().toString(),

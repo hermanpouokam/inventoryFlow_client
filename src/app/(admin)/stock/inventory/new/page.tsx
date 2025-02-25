@@ -61,7 +61,7 @@ interface InventoryProduct {
   is_beer?: boolean;
 }
 
-export default function page() {
+export default function Page() {
   const dispatch: AppDispatch = useDispatch();
   const [salespoint, setSalespoint] = React.useState(null);
   const [supplier, setSupplier] = React.useState(null);

@@ -28,7 +28,7 @@ import GroupedDataPDF from "@/app/pdf/MyDocument";
 import exportToExcel, { groupByCustomer } from "./functions";
 import IconButton from "./IconBtn";
 
-export default function page() {
+export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<
     | {
         from: Date | undefined;

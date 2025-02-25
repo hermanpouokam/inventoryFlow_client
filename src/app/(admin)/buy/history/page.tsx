@@ -27,7 +27,7 @@ import { formatteCurrency } from "../../stock/functions";
 import { ActionComponent } from "../in_progress/ActionComponent";
 import { fetchSuppliers } from "@/redux/suppliersSlicer";
 
-function page() {
+function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
     from: new Date().toString(),
     to: new Date().toString(),

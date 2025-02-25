@@ -46,7 +46,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { createSupply } from "@/components/fetch";
 
-export default function page() {
+export default function Page() {
   const dispatch: AppDispatch = useDispatch();
   const [salespoint, setSalespoint] = React.useState(null);
   const [supplier, setSupplier] = React.useState(null);

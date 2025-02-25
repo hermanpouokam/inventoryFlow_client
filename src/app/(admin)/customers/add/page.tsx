@@ -20,7 +20,7 @@ import { createClient } from "../functions";
 import { fetchClientCat } from "@/redux/clientCatSlicer";
 import { UserPlus } from "lucide-react";
 
-export default function page() {
+export default function Page() {
   const [salesPoint, setSalesPoint] = React.useState<number | null>();
   const [client_category, setCategory] = React.useState<number | null>();
   const [message, setMessage] = React.useState<{
