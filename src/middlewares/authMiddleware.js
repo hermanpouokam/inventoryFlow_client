@@ -5,7 +5,7 @@ import API_URL from "@/config";
 // 🔄 Fonction pour rafraîchir le token
 async function refreshToken(refreshToken) {
     try {
-        const response = await fetch(`${API_URL}/token/refresh/`, {
+        const response = await fetch(`${API_URL}token/refresh/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export async function authMiddleware(req) {
 
     // ✅ Vérification du token
     try {
-        const response = await fetch(`${API_URL}/verify-token/`, {
+        const response = await fetch(`${API_URL}verify-token/`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
