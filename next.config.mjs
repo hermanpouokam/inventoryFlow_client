@@ -5,7 +5,6 @@ const nextConfig = {
     },
     experimental: {
         strictNextHead: false,
-        clientReferenceManifest: false,
     },
 };
 

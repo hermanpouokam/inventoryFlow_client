@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import API_URL from "@/config";
 
 export async function enterpriseMiddleware(req) {
     const token = req.cookies.get("access_token")?.value;
@@ -14,7 +15,7 @@ export async function enterpriseMiddleware(req) {
 
     try {
         // 🔍 Récupère les informations de l'utilisateur
-        const userResponse = await fetch(`http://127.0.0.1:8000/api/current-user/`, {
+        const userResponse = await fetch(`${API_URL}current-user/`, {
             headers: { Authorization: `Bearer ${token}` },
         });
 
