@@ -391,7 +391,7 @@ function Page() {
       <div className="space-y-5  yshadow border select-none border-neutral-300 rounded-lg bg-white p-5">
         <h3 className="font-medium text-lg">Bon de commande en attente</h3>
         <h3 className="font-medium text-base text-red-600">
-          NB: si pour chaque article possedant des emballages vous n'en disposez
+          NB: si pour chaque article possedant des emballages vous n&apos;en disposez
           pas suffisament des frais supplementaires y afférent s'appliqueront
           lors du paiment.
         </h3>

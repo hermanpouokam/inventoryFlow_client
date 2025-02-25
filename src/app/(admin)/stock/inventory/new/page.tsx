@@ -409,11 +409,11 @@ export default function Page() {
         <CardBodyContent className="space-y-5">
           <ul className="px-1 text-sm font-medium text-orange-700">
             <li>
-              Vous ne pouvez faire qu'un inventaire par jour de préférence le
+              Vous ne pouvez faire qu&apos;un inventaire par jour de préférence le
               matin.
             </li>
             <li>
-              Vous ne pouvez faire un inventaire que si vous n'avez pas aucune
+              Vous ne pouvez faire un inventaire que si vous n&apos;avez pas aucune
               facture pour la journée.
             </li>
             <li>
@@ -532,7 +532,7 @@ export default function Page() {
                     <Save className="h-4 w-4" />
                   </>
                 )}
-                <span className="">Enregister l'inventaire </span>
+                <span className="">Enregister l&apos;inventaire </span>
               </Button>
             </div>
           </div>

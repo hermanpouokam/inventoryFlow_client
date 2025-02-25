@@ -87,7 +87,7 @@ export default function Page({ params }: { params: { id: string } }) {
     },
     {
       accessorKey: "Prix d'achat",
-      header: () => <div className="text-center w-[140px]">Prix d'achat</div>,
+      header: () => <div className="text-center w-[140px]">Prix d&apos;achat</div>,
       cell: ({ row }) => {
         const variant = row.original;
         return (

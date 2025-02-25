@@ -188,7 +188,7 @@ export default function Page() {
     {
       accessorKey: "Nombre de produits",
       header: () => (
-        <div className="text-center w-[140px]">Nombre d'emballages</div>
+        <div className="text-center w-[140px]">Nombre d&apos;emballages</div>
       ),
       cell: ({ row }) => {
         const variant = row.original;
@@ -389,7 +389,7 @@ export default function Page() {
       </Backdrop>
       <CardBodyContent>
         <div className="flex justify-between items-center">
-          <h3 className="text-base font-semibold">Inventaires d'emballage</h3>
+          <h3 className="text-base font-semibold">Inventaires d&apos;emballage</h3>
           <Button
             onClick={() =>
               window.location.assign("/stock/packagings/inventory/new/")
