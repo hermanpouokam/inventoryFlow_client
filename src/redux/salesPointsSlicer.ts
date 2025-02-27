@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { instance } from "@/components/fetch";
 
 interface State {
   data: SalesPoint[];
