@@ -175,7 +175,7 @@ export default function Page() {
       dispatch(fetchProducts({}));
     }
     if (salespointStatus === "idle") {
-      dispatch(fetchSalesPoints({}));
+      dispatch(fetchSalesPoints());
     }
     if (clientsStatus === "idle") {
       dispatch(fetchClients({}));
