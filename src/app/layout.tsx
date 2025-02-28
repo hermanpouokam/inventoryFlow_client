@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -22,13 +21,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
- 
-
   return (
     <html lang="en">
       <body
         className={cn(
-          "bg-neutral-100 font-sans antialiased scrollbar ",
+          "bg-neutral-100 font-sans antialiased scrollbar scroll-smooth",
           fontSans.variable
         )}
       >
