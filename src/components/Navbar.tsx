@@ -174,11 +174,12 @@ const MenuItem = ({ menuItem }: { menuItem: Menu }) => {
       <NavigationMenuList>
         <NavigationMenuItem>
           {menuItem.link && (
-            <a href={menuItem.link}>
-              <NavigationMenuLink className={cn(navigationMenuTriggerStyle(),'capitalize')}>
-                {menuTranslate[menuItem.name]}
-              </NavigationMenuLink>
-            </a>
+            <NavigationMenuLink
+              href={menuItem.link}
+              className={cn(navigationMenuTriggerStyle(), "capitalize")}
+            >
+              {menuTranslate[menuItem.name]}
+            </NavigationMenuLink>
           )}
           {menuItem.menu && (
             <>

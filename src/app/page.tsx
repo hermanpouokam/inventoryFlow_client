@@ -1,9 +1,10 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import PhoneVersion from "@/components/phoneVersion";
 import { CheckCircle, CheckIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import API_URL from "@/config";
 import { formatteCurrency } from "./(admin)/stock/functions";
+import { TextField } from "@mui/material";
 
 const links = [
   {
@@ -72,16 +73,19 @@ const tiers = [
   },
 ];
 
-export default async function page() {
-  const res = await fetch(
-    `https://inventoryflow-production.up.railway.app/api/plans/`,
-    {
-      cache: "no-store",
-    }
-  );
+export default async function page({
+  searchParams,
+}: {
+  searchParams: { success?: number };
+}) {
+  const res = await fetch(`${API_URL}/plans/`, {
+    cache: "no-store",
+  });
   const plans: Plan[] = await res.json();
 
-  console.log(plans);
+  if (searchParams.success && searchParams.success == 1) {
+    // alert("Message envoyé avec succès");
+  }
 
   return (
     <div className="place-items-center bg-white overflow-x-hidden min-h-screen scrollbar space-y-10">
@@ -162,7 +166,7 @@ export default async function page() {
             <div className="hidden sm:mb-8 sm:flex sm:justify-center">
               <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                 Profiter d&apos;un essai gratuit pour notre lancement.{" "}
-                <a href="#" className="font-semibold text-indigo-600">
+                <a href="signup" className="font-semibold text-indigo-600">
                   <span aria-hidden="true" className="absolute inset-0" />
                   commencer <span aria-hidden="true">&rarr;</span>
                 </a>
@@ -210,7 +214,7 @@ export default async function page() {
         className="w-full max-w-[1680px] place-items-center px-5"
       >
         <h2 className="text-xl font-extrabold text-center tracking-tighter text-balance bg-gradient-to-b mb-5 from-gray-500 to-gray-950 inline-block text-transparent bg-clip-text sm:text-3xl">
-          Qu&apos;est-ce que nous faison ?{" "}
+          Qu&apos;est-ce que nous faisons ?{" "}
           <span className="text-lg font-normal tracking-tighter text-balance bg-gradient-to-b mb-5 from-gray-600 to-gray-700 inline-block text-transparent bg-clip-text sm:text-xl">
             Découvrez comment nous pouvons améliorer la gestion de votre magasin
           </span>
@@ -492,23 +496,36 @@ export default async function page() {
       <section id="about-us"></section>
       <section id="contact">
         <h2 className="text-xl font-extrabold text-center tracking-tighter text-balance bg-gradient-to-b from-gray-600 to-gray-950 inline-block text-transparent bg-clip-text sm:text-3xl">
-          Concatez-nous.{" "}
+          Contactez-nous.{" "}
           <span className="text-lg ml-2 font-normal tracking-tighter text-balance bg-gradient-to-b mb-5 from-gray-600 to-gray-700 inline-block text-transparent bg-clip-text sm:text-xl">
             {" "}
-            Si vous vous avez besoin de plus d'informations contactez-nous
+            Si vous avez besoin de plus d'informations contactez-nous
           </span>
         </h2>
+        {searchParams?.success == 1 && (
+          <div className="p-3 bg-green-100 border font-medium border-green-500 text-green-600 text-center rounded-md mb-4">
+            Message envoyé avec succès !
+          </div>
+        )}
+        {searchParams?.success == 0 && (
+          <div className="p-3 bg-red-100 border font-medium border-red-500 text-red-600 text-center rounded-md mb-4">
+            Erreur lors de l'envoi du message !
+          </div>
+        )}
         <div className="max-w-[1680px] mx-auto flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <img src="/contact-image.jpg" alt="Contact" className="w-full" />
           </div>
-          <div className="md:w-1/2 bg-white p-8 rounded-2xl">
-            <form>
+          <div className="md:w-full bg-white p-8 rounded-2xl">
+            <form action={"/api/contact"} method="POST">
               <div className="mb-4">
                 <label className="block text-muted-foreground mb-2">Nom</label>
                 <input
                   type="text"
-                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  name="name"
+                  required
+                  maxLength={50}
+                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Votre nom"
                 />
               </div>
@@ -518,8 +535,24 @@ export default async function page() {
                 </label>
                 <input
                   type="email"
-                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                  maxLength={50}
+                  name="email"
+                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Votre email"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-muted-foreground mb-2">
+                  Sujet
+                </label>
+                <input
+                  type="text"
+                  name="subject"
+                  required
+                  maxLength={254}
+                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Votre nom"
                 />
               </div>
               <div className="mb-4">
@@ -527,14 +560,16 @@ export default async function page() {
                   Message
                 </label>
                 <textarea
-                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600focus:outline-none focus:ring-2 focus:ring-blue-500"
                   rows={4}
+                  required
+                  name="message"
                   placeholder="Votre message"
                 ></textarea>
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-50 text-white font-bold py-3 rounded-lg transition"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition"
               >
                 Envoyer
               </button>
@@ -542,42 +577,68 @@ export default async function page() {
           </div>
         </div>
       </section>
-      <footer className="bg-gray-100 text-white py-8 w-full">
-        <div className="max-w-[1680px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-6 md:mb-0 text-center md:text-left">
-            <img alt="" src="/logo.png" className="h-6 w-auto" />
-            <p className="text-gray-400 mt-2">
-              {"La gestion de votre entrprise devient plus facile"}.
-            </p>
+      <footer className="bg-gray-100 text-white py-8 w-full place-items-center">
+        <div className="max-w-[1680px] place-items-center">
+          <div className=" mx-auto px-6 flex flex-col gap-5 justify-between items-center">
+            <div className="mb-6 md:mb-0 text-center md:text-left">
+              <img alt="" src="/logo.png" className="h-6 w-auto" />
+            </div>
+            <nav className="flex space-x-6">
+              {links.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.link}
+                  className="text-muted-foreground hover:text-neutral-900 transition"
+                >
+                  {link.title}
+                </a>
+              ))}
+            </nav>
+            <div className="flex space-x-4 mt-6 md:mt-0">
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <i className="fab fa-facebook text-2xl"></i>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <i className="fab fa-twitter text-2xl"></i>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <i className="fab fa-instagram text-2xl"></i>
+              </a>
+            </div>
           </div>
-          <nav className="flex space-x-6">
-            <a href="#" className="text-gray-400 hover:text-white transition">
-              Accueil
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white transition">
-              À propos
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white transition">
-              Services
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white transition">
-              Contact
-            </a>
-          </nav>
-          <div className="flex space-x-4 mt-6 md:mt-0">
-            <a href="#" className="text-gray-400 hover:text-white transition">
-              <i className="fab fa-facebook text-2xl"></i>
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white transition">
-              <i className="fab fa-twitter text-2xl"></i>
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white transition">
-              <i className="fab fa-instagram text-2xl"></i>
-            </a>
+          <div className=" w-full py-5 md:py-12">
+            {/* <div className="col-span-2 place-items-start">
+              <h2 className="text-4xl font-semibold tracking-tight text-neutral-800">
+                Souscrivez à notre newsletter
+              </h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                Recevez les dernieres mise à jours en temps réel du site
+              </p>
+              <div className="mt-6 flex max-w-md gap-x-4">
+                <TextField
+                  size="small"
+                  id="email-address"
+                  name="email"
+                  label="email"
+                  type="email"
+                  required
+                  placeholder="Entrez votre email"
+                  autoComplete="email"
+                  className="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-2 -outline-offset-1 outline-black placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                />
+                <button
+                  type="submit"
+                  className="flex-none rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                >
+                  Souscrire
+                </button>
+              </div>
+            </div> */}
+            <div className="text-center text-gray-500 text-sm mt-8 pt-4">
+              &copy; {new Date().getFullYear()} InventoryFLow. Tous droits
+              réservés.
+            </div>
           </div>
-        </div>
-        <div className="text-center text-gray-500 text-sm mt-8 border-t border-gray-200 pt-4">
-          &copy; {new Date().getFullYear()} InventoryFLow. Tous droits réservés.
         </div>
       </footer>
     </div>

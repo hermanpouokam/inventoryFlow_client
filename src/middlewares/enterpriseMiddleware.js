@@ -15,7 +15,7 @@ export async function enterpriseMiddleware(req) {
 
     try {
         // 🔍 Récupère les informations de l'utilisateur
-        const userResponse = await fetch(`${API_URL}current-user/`, {
+        const userResponse = await fetch(`${API_URL}/current-user/`, {
             headers: { Authorization: `Bearer ${token}` },
         });
 

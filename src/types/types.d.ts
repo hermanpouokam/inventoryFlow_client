@@ -360,7 +360,7 @@ interface FeeDetailsBreakdown {
   fee_type: string;
 }
 
-interface PackagingDetails {}
+interface PackagingDetails { }
 
 interface TaxDetails {
   total_tax_amount: number;
@@ -565,4 +565,14 @@ interface Item {
   packaging_name: string;
   old_quantity: number;
   new_quantity: number;
+}
+
+interface Main {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  created_at: Date;
+  is_processed: boolean;
 }

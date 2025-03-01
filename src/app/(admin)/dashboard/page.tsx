@@ -668,6 +668,7 @@ export default function Page() {
 
   return (
     <div className="space-y-5">
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {cases.map((_, i) => (
           <div
@@ -701,8 +702,8 @@ export default function Page() {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <Card className="col-span-1 sm:col-span-4 relative">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
+        <Card className="col-span-1 lg:col-span-4 relative">
           {loadingData && (
             <div className="absolute w-full h-full bg-white/50 z-[999] flex justify-center items-center">
               <CircularProgress color="inherit" />
@@ -815,7 +816,7 @@ export default function Page() {
             </ChartContainer>
           </CardContent>
         </Card>
-        <CardBodyContent className="col-span-1 sm:col-span-2">
+        <CardBodyContent className="col-span-1 lg:col-span-2">
           <h4 className="text-lg font-bold text-neutral-950">
             Liste des employés
           </h4>
@@ -836,7 +837,7 @@ export default function Page() {
                 <div className="flex flex-col justify-center items-center">
                   <BadgeX className="w-12 h-12 text-muted-foreground" />
                   <h2 className="text-base font-semibold">
-                    Vous n&aquos;avez aucun employé
+                    Vous n&apos;avez aucun employé
                   </h2>
                 </div>
               </div>
