@@ -1,6 +1,6 @@
 import React from "react";
 import PhoneVersion from "@/components/phoneVersion";
-import { CheckIcon } from "lucide-react";
+import { CheckCircle, CheckIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import API_URL from "@/config";
 import { formatteCurrency } from "./(admin)/stock/functions";
@@ -18,10 +18,10 @@ const links = [
     title: "Pricing",
     link: "#pricing",
   },
-  {
-    title: "A propos de nous",
-    link: "#about-us",
-  },
+  // {
+  //   title: "A propos de nous",
+  //   link: "#about-us",
+  // },
   {
     title: "Nous contacter",
     link: "#contact",
@@ -30,48 +30,43 @@ const links = [
 
 const tiers = [
   {
-    name: "Hobby",
     id: "starter",
     href: "#",
     priceMonthly: "$29",
     description:
-      "The perfect plan if you're just getting started with our product.",
+      "Le plan parfait si vous etes une petite entreprise avec un petit personnel.",
     features: [
-      "25 products",
-      "Up to 10,000 subscribers",
-      "Advanced analytics",
-      "24-hour support response time",
+      "1 point de vente",
+      "3 utilisateurs",
+      "Articles illimités",
+      "Assistance personalisée",
     ],
     featured: false,
   },
   {
-    name: "Enterprise",
     id: "enterprise",
     href: "#",
-    priceMonthly: "$99",
-    description: "Dedicated support and infrastructure for your company.",
+    description: " your company.",
     features: [
-      "Unlimited products",
-      "Unlimited subscribers",
-      "Advanced analytics",
-      "Dedicated support representative",
-      "Marketing automations",
-      "Custom integrations",
+      "3 points de vente",
+      "Utilisateurs illimites",
+      "Articles illimités",
+      "Assistance personalisée",
+      "Visualisation de données",
+      "Stock prévisionnel",
     ],
     featured: true,
   },
   {
-    name: "Hobby",
     id: "business",
     href: "#",
-    priceMonthly: "$29",
     description:
       "The perfect plan if you're just getting started with our product.",
     features: [
-      "25 products",
-      "Up to 10,000 subscribers",
-      "Advanced analytics",
-      "24-hour support response time",
+      "Points de vente illimités",
+      "Analyse de vos ventes par l'IA",
+      "Prévision de maché",
+      "Caracterisques du plan entreprise",
     ],
     featured: false,
   },
@@ -96,7 +91,7 @@ export default async function page() {
           className="flex items-center justify-between p-4 lg:px-8 w-full max-w-[1680px]"
         >
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <img alt="" src="/logo.png" className="h-4 w-auto" />
             </a>
@@ -154,12 +149,12 @@ export default async function page() {
               cx={512}
               cy={512}
               fill="url(#759c1415-0410-454c-8f7c-9a820de03641)"
-              fillOpacity="0.3"
+              fillOpacity="0.5"
             />
             <defs>
               <linearGradient id="759c1415-0410-454c-8f7c-9a820de03641">
-                <stop stopColor="#ff80b5" />
-                <stop offset={1} stopColor="#9089fc " />
+                <stop stopColor="#0284c7" />
+                <stop offset={1} stopColor="#2563eb" />
               </linearGradient>
             </defs>
           </svg>
@@ -323,7 +318,10 @@ export default async function page() {
           </div>
         </div>
       </section>
-      <section className="relative isolate overflow-hidden bg-white px-6 py-12 sm:py-16 place-items-center lg:px-8 w-full">
+      <section
+        id="testimony"
+        className="relative isolate overflow-hidden bg-white px-6 py-12 sm:py-16 place-items-center lg:px-8 w-full"
+      >
         <h2 className="text-xl font-extrabold text-center tracking-tighter text-balance bg-gradient-to-b from-gray-500 to-gray-950 inline-block text-transparent bg-clip-text sm:text-3xl">
           Ce que nos clients pensent{" "}
           <span className="text-lg font-normal tracking-tighter text-balance bg-gradient-to-b mb-5 from-gray-600 to-gray-700 inline-block text-transparent bg-clip-text sm:text-xl"></span>
@@ -367,7 +365,10 @@ export default async function page() {
           </figure>
         </div>
       </section>
-      <section className="relative isolate bg-white px-6 lg:px-8 w-full max-w-[1680px]">
+      <section
+        id="pricing"
+        className="relative isolate bg-white px-6 lg:px-8 w-full max-w-[1680px]"
+      >
         <div
           aria-hidden="true"
           className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl"
@@ -381,7 +382,7 @@ export default async function page() {
           />
         </div>
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-xl font-extrabold text-center tracking-tighter text-balance bg-gradient-to-b from-gray-500 to-gray-950 inline-block text-transparent bg-clip-text sm:text-3xl">
+          <h2 className="text-xl font-extrabold text-center tracking-tighter text-balance bg-gradient-to-b from-gray-600 to-gray-950 inline-block text-transparent bg-clip-text sm:text-3xl">
             Choisissez un plan.
             <span className="text-lg font-normal tracking-tighter text-balance bg-gradient-to-b mb-5 from-gray-600 to-gray-700 inline-block text-transparent bg-clip-text sm:text-xl">
               {" "}
@@ -408,12 +409,14 @@ export default async function page() {
                       ? ""
                       : index === 0
                       ? "rounded-t-3xl sm:rounded-b-none lg:rounded-tr-none lg:rounded-bl-3xl"
+                      : index === 2
+                      ? "rounded-t-3xl sm:rounded-b-none lg:rounded-tl-none lg:rounded-br-3xl"
                       : "sm:rounded-t-none lg:rounded-tr-3xl lg:rounded-bl-none",
                     "rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10"
                   )}
                 >
                   <h3
-                    id={tier?.id}
+                    id={plan?.id.toString()}
                     className={cn(
                       tier?.featured ? "text-indigo-400" : "text-indigo-600",
                       "text-base/7 font-semibold first-letter:uppercase"
@@ -436,7 +439,7 @@ export default async function page() {
                         "text-base"
                       )}
                     >
-                      /month
+                      /mois
                     </span>
                   </p>
                   <p
@@ -455,14 +458,14 @@ export default async function page() {
                     )}
                   >
                     {tier?.features.map((feature) => (
-                      <li key={feature} className="flex gap-x-3">
-                        <CheckIcon
+                      <li key={feature} className="flex gap-x-3 items-center">
+                        <CheckCircle
                           aria-hidden="true"
                           className={cn(
                             tier.featured
                               ? "text-indigo-400"
                               : "text-indigo-600",
-                            "h-6 w-5 flex-none"
+                            "h-4 w-4 flex-none"
                           )}
                         />
                         {feature}
@@ -474,18 +477,109 @@ export default async function page() {
                     aria-describedby={tier?.id}
                     className={cn(
                       tier?.featured
-                        ? "bg-indigo-500 text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-indigo-500"
+                        ? "bg-indigo-500 text-white shadow-xs hover:bg-indigo-400 transition focus-visible:outline-indigo-500"
                         : "text-indigo-600 ring-1 ring-indigo-200 ring-inset hover:ring-indigo-300 focus-visible:outline-indigo-600",
                       "mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10"
                     )}
                   >
-                    Get started today
+                    Commencer maintenant
                   </a>
                 </div>
               );
             })}
         </div>
       </section>
+      <section id="about-us"></section>
+      <section id="contact">
+        <h2 className="text-xl font-extrabold text-center tracking-tighter text-balance bg-gradient-to-b from-gray-600 to-gray-950 inline-block text-transparent bg-clip-text sm:text-3xl">
+          Concatez-nous.{" "}
+          <span className="text-lg ml-2 font-normal tracking-tighter text-balance bg-gradient-to-b mb-5 from-gray-600 to-gray-700 inline-block text-transparent bg-clip-text sm:text-xl">
+            {" "}
+            Si vous vous avez besoin de plus d'informations contactez-nous
+          </span>
+        </h2>
+        <div className="max-w-[1680px] mx-auto flex flex-col md:flex-row items-center">
+          <div className="md:w-1/2 mb-8 md:mb-0">
+            <img src="/contact-image.jpg" alt="Contact" className="w-full" />
+          </div>
+          <div className="md:w-1/2 bg-white p-8 rounded-2xl">
+            <form>
+              <div className="mb-4">
+                <label className="block text-muted-foreground mb-2">Nom</label>
+                <input
+                  type="text"
+                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Votre nom"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-muted-foreground mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Votre email"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-muted-foreground mb-2">
+                  Message
+                </label>
+                <textarea
+                  className="w-full p-3 rounded-lg bg-gray-50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={4}
+                  placeholder="Votre message"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-50 text-white font-bold py-3 rounded-lg transition"
+              >
+                Envoyer
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+      <footer className="bg-gray-100 text-white py-8 w-full">
+        <div className="max-w-[1680px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+          <div className="mb-6 md:mb-0 text-center md:text-left">
+            <img alt="" src="/logo.png" className="h-6 w-auto" />
+            <p className="text-gray-400 mt-2">
+              {"La gestion de votre entrprise devient plus facile"}.
+            </p>
+          </div>
+          <nav className="flex space-x-6">
+            <a href="#" className="text-gray-400 hover:text-white transition">
+              Accueil
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition">
+              À propos
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition">
+              Services
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition">
+              Contact
+            </a>
+          </nav>
+          <div className="flex space-x-4 mt-6 md:mt-0">
+            <a href="#" className="text-gray-400 hover:text-white transition">
+              <i className="fab fa-facebook text-2xl"></i>
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition">
+              <i className="fab fa-twitter text-2xl"></i>
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition">
+              <i className="fab fa-instagram text-2xl"></i>
+            </a>
+          </div>
+        </div>
+        <div className="text-center text-gray-500 text-sm mt-8 border-t border-gray-200 pt-4">
+          &copy; {new Date().getFullYear()} InventoryFLow. Tous droits réservés.
+        </div>
+      </footer>
     </div>
   );
 }
