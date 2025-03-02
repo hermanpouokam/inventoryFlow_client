@@ -29,7 +29,7 @@ export default function CreateEnterprise() {
   const [inputsValue, setInputsValue] = useState({});
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [phoneNumber, setPhoneNumber] = useState<{
     number: string;
     country: string;
@@ -45,8 +45,8 @@ export default function CreateEnterprise() {
       const response = await registerEnterprise({
         ...data,
         plan_id: 1,
-        phone: phoneNumber?.country,
-        country: phoneNumber?.number,
+        phone: phoneNumber?.number,
+        country: phoneNumber?.country,
       });
 
       if (response) {
@@ -133,7 +133,7 @@ export default function CreateEnterprise() {
             {error}
           </p>
         )}
-        <div className="sm:p-12 sm:min-w-[30%] px-5 py-3 rounded bg-white border border-neutral-200">
+        <div className="sm:p-12 sm:min-w-[30%] px-5 py-3 rounded relative bg-white border border-neutral-200">
           {loading && (
             <div className="absolute top-0 left-0 right-0 w-full h-full bg-[rgba(255,255,255,.2 )] z-[999] animate-in">
               <LinearProgress color="primary" />

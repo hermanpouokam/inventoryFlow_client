@@ -16,7 +16,8 @@ const formatteCurrency = (
   const formatted = new Intl.NumberFormat(locale, {
     currency,
     style: "currency",
-  }).format(Number(amount));
+  }).format(Number(amount)).replace(/\u202F/g, " ")
+    .trim();
 
   return formatted;
 };

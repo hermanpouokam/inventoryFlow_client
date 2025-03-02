@@ -586,7 +586,7 @@ export default function Page() {
             })}
         >
           <div className="flex items-center flex-col sm:flex-row space-y-3 justify-between py-4">
-            <div className="flex space-x-5 space-y-3 flex-col sm:flex-row">
+            <div className="flex gap-3 flex-col sm:flex-row">
               <Input
                 placeholder="Filtrer par articles..."
                 value={table?.getColumn("name")?.getFilterValue() as string}
@@ -595,7 +595,7 @@ export default function Page() {
                 }
                 className="max-w-sm"
               />
-              <DropdownMenu>
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="ml-auto">
                     Colonnes <ChevronDown className="ml-2 h-4 w-4" />
@@ -620,7 +620,7 @@ export default function Page() {
                       );
                     })}
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </div>
             <div className="flex justify-center items-center">
               {/* <Button variant='outline' className="h-12 w-12 p-0 border-red-600 text-red-600 hover:text-white hover:bg-red-600 ">
@@ -629,7 +629,7 @@ export default function Page() {
                             </Button> */}
               <Button
                 variant="outline"
-                className="px-5 space-x-3 border-green-600 text-green-600 hover:text-white hover:bg-green-600"
+                className="px-5 space-x-3 border-green-600 text-green-600 transition hover:text-white hover:bg-green-600"
               >
                 {
                   <>

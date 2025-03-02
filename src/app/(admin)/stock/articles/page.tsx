@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
 import {
   ArrowUpDown,
-  ChevronDown,
   Edit,
   EllipsisVertical,
   EyeIcon,
@@ -21,7 +20,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -51,7 +49,6 @@ import moment from "moment";
 import { createProductCat } from "@/components/fetch";
 import { BlobProvider } from "@react-pdf/renderer";
 import ReactDOM from "react-dom/client";
-// import StockPDF from "@/app/pdf/stockPdf";
 import SelectPopover from "@/components/SelectPopover";
 import StockPDF from "@/app/pdf/stockPdf";
 import { encryptParam } from "@/utils/encryptURL";
@@ -100,7 +97,7 @@ export default function Page() {
     []
   );
   const [open, setOpen] = React.useState(false);
-
+  const [text, setText] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -411,8 +408,8 @@ export default function Page() {
         variant: "destructive",
         description:
           "Sélectionnez un point de vente pour imprimer la fiche de stock",
-        className: "bg-red-600 border-red-600",
-        icon: <X className="h-4 w-4" />,
+        className: "bg-red-500 border-red-500",
+        icon: <X className="mr-2" />,
       });
     }
     const newWindow = window.open("", "_blank");
@@ -544,22 +541,22 @@ export default function Page() {
 
         <DataTableDemo
           setTableData={setTable}
+          filterAttributes={["name", "product_code"]}
           columns={columns}
+          searchText={text}
           data={[...products].map((el, index) => {
             return { ...el, number: index + 1 };
           })}
         >
           <div className="flex items-center flex-col sm:flex-row space-y-3 justify-between py-4">
-            <div className="flex gap-3 flex-col sm:flex-row">
+            <div className="flex gap-3 flex-col sm:flex-row w-full">
               <Input
-                placeholder="Filtrer par articles..."
-                value={table?.getColumn("name")?.getFilterValue() as string}
-                onChange={(event) =>
-                  table?.getColumn("name")?.setFilterValue(event.target.value)
-                }
+                placeholder="Filtrer par nom ou code d'article..."
+                value={text}
+                onChange={(event) => setText(event.target.value)}
                 className="max-w-sm"
               />
-              <DropdownMenu>
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="ml-auto">
                     Colonnes <ChevronDown className="ml-2 h-4 w-4" />
@@ -584,7 +581,7 @@ export default function Page() {
                       );
                     })}
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </div>
             <div className="flex justify-center items-center">
               <Button

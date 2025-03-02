@@ -69,16 +69,17 @@ const styles = StyleSheet.create({
 });
 
 interface GroupedDataPDFProps {
-  products: Product[];
+  packagings: Packaging[];
   title: string;
   salespoint: SalesPoint | null;
 }
 
-const StockPDF: React.FC<GroupedDataPDFProps> = ({
-  products,
+const StockPackagingsPDF: React.FC<GroupedDataPDFProps> = ({
+  packagings,
   title,
   salespoint,
 }) => {
+
 
   return (
     <Document>
@@ -197,6 +198,6 @@ const StockPDF: React.FC<GroupedDataPDFProps> = ({
   );
 };
 
-StockPDF.displayName = "StockPDF";
+StockPackagingsPDF.displayName = "StockPackagingsPDF";
 
-export default StockPDF;
+export default StockPackagingsPDF;

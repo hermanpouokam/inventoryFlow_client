@@ -189,6 +189,7 @@ export default function Page() {
     if (!values.sales_point) {
       return setFieldError("sales_point", "Sélectionnez un point de vente");
     }
+
     try {
       const res = await createSupplier(values);
       setLoading(false);
@@ -200,7 +201,7 @@ export default function Page() {
           title: "Succès",
           description: "Fournisseur ajouté avec succès",
           variant: "success",
-          className: "bg-green-800 border-green-800",
+          className: "bg-green-600 text-white border-green-600 ",
           icon: <Check className="mr-2" />,
         });
       }
@@ -213,6 +214,8 @@ export default function Page() {
         className: "bg-red-600 border-red-600",
         icon: <X className="mr-2" />,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -552,7 +555,6 @@ export default function Page() {
               <div className="mb-4 space-y-4">
                 {inputs.map((input) => {
                   if (input.type === "select" && Array.isArray(input.options)) {
-                    console.log(input.options);
                     return (
                       <div>
                         <Combobox
@@ -569,7 +571,7 @@ export default function Page() {
                             `${option.name} ${option.address}`
                           }
                           placeholder={input.label}
-                          className="z-[99999999999999999999999999999] popover-content-width-full"
+                          className="z-[99999] popover-content-width-full"
                           getOptionLabel={(option) =>
                             `${option.name} - ${option.address}`
                           }

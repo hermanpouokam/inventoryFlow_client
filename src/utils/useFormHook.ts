@@ -156,10 +156,13 @@ const useForm = (initialValues: FormFields) => {
   const validate = (fieldValues: FormFields = values): boolean => {
     let tempErrors: FormErrors = {};
 
-    if ("email" in fieldValues)
-      tempErrors.email = /$^|.+@.+..+/.test(fieldValues.email)
-        ? ""
-        : "Email invalide";
+    if ("email" in fieldValues) {
+      const email = fieldValues.email || "";
+      tempErrors.email =
+        email.length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+          ? ""
+          : "Email invalide";
+    }
 
     if ("password" in fieldValues)
       tempErrors.password =

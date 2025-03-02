@@ -22,7 +22,7 @@ const createInventory = async (data: inventoryData) => {
 
 const validateInventory = async (id: number) => {
   try {
-    const response = await instance.put<AxiosResponse<Inventory[]>>(
+    const response = await instance.put<AxiosResponse<{ success: string }>>(
       `/inventory/${id}/validate/`,
       { withCredentials: true }
     );

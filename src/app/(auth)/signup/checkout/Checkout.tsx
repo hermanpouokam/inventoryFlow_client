@@ -60,6 +60,7 @@ export default function Checkout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!checked) return;
     setLoading(true);
     const { stripe, elements } = stripeData;
 
@@ -186,9 +187,9 @@ export default function Checkout() {
                       <p className="text-xs font-semibold text-muted-foreground">
                         name:
                       </p>
-                      <span className="text-xs font-semibold">
+                      <p className="text-xs font-semibold">
                         {user?.name} {user?.surname}
-                      </span>
+                      </p>
                     </div>
                     <div className="">
                       <p className="text-xs font-semibold text-muted-foreground">
@@ -204,7 +205,7 @@ export default function Checkout() {
                         Adresse:
                       </p>
                       <span className="text-xs font-semibold">
-                        {user?.enterprise_details?.address}
+                        {user?.enterprise_details?.address ?? "N/A"}
                       </span>
                     </div>
                   </div>

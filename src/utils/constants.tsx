@@ -1,4 +1,5 @@
 // import { handleLogout } from "@/components/auth";
+import { clearStorageAndCookies } from "@/app/(auth)/signup/functions";
 import { logoutUser } from "@/components/auth";
 import {
   User,
@@ -200,7 +201,7 @@ export const userMenu: DropdownMenuProps[] = [
         //@ts-ignore
         icon: LogOutIcon,
         menu: null,
-        onClick: handleLogout,
+        onClick: () => clearStorageAndCookies(),
       },
     ],
   },

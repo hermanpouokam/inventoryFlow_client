@@ -3,11 +3,9 @@ import CardBodyContent from "@/components/CardContent";
 import { Combobox } from "@/components/ComboBox";
 import NumericTextField from "@/components/NumericInput";
 import { Button } from "@/components/ui/button";
-import { fetchProductsCat } from "@/redux/productsCat";
 import { fetchProducts } from "@/redux/productsSlicer";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
 import { AppDispatch, RootState } from "@/redux/store";
-import { fetchSuppliers } from "@/redux/suppliersSlicer";
 import {
   Backdrop,
   CircularProgress,
@@ -42,8 +40,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableDemo } from "@/components/TableComponent";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { createSupply } from "@/components/fetch";
-import { formatteCurrency } from "../../functions";
 import { transformVariants } from "@/app/(admin)/sell/newsell/functions";
 import { createInventory } from "../functions";
 
@@ -348,12 +344,12 @@ export default function Page() {
           title: "Succès",
           description: `Inventaire créé avec succès`,
           variant: "destructive",
-          className: "bg-green-800 border-green-800",
+          className: "bg-green-600 border-green-600",
           icon: <Check className="mr-2" />,
         });
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       setLoading(false);
@@ -363,6 +359,8 @@ export default function Page() {
         variant: "destructive",
         icon: <X className="mr-2" />,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -409,19 +407,20 @@ export default function Page() {
         <CardBodyContent className="space-y-5">
           <ul className="px-1 text-sm font-medium text-orange-700">
             <li>
-              Vous ne pouvez faire qu&apos;un inventaire par jour de préférence le
-              matin.
+              Vous ne pouvez faire qu&apos;un inventaire par jour de préférence
+              le matin.
             </li>
             <li>
-              Vous ne pouvez faire un inventaire que si vous n&apos;avez pas aucune
-              facture pour la journée.
+              Vous ne pouvez faire un inventaire que si vous n&apos;avez pas
+              aucune facture pour la journée.
             </li>
             <li>
               Il vous sera impossible de faire une facture si vous avez un
               inventaire en cours.
             </li>
             <li>
-              Les inventaires non validés sont automatique supprimés le lendemain
+              Les inventaires non validés sont automatique supprimés le
+              lendemain
             </li>
           </ul>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-5">

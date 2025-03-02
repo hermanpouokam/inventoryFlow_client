@@ -43,6 +43,16 @@ import { BlobProvider } from "@react-pdf/renderer";
 import ReactDOM from "react-dom/client";
 import InventoryPDF from "@/app/pdf/inventorPDF";
 import { Inventory } from "@mui/icons-material";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
+import { useFieldArray } from "react-hook-form";
 
 export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
@@ -57,6 +67,7 @@ export default function Page() {
   const [selectedSalesPoints, setSelectedSalesPoints] = React.useState<
     SalesPoint[]
   >([]);
+  const [text, setText] = React.useState("");
   const [status, setStatus] = React.useState<{
     name: string;
     value: boolean | null;
@@ -72,6 +83,9 @@ export default function Page() {
   const { inventories, status: statusInventories } = useSelector(
     (state: RootState) => state.inventories
   );
+  const [dialogFor, setDialogFor] = React.useState<null | string>(null);
+  const [inventory, setInventory] = React.useState<null | Inventory>(null);
+
   const handleSelect = (data: SalesPoint) => {
     setSelectedSalesPoints((prev) =>
       prev.includes(data)
@@ -101,6 +115,70 @@ export default function Page() {
       dispatch(fetchSalesPoints());
     }
   }, []);
+
+  const handleValidateInventory = async () => {
+    setLoading(true);
+    try {
+      const res = await validateInventory(inventory.id);
+      if (res.data.success) {
+        await getData();
+        return toast({
+          title: "Succès",
+          variant: "success",
+          className: "bg-green-500 border-green-500",
+          description: res.data.success,
+          icon: <Check className="mr-2" />,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        className: "bg-red-500 border-red-500",
+        description: `${
+          error.response.data.error ??
+          "Erreur lors de la validation de l'inventaire"
+        }`,
+        icon: <X className="mr-2" />,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+      setDialogFor(null);
+      setInventory(null);
+    }
+  };
+
+  const handleDeleteInventory = async () => {
+    setLoading(true);
+    try {
+      const res = await deleteInventory(inventory.id);
+      if (res.data.success) {
+        await getData();
+        return toast({
+          title: "Succès",
+          variant: "success",
+          className: "bg-green-600 border-green-600",
+          description: res.data.success,
+          icon: <Check className="mr-2" />,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        className: "bg-red-500 border-red-500",
+        variant: "destructive",
+        description: `${
+          error.response.data.error ??
+          "Erreur lors de la suppression de l'inventaire"
+        }`,
+        icon: <X className="mr-2" />,
+      });
+    } finally {
+      setLoading(false);
+      setDialogFor(null);
+      setInventory(null);
+    }
+  };
 
   const columns: ColumnDef<Inventory>[] = [
     {
@@ -228,66 +306,6 @@ export default function Page() {
       enableHiding: false,
       header: () => <div className="text-right w-[30px]">Action</div>,
       cell: ({ row }) => {
-        const handleValidateInventory = async () => {
-          setLoading(true);
-          try {
-            const res = await validateInventory(row.original.id);
-            if (res.data.success) {
-              await getData();
-              return toast({
-                title: "Succès",
-                variant: "success",
-                className: "bg-green-500 border-green-500",
-                description: res.data.success,
-                icon: <Check className="mr-2" />,
-              });
-            }
-          } catch (error) {
-            toast({
-              title: "Erreur",
-              className: "bg-red-500 border-red-500",
-              description: `${
-                error.response.data.error ??
-                "Erreur lors de la validation de l'inventaire"
-              }`,
-              icon: <X className="mr-2" />,
-              variant: "destructive",
-            });
-          } finally {
-            setLoading(false);
-          }
-        };
-
-        const handleDeleteInventory = async () => {
-          setLoading(true);
-          try {
-            const res = await deleteInventory(row.original.id);
-            if (res.data.success) {
-              await getData();
-              return toast({
-                title: "Succès",
-                variant: "success",
-                className: "bg-green-500 border-green-500",
-                description: res.data.success,
-                icon: <Check className="mr-2" />,
-              });
-            }
-          } catch (error) {
-            toast({
-              title: "Erreur",
-              className: "bg-red-500 border-red-500",
-              variant: "destructive",
-              description: `${
-                error.response.data.error ??
-                "Erreur lors de la suppression de l'inventaire"
-              }`,
-              icon: <X className="mr-2" />,
-            });
-          } finally {
-            setLoading(false);
-          }
-        };
-
         const handleOpenPDF = () => {
           const newWindow = window.open("", "_blank");
           if (!newWindow) {
@@ -339,7 +357,10 @@ export default function Page() {
               {!row.original.is_validated && (
                 <DropdownMenuItem
                   disabled={row.original.is_validated}
-                  onClick={handleValidateInventory}
+                  onClick={() => {
+                    setDialogFor("validate");
+                    setInventory(row.original);
+                  }}
                 >
                   <ArrowDown size={14} className="mr-3 w-4 h-4" />
                   Validé l&apos;inventaire
@@ -355,7 +376,10 @@ export default function Page() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-red-500 hover:text-red-500"
-                    onClick={handleDeleteInventory}
+                    onClick={() => {
+                      setDialogFor("delete");
+                      setInventory(row.original);
+                    }}
                   >
                     {" "}
                     <Trash className="mr-3 w-4 h-4" size={14} />
@@ -441,7 +465,7 @@ export default function Page() {
         <DataTableDemo
           setTableData={setTable}
           columns={columns}
-          searchText=""
+          searchText={text}
           filterAttributes={["inventory_number"]}
           data={[...inventories]
             ?.sort(
@@ -454,25 +478,75 @@ export default function Page() {
             })}
         >
           <div className="flex items-center flex-col sm:flex-row space-y-3 justify-between py-4">
-            <div className="flex gap-3 items-center flex-col sm:flex-row">
+            <div className="flex gap-3 items-center flex-col sm:flex-row w-full">
               <Input
                 placeholder="Filtrer par numero d'inventaire..."
-                value={
-                  table
-                    ?.getColumn("Nom de la variante")
-                    ?.getFilterValue() as string
-                }
-                onChange={(event) =>
-                  table
-                    ?.getColumn("Nom de la variante")
-                    ?.setFilterValue(event.target.value)
-                }
+                value={text}
+                onChange={(event) => setText(event.target.value)}
                 className="max-w-sm"
               />
             </div>
           </div>
         </DataTableDemo>
       </CardBodyContent>
+      <Dialog
+        open={dialogFor ? true : false}
+        onOpenChange={() => setDialogFor(null)}
+      >
+        {dialogFor == "delete" ? (
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-red-500">
+                Supprimer {inventory?.inventory_number}?
+              </DialogTitle>
+              <DialogDescription>
+                Vous etes sur le point de supprimer cet inventaire.
+                <p className="text-red-500">
+                  NB: cette action est irreversible confirmer pour continuer
+                </p>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setDialogFor(null)}>
+                Annuler
+              </Button>
+              <Button
+                variant={"default"}
+                className="bg-green-500 hover:bg-green-600 transition"
+                onClick={handleDeleteInventory}
+                disabled={loading}
+              >
+                {loading ? "Veuillez patienter..." : "Supprimer"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        ) : (
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Valider {inventory?.inventory_number}?</DialogTitle>
+              <DialogDescription>
+                Vous etes sur le point de valider cet inventaire.
+                <p className="text-red-600">
+                  NB: cette action est irreversible confirmer pour continuer.
+                </p>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setDialogFor(null)}>
+                Annuler
+              </Button>
+              <Button
+                variant={"default"}
+                className="bg-green-500 hover:bg-green-600 transition"
+                onClick={handleValidateInventory}
+                disabled={loading}
+              >
+                {loading ? "Veuillez patienter..." : "Valider"}
+              </Button>{" "}
+            </DialogFooter>
+          </DialogContent>
+        )}
+      </Dialog>
     </div>
   );
 }

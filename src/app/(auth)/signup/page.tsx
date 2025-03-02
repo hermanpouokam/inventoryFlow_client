@@ -69,8 +69,8 @@ export default function Page() {
     } catch (error) {
       const code = error.response.data.code;
       setError(userRegErrors[code]);
-      setLoading(false);
     } finally {
+      setLoading(false);
     }
   };
 
@@ -95,7 +95,7 @@ export default function Page() {
   return (
     <main className=" items-center justify-center">
       {error && (
-        <h3 className="text-red-500 bg-red-100 p-3 rounded border border-red-500 mb-5">
+        <h3 className="text-red-500 bg-red-100 p-3 text-center rounded border border-red-500 mb-5">
           {error}
         </h3>
       )}

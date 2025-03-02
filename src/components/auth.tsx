@@ -1,6 +1,6 @@
 "use client";
 import SecureLS from "secure-ls";
-import { instance } from "./fetch"; 
+import { instance } from "./fetch";
 
 // Initialisation conditionnelle côté client
 let ls: SecureLS | null = null;
@@ -74,12 +74,14 @@ export const registerEnterprise = async ({
   phone,
   email,
   plan_id,
+  country,
 }: {
   name: string;
   address: string;
   phone?: string;
   email: string;
   plan_id: number;
+  country?: string;
 }) => {
   try {
     const response = await instance.post(
@@ -91,12 +93,10 @@ export const registerEnterprise = async ({
         email,
         plan_id,
         details: { balance: 0 },
+        country,
       },
       { withCredentials: true }
     );
-    // await storeToken(response.data.access);
-    // await storeRefreshToken(response.data.refresh);
-    // await storeUserData(response.data.user);
     return response.data;
   } catch (error) {
     console.error(
@@ -108,7 +108,13 @@ export const registerEnterprise = async ({
 };
 
 // Login
-export const login = async ({ username, password }) => {
+export const login = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
   try {
     const response = await instance.post(`/token/`, {
       username,
@@ -119,8 +125,6 @@ export const login = async ({ username, password }) => {
     await storeUserData(response.data.user);
     return response.data;
   } catch (error) {
-    // console.log(error);
-    // console.error("Login failed: ", error);
     throw error;
   }
 };
@@ -184,4 +188,3 @@ export const getPlans = async (id = 0) => {
     throw error;
   }
 };
-
