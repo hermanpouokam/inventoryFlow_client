@@ -182,234 +182,234 @@ export default function Page() {
     }
   }, []);
 
-  const columns: ColumnDef<Loss>[] = [
-    {
-      accessorKey: "number",
-      header: () => <div className="w-5">#</div>,
-      cell: ({ row }) => (
-        <div className="text-center">{row.getValue("number")}</div>
-      ),
+const columns: ColumnDef<Loss>[] = [
+  {
+    accessorKey: "number",
+    header: () => <div className="w-5">#</div>,
+    cell: ({ row }) => (
+      <div className="text-center">{row.getValue("number")}</div>
+    ),
+  },
+  {
+    accessorKey: "Point de vente",
+    header: () => <div className="text-center w-[140px]">Point de vente</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="text-center font-medium">
+          {row.original.sales_point_details.name}
+        </div>
+      );
     },
-    {
-      accessorKey: "Point de vente",
-      header: () => <div className="text-center w-[140px]">Point de vente</div>,
-      cell: ({ row }) => {
-        return (
-          <div className="text-center font-medium">
-            {row.original.sales_point_details.name}
-          </div>
-        );
-      },
+  },
+  {
+    accessorKey: "operateur",
+    header: () => <div className="text-center w-[140px]">Opérateur</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="text-center font-medium">
+          {row.original.created_by_name}
+        </div>
+      );
     },
-    {
-      accessorKey: "operateur",
-      header: () => <div className="text-center w-[140px]">Opérateur</div>,
-      cell: ({ row }) => {
-        return (
-          <div className="text-center font-medium">
-            {row.original.created_by_name}
-          </div>
-        );
-      },
+  },
+  {
+    accessorKey: "Article",
+    header: () => <div className="text-center w-[140px]">Article</div>,
+    cell: ({ row }) => {
+      const variant = row.original;
+      return (
+        <div className="text-center font-medium">
+          {row.original.product_name} {row.original.variant_name}
+        </div>
+      );
     },
-    {
-      accessorKey: "Article",
-      header: () => <div className="text-center w-[140px]">Article</div>,
-      cell: ({ row }) => {
-        const variant = row.original;
-        return (
-          <div className="text-center font-medium">
-            {row.original.product_name} {row.original.variant_name}
-          </div>
-        );
-      },
+  },
+  {
+    accessorKey: "Quantité",
+    header: () => <div className="text-center w-[140px]">Quantité</div>,
+    cell: ({ row }) => {
+      const variant = row.original;
+      return (
+        <div className="text-center font-medium">{row.original.quantity}</div>
+      );
     },
-    {
-      accessorKey: "Quantité",
-      header: () => <div className="text-center w-[140px]">Quantité</div>,
-      cell: ({ row }) => {
-        const variant = row.original;
-        return (
-          <div className="text-center font-medium">{row.original.quantity}</div>
-        );
-      },
+  },
+  {
+    accessorKey: "Status",
+    header: () => <div className="text-center w-[140px]">Status</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="text-center font-medium">
+          <p>
+            <span
+              className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${
+                row.original.is_validated ? "green" : "red"
+              }-500 text-${row.original.is_validated ? "white" : "black"}`}
+            >
+              {row.original.is_validated ? "Validé" : "Non validé"}
+            </span>
+          </p>
+        </div>
+      );
     },
-    {
-      accessorKey: "Status",
-      header: () => <div className="text-center w-[140px]">Status</div>,
-      cell: ({ row }) => {
-        return (
-          <div className="text-center font-medium">
-            <p>
-              <span
-                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${
-                  row.original.is_validated ? "green" : "red"
-                }-500 text-${row.original.is_validated ? "white" : "black"}`}
-              >
-                {row.original.is_validated ? "Validé" : "Non validé"}
-              </span>
-            </p>
-          </div>
-        );
-      },
+  },
+  {
+    accessorKey: "valide",
+    header: () => <div className="text-center w-[140px]">Validé par</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="text-center font-medium">
+          {row.original.validated_by_name ?? "-"}
+        </div>
+      );
     },
-    {
-      accessorKey: "valide",
-      header: () => <div className="text-center w-[140px]">Validé par</div>,
-      cell: ({ row }) => {
-        return (
-          <div className="text-center font-medium">
-            {row.original.validated_by_name ?? "-"}
-          </div>
-        );
-      },
+  },
+  {
+    accessorKey: "Commentaire",
+    header: () => <div className="text-center w-[270px]">Commentaire</div>,
+    cell: ({ row }) => {
+      const variant = row.original;
+      return (
+        <div className="text-justify truncate font-medium">
+          {row.original.reason}
+        </div>
+      );
     },
-    {
-      accessorKey: "Commentaire",
-      header: () => <div className="text-center w-[270px]">Commentaire</div>,
-      cell: ({ row }) => {
-        const variant = row.original;
-        return (
-          <div className="text-justify truncate font-medium">
-            {row.original.reason}
-          </div>
-        );
-      },
+  },
+  {
+    accessorKey: "Date de création",
+    header: () => (
+      <div className="text-right w-[140px]">Date de création</div>
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="text-right font-medium">
+          {new Date(row.original.created_at).toLocaleString()}
+        </div>
+      );
     },
-    {
-      accessorKey: "Date de création",
-      header: () => (
-        <div className="text-right w-[140px]">Date de création</div>
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="text-right font-medium">
-            {new Date(row.original.created_at).toLocaleString()}
-          </div>
-        );
-      },
+  },
+  {
+    accessorKey: "Date de création",
+    header: () => (
+      <div className="text-right w-[140px]">Date de validation</div>
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="text-center font-medium">
+          {row.original.validated_at
+            ? new Date(row.original.validated_at).toLocaleString()
+            : "-"}
+        </div>
+      );
     },
-    {
-      accessorKey: "Date de création",
-      header: () => (
-        <div className="text-right w-[140px]">Date de validation</div>
-      ),
-      cell: ({ row }) => {
-        return (
-          <div className="text-center font-medium">
-            {row.original.validated_at
-              ? new Date(row.original.validated_at).toLocaleString()
-              : "-"}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "Action",
-      enableHiding: false,
-      header: () => <div className="text-right w-[30px]">Action</div>,
-      cell: ({ row }) => {
-        const handleValidateLoss = async () => {
-          setLoading(true);
-          try {
-            const res = await validateLoss(row.original.id);
-            if (res.data.success) {
-              await getLosses();
-              return toast({
-                title: "Succès",
-                variant: "success",
-                className: "bg-green-500 border-green-500",
-                description: res.data.success,
-                icon: <Check className="mr-2 h-4 w-4" />,
-              });
-            }
-          } catch (error) {
-            toast({
-              title: "Erreur",
-              className: "bg-red-500 border-red-500",
-              description: `${
-                error.response.data.error ??
-                "Erreur lors de la validation de la perte"
-              }`,
-              icon: <X className="mr-2 h-4 w-4" />,
-              variant: "destructive",
+  },
+  {
+    accessorKey: "Action",
+    enableHiding: false,
+    header: () => <div className="text-right w-[30px]">Action</div>,
+    cell: ({ row }) => {
+      const handleValidateLoss = async () => {
+        setLoading(true);
+        try {
+          const res = await validateLoss(row.original.id);
+          if (res.data.success) {
+            await getLosses();
+            return toast({
+              title: "Succès",
+              variant: "success",
+              className: "bg-green-500 border-green-500",
+              description: res.data.success,
+              icon: <Check className="mr-2 h-4 w-4" />,
             });
-          } finally {
-            setLoading(false);
           }
-        };
-
-        const handleDeleteInventory = async () => {
-          setLoading(true);
-          try {
-            const res = await deleteLoss(row.original.id);
-            if (res.data.success) {
-              await getLosses();
-              return toast({
-                title: "Succès",
-                variant: "success",
-                className: "bg-green-500 border-green-500",
-                description: res.data.success,
-                icon: <Check className="mr-2 h-4 w-4" />,
-              });
-            }
-          } catch (error) {
-            toast({
-              title: "Erreur",
-              className: "bg-red-500 border-red-500",
-              variant: "destructive",
-              description: `${
-                error.response.data.error ??
-                "Erreur lors de la suppression de l'inventaire"
-              }`,
-              icon: <X className="mr-2 h-4 w-4" />,
-            });
-          } finally {
-            setLoading(false);
-          }
-        };
-
-        if (!row.original.is_validated) {
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <EllipsisVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {!row.original.is_validated && (
-                  <DropdownMenuItem
-                    disabled={row.original.is_validated}
-                    onClick={handleValidateLoss}
-                  >
-                    <ArrowDown size={14} className="mr-3 w-4 h-4" />
-                    Valider la perte
-                  </DropdownMenuItem>
-                )}
-                {!row.original.is_validated && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-500 hover:text-red-500"
-                      onClick={handleDeleteInventory}
-                    >
-                      {" "}
-                      <Trash className="mr-3 w-4 h-4" size={14} />
-                      Supprimer la perte
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          );
+        } catch (error) {
+          toast({
+            title: "Erreur",
+            className: "bg-red-500 border-red-500",
+            description: `${
+              error.response.data.error ??
+              "Erreur lors de la validation de la perte"
+            }`,
+            icon: <X className="mr-2 h-4 w-4" />,
+            variant: "destructive",
+          });
+        } finally {
+          setLoading(false);
         }
-      },
+      };
+
+      const handleDeleteInventory = async () => {
+        setLoading(true);
+        try {
+          const res = await deleteLoss(row.original.id);
+          if (res.data.success) {
+            await getLosses();
+            return toast({
+              title: "Succès",
+              variant: "success",
+              className: "bg-green-500 border-green-500",
+              description: res.data.success,
+              icon: <Check className="mr-2 h-4 w-4" />,
+            });
+          }
+        } catch (error) {
+          toast({
+            title: "Erreur",
+            className: "bg-red-500 border-red-500",
+            variant: "destructive",
+            description: `${
+              error.response.data.error ??
+              "Erreur lors de la suppression de l'inventaire"
+            }`,
+            icon: <X className="mr-2 h-4 w-4" />,
+          });
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      if (!row.original.is_validated) {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <EllipsisVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {!row.original.is_validated && (
+                <DropdownMenuItem
+                  disabled={row.original.is_validated}
+                  onClick={handleValidateLoss}
+                >
+                  <ArrowDown size={14} className="mr-3 w-4 h-4" />
+                  Valider la perte
+                </DropdownMenuItem>
+              )}
+              {!row.original.is_validated && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="text-red-500 hover:text-red-500"
+                    onClick={handleDeleteInventory}
+                  >
+                    {" "}
+                    <Trash className="mr-3 w-4 h-4" size={14} />
+                    Supprimer la perte
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      }
     },
-  ];
+  },
+];
 
   const handleSubmitForm = async () => {
     setLoading(true);

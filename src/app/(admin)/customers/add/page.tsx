@@ -60,14 +60,15 @@ export default function Page() {
           text: "Client crée avec succès",
         });
       }
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       setMessage({
         type: "error",
         text: "Une erreur s'est produite vérifiez votre connexion et réessayez",
       });
       setLoading(false);
-      console.log(error);
     }
   };
 
@@ -104,8 +105,8 @@ export default function Page() {
             )}
           </Button>
         </div>
-        <div className="w-full flex justify-center items-center gap-5">
-          <div className="w-64 sm:w-[350px] md:w-[500px] p-5 mt-5 shadow rounded bg-white border  border-neutral-300 space-x-5">
+        <div className="w-full place-items-center gap-5">
+          <div className="max-w-lg w-full py-5 px-2 mt-5 shadow rounded bg-white border  border-neutral-300 space-x-5">
             {message && (
               <div
                 className={`${

@@ -79,8 +79,6 @@ const StockPackagingsPDF: React.FC<GroupedDataPDFProps> = ({
   title,
   salespoint,
 }) => {
-
-
   return (
     <Document>
       <Page
@@ -140,40 +138,62 @@ const StockPackagingsPDF: React.FC<GroupedDataPDFProps> = ({
 
         <View style={[styles.table, { borderWidth: 2 }]}>
           <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCell}>Code</Text>
-            <Text style={[styles.tableCell, { flex: 3 }]}>Article</Text>
-            <Text style={styles.tableCell}>Quantité</Text>
-            <Text style={styles.tableCell}>Prix d'achat</Text>
-            <Text style={[styles.tableCell, { flex: 1.5 }]}>Total</Text>
+            <Text style={[styles.tableCell, { flex: 3 }]}>Emballage</Text>
+            <Text style={styles.tableCell}>Qte pleine</Text>
+            <Text style={styles.tableCell}>Qte vide</Text>
+            <Text style={styles.tableCell}>Total</Text>
+            <Text style={styles.tableCell}>P.U</Text>
+            <Text style={[styles.tableCell, { flex: 1.5 }]}>Montant Total</Text>
           </View>
-          {products?.map((product, index) => (
+          {packagings?.map((packaging, index) => (
             <View style={styles.tableRow} key={index}>
-              <Text style={styles.tableCell}>{product.product_code}</Text>
               <Text style={[styles.tableCell, { flex: 3 }]}>
-                {product.name}
+                {packaging.name}
               </Text>
-              <Text style={styles.tableCell}>{product.quantity}</Text>
-              <Text style={styles.tableCell}>{Number(product.price)}</Text>
+              <Text style={[styles.tableCell]}>{packaging.full_quantity}</Text>
+              <Text style={styles.tableCell}>{packaging.empty_quantity}</Text>
+              <Text style={styles.tableCell}>
+                {packaging.empty_quantity + packaging.full_quantity}
+              </Text>
+              <Text style={styles.tableCell}>{Number(packaging.price)}</Text>
               <Text
                 style={[styles.tableCell, { flex: 1.5, textAlign: "right" }]}
               >
-                {formatteCurrency(Number(product.price) * product.quantity)}
+                {formatteCurrency(
+                  Number(packaging.price) *
+                    (packaging.full_quantity + packaging.empty_quantity)
+                )}
               </Text>
             </View>
           ))}
           <View style={styles.tableRow}>
-            <Text style={styles.tableCell}></Text>
-            <Text style={[styles.tableCell, { fontWeight: "bold", flex: 3 }]}>
-              Total
+            <Text style={[styles.tableCell, { flex: 3 }]}>Total</Text>
+            <Text style={[styles.tableCell, { fontWeight: "bold" }]}>
+              {packagings?.reduce(
+                (acc, curr) => (acc += curr.full_quantity),
+                0
+              )}
+            </Text>
+            <Text style={[styles.tableCell, { fontWeight: "bold" }]}>
+              {packagings?.reduce(
+                (acc, curr) => (acc += curr.empty_quantity),
+                0
+              )}
             </Text>
             <Text style={styles.tableCell}>
-              {products?.reduce((acc, curr) => (acc += curr.quantity), 0)}
+              {packagings?.reduce(
+                (acc, curr) =>
+                  (acc += curr.empty_quantity + curr.full_quantity),
+                0
+              )}
             </Text>
             <Text style={styles.tableCell}>-</Text>
             <Text style={[styles.tableCell, { flex: 1.5, textAlign: "right" }]}>
               {formatteCurrency(
-                products.reduce((acc, curr) => {
-                  return (acc += curr.quantity * Number(curr.price));
+                packagings.reduce((acc, curr) => {
+                  return (acc +=
+                    curr.full_quantity +
+                    curr.empty_quantity * Number(curr.price));
                 }, 0)
               )}
             </Text>

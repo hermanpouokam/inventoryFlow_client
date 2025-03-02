@@ -12,7 +12,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { DollarSign, Grid2x2X, Package, UsersRound } from "lucide-react";
+import { BadgeDollarSign, DollarSign, Grid2x2X, Package } from "lucide-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formatteCurrency } from "../../stock/functions";
@@ -52,9 +52,8 @@ const fields = [
   },
 ];
 
-import RenderEmpoyees from "./renderEmployees";
 import { useSearchParams } from "next/navigation";
-import { SaleProfitChart } from "./renderChart";
+import { fetchPackagings } from "@/redux/packagingsSlicer";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
@@ -70,17 +69,15 @@ function SalesPoint() {
   const { data, error, status } = useSelector(
     (state: RootState) => state.salesPoints
   );
-  const {
-    data: stock,
-    error: errorStock,
-    status: statusStock,
-  } = useSelector((state: RootState) => state.products);
-  const {
-    data: bills,
-    error: errorBills,
-    status: statusBills,
-  } = useSelector((state: RootState) => state.bills);
-  const [selectedSalesPoints, setSelectedSalesPoints] = React.useState();
+  const { data: stock, status: statusStock } = useSelector(
+    (state: RootState) => state.products
+  );
+  const { data: bills, status: statusBills } = useSelector(
+    (state: RootState) => state.bills
+  );
+  const { data: packagings, status: statusPackagings } = useSelector(
+    (state: RootState) => state.packagings
+  );
   const urlParams = useSearchParams();
   const encryptedSp = urlParams.get("spxts");
   const salespoint = decryptParam(encryptedSp);
@@ -104,12 +101,15 @@ function SalesPoint() {
       dispatch(fetchSalesPoints());
     }
     if (statusStock === "idle") {
-      dispatch(fetchProducts({}));
+      dispatch(fetchProducts({ sales_points: [salespoint] }));
+    }
+    if (statusPackagings == "idle") {
+      dispatch(fetchPackagings({ sales_points: [salespoint] }));
     }
     if (statusBills === "idle") {
       dispatch(fetchBills({}));
     }
-  }, [status, statusStock, statusBills, dispatch]);
+  }, [status, statusStock, statusBills, statusPackagings, dispatch]);
 
   const cards = React.useMemo(
     () => [
@@ -117,9 +117,14 @@ function SalesPoint() {
         icon: DollarSign,
         label: "Solde caisse",
         value: function () {
-          const total = data.reduce((acc, sp) => acc + Number(sp.balance), 0);
+          const total = [
+            ...(salespoint ? data.filter((sp) => sp.id == salespoint) : data),
+          ].reduce((acc, sp) => acc + Number(sp.cash_register.balance), 0);
           return `${formatteCurrency(total, "XAF", "fr-FR")}`;
         },
+        subText: `${
+          salespoint ? "1 point de vente" : data.length + " point de vente"
+        }`,
       },
       {
         icon: Package,
@@ -127,38 +132,83 @@ function SalesPoint() {
         value: function () {
           const total = stock.reduce(
             (acc, product) =>
-              acc + product.total_quantity * parseFloat(product.price),
+              (acc += product.total_quantity * parseFloat(product.price)),
             0
           );
-          return `${formatteCurrency(total, "XAF", "fr-FR")}`;
+          const totalPackagings = packagings.reduce(
+            (acc, packaging) =>
+              (acc +=
+                (packaging.empty_quantity + packaging.full_quantity) *
+                Number(packaging.price)),
+            0
+          );
+          return `${formatteCurrency(total + totalPackagings, "XAF", "fr-FR")}`;
         },
+        subText: `${stock.length} articles et ${packagings.length} emballages`,
       },
       {
-        icon: UsersRound,
+        icon: BadgeDollarSign,
         label: "Dèttes client",
         value: function () {
           const total = bills
             .filter(
-              (bill) => Number(bill.paid) != Number(bill.total_bill_amount)
+              (bill) =>
+                Number(bill.paid) != Number(bill.total_amount_with_taxes_fees)
             )
             .reduce(
               (acc, bill) =>
-                acc + bill.total_bill_amount - (Number(bill?.paid) ?? 0),
+                acc +
+                bill.total_amount_with_taxes_fees -
+                (Number(bill?.paid) ?? 0),
               0
             );
           return `${formatteCurrency(total, "XAF", "fr-FR")}`;
         },
+        subText: `${
+          bills.filter((bill) => bill.paid != bill.total_amount_with_taxes_fees)
+            .length
+        } factures(s)`,
       },
       {
         icon: DollarSign,
         label: "Total du capital",
         value: function () {
-          const total = data.reduce((acc, sp) => acc + Number(sp.balance), 0);
-          return `${formatteCurrency(total, "XAF", "fr-FR")}`;
+          const total = data.reduce(
+            (acc, sp) => acc + Number(sp.cash_register.balance),
+            0
+          );
+          const totalBills = bills
+            .filter(
+              (bill) =>
+                Number(bill.paid) != Number(bill.total_amount_with_taxes_fees)
+            )
+            .reduce(
+              (acc, bill) =>
+                acc +
+                bill.total_amount_with_taxes_fees -
+                (Number(bill?.paid) ?? 0),
+              0
+            );
+          const totalStock = stock.reduce(
+            (acc, product) =>
+              (acc += product.total_quantity * parseFloat(product.price)),
+            0
+          );
+          const totalPackagings = packagings.reduce(
+            (acc, packaging) =>
+              (acc +=
+                (packaging.empty_quantity + packaging.full_quantity) *
+                Number(packaging.price)),
+            0
+          );
+          return `${formatteCurrency(
+            total + totalBills + totalPackagings + totalStock
+          )}`;
         },
+        subText: "",
       },
     ],
-    [data, stock, bills]
+    [data, stock, bills, packagings]
   );
 
   const selectOptions = React.useMemo(
@@ -172,7 +222,7 @@ function SalesPoint() {
   );
 
   return (
-    <React.Suspense fallback={<div>Veuillez patienter</div>}>
+    <>
       <div className="space-y-3">
         <CardBodyContent>
           <div className="flex flex-row justify-between items-center">
@@ -229,8 +279,8 @@ function SalesPoint() {
                       <card.icon className="text-muted-foreground" size={15} />
                     </div>
                     <h2 className="text-2xl mt-2 font-bold">{card.value()}</h2>
-                    <span className="text-xs text-red-600 -mt-2 text-muted-foreground">
-                      +20.1% from last month
+                    <span className="text-xs -mt-2 text-muted-foreground">
+                      {card.subText}
                     </span>
                   </div>
                 ))}
@@ -251,48 +301,6 @@ function SalesPoint() {
                 </Button>
               </div>
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
-              <CardBodyContent className="col-span-1 sm:col-span-3">
-                {/* <div className="flex flex-row mb-5 justify-around items-center">
-                                <h5 className='text-base font-semibold'>Ventes/bénéfices du jour</h5>
-                                <select name="" id="" className='border border-slate-700 px-3 py-1 rounded text-base font-medium'>
-                                    <option value="">Aujourd&apos;hui</option>
-                                    <option value="">Cette semaine</option>
-                                    <option value="">Ce mois ci</option>
-                                    <option value="">Cette annee</option>
-                                    <option value="">Tout</option>
-                                </select>
-                            </div> */}
-                <SaleProfitChart chartData={chartData} />
-                {/* <ChartContainer config={chartConfig}>
-                                <BarChart accessibilityLayer data={chartData}>
-                                    <CartesianGrid vertical={false} />
-                                    <XAxis
-                                        dataKey="month"
-                                        tickLine={false}
-                                        tickMargin={10}
-                                        axisLine={false}
-                                        tickFormatter={(value) => value.slice(0, 3)}
-                                    />
-                                    <YAxis
-                                        dataKey="desktop"
-                                        tickLine={false}
-                                        tickMargin={10}
-                                        axisLine={false}
-                                    />
-                                    <ChartTooltip
-                                        cursor={false}
-                                        content={<ChartTooltipContent hideLabel />}
-                                    />
-                                    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
-                                </BarChart>
-                            </ChartContainer> */}
-              </CardBodyContent>
-              <CardBodyContent className="col-span-1 sm:col-span-2">
-                <h2 className="text-base font-semibold">Employees</h2>
-                <RenderEmpoyees salespoint={salespoint} />
-              </CardBodyContent>
-            </div>
           </>
         )}
 
@@ -354,7 +362,7 @@ function SalesPoint() {
           </DialogActions>
         </Dialog>
       </div>
-    </React.Suspense>
+    </>
   );
 }
 

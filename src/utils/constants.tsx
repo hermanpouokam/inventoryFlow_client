@@ -136,10 +136,10 @@ export const menuItems: Menu[] = [
         text: "Depenses",
         link: "/finances/expenses",
       },
-      {
-        text: "Gestion de pertes",
-        link: "/finances/lose",
-      },
+      // {
+      //   text: "Gestion de pertes",
+      //   link: "/finances/lose",
+      // },
     ],
   },
   {

@@ -45,7 +45,7 @@ const SelectPopover = <T extends Record<string, any>>({
           <div className="overflow-hidden max-w-[90%]">
             {selectedItems.length > 0
               ? selectedItems.length > 1
-                ? `${selectedItems.length} selected`
+                ? `${selectedItems.length} selectionnés`
                 : getOptionLabel(selectedItems[0])
               : placeholder}
           </div>
@@ -63,7 +63,7 @@ const SelectPopover = <T extends Record<string, any>>({
             <CommandGroup>
               {items.map((item) => (
                 <CommandItem
-                  value={getOptionLabel(item)}
+                  value={`${getOptionLabel(item)} ${item.id}`}
                   key={item.id}
                   onSelect={() => onSelect(item)}
                 >

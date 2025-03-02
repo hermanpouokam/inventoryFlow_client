@@ -14,6 +14,7 @@ import suppliersReducer from "./suppliersSlicer";
 import PackagingsReducer from "./packagingsSlicer";
 import suppliesReducer from "./supplies";
 import lossesReducer from "./losses";
+import expensesReducer from "./expenses";
 import inventoriesReducer from "./inventory";
 import packagingInventoriesReducer from "./packagingInventory";
 
@@ -34,6 +35,7 @@ const store = configureStore({
     bill: billReducer,
     inventories: inventoriesReducer,
     losses: lossesReducer,
+    expenses: expensesReducer,
     packagingInventories: packagingInventoriesReducer,
   },
 });

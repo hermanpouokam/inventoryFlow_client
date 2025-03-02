@@ -198,7 +198,10 @@ export default function Page() {
   ]);
 
   const calculateTotal = (array: any[], field: string) =>
-    array.reduce((acc, curr) => acc + parseFloat(curr[field]), 0);
+    array.reduce((acc, curr) => {
+      const value = field.split(".").reduce((o, key) => o?.[key], curr);
+      return acc + (parseFloat(value) || 0);
+    }, 0);
 
   const calculateBillAmount = (bills: Bill[], stateFilters: string[] = []) =>
     bills
@@ -236,7 +239,7 @@ export default function Page() {
         name: "Montant en caisse",
         data: () =>
           formatteCurrency(
-            calculateTotal(salespoint, "balance"),
+            calculateTotal(salespoint, "cash_register.balance"),
             "XAF",
             "fr-FR"
           ),
@@ -668,7 +671,6 @@ export default function Page() {
 
   return (
     <div className="space-y-5">
-
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {cases.map((_, i) => (
           <div

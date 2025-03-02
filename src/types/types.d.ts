@@ -237,7 +237,7 @@ interface SalesPoint {
   id: number;
   name: string;
   enterprise: number;
-  balance: string;
+  cash_register: CashRegister;
   address: string;
   created_at: string;
   last_update: string;
@@ -245,6 +245,14 @@ interface SalesPoint {
   number: string | null;
   nc: string;
 }
+
+interface CashRegister {
+  id: number;
+  sales_point: number;
+  balance: string;
+  last_update: Date;
+}
+
 
 interface clientCat {
   id: number;
@@ -575,4 +583,46 @@ interface Main {
   message: string;
   created_at: Date;
   is_processed: boolean;
+}
+
+interface Expense {
+  id: number;
+  sales_point_details: SalesPointDetails;
+  validated_by_name: null | string;
+  created_by_name: string;
+  description: string;
+  amount: string;
+  is_validated: boolean;
+  created_at: Date;
+  validated_at: Date | null;
+  remove_from_balance: boolean;
+  expense_number: string;
+  sales_point: number | null;
+  created_by: number;
+  validated_by: number | null;
+}
+
+interface CashData {
+  cash_registers: CashRegister[];
+  transactions: Transaction[];
+  total_balance: number;
+  total_deposits: number;
+  total_withdrawals: number;
+}
+
+interface Transaction {
+  id: number;
+  cash_register: number;
+  sales_point: string;
+  amount: string;
+  transaction_type: 'deposit' | 'withdrawal';
+  reason: string;
+  previous_balance: string;
+  new_balance: string;
+  created_by: string;
+  validated_by?: string;
+  created_at: Date;
+  validated_at: Date | null;
+  is_validated: boolean;
+  transction_number: string
 }

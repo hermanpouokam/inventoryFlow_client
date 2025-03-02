@@ -23,27 +23,25 @@ import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
 import {
   ArrowUpDown,
   Check,
-  ChevronDown,
   ChevronsUpDown,
   Edit,
   EllipsisVertical,
   EyeIcon,
   PrinterIcon,
+  X,
 } from "lucide-react";
 import { DataTableDemo } from "@/components/TableComponent";
 import { ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { fetchProducts } from "@/redux/productsSlicer";
-import { calculateTotalAmount, formatteCurrency } from "../functions";
+import { formatteCurrency } from "../functions";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Backdrop,
@@ -61,9 +59,11 @@ import {
 } from "@mui/material";
 import { fetchSuppliers } from "@/redux/suppliersSlicer";
 import { TransitionProps } from "@mui/material/transitions";
-import moment from "moment";
-import { createPackaging, createProductCat } from "@/components/fetch";
+import { createPackaging } from "@/components/fetch";
 import { fetchPackagings } from "@/redux/packagingsSlicer";
+import StockPackagingsPDF from "@/app/pdf/stockPackagingsPdf";
+import { BlobProvider } from "@react-pdf/renderer";
+import ReactDOM from "react-dom/client";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -93,8 +93,6 @@ export default function Page() {
     status: statusSuppliers,
   } = useSelector((state: RootState) => state.suppliers);
 
-  const [salesPoinstdata, setSalesPoint] =
-    React.useState<SalesPoint[]>(salespoints);
   const [suppliersData, setSuppliersData] = React.useState<Supplier[]>([]);
   const [selectedSalesPoints, setSelectedSalesPoints] = React.useState<
     number[]
@@ -425,6 +423,59 @@ export default function Page() {
     }
   };
 
+  const handleOpenPDF = () => {
+    if (selectedSalesPoints.length != 1) {
+      return toast({
+        title: "Erreur",
+        variant: "destructive",
+        description:
+          "Sélectionnez un point de vente pour imprimer la fiche de stock",
+        className: "bg-red-500 border-red-500",
+        icon: <X className="mr-2" />,
+      });
+    }
+    const newWindow = window.open("", "_blank");
+    if (!newWindow) {
+      alert("Failed to open a new tab. Please allow popups for this site.");
+      return;
+    }
+    newWindow.document.write("<p>Loading PDF...</p>");
+    const pdfBlobProvider = (
+      <BlobProvider
+        document={
+          <StockPackagingsPDF
+            salespoint={salespoints.find(
+              (s) => s.id === selectedSalesPoints[0]
+            )}
+            //@ts-ignore
+            title={`Fiche de stock d'emballage du ${new Date().toLocaleDateString()} ${
+              selectedSuppliers.length > 0 ? "filtré par" : ""
+            } ${selectedSuppliers.length > 0 ? "fournisseur" : ""} `}
+            packagings={packagings.filter(
+              (p) => p.sales_point === selectedSalesPoints[0]
+            )}
+          />
+        }
+      >
+        {/* @ts-ignore */}
+        {({ blob }) => {
+          console.log("blob", blob);
+          if (blob) {
+            const blobUrl = URL.createObjectURL(blob);
+            newWindow.location.href = blobUrl; // Redirect the popup to the blob URL
+          } else {
+            newWindow.document.write("<p>Failed to load the PDF.</p>");
+          }
+        }}
+      </BlobProvider>
+    );
+
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = ReactDOM.createRoot(container);
+    root.render(pdfBlobProvider);
+  };
+
   return (
     <section className="space-y-4">
       <Backdrop
@@ -628,6 +679,7 @@ export default function Page() {
                                 <Trash className="h-4 w-4" />
                             </Button> */}
               <Button
+                onClick={handleOpenPDF}
                 variant="outline"
                 className="px-5 space-x-3 border-green-600 text-green-600 transition hover:text-white hover:bg-green-600"
               >
