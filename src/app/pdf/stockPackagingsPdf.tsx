@@ -1,7 +1,8 @@
+'use client'
+export const dynamic = "force-dynamic";
 import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import moment from "moment";
-import { formatFcfa } from "@/components/MoneyDisplay";
 import { formatteCurrency } from "../(admin)/stock/functions";
 
 const styles = StyleSheet.create({

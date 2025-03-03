@@ -1,7 +1,9 @@
+'use client'
+export const dynamic = "force-dynamic";
+
 import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import moment from "moment";
-import { json } from "node:stream/consumers";
 
 const styles = StyleSheet.create({
   page: {

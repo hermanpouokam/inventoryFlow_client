@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { LONG_LIFE_DURATION } from "@/utils/constants";
 import API_URL from "@/config";
+export const LONG_LIFE_DURATION = 10 * 365 * 24 * 60 * 60;
 
 // 🔄 Fonction pour rafraîchir le token
 async function refreshToken(refreshToken) {

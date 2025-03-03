@@ -1,3 +1,5 @@
+'use client'
+export const dynamic = "force-dynamic";
 import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import { formatteCurrency } from "../(admin)/stock/functions";
