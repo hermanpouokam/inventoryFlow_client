@@ -5,6 +5,7 @@ import { menuItems, menuTranslate } from "@/utils/constants";
 import { Button } from "./ui/button";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { IndeterminateCheckBox } from "@mui/icons-material";
 
 export default function Sidebar() {
 
@@ -111,7 +112,7 @@ export default function Sidebar() {
             const Icon = item.icon;
 
             return (
-              <li className="px-1 pl-4">
+              <li className="px-1 pl-4" key={index}>
                 <Button
                   variant={"ghost"}
                   onClick={() => handleBtnClicked(item, index)}

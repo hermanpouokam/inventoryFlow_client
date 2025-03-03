@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tableContainer: {
-    border: 1.5,
+    borderWidth: 1,
     borderColor: "#000",
   },
   section: {
@@ -89,7 +89,7 @@ const StockPDF: React.FC<GroupedDataPDFProps> = ({
         <View
           style={{
             marginBottom: 25,
-            border: 2,
+            borderWidth: 1.5,
             width: "100%",
             borderStyle: "dashed",
             paddingVertical: 10,
@@ -141,7 +141,7 @@ const StockPDF: React.FC<GroupedDataPDFProps> = ({
             <Text style={styles.tableCell}>Code</Text>
             <Text style={[styles.tableCell, { flex: 3 }]}>Article</Text>
             <Text style={styles.tableCell}>Quantité</Text>
-            <Text style={styles.tableCell}>Prix d'achat</Text>
+            <Text style={styles.tableCell}>P.A</Text>
             <Text style={[styles.tableCell, { flex: 1.5 }]}>Total</Text>
           </View>
           {products?.map((product, index) => (

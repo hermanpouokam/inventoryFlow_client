@@ -400,9 +400,8 @@ export default function Page() {
       })
     );
   };
-
   const handleOpenPDF = () => {
-    if (selectedSalesPoints.length != 1) {
+    if (selectedSalesPoints.length !== 1) {
       return toast({
         title: "Erreur",
         variant: "destructive",
@@ -412,49 +411,62 @@ export default function Page() {
         icon: <X className="mr-2" />,
       });
     }
+
     const newWindow = window.open("", "_blank");
     if (!newWindow) {
       alert("Failed to open a new tab. Please allow popups for this site.");
       return;
     }
     newWindow.document.write("<p>Loading PDF...</p>");
-    const pdfBlobProvider = (
-      <BlobProvider
-        document={
-          <StockPDF
-            salespoint={salespoints.find(
-              (s) => s.id === selectedSalesPoints[0]
-            )}
-            //@ts-ignore
-            title={`Fiche de stock du ${new Date().toLocaleDateString()} ${
-              selectedCategories.length > 0 ||
-              (selectedSuppliers.length > 0 ? "filtré par" : "")
-            } ${selectedSuppliers.length > 0 ? "fournisseur" : ""} ${
-              selectedCategories.length > 0 ? "catégorie" : ""
-            }`}
-            products={transformVariants(
-              products.filter((p) => p.sales_point === selectedSalesPoints[0])
-            )}
-          />
-        }
-      >
-        {/* @ts-ignore */}
-        {({ blob }) => {
-          console.log("blob", blob);
-          if (blob) {
-            const blobUrl = URL.createObjectURL(blob);
-            newWindow.location.href = blobUrl; // Redirect the popup to the blob URL
-          } else {
-            newWindow.document.write("<p>Failed to load the PDF.</p>");
-          }
-        }}
-      </BlobProvider>
+
+    // Récupérer les données
+    const selectedSalesPoint = salespoints.find(
+      (s) => s.id === selectedSalesPoints[0]
+    );
+    const filteredProducts = transformVariants(
+      products.filter((p) => p.sales_point === selectedSalesPoints[0])
     );
 
-    const container = document.createElement("div");
-    document.body.appendChild(container);
-    const root = ReactDOM.createRoot(container);
-    root.render(pdfBlobProvider);
+    // Générer le document PDF
+    const pdfDocument = (
+      <StockPDF
+        salespoint={selectedSalesPoint}
+        title={`Fiche de stock du ${new Date().toLocaleDateString()} ${
+          selectedCategories.length > 0 || selectedSuppliers.length > 0
+            ? "filtré par"
+            : ""
+        } ${selectedSuppliers.length > 0 ? "fournisseur" : ""} ${
+          selectedCategories.length > 0 ? "catégorie" : ""
+        }`}
+        products={filteredProducts}
+      />
+    );
+
+    // Utiliser BlobProvider pour obtenir le Blob
+    const blobProvider = new Promise((resolve) => {
+      const container = document.createElement("div");
+      document.body.appendChild(container);
+      ReactDOM.createRoot(container).render(
+        <BlobProvider document={pdfDocument}>
+          {({ blob }) => {
+            if (blob) {
+              resolve(blob);
+            }
+            return null;
+          }}
+        </BlobProvider>
+      );
+    });
+
+    // Attendre que le blob soit disponible et ouvrir le PDF
+    blobProvider.then((blob) => {
+      if (blob) {
+        const blobUrl = URL.createObjectURL(blob);
+        newWindow.location.href = blobUrl;
+      } else {
+        newWindow.document.write("<p>Failed to load the PDF.</p>");
+      }
+    });
   };
 
   return (

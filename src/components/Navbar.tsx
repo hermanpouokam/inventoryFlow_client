@@ -54,8 +54,8 @@ export default function Navbar() {
             </a>
           </div>
           <div className="hidden  xl:flex xl:flex-row">
-            {menuItems.map((menuItem) => (
-              <MenuItem key={menuItem.link} menuItem={menuItem} />
+            {menuItems.map((menuItem,index) => (
+              <MenuItem key={index} menuItem={menuItem} />
             ))}
           </div>
           <div className="">

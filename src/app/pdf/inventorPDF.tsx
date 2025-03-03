@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tableContainer: {
-    border: 1.5,
+    borderWidth: 1.5,
     borderColor: "#000",
   },
   section: {
@@ -87,7 +87,7 @@ const InventoryPDF: React.FC<InventoryPDFProps> = ({ inventory, title }) => {
         <View
           style={{
             marginBottom: 25,
-            border: 2,
+            borderWidth: 2,
             width: "100%",
             borderStyle: "dashed",
             paddingVertical: 10,
