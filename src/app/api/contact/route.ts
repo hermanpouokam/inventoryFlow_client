@@ -12,7 +12,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Tous les champs sont requis." }, { status: 400 });
         }
 
-        const response = await fetch(`${API_URL}contact/create/`, {
+        const response = await fetch(`${API_URL}/contact/create/`, {
             method: "POST",
             body: JSON.stringify({ name, email, subject, message }),
             headers: { "Content-Type": "application/json" },

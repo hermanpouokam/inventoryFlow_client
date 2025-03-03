@@ -40,7 +40,7 @@ export const tiers = [
   {
     id: "starter",
     description:
-      "Le plan parfait si vous etes une petite entreprise avec un petit personnel.",
+      "Le plan parfait si vous êtes une petite entreprise avec un petit personnel.",
     features: [
       "1 point de vente",
       "3 utilisateur",
@@ -55,7 +55,7 @@ export const tiers = [
       "Le plan dont vous a besoin pour gérer plusieurs points de vente de votre entreprise.",
     features: [
       "3 points de vente",
-      "Utilisateurs illimites",
+      "Utilisateurs illimités",
       "Articles illimités",
       "Assistance personalisée",
       "Visualisation de données",
@@ -444,7 +444,7 @@ export default async function page({
                     <span
                       className={cn(
                         tier?.featured ? "text-gray-400" : "text-gray-500",
-                        "text-base"
+                        "text-[12px] sm:text-base"
                       )}
                     >
                       /mois
@@ -498,7 +498,7 @@ export default async function page({
         </div>
       </section>
       <section id="about-us"></section>
-      <section id="contact">
+      <section id="contact" className="w-full place-items-center">
         <h2 className="text-xl font-extrabold text-center tracking-tighter text-balance bg-gradient-to-b from-gray-600 to-gray-950 inline-block text-transparent bg-clip-text sm:text-3xl">
           Contactez-nous.{" "}
           <span className="text-lg ml-2 font-normal tracking-tighter text-balance bg-gradient-to-b mb-5 from-gray-600 to-gray-700 inline-block text-transparent bg-clip-text sm:text-xl">
@@ -517,10 +517,10 @@ export default async function page({
           </div>
         )}
         <div className="max-w-[1680px] mx-auto flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
-            <img src="/contact-image.jpg" alt="Contact" className="w-full" />
+          <div className="md:w-full hidden md:block mb-8 md:mb-0">
+            <img src="/contact.jpg" alt="Contact" className="w-full opacity-80" />
           </div>
-          <div className="md:w-full bg-white p-8 rounded-2xl">
+          <div className="md:w-full w-full bg-white p-8 rounded-2xl">
             <form action={"/api/contact"} method="POST">
               <div className="mb-4">
                 <label className="block text-muted-foreground mb-2">Nom</label>
@@ -592,7 +592,7 @@ export default async function page({
                 <a
                   key={index}
                   href={link.link}
-                  className="text-muted-foreground hover:text-neutral-900 transition"
+                  className="text-muted-foreground text-xs font-semibold sm:text-base sm:font-normal  hover:text-neutral-900 transition"
                 >
                   {link.title}
                 </a>
