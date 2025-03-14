@@ -15,16 +15,19 @@ const initialState: YourState = {
   error: null,
 };
 interface Params {
-  sales_point?: number;
+  sales_point?: number[];
 }
 // Create an async thunk for fetching data
 export const fetchEmployees = createAsyncThunk(
   "employees/fetchEmployees",
   async ({ sales_point }: Params) => {
-    const params = {
-      ...(sales_point ? { sales_point } : {}),
-    };
-    const response = await instance.get("/employees/", { params }); // Adjust endpoint as needed
+    const params = new URLSearchParams();
+    sales_point?.forEach((sp, index) => {
+      params.append(`sales_point`, sp);
+    });
+    const query = params.toString();
+
+    const response = await instance.get(`/employees/?${query.toString()}`,); // Adjust endpoint as needed
     return response.data;
   }
 );

@@ -12,7 +12,6 @@ export default function Sidebar() {
 
   const pathname = usePathname();
   const basePath = pathname.split("/")[1] || "";
-  console.log(basePath);
   const submenuRefs = useRef<(HTMLUListElement | null)[]>([]);
 
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);

@@ -12,7 +12,15 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { BadgeDollarSign, DollarSign, Grid2x2X, Package } from "lucide-react";
+import {
+  BadgeDollarSign,
+  CircleDollarSignIcon,
+  DollarSign,
+  Grid2x2X,
+  Package,
+  Users,
+  UsersRound,
+} from "lucide-react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formatteCurrency } from "../../stock/functions";
@@ -54,6 +62,7 @@ const fields = [
 
 import { useSearchParams } from "next/navigation";
 import { fetchPackagings } from "@/redux/packagingsSlicer";
+import { fetchEmployees } from "@/redux/employeesSlicer";
 
 function SalesPoint() {
   const dispatch: AppDispatch = useDispatch();
@@ -68,6 +77,12 @@ function SalesPoint() {
   );
   const { data: packagings, status: statusPackagings } = useSelector(
     (state: RootState) => state.packagings
+  );
+  const { data: employees, status: statusEmployees } = useSelector(
+    (state: RootState) => state.employees
+  );
+  const { data: clients, status: statusClient } = useSelector(
+    (state: RootState) => state.clients
   );
   const urlParams = useSearchParams();
   const encryptedSp = urlParams.get("spxts");
@@ -98,7 +113,10 @@ function SalesPoint() {
       dispatch(fetchPackagings({ sales_points: [salespoint] }));
     }
     if (statusBills === "idle") {
-      dispatch(fetchBills({}));
+      dispatch(fetchBills({ sales_point: [salespoint] }));
+    }
+    if (statusEmployees === "idle") {
+      dispatch(fetchEmployees({ sales_point: [salespoint] }));
     }
   }, [
     status,
@@ -121,7 +139,7 @@ function SalesPoint() {
           return `${formatteCurrency(total, "XAF", "fr-FR")}`;
         },
         subText: `${
-          salespoint ? "1 point de vente" : data.length + " point de vente"
+          salespoint ? "1 point de vente" : data.length + " points de vente"
         }`,
       },
       {
@@ -145,13 +163,15 @@ function SalesPoint() {
         subText: `${stock.length} articles et ${packagings.length} emballages`,
       },
       {
-        icon: BadgeDollarSign,
+        icon: CircleDollarSignIcon,
         label: "Dèttes client",
         value: function () {
           const total = bills
             .filter(
               (bill) =>
-                Number(bill.paid) != Number(bill.total_amount_with_taxes_fees)
+                Number(bill.paid) !=
+                  Number(bill.total_amount_with_taxes_fees) &&
+                bill.state != "created"
             )
             .reduce(
               (acc, bill) =>
@@ -163,18 +183,20 @@ function SalesPoint() {
           return `${formatteCurrency(total, "XAF", "fr-FR")}`;
         },
         subText: `${
-          bills.filter((bill) => bill.paid != bill.total_amount_with_taxes_fees)
-            .length
+          bills.filter(
+            (bill) =>
+              Number(bill.paid) != Number(bill.total_amount_with_taxes_fees) &&
+              bill.state != "created"
+          ).length
         } factures(s)`,
       },
       {
         icon: DollarSign,
         label: "Total du capital",
         value: function () {
-          const total = data.reduce(
-            (acc, sp) => acc + Number(sp.cash_register.balance),
-            0
-          );
+          const total = [
+            ...(salespoint ? data.filter((sp) => sp.id == salespoint) : data),
+          ].reduce((acc, sp) => acc + Number(sp.cash_register.balance), 0);
           const totalBills = bills
             .filter(
               (bill) =>
@@ -199,11 +221,32 @@ function SalesPoint() {
                 Number(packaging.price)),
             0
           );
+          console.log(total, totalBills, totalPackagings, totalStock);
           return `${formatteCurrency(
             total + totalBills + totalPackagings + totalStock
           )}`;
         },
         subText: "",
+      },
+      {
+        icon: Users,
+        label: "Nombre d'employées",
+        value: function () {
+          return `${employees.length}`;
+        },
+        subText: `${
+          salespoint ? "1 point de vente" : data.length + " points de vente"
+        }`,
+      },
+      {
+        icon: UsersRound,
+        label: "Clients actifs",
+        value: function () {
+          return `${clients.length}`;
+        },
+        subText: `${
+          salespoint ? "1 point de vente" : data.length + " points de vente"
+        }`,
       },
     ],
     [data, stock, bills, packagings]
