@@ -46,9 +46,21 @@ const createVariant = async (params: {
   return res;
 };
 
+function formatNumber(number: number) {
+  if (!Number.isFinite(number)) return "Invalid number";
+
+  const hasDecimals = number % 1 !== 0; // Vérifie si le nombre a des décimales
+  const decimals = hasDecimals ? number.toString().split(".")[1].length : 0;
+
+  return number
+    .toFixed(decimals)
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export {
   calculateTotalAmount,
   formatteCurrency,
   createSupplier,
   createVariant,
+  formatNumber
 };

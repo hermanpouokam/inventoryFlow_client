@@ -130,11 +130,11 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
           </View>
         </View>
 
-        <Text style={[styles.subtitle, { marginTop: 5 }]}>Produits</Text>
+        <Text style={[styles.subtitle, { marginTop: 5 }]}>Articles</Text>
         <View style={styles.table}>
           <View style={[styles.tableRow, styles.tableHeader]}>
             <Text style={styles.tableCell}>Code</Text>
-            <Text style={styles.tableCell}>Produits</Text>
+            <Text style={styles.tableCell}>Article</Text>
             <Text style={styles.tableCell}>Quantité</Text>
             <Text style={styles.tableCell}>Prix</Text>
             <Text style={styles.tableCell}>Total</Text>
@@ -142,7 +142,7 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
           {bill?.product_bills.map((product, index) => (
             <View style={styles.tableRow} key={index}>
               <Text style={styles.tableCell}>
-                {product.product_details.product_code}
+                {product.product_details.product_code.toUpperCase()}
               </Text>
               <Text style={styles.tableCell}>
                 {product.product_details.name}
@@ -170,7 +170,13 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
             </Text>
             <Text style={styles.tableCell}>-</Text>
             <Text style={styles.tableCell}>
-              {formatteCurrency(bill?.total_bill_amount ?? 0, "XAF", "fr-FR")}
+              {formatteCurrency(
+                bill?.product_bills.reduce((acc, curr) => {
+                  return (acc += curr.total_amount);
+                }, 0) ?? 0,
+                "XAF",
+                "fr-FR"
+              )}
             </Text>
           </View>
         </View>
@@ -178,10 +184,10 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
           (productBill) => productBill.package_product_bill !== null
         ) && (
           <>
-            <Text style={[styles.subtitle, { marginTop: 5 }]}>Articles</Text>
+            <Text style={[styles.subtitle, { marginTop: 5 }]}>Emballages</Text>
             <View style={styles.table}>
               <View style={[styles.tableRow, styles.tableHeader]}>
-                <Text style={styles.tableCell}>Désignation</Text>
+                <Text style={styles.tableCell}>Article</Text>
                 <Text style={styles.tableCell}>Emballage</Text>
                 <Text style={styles.tableCell}>Consigné</Text>
                 <Text style={styles.tableCell}>Prix</Text>
@@ -193,16 +199,16 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
                   return (
                     <View style={styles.tableRow} key={index}>
                       <Text style={styles.tableCell}>
-                        {product.product_details.product_code}
+                        {product.product_details.product_code.toUpperCase()}
                       </Text>
                       <Text style={styles.tableCell}>
-                        {packageProduct.packaging_details.name}
+                        {packageProduct.name}
                       </Text>
                       <Text style={styles.tableCell}>
                         {packageProduct.record}
                       </Text>
                       <Text style={styles.tableCell}>
-                        {packageProduct.packaging_details.price}
+                        {Number(packageProduct.price)}
                       </Text>
                       <Text style={styles.tableCell}>
                         {formatteCurrency(
@@ -216,16 +222,27 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
                 }
               })}
               <View style={styles.tableRow}>
-                <Text
-                  style={[styles.tableCell, { fontWeight: "bold" }]}
-                  //@ts-ignore
-                  colSpan={4}
-                >
+                <Text style={styles.tableCell}></Text>
+                <Text style={[styles.tableCell, { fontWeight: "bold" }]}>
                   Total
+                </Text>
+                <Text style={styles.tableCell}>
+                  {bill.product_bills.reduce((acc, curr) => {
+                    const pk = curr?.package_product_bill;
+                    return (acc += Number(pk?.record));
+                  }, 0)}
                 </Text>
                 <Text style={styles.tableCell}>-</Text>
                 <Text style={styles.tableCell}>
-                  {formatteCurrency(bill?.total_amount, "XAF", "fr-FR")}
+                  {formatteCurrency(
+                    bill?.product_bills.reduce((acc, curr) => {
+                      return (acc += Number(
+                        curr?.package_product_bill?.total_amount
+                      ));
+                    }, 0) ?? 0,
+                    "XAF",
+                    "fr-FR"
+                  )}
                 </Text>
               </View>
             </View>
@@ -237,7 +254,7 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableCell}>{tax.name}</Text>
               <Text style={styles.tableCell}>
-                {formatteCurrency(tax.rate, "XAF", "fr-FR")}
+                {formatteCurrency(tax.total, "XAF", "fr-FR")}
               </Text>
             </View>
           ))}
@@ -257,10 +274,9 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
             Net à payer:
           </Text>
           <Text style={[styles.subtitle]}>
-            {formatteCurrency(bill?.total_amount_with_taxes_fees)}
+            {formatteCurrency(bill?.total_amount_with_taxes_fees ?? 0)}
           </Text>
         </View>
-
         <View
           style={[
             styles.tableRow,

@@ -1,6 +1,7 @@
 import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import moment from "moment";
+import { formatNumber } from "../(admin)/stock/functions";
 
 const styles = StyleSheet.create({
   page: {
@@ -132,13 +133,16 @@ const GroupedDataPDF: React.FC<GroupedDataPDFProps> = ({
               marginTop: 5,
             }}
           >
-            <Text style={{ fontSize: 9 }}>
+            <Text style={[{ fontSize: 9, textTransform: "uppercase" }]}>
+              N<sup>o</sup> CONT: {salespoint?.nc ?? "N/A"}
+            </Text>
+            <Text style={{ fontSize: 9, textTransform: "uppercase" }}>
               Adresse: {salespoint?.address ?? "N/A"}
             </Text>
-            <Text style={{ fontSize: 9 }}>
+            <Text style={{ fontSize: 9, textTransform: "uppercase" }}>
               Numéro: {salespoint?.number ?? "N/A"}
             </Text>
-            <Text style={{ fontSize: 9 }}>
+            <Text style={{ fontSize: 9, textTransform: "uppercase" }}>
               Email: {salespoint?.email ?? "N/A"}
             </Text>
           </View>
@@ -165,11 +169,13 @@ const GroupedDataPDF: React.FC<GroupedDataPDFProps> = ({
                   style={[
                     styles.tableCell,
                     i === Object.entries(groupedData).length - 1
-                      ? { borderWidth: 0 }
+                      ? { borderWidth: 0.1 }
                       : {},
                   ]}
                 >
-                  <Text style={styles.cellText}>
+                  <Text
+                    style={[styles.cellText, { textTransform: "capitalize" }]}
+                  >
                     {customerData.customer_name}
                   </Text>
                 </View>
@@ -189,7 +195,7 @@ const GroupedDataPDF: React.FC<GroupedDataPDFProps> = ({
                   style={[
                     styles.tableCell,
                     i === Object.entries(groupedData).length - 1
-                      ? { borderWidth: 0 }
+                      ? { borderWidth: 0.1 }
                       : {},
                   ]}
                 >
@@ -213,7 +219,7 @@ const GroupedDataPDF: React.FC<GroupedDataPDFProps> = ({
                   style={[
                     styles.tableCell,
                     i === Object.entries(groupedData).length - 1
-                      ? { borderWidth: 0 }
+                      ? { borderWidth: 0.1 }
                       : {},
                   ]}
                 >
@@ -237,12 +243,12 @@ const GroupedDataPDF: React.FC<GroupedDataPDFProps> = ({
                   style={[
                     styles.tableCell,
                     i === Object.entries(groupedData).length - 1
-                      ? { borderWidth: 0 }
+                      ? { borderWidth: 0.1 }
                       : {},
                   ]}
                 >
                   <Text style={styles.cellText}>
-                    {customerData.total_amount}
+                    {formatNumber(customerData.total_amount)}
                   </Text>
                 </View>
               )
@@ -260,7 +266,7 @@ const GroupedDataPDF: React.FC<GroupedDataPDFProps> = ({
                     style={[
                       styles.tableCell,
                       i === Object.entries(groupedData).length - 1
-                        ? { borderWidth: 0 }
+                        ? { borderWidth: 0.5 }
                         : {},
                     ]}
                   >

@@ -167,7 +167,7 @@ export default function Page() {
     // },
     {
       accessorKey: "number",
-      header: () => <div className="w-[50px]">#</div>,
+      header: () => <div className="w-[15px]">#</div>,
       cell: ({ row }) => (
         <div className="lowercase w-[50px]">{row.getValue("number")}</div>
       ),
@@ -346,7 +346,7 @@ export default function Page() {
     },
     {
       accessorKey: "total",
-      header: () => <div className="text-right">Total</div>,
+      header: () => <div className="text-right w-[110px]">Total</div>,
       cell: ({ row }) => {
         const total = parseFloat(row.getValue("total"));
         return (
@@ -432,7 +432,7 @@ export default function Page() {
     if (quantity && Number(quantity) < 1) {
       return;
     }
-    if (packageQty && packageQty < 1) {
+    if (quantity && Number(quantity) < 1) {
       return;
     }
     if (product?.is_beer && packageQty < 1) {
@@ -442,6 +442,14 @@ export default function Page() {
         variant: "destructive",
         className: "bg-yellow-400 border-yellow-400 text-white text-base",
         icon: <InfoIcon className="mr-2" />,
+      });
+    }
+    if (product?.is_beer && packageQty > Number(quantity)) {
+      return toast({
+        title: "Erreur",
+        description: `Le nombre d'emballage consignés ne peut pas être supérieur à la quantité de  produit.`,
+        variant: "destructive",
+        icon: <X className="mr-2" />,
       });
     }
     if (
@@ -488,7 +496,7 @@ export default function Page() {
           title: "Succès",
           description: `Prix ajouter avec succès`,
           variant: "success",
-          className: "bg-green-800 border-green-800",
+          className: "bg-green-600 border-green-600",
           icon: <Check className="mr-2" />,
         });
       } else {
@@ -496,7 +504,7 @@ export default function Page() {
           title: "Erreur",
           description: `Une erreur est survenu veuillez réessayer`,
           variant: "destructive",
-          className: "bg-green-800 border-green-800",
+          className: "bg-green-600 border-green-600",
           icon: <Check className="mr-2" />,
         });
       }
@@ -585,7 +593,7 @@ export default function Page() {
         title: "Succès",
         description: `Facture créée avec succès`,
         variant: "destructive",
-        className: "bg-green-800 border-green-800",
+        className: "bg-green-600 border-green-600",
         icon: <Check className="mr-2" />,
       });
       setTimeout(() => {
@@ -918,8 +926,8 @@ export default function Page() {
         </MuiDialogTitle>
         <MuiDialogContent>
           <DialogContentText>
-            Voulez-vous ajouter &quot;{age?.price}&quot; comme prix par defaut de{" "}
-            <b>{customer?.name}</b>
+            Voulez-vous ajouter &quot;{age?.price}&quot; comme prix par defaut
+            de <b>{customer?.name}</b>
           </DialogContentText>
         </MuiDialogContent>
         <DialogActions>

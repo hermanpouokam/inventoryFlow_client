@@ -91,11 +91,11 @@ export function DataTableDemo<T extends object>({
                 className="hover:bg-neutral-900 bg-neutral-900"
                 key={headerGroup.id}
               >
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map((header,index) => {
                   return (
                     <TableHead
                       className="border-x border-x-neutral-300 first:border-0 last:border-0 text-white"
-                      key={header.id}
+                      key={index}
                     >
                       {header.isPlaceholder
                         ? null
@@ -117,10 +117,10 @@ export function DataTableDemo<T extends object>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map((cell,index) => (
                     <TableCell
                       className="border-x border-x-neutral-300 first:border-0 last:border-0 text-white"
-                      key={cell.id}
+                      key={index}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -147,11 +147,11 @@ export function DataTableDemo<T extends object>({
                 className="bg-neutral-900 hover:bg-neutral-900"
                 key={footerGroup.id}
               >
-                {footerGroup.headers.map((footer) => {
+                {footerGroup.headers.map((footer,index) => {
                   return (
                     <TableCell
                       className="border-x border-x-neutral-300 first:border-0 last:border-0 text-white"
-                      key={footer.id}
+                      key={index}
                     >
                       {footer.isPlaceholder
                         ? null

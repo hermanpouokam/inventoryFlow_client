@@ -64,6 +64,7 @@ import { fetchPackagings } from "@/redux/packagingsSlicer";
 import StockPackagingsPDF from "@/app/pdf/stockPackagingsPdf";
 import { BlobProvider } from "@react-pdf/renderer";
 import ReactDOM from "react-dom/client";
+import { encryptParam } from "@/utils/encryptURL";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -183,7 +184,15 @@ export default function Page() {
       header: () => <div className="w-10 text-center">Actions</div>,
       enableHiding: false,
       cell: ({ row }) => {
-        const payment = row.original;
+        const pk = row.original;
+        const handleNavigate = () => {
+          try {
+            const encryptedId = encryptParam(encodeURI(pk.id.toString()));
+            window.location.assign(`/stock/packagings/${encryptedId}`);
+          } catch (error) {
+            console.log(error);
+          }
+        };
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -199,7 +208,7 @@ export default function Page() {
                 <Edit size={14} className="mr-3" />
                 Modifier
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => {}}>
+              <DropdownMenuItem onClick={handleNavigate}>
                 {" "}
                 <EyeIcon className="mr-3" size={14} /> Details
               </DropdownMenuItem>
@@ -210,9 +219,9 @@ export default function Page() {
     },
     {
       accessorKey: "number",
-      header: () => <div className="w-5">#</div>,
+      header: () => <div className="w-5 text-center">#</div>,
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue("number")}</div>
+        <div className="text-center w-5">{row.getValue("number")}</div>
       ),
     },
     {
@@ -220,7 +229,7 @@ export default function Page() {
       header: ({ column }) => {
         return (
           <div
-            className="flex justify-between w-32"
+            className="flex justify-center w-[220px]"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Nom
@@ -230,16 +239,18 @@ export default function Page() {
       },
       cell: ({ row }) => {
         const product = row.original;
-        return <div className="capitalize">{product.name}</div>;
+        return (
+          <div className="capitalize text-center w-[220px]">{product.name}</div>
+        );
       },
     },
     {
       accessorKey: "point de vente",
-      header: () => <div className="text-center w-32">Point de vente</div>,
+      header: () => <div className="text-center w-[160px]">Point de vente</div>,
       cell: ({ row }) => {
         const product = row.original;
         return (
-          <div className="text-center font-medium">
+          <div className="text-center font-medium w-[160px]">
             {product.sales_point_details.name}
           </div>
         );
@@ -247,11 +258,11 @@ export default function Page() {
     },
     {
       accessorKey: "fournisseur",
-      header: () => <div className="text-center w-32">Founisseur</div>,
+      header: () => <div className="text-center w-[160px]">Founisseur</div>,
       cell: ({ row }) => {
         const product = row.original;
         return (
-          <div className="text-center font-medium">
+          <div className="text-center font-medium w-[160px]">
             {product.supplier_details.name}
           </div>
         );
@@ -275,7 +286,6 @@ export default function Page() {
         const formatted = new Intl.NumberFormat("fr-FR", {
           currency: "XAF",
           style: "currency",
-          //@ts-ignore
         }).format(product.price);
 
         return <div className="capitalize text-center">{formatted}</div>;

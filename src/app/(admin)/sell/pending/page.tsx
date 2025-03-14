@@ -187,32 +187,58 @@ export default function Page() {
     },
     {
       accessorKey: "product_bills",
+      header: ({ column }) => {
+        return (
+          <div
+            className="flex justify-center w-[110px]"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <span>Nombre de colis</span>
+            {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const product_bills: ProductBill[] = row.getValue("product_bills");
+        return (
+          <div className="capitalize text-center  w-[100px]">
+            {product_bills.reduce(
+              (acc, curr) => (acc = acc + curr.quantity),
+              0
+            )}
+          </div>
+        );
+      },
+      footer: () => {
+        const totalQty = data.reduce((total, bill) => {
+          return (
+            total +
+            bill.product_bills.reduce((subtotal, product_bill) => {
+              return subtotal + product_bill.quantity;
+            }, 0)
+          );
+        }, 0);
+        return <div className="text-center">{totalQty}</div>;
+      },
+    },
+    {
+      accessorKey: "product_bills",
       header: () => (
         <div>
-          <h6 className="text-right w-[220px]">Montant de la facture</h6>
+          <h6 className="text-right w-[220px]">Montant</h6>
         </div>
       ),
       cell: ({ row }) => {
-        const product_bills: ProductBill[] = row.original.product_bills;
-        const total = product_bills.reduce(
-          (acc, curr) => (acc = acc + Number(curr.total_amount)),
-          0
-        );
         return (
           <div className="text-right font-medium">
-            {formatteCurrency(total)}
+            {formatteCurrency(row.original.total_amount)}
           </div>
         );
       },
 
       footer: () => {
         const totalAmount = data.reduce((total, bill) => {
-          return (
-            total +
-            bill.product_bills.reduce((subtotal, product_bill) => {
-              return subtotal + Number(product_bill.total_amount);
-            }, 0)
-          );
+          return total + bill.total_amount;
         }, 0);
 
         return (
@@ -292,38 +318,27 @@ export default function Page() {
     },
     {
       accessorKey: "product_bills",
-      header: ({ column }) => {
-        return (
-          <div
-            className="flex justify-center w-[110px]"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            <span>Nombre de colis</span>
-            {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
-          </div>
-        );
-      },
+      header: () => (
+        <div>
+          <h6 className="text-right w-[220px]">Montant total</h6>
+        </div>
+      ),
       cell: ({ row }) => {
-        const product_bills: ProductBill[] = row.getValue("product_bills");
         return (
-          <div className="capitalize text-center  w-[100px]">
-            {product_bills.reduce(
-              (acc, curr) => (acc = acc + curr.quantity),
-              0
-            )}
+          <div className="text-right font-medium">
+            {formatteCurrency(row.original.total_amount)}
           </div>
         );
       },
+
       footer: () => {
-        const totalQty = data.reduce((total, bill) => {
-          return (
-            total +
-            bill.product_bills.reduce((subtotal, product_bill) => {
-              return subtotal + product_bill.quantity;
-            }, 0)
-          );
+        const totalAmount = data.reduce((total, bill) => {
+          return total + bill.total_amount;
         }, 0);
-        return <div className="text-center">{totalQty}</div>;
+
+        return (
+          <div className="text-right">{formatteCurrency(totalAmount)}</div>
+        );
       },
     },
     {
@@ -334,13 +349,13 @@ export default function Page() {
       cell: ({ row }) => {
         return (
           <div className="text-center font-medium">
-            {moment(row.getValue("created_at")).format("DD/MM/YYYY hh:mm:ss")}
+            {moment(row.getValue("created_at")).format("DD/MM/YYYY HH:mm:ss")}
           </div>
         );
       },
     },
     {
-      accessorKey: "delivered_at",
+      accessorKey: "date de livraison",
       header: () => (
         <div className="text-center w-[240px]">Date de livraison</div>
       ),
@@ -349,7 +364,9 @@ export default function Page() {
 
         return (
           <div className="text-center font-medium">
-            {moment(row.getValue("delivered_at")).format("DD/MM/YYYY")}
+            {row.original.delivery_date
+              ? moment(row.original.delivery_date).format("DD/MM/YYYY")
+              : "-"}
           </div>
         );
       },
@@ -411,7 +428,7 @@ export default function Page() {
   }, []);
 
   React.useEffect(() => {
-    if (status === "idle") {
+    if (salespointStatus === "idle") {
       dispatch(fetchSalesPoints());
     }
     if (statusEmployees === "idle") {
@@ -422,7 +439,7 @@ export default function Page() {
         fetchClients({ sales_points: selectedSalesPoints.map((el) => el.id) })
       );
     }
-  }, [status, statusEmployees, dispatch]);
+  }, [salespointStatus, statusEmployees, dispatch]);
 
   React.useEffect(() => {
     document.title = "Facture en attente";
@@ -498,8 +515,8 @@ export default function Page() {
         <h3 className="font-medium text-base">Commandes à livrer</h3>
         <DataTableDemo
           setTableData={setTable}
-          filterAttributes={["bill_number", "customer_name"]} 
-          searchText={searchText} 
+          filterAttributes={["bill_number", "customer_name"]}
+          searchText={searchText}
           columns={columns}
           data={data
             .map((el, index) => {

@@ -42,6 +42,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { check_warnings, receiptSupply } from "./functions";
 import { cn } from "@/lib/utils";
 import SupplyPdf from "@/app/pdf/supplyPdf";
+import { instance } from "@/components/fetch";
 
 export const ActionComponent = ({
   supply,
@@ -87,9 +88,9 @@ export const ActionComponent = ({
       if (res) {
         toast({
           title: "Succès",
-          description: `Facture créée avec succès`,
-          variant: "destructive",
-          className: "bg-green-800 border-green-800",
+          description: `Commande receptionnée avec succès`,
+          variant: 'success',
+          className: "bg-green-600 border-green-600",
           icon: <Check className="mr-2" />,
         });
         onGetData();
@@ -97,9 +98,39 @@ export const ActionComponent = ({
     } catch (error) {
       toast({
         title: "Erreur",
-        description: `Une erreur s'est produite lors de la reception de la commande`,
+        description: `Erreur lors de la reception de la commande`,
         variant: "destructive",
-        className: "bg-red-800 border-red-800",
+        className: "bg-red-500 border-red-500",
+        icon: <Check className="mr-2" />,
+      });
+    } finally {
+      setLoadingState(false);
+    }
+  };
+
+  const handleDeleteBill = async (supplyId: number) => {
+    setLoadingState(true);
+    try {
+      const res = await instance.delete(`/supplies/${supplyId}/`, {
+        withCredentials: true,
+      });
+      if (res.status === 204) {
+        toast({
+          title: "Succès",
+          description: `Commande supprimée avec succès`,
+          variant: 'success',
+          className: "bg-green-600 border-green-600",
+          icon: <Check className="mr-2" />,
+        });
+        onGetData();
+        setOpenModalDelete(false);
+      }
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: `Erreur lors de la suppression de la commande`,
+        variant: "destructive",
+        className: "bg-red-500 border-red-500",
         icon: <Check className="mr-2" />,
       });
     } finally {
@@ -156,10 +187,10 @@ export const ActionComponent = ({
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOpen(!open)}>
+          {/* <DropdownMenuItem onClick={() => setOpen(!open)}>
             <EyeIcon size={14} className="mr-3" />
             Voir les details
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem onClick={() => handleOpenPDF("large")}>
             {" "}
             <Printer className="mr-3" size={14} />
@@ -205,9 +236,9 @@ export const ActionComponent = ({
           <MuiButton color="success" onClick={() => setOpenModalDelete(false)}>
             Non
           </MuiButton>
-          {/* <MuiButton color="error" onClick={() => handleDeleteBill(bill.id)}>
+          <MuiButton color="error" onClick={() => handleDeleteBill(supply.id)}>
             Oui
-          </MuiButton> */}
+          </MuiButton>
         </DialogActions>
       </MuiDialog>
       <AlertDialog open={Muiopen}>

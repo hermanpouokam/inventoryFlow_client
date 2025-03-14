@@ -156,6 +156,9 @@ export default function Page() {
       if (!values["sales_point"]) {
         return setFieldError("form", "Veuillez sélectionner un point de vente");
       }
+      if (values["price"] == 0 || values["price"] < 0) {
+        return setFieldError("form", "Prix de vente invalide");
+      }
       if (
         Object.values(sellsPricesValue).some(
           (value) => parseFloat(value) < values["price"]

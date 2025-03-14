@@ -35,7 +35,6 @@ export default function Signin() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.error("login start");
     try {
       setLoading(true);
       const { data, isEmpty } = getFormData(e.currentTarget);
@@ -58,7 +57,6 @@ export default function Signin() {
       const redirect = params.get("next");
 
       if (response) {
-        console.error("login success");
         if (redirect) {
           router.replace(redirect);
         } else {
@@ -66,7 +64,6 @@ export default function Signin() {
         }
       }
     } catch (error) {
-      // console.error("Error details:", error);
       const code = error.response.data.code;
       setError(userErrors[code]);
       setLoading(false);

@@ -23,6 +23,7 @@ import getFormData from "@/components/functions";
 import { useToast } from "@/components/ui/use-toast";
 import {
   ArrowUpDown,
+  Check,
   Edit,
   EllipsisVertical,
   Eye,
@@ -324,7 +325,7 @@ export default function Page() {
           title: "Success",
           className: "bg-green-600",
           description: "Catégorie de client créée avec succès",
-          icon: <X size={12} />,
+          icon: <Check className="mr-4" />,
         });
       }
       setTimeout(() => {
@@ -335,7 +336,7 @@ export default function Page() {
         variant: "destructive",
         title: "Error",
         description: "Une erreur est survenue veuillez réessayer",
-        icon: <X size={12} />,
+        icon: <X className="mr-4" />,
       });
       console.log(error);
     } finally {

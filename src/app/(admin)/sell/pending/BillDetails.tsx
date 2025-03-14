@@ -23,6 +23,7 @@ import {
   Trash,
   X,
   CheckCircle,
+  Check,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -56,14 +57,11 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
   const [products, setProducts] = React.useState<Product[]>([]);
   const [product, setProduct] = React.useState<Product | null>(null);
   const [oldQty, setOldQty] = React.useState<number>(0);
-  const [customer, setCustomer] = React.useState<Customer | null>(null);
-  const [quantity, setQuantity] = React.useState<number | null>("");
-  const [record, setRecord] = React.useState<number | null>("");
+  const [quantity, setQuantity] = React.useState<number | null | string>("");
+  const [record, setRecord] = React.useState<number | null>(0);
   const [loading, setLoading] = React.useState(false);
-  const [name, setName] = React.useState("");
   const qtyRef = React.useRef(null);
   const { toast } = useToast();
-  const [htmlContent, setHtmlContent] = React.useState("<h1>Hello, PDF!</h1>");
 
   React.useEffect(() => {
     const getData = async () => {
@@ -80,8 +78,6 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
 
   const onChange = (event: any, newValue: Product) => {
     setProduct(newValue);
-    console.log("new val------------------------------>", newValue);
-    // qtyRef?.current?.focus()
   };
   const columns: ColumnDef<Payment>[] = [
     // {
@@ -295,7 +291,7 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
         icon: <X className="mr-2" />,
       });
     }
-    if (quantity && quantity < 1) {
+    if (quantity && Number(quantity) < 1) {
       return;
     }
     if (
@@ -305,66 +301,35 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
           `${product?.product_code}${product?.name}`
       )
     ) {
-      return toast({
-        title: "Erreur",
-        className:
-          "bg-red-700 border-red-700 text-white text-base font-semibold",
-        description: `Cet article existe déjà`,
-        variant: "destructive",
-        icon: <X className="mr-2" />,
-      });
+      return 
     }
     setData((prev) => {
-      return [
-        ...prev,
-        {
-          id: product.id,
-          article: product?.name,
-          variant_id: product?.variant_id,
-          product_id: product?.product_id,
-          code: product?.product_code,
-          number: prev.length + 1,
-          price: product?.price,
-          quantity: quantity,
-          package: record,
-          sellPrice: product?.sell_prices.find((s) => s.id == age)?.price,
-          sell_price: age,
-          total:
-            quantity * product?.sell_prices.find((s) => s.id == age)?.price,
-          is_variant: product.is_variant,
-        },
-      ];
+      if (product) {
+        return [
+          ...prev,
+          {
+            id: product?.id,
+            article: product?.name,
+            variant_id: product?.variant_id,
+            product_id: product?.product_id,
+            code: product?.product_code,
+            number: prev.length + 1,
+            price: product?.price,
+            quantity: quantity,
+            package: record,
+            sellPrice: product?.sell_prices.find((s) => s.id == age)?.price,
+            sell_price: age,
+            total:
+              Number(quantity) *
+              Number(product?.sell_prices.find((s) => s.id == age)?.price ?? 0),
+            is_variant: product.is_variant,
+          },
+        ];
+      }
     });
     setQuantity("");
     setProduct(null);
     setAge(null);
-  };
-
-  const handleGeneratePDF = async () => {
-    try {
-      const response = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ htmlContent }),
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "document.pdf";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      } else {
-        console.error("Failed to generate PDF:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    }
   };
 
   const handleUpdateInvoice = async () => {
@@ -372,6 +337,7 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
     try {
       const dataBill = {
         customer: bill.customer,
+        customer_name: bill.customer_name ?? "",
         sales_point: bill.sales_point,
         product_bills: data.map((obj) => {
           if (obj.is_variant) {
@@ -381,7 +347,7 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
               sell_price: obj.sell_price,
               quantity: Number(obj.quantity),
               is_variant: true,
-              record_package: obj.package,
+              record_package: Number(obj.package ?? 0),
             };
           } else {
             return {
@@ -389,7 +355,7 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
               sell_price: obj.sell_price,
               quantity: Number(obj.quantity),
               variant_id: null,
-              record_package: obj.package,
+              record_package: Number(obj.package ?? 0),
               is_variant: false,
             };
           }
@@ -402,9 +368,9 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
           title: "Succès",
           description: `Facture modifiée avec succès`,
           className:
-            "bg-green-700 border-green-700 text-white text-base font-semibold",
+            "bg-green-600 border-green-600 text-white text-base font-semibold",
           variant: "default",
-          icon: <CheckCircle className="mr-2" />,
+          icon: <Check className="mr-2" />,
         });
         setTimeout(() => {
           window.location.reload();
@@ -418,7 +384,7 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
         title: "Erreur",
         description: `Une erreur inattendu est survenu verifiez votre connexion et réessayez`,
         className:
-          "bg-red-700 border-red-700 text-white text-base font-semibold",
+          "bg-red-500 border-red-500 text-white text-base font-semibold",
         variant: "default",
         icon: <X className="mr-2" />,
       });
@@ -563,7 +529,7 @@ export default function BillDetails({ bill, setClose }: PropsParams) {
                 fullWidth
                 size="small"
                 type="number"
-                onChange={(e) => setRecord(parseInt(e.target.value))}
+                onChange={(e) => setRecord(Number(e.target.value))}
                 label="Embalage à consigner"
                 error={record && record < 0 ? true : false}
                 helperText={

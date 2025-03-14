@@ -43,7 +43,7 @@ export const tiers = [
       "Le plan parfait si vous êtes une petite entreprise avec un petit personnel.",
     features: [
       "1 point de vente",
-      "3 utilisateur",
+      "3 utilisateurS",
       "Articles illimités",
       "Assistance personalisée",
     ],

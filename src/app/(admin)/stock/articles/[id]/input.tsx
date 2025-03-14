@@ -6,22 +6,6 @@ import { TextField } from "@mui/material";
 import { Check, Pencil, X } from "lucide-react";
 import * as React from "react";
 
-type TranslationKeys = keyof typeof translations;
-const getTranslation = (key: TranslationKeys): string => translations[key];
-
-const translations = {
-  name: "nom",
-  total_quantity: "quantité",
-  sales_point_details: "point de vente",
-  category_details: "catégorie",
-  package_details: "Emballage",
-  supplier: "fournisseur",
-  product_code: "code produit",
-  sell_prices: "prix vente",
-  price: "prix d'achat",
-  is_beer: "Emballage",
-};
-
 const InputComponent = ({
   input,
   isSelected,
@@ -30,6 +14,8 @@ const InputComponent = ({
   loading,
   product,
   setProduct,
+  translations,
+  link = "products",
 }: {
   input: any;
   isSelected: boolean;
@@ -38,7 +24,12 @@ const InputComponent = ({
   loading: boolean;
   setProduct: (product: Product) => void;
   product: Product;
+  translations: Record<string, string>;
+  link: "products" | "packagings";
 }) => {
+  type TranslationKeys = keyof typeof translations;
+  const getTranslation = (key: TranslationKeys): string => translations[key];
+
   const { toast } = useToast();
   const [text, setText] = React.useState(input?.value ?? "");
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -59,8 +50,8 @@ const InputComponent = ({
       });
     onSetLoading(true);
     try {
-      const response = await instance.put(
-        `/products/${product?.id}/`,
+      const response = await instance.patch(
+        `/${link}/${product?.id}/`,
         {
           [input.name]: text,
         },
@@ -76,7 +67,7 @@ const InputComponent = ({
           variant: "success",
           title: "Succès",
           description: "Le produit a bien été modifié",
-          icon: <Check className="w-4 h-4" />,
+          icon: <Check className="mr-2" />,
           className: "bg-green-500 border-green-500 text-white",
         });
       }
@@ -86,7 +77,7 @@ const InputComponent = ({
         title: "Erreur",
         description:
           "Une erreur est survenue lors de la modification du produit",
-        icon: <X className="w-4 h-4" />,
+        icon: <X className="mr-2" />,
         className: "bg-red-500 border-red-500 text-white",
       });
     } finally {
@@ -101,38 +92,41 @@ const InputComponent = ({
     input.type === "boolean"
   ) {
     return (
-      <div className="flex items-center justify-start gap-3 overflow-hidden">
-        <label className="text-sm col-span-1 font-medium">{translated}</label>
-
+      <div className="grid grid-cols-5 gap-3 place-items-center space-x-1">
+        <label className=" col-span-1 font-medium truncate max-w-full text-xs sm:text-sm">
+          {translated}
+        </label>
         {isSelected ? (
-          <TextField
-            fullWidth
-            value={text}
-            onChange={(el) => setText(el.target.value)}
-            size="small"
-            inputRef={inputRef} // Attache la ref ici pour qu'on puisse focus
-          />
+          <div className="w-full col-span-3 mr-1">
+            <TextField
+              fullWidth
+              value={text}
+              onChange={(el) => setText(el.target.value)}
+              size="small"
+              inputRef={inputRef}
+            />
+          </div>
         ) : (
           <div
             className={cn(
-              "col-span-2 border border-slate-400 rounded p-2 transition-all duration-300 overflow-hidden w-[60%]"
+              "col-span-3 border border-slate-400 truncate rounded p-2 transition-all duration-300 overflow-hidden w-full"
             )}
           >
-            <h4>{input.value}</h4>
+            <h4>
+              {typeof input.value == "string"
+                ? input.value
+                : typeof input.value == "number"
+                ? Number(input.value)
+                : new Date(input.value).toLocaleString()}
+            </h4>
           </div>
         )}
-
         {["name", "product_code", "price"].includes(input.name) && (
-          <div
-          //   className={cn(
-          //     "flex justify-center items-center gap-2 transition-all duration-150",
-          //     !checked ? "translate-x-[80%]" : "translate-x-[0]"
-          //   )}
-          >
+          <div>
             {!isSelected ? (
               <Button
                 variant="secondary"
-                onClick={() => onSelect(input?.name ?? "")} // Sélectionne cet élément et désélectionne les autres
+                onClick={() => onSelect(input?.name ?? "")}
                 className="transition-opacity duration-300"
               >
                 <Pencil className="w-4 h-4" />

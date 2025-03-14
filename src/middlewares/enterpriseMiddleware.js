@@ -11,7 +11,6 @@ export async function enterpriseMiddleware(req) {
         "/signup/select_plan",
         "/signup/create_enterprise"
     ];
-    console.log("✅ enterprise middleware:");
 
     try {
         // 🔍 Récupère les informations de l'utilisateur
@@ -21,8 +20,6 @@ export async function enterpriseMiddleware(req) {
 
         if (userResponse.ok) {
             const userData = await userResponse.json();
-            console.log("✅ User Data:", userData);
-
             // 🔎 Si l'utilisateur n'a pas d'entreprise
             if (!userData.enterprise) {
                 // ✅ Accès uniquement aux pages autorisées

@@ -163,8 +163,8 @@ interface Bill {
   operator: number;
   cashed: null;
   cashed_at: Date;
-  sales_point_details: Details;
-  customer_details: CustomerDetails;
+  sales_point_details: SalesPoint;
+  customer_details: Customer | null;
   paid: null;
   operator_details: OperatorDetails;
   cashed_details: null;
@@ -175,7 +175,7 @@ interface Bill {
   product_bills: ProductBill[];
   total_amount: number;
   deliverer: null;
-  deliverer_details: null;
+  deliverer_details: null | Employee;
   last_operation: LastOperation;
   taxes: BillTax[];
   additional_fees: AdditionalFee[];
@@ -215,6 +215,7 @@ interface ProductBill {
   is_variant: boolean;
   product_details: ProductDetails;
   total_amount: number;
+  record_package: number;
   benefit: number;
   package_product_bill: null | PackageProductBill;
 }
@@ -303,8 +304,10 @@ interface PackageProductBill {
   id: number;
   packaging: number;
   packaging_details: Packaging;
+  name: string;
   quantity: number;
   record: number;
+  price: number;
   total_amount: number;
 }
 

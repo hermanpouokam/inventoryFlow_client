@@ -3,12 +3,6 @@ import CardBodyContent from "@/components/CardContent";
 import { instance } from "@/components/fetch";
 import { DataTableDemo } from "@/components/TableComponent";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { decryptParam } from "@/utils/encryptURL";
@@ -20,19 +14,15 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Divider,
   TextField,
 } from "@mui/material";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Check, ChevronDown, Pencil, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import * as React from "react";
 import { createVariant, formatteCurrency } from "../../functions";
 import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
-import { el } from "date-fns/locale";
-import { set } from "date-fns";
 import InputComponent from "./input";
 import InputPrice from "./SellPriceInput";
 import { PlusOneTwoTone } from "@mui/icons-material";
@@ -47,6 +37,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const { toast } = useToast();
   const [selectedInput, setSelectedInput] = React.useState<string | null>(null);
   const [newPrice, setNewPrice] = React.useState<SellPrice | null>(null);
+
   const getProduct = async (decryptedParam: string) => {
     try {
       const res = await instance.get(`/products/${decryptedParam}/`);
@@ -87,7 +78,9 @@ export default function Page({ params }: { params: { id: string } }) {
     },
     {
       accessorKey: "Prix d'achat",
-      header: () => <div className="text-center w-[140px]">Prix d&apos;achat</div>,
+      header: () => (
+        <div className="text-center w-[140px]">Prix d&apos;achat</div>
+      ),
       cell: ({ row }) => {
         const variant = row.original;
         return (
@@ -153,6 +146,19 @@ export default function Page({ params }: { params: { id: string } }) {
   const { errors, handleChange, handleSubmit, resetForm, values } = useForm(
     initializeFormValues(inputs)
   );
+
+  const translations = {
+    name: "nom",
+    total_quantity: "quantité",
+    sales_point_details: "point de vente",
+    category_details: "catégorie",
+    package_details: "Emballage",
+    supplier: "fournisseur",
+    product_code: "code produit",
+    sell_prices: "prix vente",
+    price: "prix d'achat",
+    is_beer: "Emballage",
+  };
 
   const handleCreateVariant = async () => {
     console.log("creating variant...");
@@ -274,6 +280,8 @@ export default function Page({ params }: { params: { id: string } }) {
               onSetLoading={(el) => setLoading(el)}
               product={product}
               setProduct={(el) => setProduct(el)}
+              translations={translations}
+              link="products"
             />
           ))}
         </div>
@@ -299,6 +307,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 onSelect={(el) => setSelectedInput(el)}
                 onSetLoading={(el) => setLoading(el)}
                 product={product}
+                loading={loading}
               />
             ))}
           {newPrice && selectedInput == "price0" ? (
@@ -311,6 +320,7 @@ export default function Page({ params }: { params: { id: string } }) {
               }}
               onSetLoading={(el) => setLoading(el)}
               input={newPrice}
+              loading={loading}
               isSelected={selectedInput === `price0`}
               product={product}
             />

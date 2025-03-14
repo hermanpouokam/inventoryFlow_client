@@ -164,7 +164,7 @@ export default function Checkout() {
             )}
 
             <h3 className="text-2xl font-bold">Checkout</h3>
-            <div className="grid grid-cols-2 sm:grid-col-2 md:grid-cols-2 lg:grid-cols-3 space-x-3 ">
+            <div className="grid grid-cols-1 sm:grid-col-2 md:grid-cols-2 lg:grid-cols-3 gap-3 ">
               <div className="col-span-2">
                 <div className="border-orange-500 rounded bg-orange-300 py-2 px-3 flex justify-start items-center gap-2 mt-3">
                   <AlertCircle className="h-5 w-5" />
@@ -313,7 +313,7 @@ export default function Checkout() {
                 </div>
               </div> */}
               </div>
-              <div className="col-span-1 mt-2">
+              <div className="w-full mt-2">
                 <div className="bg-white space-y-5 border rounded border-slate-300 p-3">
                   <span className="text-sm font-bold">Détails de l'achat</span>
                   <hr className="h-1" />

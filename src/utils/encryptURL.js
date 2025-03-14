@@ -15,7 +15,7 @@ const decryptParam = (encryptedParam) => {
     const bytes = CryptoJS.AES.decrypt(encryptedParam.replace(/-/g, '+')
       .replace(/_/g, '/'), secretKey);
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-    return decrypted ? decrypted : null; // Gérer un déchiffrement vide ou invalide
+    return decrypted ? decrypted : null;
   } catch (error) {
     console.error("Échec du déchiffrement :", error);
     return null;

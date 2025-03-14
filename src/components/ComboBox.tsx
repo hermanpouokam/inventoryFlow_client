@@ -37,7 +37,7 @@ interface ComboboxProps<T> {
 
 export function Combobox<T>({
   options,
-  value: propValue = null, // Destructure prop value
+  value: propValue = null,
   placeholder = "Search...",
   buttonLabel = "Select...",
   getOptionLabel,
@@ -50,7 +50,6 @@ export function Combobox<T>({
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<T | null>(propValue);
 
-  // Sync internal state with parent prop
   React.useEffect(() => {
     setValue(propValue);
   }, [propValue]);
@@ -58,11 +57,10 @@ export function Combobox<T>({
   const handleSelect = (selectedValue: T) => {
     const isSameValue =
       value && getOptionValue(selectedValue) === getOptionValue(value);
-    const newValue = isSameValue ? null : selectedValue; // Toggle value if selecting the same option
-
+    const newValue = isSameValue ? null : selectedValue; 
     setValue(newValue);
     setOpen(false);
-    onValueChange?.(newValue); // Notify parent of the change
+    onValueChange?.(newValue);
   };
 
   return (
@@ -78,13 +76,13 @@ export function Combobox<T>({
             <span className="truncate">
               {value ? getOptionLabel(value) : buttonLabel}
             </span>
-            <RightIcon className="opacity-50" />
+            <RightIcon className="opacity-50 w-4 h-4 -mr-1" />
           </Button>
         </PopoverTrigger>
         <PopoverContent
           className={cn(
             "px-1 py-2",
-            className ? className : "popover-content-width-full"
+            className ? className : "popover-content-width-full" 
           )}
           align="start"
         >

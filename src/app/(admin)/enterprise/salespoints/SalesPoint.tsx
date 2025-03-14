@@ -55,15 +55,6 @@ const fields = [
 import { useSearchParams } from "next/navigation";
 import { fetchPackagings } from "@/redux/packagingsSlicer";
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 190, mobile: 73 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
-
 function SalesPoint() {
   const dispatch: AppDispatch = useDispatch();
   const { data, error, status } = useSelector(
@@ -80,7 +71,7 @@ function SalesPoint() {
   );
   const urlParams = useSearchParams();
   const encryptedSp = urlParams.get("spxts");
-  const salespoint = decryptParam(encryptedSp);
+  const salespoint = encryptedSp ? decryptParam(encryptedSp) : null;
 
   const [open, setOpen] = React.useState(false);
 
@@ -109,7 +100,14 @@ function SalesPoint() {
     if (statusBills === "idle") {
       dispatch(fetchBills({}));
     }
-  }, [status, statusStock, statusBills, statusPackagings, dispatch]);
+  }, [
+    status,
+    statusStock,
+    statusBills,
+    statusPackagings,
+    dispatch,
+    salespoint,
+  ]);
 
   const cards = React.useMemo(
     () => [

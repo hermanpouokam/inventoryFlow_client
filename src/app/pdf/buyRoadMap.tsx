@@ -8,8 +8,30 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
   },
+  container: {
+    margin: "0 auto",
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    backgroundColor: "#fff",
+    border: "2px solid #2d3436",
+    borderStyle: "dashed",
+    borderRadius: 5,
+    width: "100%",
+  },
+  subtitle: {
+    fontSize: 10,
+    marginBottom: 5,
+    textTransform: "uppercase",
+  },
+  title: {
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 10,
+    textTransform: "uppercase",
+    fontWeight: "bold",
+  },
   tableContainer: {
-    border: 1.5,
+    borderWidth: 1.5,
     borderColor: "#000",
   },
   section: {
@@ -85,26 +107,6 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
   title,
   salespoint,
 }) => {
-  const listAllProducts = (groupedData: GroupedData) => {
-    const products: { [productId: string]: string } = {};
-    Object.values(groupedData).forEach((customer) => {
-      Object.entries(customer.total_products).forEach(
-        ([productId, productDetails]) => {
-          if (!products[productId]) {
-            products[productId] = productDetails.product_name;
-          }
-        }
-      );
-    });
-    return products;
-  };
-
-    const allProducts = listAllProducts(groupedData);
-    const productArray = Object.entries(allProducts).map(([id, name]) => ({
-      id,
-      name,
-    }));
-
   return (
     <Document>
       <Page
@@ -112,40 +114,22 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
         //@ts-ignore
         style={styles.page}
       >
-        <View
-          style={{
-            marginBottom: 25,
-            border: 2,
-            width: "100%",
-            borderStyle: "dashed",
-            paddingVertical: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 25,
-              textAlign: "center",
-            }}
-          >
-            {salespoint?.name}
-          </Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              marginTop: 5,
-            }}
-          >
-            <Text style={{ fontSize: 9 }}>
+        <View style={[styles.container, { justifyContent: "space-between" }]}>
+          <Text style={styles.title}>{salespoint?.name}</Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              N<sup>o</sup> CONT: N/A
+            </Text>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
               Adresse: {salespoint?.address ?? "N/A"}
             </Text>
-            <Text style={{ fontSize: 9 }}>
-              Numéro: {salespoint?.number ?? "N/A"}
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              E-MAIL: {salespoint?.email ?? "N/A"}
             </Text>
-            <Text style={{ fontSize: 9 }}>
-              Email: {salespoint?.email ?? "N/A"}
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              Numéro: {salespoint?.number ?? "N/A"}
             </Text>
           </View>
         </View>
@@ -167,7 +151,7 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
               style={{
                 marginBottom: 10,
                 width: "100%",
-                border: 2,
+                borderWidth: 2,
                 borderColor: "#000",
                 borderStyle: "solid",
                 padding: 0,
@@ -214,9 +198,14 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
                         >
                           <Text style={[styles.tableCell]}>{index + 1}</Text>
                           <Text style={[styles.tableCell, { width: "30%" }]}>
-                            {product.code}
+                            {product?.code}
                           </Text>
-                          <Text style={[styles.tableCell, { width: "55%" }]}>
+                          <Text
+                            style={[
+                              styles.tableCell,
+                              { width: "55%", textAlign: "center" },
+                            ]}
+                          >
                             {productKey}
                           </Text>
                           <Text
@@ -229,7 +218,7 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
                               },
                             ]}
                           >
-                            {product.quantity}
+                            {product?.quantity}
                           </Text>
                         </View>
                       )

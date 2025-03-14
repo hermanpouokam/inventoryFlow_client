@@ -139,10 +139,26 @@ export default function Page() {
     },
   ];
 
-  const { errors, handleChange, handleSubmit, resetForm, setValues, values } =
-    useForm(initializeFormValues(inputs));
+  const {
+    errors,
+    handleChange,
+    handleSubmit,
+    resetForm,
+    setValues,
+    values,
+    setFieldError,
+  } = useForm(initializeFormValues(inputs));
 
   const submitForm = async () => {
+    setLoading(true);
+    if (values.amount < 1) {
+      setLoading(false);
+      return setFieldError("amount", "Entrez un montant valide");
+    }
+    if (!values.sales_point) {
+      setLoading(false);
+      return setFieldError("sales_point", "Sélectionnez un point de vente");
+    }
     const data = { ...values, remove_from_balance: true };
     const res = await instance.post("/expenses/", data, {
       withCredentials: true,
@@ -159,8 +175,11 @@ export default function Page() {
         resetForm();
         handleClose();
         await getExpenses();
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
+      console.log(error);
       return toast({
         variant: "destructive",
         description: "Une erreur n'est produite veuillez réessayer!",
@@ -168,6 +187,8 @@ export default function Page() {
         className: "bg-red-600 border-red-600 text-white",
         icon: <Check className="mr-2" />,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -346,8 +367,7 @@ export default function Page() {
           setLoading(true);
           try {
             const res = await deleteExpense(row.original.id);
-            console.log(res.status);
-            if (res.status === 200) {
+            if (res.status === 204) {
               await getExpenses();
               return toast({
                 title: "Succès",
@@ -358,12 +378,13 @@ export default function Page() {
               });
             }
           } catch (error) {
+            console.log(error);
             toast({
               title: "Erreur",
               className: "bg-red-500 border-red-500",
               variant: "destructive",
               description: `${
-                error.response.data.error ??
+                error.response.data.error.replace("[", "") ??
                 "Erreur lors de la suppression de l'inventaire"
               }`,
               icon: <X className="mr-2 h-4 w-4" />,
@@ -391,7 +412,7 @@ export default function Page() {
                     onClick={handleValidateLoss}
                   >
                     <ArrowDown size={14} className="mr-3 w-4 h-4" />
-                    Valider la perte
+                    Valider la dépense
                   </DropdownMenuItem>
                 )}
                 {!row.original.is_validated && (
@@ -403,7 +424,7 @@ export default function Page() {
                     >
                       {" "}
                       <Trash className="mr-3 w-4 h-4" size={14} />
-                      Supprimer la perte
+                      Supprimer la dépense
                     </DropdownMenuItem>
                   </>
                 )}
@@ -436,7 +457,7 @@ export default function Page() {
           Entrer une depense
         </Button>
       </CardBodyContent>
-      <CardBodyContent className="grid grid-cols-5 gap-5">
+      <CardBodyContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5">
         <DateRangePicker
           defaultDateRange={pickedDateRange}
           datesData={datesData}
@@ -520,29 +541,38 @@ export default function Page() {
               {inputs.map((input) => {
                 if (input.type == "select") {
                   return (
-                    <Combobox
-                      options={salespoints}
-                      RightIcon={ChevronDown}
-                      getOptionLabel={(option) =>
-                        `${option.name} - ${option.address}`
-                      }
-                      getOptionValue={(option) =>
-                        `${option.name} ${option.id} ${option.address}`
-                      }
-                      value={salespoints.find(
-                        (s) => s.id === values[input.name]
+                    <div>
+                      <Combobox
+                        options={salespoints}
+                        RightIcon={ChevronDown}
+                        getOptionLabel={(option) =>
+                          `${option.name} - ${option.address}`
+                        }
+                        getOptionValue={(option) =>
+                          `${option.name} ${option.id} ${option.address}`
+                        }
+                        value={salespoints.find(
+                          (s) => s.id === values[input.name]
+                        )}
+                        onValueChange={(val) =>
+                          setValues((oldVal) => {
+                            return { ...oldVal, [input.name]: val?.id };
+                          })
+                        }
+                        placeholder={input.label}
+                        className="z-[99999] popover-content-width-full"
+                        buttonClassName={cn(
+                          errors[input.name] && "border-red-600"
+                        )}
+                      />
+                      {errors[input.name] ? (
+                        <p className="text-red-500 text-xs pl-3 mt-1 font-normal">
+                          {errors[input.name]}{" "}
+                        </p>
+                      ) : (
+                        ""
                       )}
-                      onValueChange={(val) =>
-                        setValues((oldVal) => {
-                          return { ...oldVal, [input.name]: val?.id };
-                        })
-                      }
-                      placeholder={input.label}
-                      className="z-[99999] popover-content-width-full"
-                      buttonClassName={cn(
-                        errors[input.name] && "border-red-600"
-                      )}
-                    />
+                    </div>
                   );
                 } else {
                   return (
@@ -558,6 +588,8 @@ export default function Page() {
                       type={input.type}
                       value={values[input.name]}
                       fullWidth
+                      error={!!errors[input.name]}
+                      helperText={errors[input.name] && errors[input.name]}
                     />
                   );
                 }
@@ -569,9 +601,11 @@ export default function Page() {
               className="bg-red-500 hover:bg-red-600 transition"
               onClick={handleClose}
             >
-              Cancel
+              Annuler
             </Button>
-            <Button type="submit">Subscribe</Button>
+            <Button disabled={loading} type="submit">
+              {!loading ? "Ajouter" : "Veuillez patienter"}
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

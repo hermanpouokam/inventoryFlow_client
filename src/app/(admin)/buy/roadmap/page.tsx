@@ -141,6 +141,7 @@ export default function Page() {
       return;
     }
     newWindow.document.write("<p>Loading PDF...</p>");
+    console.log(organizedData);
     const pdfBlobProvider = (
       <BlobProvider
         document={

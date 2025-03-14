@@ -16,7 +16,7 @@ function groupBillsBy(
   const start = startDate ? new Date(startDate) : null;
   const end = endDate ? new Date(endDate) : null;
 
-  const filteredBills = bills.filter((bill) => {
+  const filteredBills = [...bills].sort((a, b) => new Date(a.delivery_date) - new Date(b.delivery_date)).filter((bill) => {
     const billDate = new Date(bill.created_at);
     return (!start || billDate >= start) && (!end || billDate <= end);
   });
@@ -78,7 +78,7 @@ const weeksInFrench = [
 ];
 
 const translateRole = {
-  "deliverer":"livreur",
-  "secretary":"sécrétaire"
+  "deliverer": "livreur",
+  "secretary": "sécrétaire"
 }
-export { groupBillsBy, monthsInFrench, weeksInFrench,translateRole };
+export { groupBillsBy, monthsInFrench, weeksInFrench, translateRole };

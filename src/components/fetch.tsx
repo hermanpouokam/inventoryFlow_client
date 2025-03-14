@@ -180,7 +180,7 @@ export const updateDeliverer = async (
       },
       { withCredentials: true }
     );
-    return response.data;
+    return response;
   } catch (error: AxiosError) {
     if (error.response) {
       console.error("Error updating deliverer:", error.response.data);
@@ -189,6 +189,7 @@ export const updateDeliverer = async (
     } else {
       console.error("Error updating deliverer:", error.message);
     }
+    throw error
   }
 };
 
@@ -210,6 +211,7 @@ export const updatePaid = async (amount: number, billId: number) => {
     } else {
       console.error("Error updating deliverer:", error.message);
     }
+    throw error
   }
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import { formatteCurrency } from "../(admin)/stock/functions";
 
 const styles = StyleSheet.create({
   page: {
@@ -50,22 +51,36 @@ const styles = StyleSheet.create({
   },
   footer: {
     textAlign: "center",
-    fontSize: 7,
+    fontSize: 5,
     // marginTop: 20,
     color: "#34495e",
   },
   signature: {
     marginTop: 50,
     textAlign: "center",
-    fontSize: 10,
+    fontSize: 7,
     fontWeight: "bold",
   },
 });
 
+const calculateHeight = (bill: Bill | null) => {
+  const baseHeight = 400; // Hauteur minimale
+  const extraHeightPerItem = 65; // Hauteur supplémentaire par élément
+  return (
+    baseHeight +
+    bill?.product_bills?.length * extraHeightPerItem +
+    bill?.product_bills.filter((pd) => pd.package_product_bill !== null)
+      ?.length *
+      extraHeightPerItem
+  );
+};
+
 const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
+  const pageHeight = calculateHeight(bill);
+
   return (
     <Document>
-      <Page style={styles.page} size={[250, undefined]}>
+      <Page style={styles.page} size={[250, pageHeight]}>
         <View style={[styles.container, { justifyContent: "space-between" }]}>
           <Text style={styles.title}>{bill?.sales_point_details.name}</Text>
           <View style={[styles.tableRow, { flexWrap: "wrap" }]}>
@@ -107,13 +122,10 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
               Livreur :{" "}
               {bill?.deliverer ? bill?.deliverer_details?.name : "N/A"}{" "}
             </Text>
-            {/* @ts-ignore */}
             <Text style={styles.subtitle}>
-              {/* @ts-ignore */}
               Créer le: {new Date(bill?.created_at).toLocaleString()}
             </Text>
             <Text style={styles.subtitle}>
-              {/* @ts-ignore */}
               Echéance :{" "}
               {bill?.cashed
                 ? new Date(bill?.cashed_at).toLocaleString()
@@ -129,8 +141,10 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
         <View style={styles.table}>
           <View style={[styles.tableRow, styles.tableHeader]}>
             <Text style={styles.tableCell}>Code</Text>
-            <Text style={[styles.tableCell, { flex: 2 }]}>Designation</Text>
-            <Text style={styles.tableCell}>Qte</Text>
+            <Text style={[styles.tableCell, { flex: 3, textAlign: "center" }]}>
+              Designation
+            </Text>
+            <Text style={styles.tableCell}>Qté</Text>
             <Text style={styles.tableCell}>P.U</Text>
             <Text style={[styles.tableCell, { flex: 2 }]}>Total</Text>
           </View>
@@ -139,7 +153,9 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
               <Text style={styles.tableCell}>
                 {product.product_details.product_code}
               </Text>
-              <Text style={[styles.tableCell, { flex: 3 }]}>
+              <Text
+                style={[styles.tableCell, { flex: 3, textAlign: "center" }]}
+              >
                 {product.product_details.name}
               </Text>
               <Text style={styles.tableCell}>{product.quantity}</Text>
@@ -152,7 +168,10 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
           <View style={styles.tableRow}>
             <Text style={styles.tableCell}></Text>
             <Text
-              style={[styles.tableCell, { fontWeight: "bold", flex: 2 }]}
+              style={[
+                styles.tableCell,
+                { fontWeight: "bold", flex: 3, textAlign: "center" },
+              ]}
               //@ts-ignore
             >
               Total
@@ -165,7 +184,11 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
             </Text>
             <Text style={styles.tableCell}>-</Text>
             <Text style={[styles.tableCell, { flex: 2 }]}>
-              {Number(bill?.total_amount ?? 0)}
+              {Number(
+                bill?.product_bills.reduce((acc, curr) => {
+                  return (acc += curr.total_amount);
+                }, 0) ?? 0
+              )}
             </Text>
           </View>
         </View>
@@ -173,14 +196,18 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
           (productBill) => productBill.package_product_bill !== null
         ) && (
           <>
-            <Text style={[styles.subtitle, { marginTop: 5 }]}>Produits</Text>
+            <Text style={[styles.subtitle, { marginTop: 5 }]}>Emballages</Text>
             <View style={styles.table}>
               <View style={[styles.tableRow, styles.tableHeader]}>
-                <Text style={styles.tableCell}>Produit</Text>
-                <Text style={styles.tableCell}>Emballage</Text>
-                <Text style={styles.tableCell}>Consigné</Text>
-                <Text style={styles.tableCell}>Prix</Text>
-                <Text style={styles.tableCell}>Total</Text>
+                <Text style={styles.tableCell}>Article</Text>
+                <Text
+                  style={[styles.tableCell, { flex: 3, textAlign: "center" }]}
+                >
+                  Emballage
+                </Text>
+                <Text style={styles.tableCell}>Qté</Text>
+                <Text style={styles.tableCell}>P.U</Text>
+                <Text style={[styles.tableCell, { flex: 2 }]}>Total</Text>
               </View>
               {bill?.product_bills.map((product: ProductBill, index) => {
                 const packageProduct = product?.package_product_bill;
@@ -190,39 +217,52 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
                       <Text style={styles.tableCell}>
                         {product.product_details.product_code}
                       </Text>
-                      <Text style={styles.tableCell}>
-                        {packageProduct.packaging_details.name}
+                      <Text
+                        style={[
+                          styles.tableCell,
+                          { flex: 3, textAlign: "center" },
+                        ]}
+                      >
+                        {packageProduct.name}
                       </Text>
                       <Text style={styles.tableCell}>
                         {packageProduct.record}
                       </Text>
                       <Text style={styles.tableCell}>
-                        {packageProduct.packaging_details.price}
+                        {Number(packageProduct.price)}
                       </Text>
-                      <Text style={styles.tableCell}>
-                        {formatteCurrency(
-                          packageProduct.total_amount,
-                          "XAF",
-                          "fr-FR"
-                        ).replace("/", ",")}
+                      <Text style={[styles.tableCell, { flex: 2 }]}>
+                        {Number(packageProduct.total_amount)}
                       </Text>
                     </View>
                   );
                 }
               })}
               <View style={styles.tableRow}>
+                <Text style={styles.tableCell}></Text>
                 <Text
-                  style={[styles.tableCell, { fontWeight: "bold" }]}
-                  //@ts-ignore
-                  colSpan={4}
+                  style={[
+                    styles.tableCell,
+                    { fontWeight: "bold", flex: 3, textAlign: "center" },
+                  ]}
                 >
                   Total
                 </Text>
-                <Text style={styles.tableCell}>-</Text>
                 <Text style={styles.tableCell}>
-                  {formatteCurrency(bill?.total_amount, "XAF", "fr-FR").replace(
-                    "/",
-                    ","
+                  {bill.product_bills.reduce((acc, curr) => {
+                    const pkg = curr.package_product_bill;
+                    return (acc += Number(pkg?.record));
+                  }, 0)}
+                </Text>
+                <Text style={styles.tableCell}>-</Text>
+                <Text style={[styles.tableCell, { flex: 2 }]}>
+                  {Number(
+                    bill.product_bills.reduce((acc, curr) => {
+                      const pkg = curr.package_product_bill;
+                      return (acc += Number(
+                        pkg?.record * pkg?.price
+                      ));
+                    }, 0)
                   )}
                 </Text>
               </View>
@@ -235,7 +275,7 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableCell}>{tax.name}</Text>
               <Text style={styles.tableCell}>
-                {formatteCurrency(tax.name, "XAF", "fr-FR").replace("/", ",")}
+                {formatteCurrency(tax.total)}
               </Text>
             </View>
           ))}

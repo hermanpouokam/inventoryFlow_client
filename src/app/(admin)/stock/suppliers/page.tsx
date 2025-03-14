@@ -415,8 +415,11 @@ export default function Page() {
             const params = {
               suppliers: [row.original.id],
             };
-            const res: Supply[] = await getSupplies(params);
-            if (res.length > 0) {
+            const res = await instance.get(
+              `/supplies/?suppliers=${row.original.id}`,
+              { withCredentials: true }
+            );
+            if (res.data.length > 0) {
               return toast({
                 title: "Erreur",
                 description:

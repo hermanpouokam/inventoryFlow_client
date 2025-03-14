@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Check, CircleAlert, Pencil, X } from "lucide-react";
@@ -12,12 +12,14 @@ const InputPrice = ({
   onSelect,
   onSetLoading,
   product,
+  loading,
 }: {
   input: SellPrice;
   isSelected: boolean;
   onSelect: (e: string) => void;
   onSetLoading: (state: boolean) => void;
   product: Product;
+  loading: boolean;
 }) => {
   const [text, setText] = React.useState(Number(input?.price) ?? "");
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -160,10 +162,15 @@ const InputPrice = ({
           </Button>
           <Button
             variant="default"
+            disabled={loading}
             onClick={handleUpdateProduct}
             className="bg-green-600 hover:bg-green-700"
           >
-            <Check className="w-4 h-4" />
+            {loading ? (
+              <CircularProgress size={"small"} />
+            ) : (
+              <Check className="w-4 h-4" />
+            )}
           </Button>
         </div>
       )}

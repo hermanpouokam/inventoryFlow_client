@@ -42,7 +42,9 @@ import {
   Check,
   EllipsisVertical,
   EyeIcon,
+  PrinterIcon,
   WalletCards,
+  X,
 } from "lucide-react";
 import moment from "moment";
 import * as React from "react";
@@ -51,11 +53,15 @@ import BillDetails from "../pending/BillDetails";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatteCurrency } from "../../stock/functions";
-import { updatePaid } from "@/components/fetch";
+import { instance, updatePaid } from "@/components/fetch";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchClients } from "@/redux/clients";
 import SelectPopover from "@/components/SelectPopover";
 import { getBill } from "../functions";
+import InvoicePDF from "@/app/pdf/invoiceA4Pdf";
+import InvoiceSmallPDF from "@/app/pdf/invoiceSmallPDF";
+import { BlobProvider } from "@react-pdf/renderer";
+import ReactDOM from "react-dom/client";
 
 export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<{
@@ -80,7 +86,7 @@ export default function Page() {
   } = useSelector((state: RootState) => state.clients);
   const [data, setdata] = React.useState<Bill[]>([]);
   const [customer, setCustomer] = React.useState<Customer[]>([]);
-
+  const [text, setText] = React.useState<sting>("");
   const dispatch: AppDispatch = useDispatch();
   const {
     data: salesPoints,
@@ -141,16 +147,19 @@ export default function Page() {
             "bg-green-700 border-green-700 text-white text-base font-semibold",
           title: "Succès",
           description: "Facture encaissée avec succès",
+          icon: <Check className="mr-2" />,
         });
         dispatch(fetchBills({ state: "pending" }));
       }
     } catch (error) {
       toast({
         title: "Erreur",
-        description: `Une erreur est survenu veuillez réessayer`,
+        description:
+          error.response.data.detail ??
+          `Une erreur est survenu veuillez réessayer`,
         variant: "destructive",
-        className: "bg-red-800 border-red-800",
-        icon: <Check className="mr-2" />,
+        className: "bg-red-500 border-red-500",
+        icon: <X className="mr-2" />,
       });
     }
     await getData();
@@ -177,96 +186,218 @@ export default function Page() {
   }, [dispatch, selectedSalespoint]);
 
   const ActionComponent = ({ row }: { row: any }) => {
-    const bill = row.original;
+    const bill: Bill = row.original;
     const [open, setOpen] = React.useState(false);
     const [openPopup, setOpenPopup] = React.useState(false);
+    const [type, setType] = React.useState<"receipt" | "record">("receipt");
 
-    const PopUp = ({ isOpen }: { isOpen: boolean }) => {
+    const [product_bill_ids, setProduct_bill_ids] = React.useState<number[]>(
+      []
+    );
+
+    const handleClick = async () => {
+      setLoading(true);
+      try {
+        const response = await instance.post(
+          `/bills/${bill.id}/retour_emballage/`,
+          { product_bill_ids },
+          { withCredentials: true }
+        );
+        if (response.status === 200) {
+          getData();
+          return toast({
+            title: "Succès",
+            description:
+              response.data.success ?? "Retour emballage effectué avec succès",
+            icon: <Check className="mr-2" />,
+            variant: "default",
+            className: "bg-green-600 border-green-600 text-white",
+          });
+        }
+      } catch (error) {
+        return toast({
+          title: "Erreur",
+          description:
+            error.response.data.error ??
+            "Une erreur est survenue. verifiez votre connexion et ressayez",
+          icon: <X className="mr-2" />,
+          variant: "destructive",
+          className: "bg-red-600 border-red-600 text-white",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const PopUp = ({
+      isOpen,
+      type,
+    }: {
+      isOpen: boolean;
+      type: "receipt" | "record";
+    }) => {
       const handleClose = () => {
         setOpenPopup(false);
       };
 
-      return (
-        <MuiDialog
-          open={isOpen}
-          onClose={handleClose}
-          PaperProps={{
-            component: "form",
-            onSubmit: onSubmit,
-          }}
-        >
-          <MuiDialogTitle>
-            Encaisser la facture {bill.bill_number}
-          </MuiDialogTitle>
-          <MuiDialogContent>
-            <DialogContentText>
-              Entrez le montant verser pour cette facture et validez
-            </DialogContentText>
-            <div className="mt-2"></div>
-            <TextField
-              autoFocus
-              required
-              margin="dense"
-              name="total_amount"
-              label="Montant total"
-              value={bill.total_amount_with_taxes_fees}
-              type="number"
-              size="small"
-              fullWidth
-            />
-            <TextField
-              autoFocus
-              required
-              margin="dense"
-              name="paid_amount"
-              label="Montant payé"
-              type="number"
-              size="small"
-              defaultValue={bill.total_amount_with_taxes_fees}
-              fullWidth
-            />
-            <input type="text" hidden={true} name="bill_id" value={bill.id} />
-          </MuiDialogContent>
-          <DialogActions>
-            <MuiButton disabled={loading} onClick={handleClose} color="error">
-              Annuler
-            </MuiButton>
-            <MuiButton disabled={loading} type="submit" color="success">
-              {loading ? "Veuillez patienter..." : "Encaisser"}
-            </MuiButton>
-          </DialogActions>
-        </MuiDialog>
-      );
+      if (type == "receipt") {
+        return (
+          <MuiDialog
+            open={isOpen}
+            PaperProps={{
+              component: "form",
+              onSubmit: onSubmit,
+            }}
+          >
+            <MuiDialogTitle>
+              Encaisser la facture {bill.bill_number}
+            </MuiDialogTitle>
+            <MuiDialogContent>
+              <DialogContentText>
+                Entrez le montant verser pour cette facture et validez
+              </DialogContentText>
+              <div className="mt-2"></div>
+              <TextField
+                autoFocus
+                required
+                margin="dense"
+                name="total_amount"
+                label="Montant total"
+                value={bill.total_amount_with_taxes_fees}
+                type="number"
+                size="small"
+                fullWidth
+              />
+              <TextField
+                autoFocus
+                required
+                margin="dense"
+                name="paid_amount"
+                label="Montant payé"
+                type="number"
+                size="small"
+                defaultValue={bill.total_amount_with_taxes_fees}
+                fullWidth
+              />
+              <input type="text" hidden={true} name="bill_id" value={bill.id} />
+            </MuiDialogContent>
+            <DialogActions>
+              <MuiButton disabled={loading} onClick={handleClose} color="error">
+                Annuler
+              </MuiButton>
+              <MuiButton disabled={loading} type="submit" color="success">
+                {loading ? "Veuillez patienter..." : "Encaisser"}
+              </MuiButton>
+            </DialogActions>
+          </MuiDialog>
+        );
+      } else if (type == "record") {
+        return (
+          <MuiDialog
+            open={isOpen}
+            PaperProps={{
+              component: "form",
+              onSubmit: onSubmit,
+            }}
+          >
+            <MuiDialogTitle>
+              Retour d&apos;emballage de la facture {bill.bill_number}
+            </MuiDialogTitle>
+            <MuiDialogContent>
+              <div className="space-y-3">
+                <p className="text-sm text-orange-500">
+                  NB: Le montant des emballages retournés sera automatiquement
+                  deduit de la caisse et reversé dans le solde du client
+                </p>
+                <p className="font-medium text-base">
+                  Vous allez effetuer le retour des emballages suivants
+                </p>
+                <div className="space-y-2 pl-2">
+                  {bill.product_bills.map((pb) => {
+                    return (
+                      <div className="flex items-center space-x-2" key={pb.id}>
+                        <Checkbox
+                          // value={pb.id}
+                          checked={product_bill_ids.includes(pb.id)}
+                          onCheckedChange={(checked) => {
+                            return checked
+                              ? setProduct_bill_ids([
+                                  ...product_bill_ids,
+                                  pb.id,
+                                ])
+                              : setProduct_bill_ids((items) => {
+                                  return items.filter((item) => item !== pb.id);
+                                });
+                          }}
+                          id={`product-${pb.id}`}
+                        />
+                        <label
+                          htmlFor={`product-${pb.id}`}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {pb.product_details.name} {"=>"} {pb.record_package}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </MuiDialogContent>
+            <DialogActions>
+              <MuiButton disabled={loading} onClick={handleClose} color="error">
+                Annuler
+              </MuiButton>
+              <MuiButton
+                disabled={loading || product_bill_ids.length < 1}
+                onClick={handleClick}
+                color="success"
+              >
+                {loading ? "Veuillez patienter..." : "Confirmer"}
+              </MuiButton>
+            </DialogActions>
+          </MuiDialog>
+        );
+      }
     };
 
-    const handleOpenPdf = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/generate-pdf", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ bill }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Error fetching PDF");
-        }
-
-        const pdfBlob = await response.blob();
-
-        const blobUrl = URL.createObjectURL(pdfBlob);
-
-        window.open(blobUrl, "_blank");
-      } catch (error) {
-        console.error("Failed to fetch PDF:", error);
-      } finally {
+    const handleOpenPDF = (format: "large" | "small" = "large") => {
+      const newWindow = window.open("", "_blank");
+      if (!newWindow) {
+        alert("Failed to open a new tab. Please allow popups for this site.");
+        return;
       }
+      newWindow.document.write("<p>Loading PDF...</p>");
+      const pdfBlobProvider = (
+        <BlobProvider
+          document={
+            format == "large" ? (
+              <InvoicePDF bill={bill} />
+            ) : (
+              <InvoiceSmallPDF bill={bill} />
+            )
+          }
+        >
+          {/* @ts-ignore */}
+          {({ blob }) => {
+            console.log("blob", blob);
+            if (blob) {
+              const blobUrl = URL.createObjectURL(blob);
+              newWindow.location.href = blobUrl; // Redirect the popup to the blob URL
+            } else {
+              newWindow.document.write("<p>Failed to load the PDF.</p>");
+            }
+          }}
+        </BlobProvider>
+      );
+      const container = document.createElement("div");
+      document.body.appendChild(container);
+      const root = ReactDOM.createRoot(container);
+      root.render(pdfBlobProvider);
     };
 
     return (
       <>
-        <PopUp isOpen={openPopup} />
+        <PopUp isOpen={openPopup} type={type} />
         <Dialog open={open}>
           <DialogContent className="sm:max-w-full max-h-full overflow-auto p-5">
             <DialogHeader>
@@ -299,16 +430,32 @@ export default function Page() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleOpenPdf()}>
-              <EyeIcon size={14} className="mr-3" />
-              Voir les details
+            <DropdownMenuItem onClick={() => handleOpenPDF("large")}>
+              <PrinterIcon size={14} className="mr-3" />
+              Imprimer en A4
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setOpenPopup(true)}>
-              {" "}
-              <ArrowDownToLine className="mr-3" size={14} />
-              Retour d&apos;emballage
+            <DropdownMenuItem onClick={() => handleOpenPDF("small")}>
+              <PrinterIcon size={14} className="mr-3" />
+              Imprimer en petit format
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setOpenPopup(true)}>
+            {bill.product_bills.some((pb) => pb.record_package > 0) ? (
+              <DropdownMenuItem
+                onClick={() => {
+                  setOpenPopup(true);
+                  setType("record");
+                }}
+              >
+                {" "}
+                <ArrowDownToLine className="mr-3" size={14} />
+                Retour d&apos;emballage
+              </DropdownMenuItem>
+            ) : null}
+            <DropdownMenuItem
+              onClick={() => {
+                setOpenPopup(true);
+                setType("receipt");
+              }}
+            >
               {" "}
               <WalletCards className="mr-3" size={14} />
               Encaisser la facture
@@ -399,39 +546,7 @@ export default function Page() {
       footer: () => <div className="text-right">Total</div>,
     },
     {
-      accessorKey: "product_bills",
-      header: () => (
-        <div>
-          <h6 className="text-right text-base w-[220px]">Montant total</h6>
-        </div>
-      ),
-      cell: ({ row }) => {
-        const product_bills: ProductBill[] = row.getValue("product_bills");
-        const total = product_bills.reduce(
-          (acc, curr) => (acc = acc + parseFloat(curr.total_amount.toString())),
-          0
-        );
-        const formatted = formatteCurrency(total, "XAF", "fr-FR");
-
-        return <div className="text-right font-medium">{formatted}</div>;
-      },
-      footer: () => {
-        const totalAmount = data.reduce((total, bill) => {
-          return (
-            total +
-            bill.product_bills.reduce((subtotal, product_bill) => {
-              return (
-                subtotal + parseFloat(product_bill.total_amount.toString())
-              );
-            }, 0)
-          );
-        }, 0);
-        const formatted = formatteCurrency(totalAmount, "XAF", "fr-FR");
-        return <div className="text-right">{formatted}</div>;
-      },
-    },
-    {
-      accessorKey: "product_bills",
+      accessorKey: "nombre de colis",
       header: ({ column }) => {
         return (
           <div
@@ -444,10 +559,9 @@ export default function Page() {
         );
       },
       cell: ({ row }) => {
-        const product_bills: ProductBill[] = row.getValue("product_bills");
         return (
           <div className="capitalize text-center  w-[100px]">
-            {product_bills.reduce(
+            {row.original.product_bills.reduce(
               (acc, curr) => (acc = acc + curr.quantity),
               0
             )}
@@ -464,6 +578,122 @@ export default function Page() {
           );
         }, 0);
         return <div className="text-center">{totalQty}</div>;
+      },
+    },
+    {
+      accessorKey: "product_bills",
+      header: () => (
+        <div>
+          <h6 className="text-right text-base w-[220px]">Montant</h6>
+        </div>
+      ),
+      cell: ({ row }) => {
+        const formatted = formatteCurrency(
+          row.original.total_amount,
+          "XAF",
+          "fr-FR"
+        );
+        return <div className="text-right font-medium">{formatted}</div>;
+      },
+      footer: () => {
+        const totalAmount = data.reduce((total, bill) => {
+          return (total += bill.total_amount);
+        }, 0);
+        const formatted = formatteCurrency(totalAmount, "XAF", "fr-FR");
+        return <div className="text-right">{formatted}</div>;
+      },
+    },
+    {
+      accessorKey: "taxes",
+      header: () => (
+        <div>
+          <h6 className="text-right w-[220px]">Taxes</h6>
+        </div>
+      ),
+      cell: ({ row }) => {
+        const tax = row.original.taxes;
+        const total = tax.reduce(
+          (acc, curr) => (acc = acc + Number(curr.total)),
+          0
+        );
+
+        return (
+          <div className="text-right font-medium">
+            {formatteCurrency(total ?? 0)}
+          </div>
+        );
+      },
+
+      footer: () => {
+        const totalAmount = data.reduce((total, bill) => {
+          return (
+            total +
+            bill.taxes.reduce((subtotal, taxe) => {
+              return subtotal + (taxe.total ?? 0);
+            }, 0)
+          );
+        }, 0);
+
+        return (
+          <div className="text-right">{formatteCurrency(totalAmount)}</div>
+        );
+      },
+    },
+    {
+      accessorKey: "Frais supplementaires",
+      header: () => (
+        <div>
+          <h6 className="text-right w-[220px]">Frais supplementaires</h6>
+        </div>
+      ),
+      cell: ({ row }) => {
+        const fees = row.original.additional_fees;
+        const total = fees.reduce(
+          (acc, curr) => (acc = acc + Number(curr.total)),
+          0
+        );
+
+        return (
+          <div className="text-right font-medium">
+            {formatteCurrency(total ?? 0)}
+          </div>
+        );
+      },
+      footer: () => {
+        const totalAmount = data.reduce((total, bill) => {
+          return (
+            total +
+            bill.additional_fees.reduce((subtotal, additional_fee) => {
+              return subtotal + Number(additional_fee.total);
+            }, 0)
+          );
+        }, 0);
+        return (
+          <div className="text-right">{formatteCurrency(totalAmount)}</div>
+        );
+      },
+    },
+    {
+      accessorKey: "product_bills",
+      header: () => (
+        <div>
+          <h6 className="text-right text-base w-[220px]">Montant total</h6>
+        </div>
+      ),
+      cell: ({ row }) => {
+        const formatted = formatteCurrency(
+          row.original.total_amount_with_taxes_fees,
+          "XAF",
+          "fr-FR"
+        );
+        return <div className="text-right font-medium">{formatted}</div>;
+      },
+      footer: () => {
+        const totalAmount = data.reduce((total, bill) => {
+          return (total += bill.total_amount_with_taxes_fees);
+        }, 0);
+        const formatted = formatteCurrency(totalAmount, "XAF", "fr-FR");
+        return <div className="text-right">{formatted}</div>;
       },
     },
     {
@@ -498,7 +728,7 @@ export default function Page() {
         </Backdrop>
         <CardBodyContent className="space-y-3">
           <h2 className="text-base font-semibold">Encaisser une facture</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             <DateRangePicker
               //@ts-ignore
               defaultDateRange={pickedDateRange}
@@ -538,8 +768,8 @@ export default function Page() {
         <CardBodyContent className="spaec-y-3">
           <h2 className="text-base font-semibold">Factures non encaissées</h2>
           <DataTableDemo
-            filterAttributes={["bill_number"]}
-            searchText=""
+            filterAttributes={["bill_number", "customer_name"]}
+            searchText={text}
             setTableData={setTable}
             columns={columns}
             data={data.map((el, index) => {
@@ -550,16 +780,8 @@ export default function Page() {
               <div className="flex space-x-5">
                 <Input
                   placeholder="Filtrer par client..."
-                  value={
-                    table
-                      ?.getColumn("customer_name")
-                      ?.getFilterValue() as string
-                  }
-                  onChange={(event) =>
-                    table
-                      ?.getColumn("customer_name")
-                      ?.setFilterValue(event.target.value)
-                  }
+                  value={text}
+                  onChange={(event) => setText(event.target.value)}
                   className="max-w-sm"
                 />
                 {/* <DropdownMenu>

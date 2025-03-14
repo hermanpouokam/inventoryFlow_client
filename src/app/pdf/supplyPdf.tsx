@@ -10,9 +10,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
     width: "100%",
+    border: "2px solid #2d3436",
+    borderStyle: "dashed",
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     textAlign: "center",
     marginBottom: 10,
     textDecoration: "underline",
@@ -76,14 +81,28 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
   return (
     <Document>
       <Page style={styles.page} size="A4">
-        <View style={[styles.container]}>
-          <Text style={[styles.title, { marginBottom: 10 }]}>
-            {supply?.sales_point_details.name}
-          </Text>
-          <Text style={styles.title}>
-            Bon de commande N<sup>o</sup> {supply?.supply_number}
-          </Text>
+        <View style={[styles.container, { justifyContent: "space-between" }]}>
+          <Text style={styles.title}>{supply?.sales_point_details.name}</Text>
+          <View style={styles.tableRow}>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              N<sup>o</sup> CONT: N/A
+            </Text>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              Adresse: {supply?.sales_point_details.address ?? "N/A"}
+            </Text>
+          </View>
+          <View style={[styles.tableRow]}>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              E-MAIL: {supply?.sales_point_details?.email ?? "N/A"}
+            </Text>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              Numéro: {supply?.sales_point_details.number ?? "N/A"}
+            </Text>
+          </View>
         </View>
+        <Text style={[styles.title, { marginTop: 15 }]}>
+          Bon de commande #{supply?.supply_number}
+        </Text>
         <View
           style={{
             display: "flex",
@@ -115,6 +134,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
           </View>
         </View>
 
+        <Text style={[styles.subtitle, { marginTop: 5 }]}>Articles</Text>
         <View style={styles.table}>
           <View style={[styles.tableRow, styles.tableHeader]}>
             <Text style={styles.tableCell}>Code</Text>
@@ -134,7 +154,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
               <Text style={styles.tableCell}>{product.quantity}</Text>
               <Text style={styles.tableCell}>{Number(product.price)}</Text>
               <Text style={styles.tableCell}>
-                {formatteCurrency(Number(product.price), "XAF", "fr-FR")}
+                {formatteCurrency(Number(product.price))}
               </Text>
             </View>
           ))}
@@ -178,7 +198,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
                       {packaging.missing_quantity}
                     </Text>
                     <Text style={styles.tableCell}>
-                      {packaging.packaging_cost}
+                      {Number(packaging.packaging_cost)}
                     </Text>
                     <Text style={styles.tableCell}>
                       {formatteCurrency(
@@ -197,13 +217,15 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
                   Total
                 </Text>
                 <Text style={styles.tableCell}>
-                  {Object.values(packagingDetails).reduce((acc, curr) => {
-                    return (acc += Number(curr.missing_quantity));
-                  }, 0)}
+                  {Number(
+                    Object.values(packagingDetails).reduce((acc, curr) => {
+                      return (acc += Number(curr.missing_quantity));
+                    }, 0)
+                  )}
                 </Text>
                 <Text style={styles.tableCell}>-</Text>
                 <Text style={styles.tableCell}>
-                  {formatteCurrency(totalPackagings, "XAF", "fr-FR")}
+                  {formatteCurrency(totalPackagings)}
                 </Text>
               </View>
             </>
@@ -223,10 +245,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
                       ]}
                     >
                       {obj.tax_name} :{"     "}
-                      {formatteCurrency(obj.tax_amount, "XAF", "fr-FR").replace(
-                        "/",
-                        ""
-                      )}
+                      {formatteCurrency(obj.tax_amount)}
                     </Text>
                   </View>
                 );
@@ -243,11 +262,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
                 ]}
               >
                 Total :{"    "}
-                {formatteCurrency(
-                  Number(taxDetails?.total_tax_amount),
-                  "XAF",
-                  "fr-FR"
-                ).replace("/", "")}
+                {formatteCurrency(Number(taxDetails?.total_tax_amount))}
               </Text>
             </>
           )}

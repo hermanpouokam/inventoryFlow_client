@@ -224,9 +224,9 @@ export default function Page() {
 
     const unpaidBills = bills.filter(
       (bill) =>
-        bill.state === "delivered" &&
+        bill.state === "success" &&
         bill.paid &&
-        bill.total_amount_with_taxes_fees > parseFloat(bill?.paid)
+        bill.total_amount_with_taxes_fees > Number(bill?.paid)
     );
     const unpaidBillAmount = unpaidBills.reduce(
       (acc, curr) =>

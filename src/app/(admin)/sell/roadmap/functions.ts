@@ -1,8 +1,8 @@
 const groupByCustomer = (bills: Bill[]) => {
   const result: OrganizedRoute = {};
   bills.forEach((bill: Bill) => {
-    const customerId = bill.customer;
-    const customerName = bill.customer_details.name;
+    const customerId = bill.customer ?? 0;
+    const customerName = bill?.customer_details?.name ?? "Clients divers";
     if (!result[customerId]) {
       result[customerId] = {
         customer_name: customerName,
@@ -87,4 +87,4 @@ const exportToExcel = (groupedData: GroupedData, fileName: string) => {
 
 export default exportToExcel;
 
-export { groupByCustomer,exportToExcel };
+export { groupByCustomer, exportToExcel };

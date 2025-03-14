@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 import { IndeterminateCheckBox } from "@mui/icons-material";
 
 export default function Sidebar() {
-
   const [open, setOpen] = useState<boolean>(false);
 
   const pathname = usePathname();
@@ -144,8 +143,8 @@ export default function Sidebar() {
                     "max-h-0 w-full space-y-2 overflow-hidden transition-all ease-in-out duration-150 pl-8"
                   )}
                 >
-                  {item.menu?.map((el) => (
-                    <li className="w-full ">
+                  {item.menu?.map((el, index) => (
+                    <li key={index} className="w-full ">
                       <a
                         href={el.link}
                         className={cn(

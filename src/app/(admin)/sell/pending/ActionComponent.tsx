@@ -1,6 +1,5 @@
 import InvoicePDF from "@/app/pdf/invoiceA4Pdf";
 import InvoiceSmallPDF from "@/app/pdf/invoiceSmallPDF";
-import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import {
   Dialog,
   DialogClose,
@@ -29,6 +28,7 @@ import {
   EyeIcon,
   Printer,
   Trash,
+  X,
 } from "lucide-react";
 import {
   CircularProgress,
@@ -42,7 +42,6 @@ import {
   DialogContentText,
   Button as MuiButton,
   DialogActions,
-  Backdrop,
 } from "@mui/material";
 
 import ReactDOM from "react-dom/client";
@@ -84,19 +83,41 @@ export const ActionComponent = ({
       const formData = new FormData(event.currentTarget);
       const formJson = Object.fromEntries((formData as any).entries());
       const data = formJson?.employee > 0 ? formJson?.employee : null;
-      const res = await updateDeliverer(bill?.id, parseInt(data));
+      const res = await updateDeliverer(bill?.id, data);
+      if (res.status === 200) {
+        toast({
+          variant: "default",
+          className:
+            "bg-green-600 border-green-600 text-white text-base font-semibold",
+          title: "Succès",
+          description: "Facture receptionnée avec succès",
+          icon: <Check className="mr-2" />,
+        });
+        onGetData();
+        handleClose();
+        onSetLoading(false);
+      } else {
+        toast({
+          variant: "destructive",
+          className:
+            "bg-red-600 border-red-600 text-white text-base font-semibold",
+          title: "Erreur",
+          description: "Une erreur est survenue veuillez reessayer.",
+          icon: <X className="mr-2" />,
+        });
+        onGetData();
+        handleClose();
+        onSetLoading(false);
+      }
+    } catch (error) {
       toast({
         variant: "default",
         className:
-          "bg-green-700 border-green-700 text-white text-base font-semibold",
-        title: "Succès",
-        description: "Facture receptionnée avec succès",
+          "bg-red-600 border-red-600 text-white text-base font-semibold",
+        title: "Erreur",
+        description: "Une erreur est survenue veuillez reessayer.",
+        icon: <X className="mr-2" />,
       });
-      onGetData();
-      handleClose();
-      onSetLoading(false);
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -109,7 +130,7 @@ export const ActionComponent = ({
           title: "Succès",
           description: `Facture supprimée avec succès`,
           variant: "success",
-          className: "bg-green-800 border-green-800",
+          className: "bg-green-600 border-green-600",
           icon: <Check className="mr-2" />,
         });
       } else {
@@ -117,7 +138,7 @@ export const ActionComponent = ({
           title: "Erreur",
           description: `Une erreur est survenu veuillez réessayer`,
           variant: "destructive",
-          className: "bg-red-800 border-red-800",
+          className: "bg-red-600 border-red-600",
           icon: <Check className="mr-2" />,
         });
       }
@@ -261,40 +282,42 @@ export const ActionComponent = ({
           Voulez-vous vraiment receptionner {bill?.bill_number} ?
         </MuiDialogTitle>
         <MuiDialogContent>
-          <div className="max-w-sm">
-            {
-              <>
-                <DialogContentText>
-                  Selectionner un livreur puis validez
-                </DialogContentText>
-                <FormControl size="small" fullWidth sx={{ marginTop: 2 }}>
-                  <InputLabel size="small" id="demo-simple-select-label">
-                    Seletionner un livreur
-                  </InputLabel>
-                  <MuiSelect
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    required
-                    fullWidth
-                    name="employee"
-                    size="small"
-                    label="Seletionner un livreur"
-                  >
-                    {[
-                      { id: 0, name: "Aucun" },
-                      ...employees.filter(
-                        (employee) =>
-                          employee.sales_point == bill?.sales_point &&
-                          employee.is_deliverer == true
-                      ),
-                    ].map((employee) => (
-                      <MenuItem key={employee.id} value={employee.id}>{employee.name}</MenuItem>
-                    ))}
-                  </MuiSelect>
-                </FormControl>
-              </>
-            }
-          </div>
+          {/* <div className="max-w-sm"> */}
+          {
+            <>
+              <DialogContentText>
+                Selectionner un livreur puis validez
+              </DialogContentText>
+              <FormControl size="small" fullWidth sx={{ marginTop: 2 }}>
+                <InputLabel size="small" id="demo-simple-select-label">
+                  Seletionner un livreur
+                </InputLabel>
+                <MuiSelect
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  required
+                  fullWidth
+                  name="employee"
+                  size="small"
+                  label="Seletionner un livreur"
+                >
+                  {[
+                    { id: 0, name: "Aucun" },
+                    ...employees.filter(
+                      (employee) =>
+                        employee.sales_point == bill?.sales_point &&
+                        employee.is_deliverer == true
+                    ),
+                  ].map((employee) => (
+                    <MenuItem key={employee.id} value={employee.id}>
+                      {employee.name}
+                    </MenuItem>
+                  ))}
+                </MuiSelect>
+              </FormControl>
+            </>
+          }
+          {/* </div> */}
         </MuiDialogContent>
         <DialogActions>
           <Button

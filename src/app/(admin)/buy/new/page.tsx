@@ -343,8 +343,8 @@ export default function Page() {
         toast({
           title: "Succès",
           description: `Facture créée avec succès`,
-          variant: "destructive",
-          className: "bg-green-800 border-green-800",
+          variant: "success",
+          className: "bg-green-600 border-green-600",
           icon: <Check className="mr-2" />,
         });
         setTimeout(() => {
@@ -425,7 +425,7 @@ export default function Page() {
         <CardBodyContent className="space-y-5">
           <h2 className="text-red-500 text-base font-medium">
             NB: Pour tout article possedant un emballage assurez vous
-            d&aquos;avoir le nombre d&aquos;emballages vides correspondant.
+            d&apos;avoir le nombre d&apos;emballages vides correspondants.
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-5">
             <Combobox
