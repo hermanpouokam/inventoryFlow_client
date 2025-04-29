@@ -613,7 +613,7 @@ export default function Page() {
       cell: ({ row }) => {
         const tax = row.original.taxes;
         const total = tax.reduce(
-          (acc, curr) => (acc = acc + Number(curr.total)),
+          (acc, curr) => (acc = acc + Number(curr.amount)),
           0
         );
 
@@ -629,7 +629,7 @@ export default function Page() {
           return (
             total +
             bill.taxes.reduce((subtotal, taxe) => {
-              return subtotal + (taxe.total ?? 0);
+              return subtotal + (taxe.amount ?? 0);
             }, 0)
           );
         }, 0);

@@ -171,7 +171,7 @@ export default function Page() {
                 (tier) => tier.id.toLowerCase() == plan.name.toLowerCase()
               );
               return (
-                <div className="p-4 xl:w-1/4 md:w-1/2 w-full">
+                <div key={i} className="p-4 xl:w-1/4 md:w-1/2 w-full">
                   <div
                     className={cn(
                       "h-full p-6 rounded-lg border-2  flex flex-col relative overflow-hidden",
@@ -203,9 +203,9 @@ export default function Page() {
                           <svg
                             fill="none"
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2.5"
                             className="w-3 h-3"
                             viewBox="0 0 24 24"
                           >

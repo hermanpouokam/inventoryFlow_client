@@ -135,7 +135,14 @@ export default function Page() {
       id: "actions",
       enableHiding: false,
       header: () => <div className="text-left w-[50px]">Actions</div>,
-      cell: ({ row }) => <ActionComponent bill={row.original} />,
+      cell: ({ row }) => (
+        <ActionComponent
+          onGetData={getData}
+          onSetLoading={(e) => setLoading(e)}
+          bill={row.original}
+          loading={loading}
+        />
+      ),
     },
     {
       accessorKey: "bill_number",
@@ -228,13 +235,13 @@ export default function Page() {
         const formatted = new Intl.NumberFormat("fr-FR", {
           style: "currency",
           currency: "XAF",
-        }).format(bill.total_bill_amount);
+        }).format(bill.total_amount);
 
         return <div className="text-right font-medium">{formatted}</div>;
       },
       footer: () => {
         const totalAmount = data.reduce((total, bill) => {
-          return total + bill.total_bill_amount;
+          return total + bill.total_amount;
         }, 0);
         const formatted = formatteCurrency(totalAmount, "XAF", "fr-FR");
 
@@ -300,11 +307,9 @@ export default function Page() {
       ),
       cell: ({ row }) => {
         const bill = row.original;
-        const totalTaxes = bill.taxes.reduce((total, tax) => {
-          return total + tax.value;
-        }, 0);
+
         const formatted = formatteCurrency(
-          totalTaxes + bill.total_bill_amount,
+          bill.total_amount_with_taxes_fees,
           "XAF",
           "fr-FR"
         );
@@ -372,7 +377,7 @@ export default function Page() {
       </Backdrop>
       <CardBodyContent className="space-y-3">
         <h2 className="text-base font-semibold">Encaisser une facture</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           <DateRangePicker
             defaultDateRange={pickedDateRange}
             datesData={datesData}

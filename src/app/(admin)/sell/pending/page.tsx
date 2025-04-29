@@ -256,7 +256,7 @@ export default function Page() {
       cell: ({ row }) => {
         const tax = row.original.taxes;
         const total = tax.reduce(
-          (acc, curr) => (acc = acc + Number(curr.total)),
+          (acc, curr) => (acc = acc + Number(curr.amount)),
           0
         );
 
@@ -272,7 +272,7 @@ export default function Page() {
           return (
             total +
             bill.taxes.reduce((subtotal, taxe) => {
-              return subtotal + (taxe.total ?? 0);
+              return subtotal + (taxe.amount ?? 0);
             }, 0)
           );
         }, 0);
@@ -473,7 +473,7 @@ export default function Page() {
         <CircularProgress color="inherit" />
       </Backdrop>
       <div className="shadow border select-none border-neutral-300 rounded-lg bg-white p-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           <DateRangePicker
             defaultDateRange={pickedDateRange}
             datesData={datesData}
@@ -488,7 +488,6 @@ export default function Page() {
             items={salespoints}
             getOptionLabel={(option) => `${option.name} - ${option.address}`}
             onSelect={handleSelect}
-            // displayProperties={["name", "address"]}
             placeholder="Points de vente"
           />
           <SelectPopover
@@ -496,7 +495,6 @@ export default function Page() {
             items={customers}
             getOptionLabel={(option) => `${option.name}`}
             onSelect={handleSelectCustomers}
-            // displayProperties={["name"]}
             placeholder="Clients"
           />
 
@@ -504,7 +502,7 @@ export default function Page() {
             variant={"outline"}
             onClick={getData}
             className={cn(
-              "w-full bg-green-600 hover:bg-green-700 hover:text-white text-white"
+              "w-full bg-green-600 hover:bg-green-700 transition hover:text-white text-white"
             )}
           >
             Rechercher
@@ -526,7 +524,11 @@ export default function Page() {
               };
             })
             .filter((el) => el.state == "created")
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))}
+            .sort(
+              (a, b) =>
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            )}
         >
           <div className="flex items-center justify-between py-4">
             <div className="flex space-x-5">

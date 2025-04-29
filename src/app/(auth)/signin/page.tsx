@@ -74,7 +74,7 @@ export default function Signin() {
   return (
     <main className="flex min-h-screen flex-col items-center  justify-center p-10">
       {error && (
-        <h3 className="text-red-500 bg-red-100 p-3 rounded border border-red-500 mb-5">
+        <h3 className="text-red-500 bg-red-100 w-full text-center font-medium p-3 rounded border border-red-500 mb-5">
           {error}
         </h3>
       )}

@@ -8,8 +8,12 @@ export async function enterpriseMiddleware(req) {
 
     // 🚀 Routes accessibles sans entreprise
     const allowedWithoutEnterprise = [
-        "/signup/select_plan",
         "/signup/create_enterprise"
+    ];
+
+    const allowedWithEnterpriseNotPlan = [
+        "/signup/select_plan",
+        "/signup/checkout",
     ];
 
     try {
@@ -20,6 +24,7 @@ export async function enterpriseMiddleware(req) {
 
         if (userResponse.ok) {
             const userData = await userResponse.json();
+            console.log(userData.enterprise_details.plan.id)
             // 🔎 Si l'utilisateur n'a pas d'entreprise
             if (!userData.enterprise) {
                 // ✅ Accès uniquement aux pages autorisées
@@ -31,11 +36,20 @@ export async function enterpriseMiddleware(req) {
                 // 🚫 Redirection pour toutes les autres pages protégées
                 console.log("🔄 Redirection vers /signup/create_enterprise");
                 return NextResponse.redirect(new URL("/signup/create_enterprise", req.url));
+            } else {
+                // if (!userData.enterprise_details.plan||userData.enterprise_details.plan.id != 1) {
+                //     if (allowedWithEnterpriseNotPlan.some(route => pathname.startsWith(route))) {
+                //         return NextResponse.redirect(new URL("/dashboard", req.url));
+                //     }
+                // }
+                if (allowedWithoutEnterprise.some(route => pathname.startsWith(route))) {
+                    return NextResponse.redirect(new URL("/dashboard", req.url));
+                }
             }
         }
 
         // ✅ Si aucun problème, continuer normalement
-        return NextResponse.next();
+        return null;
     } catch (err) {
         console.error("❌ Erreur lors de la récupération de l'utilisateur:", err.message);
         return NextResponse.next();

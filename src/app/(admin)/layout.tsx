@@ -35,8 +35,8 @@ export default function RootLayout({
           {children}
         </div>
       </main>
-      <footer className="py-5 bg-white shadow-inner">
-        <p className="text-center font-semibold text-base text-muted-foreground">
+      <footer className="py-3 bg-white shadow-inner">
+        <p className="text-center font-medium text-sm text-muted-foreground">
           © {moment().format("YYYY")} InventoryFlow by Interact | Tous droits
           reservés.
         </p>

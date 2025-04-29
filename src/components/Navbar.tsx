@@ -47,7 +47,7 @@ export default function Navbar() {
             <div className="mr-2 flex xl:hidden">
               <Sidebar />
             </div>
-            <a href="" className="mr-5">
+            <a href="/dashboard" className="mr-5">
               <div className="flex-shrink-0 select-none">
                 <img src={logo.src} alt="logo" className="w-32 h-auto" />
               </div>
@@ -87,7 +87,7 @@ export default function Navbar() {
                       <img
                         className="h-8 w-8 rounded-full"
                         src={user.img ? user.img : profile.src}
-                        alt=""
+                        alt="user profile picture"
                       />
                     </button>
                   </div>
@@ -176,7 +176,7 @@ const MenuItem = ({ menuItem }: { menuItem: Menu }) => {
           {menuItem.link && (
             <NavigationMenuLink
               href={menuItem.link}
-              className={cn(navigationMenuTriggerStyle(), "capitalize")}
+              className={cn(navigationMenuTriggerStyle(), "first-letter:uppercase")}
             >
               {menuTranslate[menuItem.name]}
             </NavigationMenuLink>

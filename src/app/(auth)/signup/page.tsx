@@ -112,7 +112,7 @@ export default function Page() {
             className="w-auto h-6 mx-auto"
           />
           <h2 className="mt-5 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
-            Creer votre entreprise
+            Créez votre compte
           </h2>
           <h2 className="mt-2 text-center text-sm tracking-tight text-neutral-700">
             Entrez vos informations personnelles puis continuer pour creer votre

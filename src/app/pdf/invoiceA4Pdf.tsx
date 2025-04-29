@@ -254,7 +254,7 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableCell}>{tax.name}</Text>
               <Text style={styles.tableCell}>
-                {formatteCurrency(tax.total, "XAF", "fr-FR")}
+                {formatteCurrency(tax.amount  , "XAF", "fr-FR")}
               </Text>
             </View>
           ))}
@@ -268,7 +268,7 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
               alignItems: "center",
             },
           ]}
-        >
+      >
           <Text style={[styles.subtitle]}></Text>
           <Text style={[styles.subtitle, { marginHorizontal: 5 }]}>
             Net à payer:

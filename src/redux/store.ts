@@ -17,6 +17,7 @@ import lossesReducer from "./losses";
 import expensesReducer from "./expenses";
 import inventoriesReducer from "./inventory";
 import packagingInventoriesReducer from "./packagingInventory";
+import taxesReducer from "./taxesSlicer";
 
 const store = configureStore({
   reducer: {
@@ -37,6 +38,7 @@ const store = configureStore({
     losses: lossesReducer,
     expenses: expensesReducer,
     packagingInventories: packagingInventoriesReducer,
+    taxes: taxesReducer
   },
 });
 

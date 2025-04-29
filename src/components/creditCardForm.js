@@ -1,6 +1,6 @@
 'use client';
 
-import { CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements, } from '@stripe/react-stripe-js';
 import { useEffect } from 'react';
 
 export default function CustomCardForm({ onChange }) {

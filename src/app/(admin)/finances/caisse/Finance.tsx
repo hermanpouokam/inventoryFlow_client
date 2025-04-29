@@ -159,7 +159,6 @@ export default function Finances() {
       const res = await instance.get(`/sales-points/cash-data/`, { params });
       if (res.status == 200) {
         setData(res.data);
-        console.log(res.data);
       }
       setLoading(false);
     } catch (error) {
@@ -479,13 +478,17 @@ export default function Finances() {
 
   const filteredTransactions =
     type || status
-      ? [...(data ? data?.transactions : [])].filter((t) => {
-          return (
-            (!type || t.transaction_type === type) &&
-            (!status || String(t.is_validated) == status)
-          );
-        })
-      : [...(data ? data?.transactions : [])];
+      ? [...(data ? data?.transactions : [])]
+          .filter((t) => {
+            return (
+              (!type || t.transaction_type === type) &&
+              (!status || String(t.is_validated) == status)
+            );
+          })
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      : [...(data ? data?.transactions : [])].sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
 
   const dataType = [
     {
@@ -643,7 +646,7 @@ export default function Finances() {
             }
           } catch (error) {
             setOperation(null);
-            console.log(error)
+            console.log(error);
             return toast({
               variant: "destructive",
               title: "Erreur",

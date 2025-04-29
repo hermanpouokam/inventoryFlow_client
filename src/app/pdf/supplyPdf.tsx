@@ -77,6 +77,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
       Number(packaging.packaging_cost) * Number(packaging.missing_quantity));
   }, 0);
   const taxDetails = supply?.invoice_history[0]?.tax_details;
+  console.log(taxDetails);
   const feeDetails = supply?.invoice_history[0]?.fee_details;
   return (
     <Document>
@@ -237,14 +238,25 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
               <Text style={[styles.subtitle, { marginTop: 5 }]}>Taxes: </Text>
               {taxDetails?.breakdown?.map((obj, i) => {
                 return (
-                  <View key={i} style={{}}>
+                  <View
+                    key={i}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 5,
+                      alignSelf: "flex-end",
+                      width: "18%",
+                    }}
+                  >
                     <Text
                       style={[
                         styles.tableCell,
-                        { textAlign: "right", borderWidth: 0 },
+                        { textAlign: "right", borderBottom: 0 },
                       ]}
                     >
                       {obj.tax_name} :{"     "}
+                    </Text>
+                    <Text style={{ flex: 3, fontSize: 8 }}>
                       {formatteCurrency(obj.tax_amount)}
                     </Text>
                   </View>
@@ -255,7 +267,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
                   styles.tableCell,
                   {
                     textAlign: "right",
-                    borderWidth: 0,
+                    borderBottom: 0,
                     fontWeight: "bold",
                     marginTop: 5,
                   },
@@ -281,7 +293,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
                         styles.tableCell,
                         {
                           textAlign: "right",
-                          borderWidth: 0,
+                          // borderWidth: 0,
                         },
                       ]}
                     >
@@ -299,7 +311,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
                   styles.tableCell,
                   {
                     textAlign: "right",
-                    borderWidth: 0,
+                    // borderWidth: 0,
                     fontWeight: "bold",
                     marginTop: 5,
                   },

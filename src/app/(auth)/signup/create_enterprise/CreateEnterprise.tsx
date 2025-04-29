@@ -175,6 +175,11 @@ export default function CreateEnterprise() {
                           size="small"
                           label={`${input.label} de l'entreprise`}
                           variant="outlined"
+                          helperText={
+                            input.name === "phone"
+                              ? "Le pays correspondant a l'entreprise sera assigné à celui de l'entreprise."
+                              : ""
+                          }
                         />
                       </div>
                     );

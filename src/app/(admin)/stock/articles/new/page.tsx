@@ -22,6 +22,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Check } from "lucide-react";
+import { Input } from "postcss";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -336,6 +337,12 @@ export default function Page() {
                     </p>
                   </div>
                 </div>
+              ) : field.name == "quantity" ? (
+                <input
+                  name={field.name}
+                  value={values[field.name]}
+                  type="hidden"
+                />
               ) : (
                 <>
                   <TextField

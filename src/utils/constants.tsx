@@ -337,3 +337,32 @@ export const userRegErrors = {
     "Ce nom d'utilisateur est déjà pris. Veuillez en choisir un autre.",
   "EMAIL ALREADY EXIST": "Un compte avec cet email existe déjà.",
 };
+
+export const translate = {
+  percentage: "pourcentage",
+  supply: "achat",
+  bill: "vente",
+  flat: "fixe",
+  plan_id: "plan",
+  name: "nom",
+  address: "adresse",
+  number: "numéro",
+  phone: "numéro",
+  currency: "devise",
+  email: "email",
+  nc: "Numéro de contribuable",
+};
+
+export const mois = [
+  "janvier",
+  "février",
+  "mars",
+  "avril",
+  "mai",
+  "juin",
+  "juillet",
+  "août",
+  "octobre",
+  "novembre",
+  "décembre",
+];

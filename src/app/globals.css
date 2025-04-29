@@ -387,3 +387,25 @@ html {
   left: 50%;
   animation-duration: 5s;
 }
+
+.pulse {
+  width: 8px;
+  height: 8px;
+  background-color: rgb(9, 116, 9);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(1, 110, 1, 0.8);
+  animation: pulseAnimation 1s linear infinite;
+  animation-delay: 1s;
+}
+
+@keyframes pulseAnimation {
+  0% {
+    transform: scale(.4);
+    box-shadow: 0 0 10px rgba(1, 110, 1, 0.8);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(1, 110, 1, 0.8);
+  }
+}

@@ -1,10 +1,10 @@
-export type Field = {
+export type Field<T = any> = {
   name: string;
   label: string;
   required: boolean;
   value?: string | boolean | number;
-  type: 'number' | 'select' | 'email' | 'password' | 'checkbox'|'text';
-  options?: Supplier[] | SalesPoint[] | Category[];
+  type: 'number' | 'select' | 'email' | 'password' | 'checkbox' | 'text';
+  options?: T[];
 };
 
 import { useState } from "react";

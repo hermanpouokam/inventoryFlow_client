@@ -23,7 +23,9 @@ export const fetchEmployees = createAsyncThunk(
   async ({ sales_point }: Params) => {
     const params = new URLSearchParams();
     sales_point?.forEach((sp, index) => {
-      params.append(`sales_point`, sp);
+      if (sp) {
+        params.append(`sales_point`, sp);
+      }
     });
     const query = params.toString();
 

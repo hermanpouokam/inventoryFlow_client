@@ -27,11 +27,24 @@ interface Menu {
 
 interface Plan {
   id: number;
+  last_subscription_price: SubscriptionPrice | null;
   name: string;
   description: string;
   price: string;
   duration: number;
+  created_at: Date;
+  currency: string;
+  interval: 'month' | 'year'
 }
+
+interface SubscriptionPrice {
+  stripe_price_id: string;
+  amount: string;
+  currency: string;
+  interval: string;
+  product_name: string;
+}
+
 
 interface Notification {
   title: string;
@@ -171,7 +184,7 @@ interface Bill {
   customer_name: string;
   created_at: Date;
   delivery_date: Date;
-  state: string;
+  state: 'created' | "pending" | "success";
   product_bills: ProductBill[];
   total_amount: number;
   deliverer: null;
@@ -186,7 +199,7 @@ interface BillTax {
   name: string;
   rate: string;
   type: string;
-  total: number;
+  amount: number;
 }
 
 interface AdditionalFee {
@@ -284,6 +297,7 @@ interface Employee {
   sales_point: number;
   sales_point_details: SalesPoint;
   is_deliverer: boolean;
+  is_active: boolean;
 }
 
 interface Packaging {
@@ -378,6 +392,19 @@ interface TaxDetails {
   breakdown: TaxDetailsBreakdown[];
 }
 
+interface Tax {
+  id: number;
+  tax_name: string;
+  tax_type: 'percentage' | 'flat';
+  tax_application: 'supply' | 'bill';
+  value: string;
+  is_active: boolean;
+  created_at: Date;
+  updated_at: Date;
+  sales_point: number;
+}
+
+
 interface TaxDetailsBreakdown {
   tax_name: string;
   rate: number;
@@ -465,6 +492,8 @@ interface EnterpriseDetails {
   address: string;
   phone: string;
   email: string;
+  currency: string;
+  nc: string | null;
   created_at: Date;
   last_update: Date;
   plan: Plan;
@@ -628,4 +657,36 @@ interface Transaction {
   validated_at: Date | null;
   is_validated: boolean;
   transction_number: string
+}
+
+interface Permission {
+  id: number;
+  number: number;
+  name: string;
+  path: string;
+}
+
+interface PaymentInfo {
+  id: number;
+  plan: Plan;
+  amount: string;
+  payment_date: Date;
+  next_due_date: Date;
+  payment_method: string;
+  description: null;
+  status: 'pending' | 'completed' | 'failed';
+  payment_intent: string;
+  payment_id: null;
+  created_at: Date;
+  enterprise: number;
+  invoice_number: string;
+}
+
+interface paymentMethod {
+  brand: string;
+  last4: string;
+  exp_month: number;
+  exp_year: number;
+  id: string;
+  type: string;
 }

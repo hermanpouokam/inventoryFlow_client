@@ -1,13 +1,24 @@
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { enterpriseMiddleware } from "./middlewares/enterpriseMiddleware";
+import { permissionsMiddleware } from "./middlewares/permissionsMiddleware";
 
 export async function middleware(req) {
-  // 🔍 Vérification de l'authentification en premier
-  const authResponse = await authMiddleware(req);
-  if (authResponse) return authResponse;
+  console.log("✅ Middleware exécuté :", req.nextUrl.pathname);
 
-  // 🔍 Vérification de l'entreprise après authentification
-  return enterpriseMiddleware(req);
+  const authResponse = await authMiddleware(req);
+  if (authResponse) {
+    console.log("🔒 Bloqué par authMiddleware");
+    return authResponse;
+  }
+
+  const enterpriseResponse = await enterpriseMiddleware(req);
+  if (enterpriseResponse) {
+    console.log("🏢 Bloqué par enterpriseMiddleware");
+    return enterpriseResponse;
+  }
+
+  console.log("🔍 Vérification des permissions en cours...");
+  return await permissionsMiddleware(req);
 }
 
 export const config = {

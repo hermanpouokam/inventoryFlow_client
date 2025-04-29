@@ -12,7 +12,7 @@ import { getPlans, getUserData } from "@/components/auth";
 import { loadStripe } from "@stripe/stripe-js";
 import { CardNumberElement, Elements } from "@stripe/react-stripe-js";
 import CustomCardForm from "@/components/creditCardForm";
-import { handlePaymentSuccess } from "../functions";
+import { handlePaymentSuccess, updatePaimentMethod } from "../functions";
 import { useParams, useSearchParams } from "next/navigation";
 import { decryptParam } from "@/utils/encryptURL";
 import useTimer from "@/utils/useTimer";
@@ -30,7 +30,7 @@ export default function Checkout() {
   });
   const initialTime = 5; // Different initial time
   const onTimerEnd = () => {
-    window.location.assign("/dashboard");
+    // window.location.assign("/dashboard");
   };
 
   const { timeLeft, isActive, resetTimer, stopTimer } = useTimer({
@@ -55,11 +55,18 @@ export default function Checkout() {
 
   const getUser = async () => {
     const user = await getUserData();
+    console.log(user);
     setUser(user);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    if (
+      moment(user?.enterprise_details?.last_payment?.next_due_date).isAfter(
+        moment()
+      )
+    )
+      return;
     if (!checked) return;
     setLoading(true);
     const { stripe, elements } = stripeData;
@@ -87,15 +94,21 @@ export default function Checkout() {
         },
         body: JSON.stringify({
           paymentMethodId: paymentMethod.id,
-          amount: Number(planData?.price),
-          currency: "XAF",
+          priceId: planData?.last_subscription_price?.stripe_price_id,
+          email: user?.enterprise_details?.email ?? "",
         }),
       });
 
       const result = await response.json();
 
       if (result.success) {
-        await handlePaymentSuccess(result.paymentIntentId, planData?.price, 2);
+        await handlePaymentSuccess(
+          result.paymentIntentId,
+          planData?.price,
+          planData?.id,
+          "completed"
+        );
+        await updatePaimentMethod(paymentMethod.id, result.customerId);
         setError({
           type: "success",
           msg: result.message,
@@ -112,13 +125,21 @@ export default function Checkout() {
             type: "error",
             msg: confirmError.message,
           });
+          await handlePaymentSuccess(
+            result.paymentIntentId,
+            planData?.price,
+            planData?.id,
+            "failed"
+          );
           setLoading(false);
         } else {
           await handlePaymentSuccess(
             result.paymentIntentId,
             planData?.price,
-            2
-          ); // Use the ID here
+            planData?.id,
+            "completed"
+          );
+          await updatePaimentMethod(paymentMethod.id, result.customerId);
           setError({
             type: "success",
             msg: result.message,
@@ -127,11 +148,17 @@ export default function Checkout() {
           resetTimer();
         }
       } else {
-        setLoading(false);
         setError({
           type: "error",
           msg: result.error,
         });
+        await handlePaymentSuccess(
+          result.paymentIntentId,
+          planData?.price,
+          planData?.id,
+          "failed"
+        );
+        setLoading(false);
       }
     }
   };
@@ -382,7 +409,12 @@ export default function Checkout() {
                     type="submit"
                     className="w-full mt-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition disabled:bg-gray-400"
                     disabled={
-                      loading || !stripeData.elements || !stripeData.stripe
+                      loading ||
+                      !stripeData.elements ||
+                      !stripeData.stripe ||
+                      moment(
+                        user?.enterprise_details?.last_payment?.next_due_date
+                      ).isAfter(moment())
                     }
                   >
                     {loading
@@ -393,6 +425,15 @@ export default function Checkout() {
                           "fr-FR"
                         )}`}
                   </Button>
+                  {moment(
+                    user?.enterprise_details?.last_payment?.next_due_date
+                  ).isAfter(moment()) ? (
+                    <div className="flex items-center">
+                      <span className="text-xs font-medium my-1 text-red-500">
+                        Vous avez déjà un plan en cours
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
