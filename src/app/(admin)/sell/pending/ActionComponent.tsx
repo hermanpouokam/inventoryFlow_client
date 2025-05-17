@@ -48,6 +48,7 @@ import ReactDOM from "react-dom/client";
 import { deleteBill } from "../functions";
 import { useToast } from "@/components/ui/use-toast";
 import { updateDeliverer } from "@/components/fetch";
+import { usePermission } from "@/context/PermissionContext";
 
 export const ActionComponent = ({
   bill,
@@ -181,7 +182,7 @@ export const ActionComponent = ({
     const root = ReactDOM.createRoot(container);
     root.render(pdfBlobProvider);
   };
-
+  const { hasPermission, user, isAdmin } = usePermission()
   return (
     <>
       <Dialog open={open}>
@@ -216,10 +217,14 @@ export const ActionComponent = ({
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOpen(!open)}>
-            <EyeIcon size={14} className="mr-3" />
-            Voir les details
-          </DropdownMenuItem>
+          {
+            hasPermission('edit_invoice') ?
+              <DropdownMenuItem onClick={() => setOpen(!open)}>
+                <EyeIcon size={14} className="mr-3" />
+                Voir les details
+              </DropdownMenuItem>
+              : null
+          }
           <DropdownMenuItem onClick={() => handleOpenPDF("large")}>
             {" "}
             <Printer className="mr-3" size={14} />
@@ -230,23 +235,27 @@ export const ActionComponent = ({
             <Printer className="mr-3" size={14} />
             Imprimer en petit format
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              handleClickOpen();
-            }}
-          >
-            {" "}
-            <ArrowDownToLine className="mr-3" size={14} />
-            Receptionner
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setOpenModalDelete(true)}
-            className="text-red-500 hover:text-white hover:bg-red-600 "
-          >
-            {" "}
-            <Trash className="mr-3" size={14} />
-            Supprimer
-          </DropdownMenuItem>
+          {
+            hasPermission('receipt_bill') ? <DropdownMenuItem
+              onClick={() => {
+                handleClickOpen();
+              }}
+            >
+              {" "}
+              <ArrowDownToLine className="mr-3" size={14} />
+              Receptionner
+            </DropdownMenuItem> : null
+          }
+          {
+            hasPermission('delete_bill') ? <DropdownMenuItem
+              onClick={() => setOpenModalDelete(true)}
+              className="text-red-500 hover:text-white hover:bg-red-600 "
+            >
+              {" "}
+              <Trash className="mr-3" size={14} />
+              Supprimer
+            </DropdownMenuItem> : null
+          }
         </DropdownMenuContent>
       </DropdownMenu>
       <MuiDialog open={openModalDelete}>

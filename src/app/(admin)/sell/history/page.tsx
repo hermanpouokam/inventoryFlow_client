@@ -88,15 +88,15 @@ export default function Page() {
   };
 
   React.useEffect(() => {
-    if (status == "idle") {
-      dispatch(fetchSalesPoints({}));
+    if (salespointStatus == "idle") {
+      dispatch(fetchSalesPoints());
     }
     if (statusCustomers == "idle") {
       dispatch(
         fetchClients({ sales_points: selectedSalesPoints.map((el) => el.id) })
       );
     }
-  }, [dispatch]);
+  }, [dispatch, salespointStatus, statusCustomers]);
 
   const handleSelect = (data: SalesPoint) => {
     setSelectedSalesPoints((prev) =>
@@ -155,7 +155,7 @@ export default function Page() {
     },
     {
       accessorKey: "sales_point",
-      header: () => <div className="text-left w-[220px]">Point de vente</div>,
+      header: () => <div className="text-center w-[220px]">Point de vente</div>,
       cell: ({ row }) => (
         <div className="text-center capitalize truncate">
           {row.original.sales_point_details.name} -{" "}
@@ -178,7 +178,7 @@ export default function Page() {
       },
       cell: ({ row }) => {
         return (
-          <div className="capitalize text-left text-base font-medium">
+          <div className="capitalize text-center text-base font-medium">
             {row.original.customer_name}
           </div>
         );
@@ -256,7 +256,7 @@ export default function Page() {
         </div>
       ),
       cell: ({ row }) => {
-        const product_bills: ProductBill[] = row.getValue("product_bills");
+        const product_bills: ProductBill[] = row.original.product_bills;
         const total = product_bills.reduce(
           (acc, curr) => (acc = acc + parseFloat(curr.benefit.toString())),
           0
@@ -288,7 +288,7 @@ export default function Page() {
       cell: ({ row }) => {
         const bill = row.original;
         const totalTaxes = bill.taxes.reduce((total, tax) => {
-          return total + tax.value;
+          return total + tax.amount;
         }, 0);
         const formatted = formatteCurrency(totalTaxes, "XAF", "fr-FR");
 
@@ -338,7 +338,7 @@ export default function Page() {
         return (
           <div
             className={cn(
-              "capitalize text-center p-2 rounded-full w-[70px]",
+              "capitalize flex justify-center items-center text-center p-2 rounded-full w-[110px]",
               bill.state == "created" && "bg-red-500",
               bill.state == "pending" && "bg-orange-500",
               bill.state == "success" && "bg-green-500",
@@ -393,13 +393,15 @@ export default function Page() {
             onSelect={handleSelect}
             getOptionLabel={(option) => `${option.name} - ${option.address}`}
             placeholder="Point de vente"
+            searchPlaceholder="Rechercher un point de vente"
           />
           <SelectPopover
             selectedItems={customer}
             items={customers}
             onSelect={handleSelectCustomers}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
+            getOptionLabel={(option) => `${option.name} ${option.surname}`}
             placeholder="Clients"
+            searchPlaceholder="Rechercher un client"
           />
           <Button
             variant={"outline"}

@@ -71,7 +71,7 @@ const calculateHeight = (bill: Bill | null) => {
     bill?.product_bills?.length * extraHeightPerItem +
     bill?.product_bills.filter((pd) => pd.package_product_bill !== null)
       ?.length *
-      extraHeightPerItem
+    extraHeightPerItem
   );
 };
 
@@ -172,7 +172,7 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
                 styles.tableCell,
                 { fontWeight: "bold", flex: 3, textAlign: "center" },
               ]}
-              //@ts-ignore
+            //@ts-ignore
             >
               Total
             </Text>
@@ -195,87 +195,87 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
         {bill?.product_bills.some(
           (productBill) => productBill.package_product_bill !== null
         ) && (
-          <>
-            <Text style={[styles.subtitle, { marginTop: 5 }]}>Emballages</Text>
-            <View style={styles.table}>
-              <View style={[styles.tableRow, styles.tableHeader]}>
-                <Text style={styles.tableCell}>Article</Text>
-                <Text
-                  style={[styles.tableCell, { flex: 3, textAlign: "center" }]}
-                >
-                  Emballage
-                </Text>
-                <Text style={styles.tableCell}>Qté</Text>
-                <Text style={styles.tableCell}>P.U</Text>
-                <Text style={[styles.tableCell, { flex: 2 }]}>Total</Text>
-              </View>
-              {bill?.product_bills.map((product: ProductBill, index) => {
-                const packageProduct = product?.package_product_bill;
-                if (packageProduct) {
-                  return (
-                    <View style={styles.tableRow} key={index}>
-                      <Text style={styles.tableCell}>
-                        {product.product_details.product_code}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.tableCell,
-                          { flex: 3, textAlign: "center" },
-                        ]}
-                      >
-                        {packageProduct.name}
-                      </Text>
-                      <Text style={styles.tableCell}>
-                        {packageProduct.record}
-                      </Text>
-                      <Text style={styles.tableCell}>
-                        {Number(packageProduct.price)}
-                      </Text>
-                      <Text style={[styles.tableCell, { flex: 2 }]}>
-                        {Number(packageProduct.total_amount)}
-                      </Text>
-                    </View>
-                  );
-                }
-              })}
-              <View style={styles.tableRow}>
-                <Text style={styles.tableCell}></Text>
-                <Text
-                  style={[
-                    styles.tableCell,
-                    { fontWeight: "bold", flex: 3, textAlign: "center" },
-                  ]}
-                >
-                  Total
-                </Text>
-                <Text style={styles.tableCell}>
-                  {bill.product_bills.reduce((acc, curr) => {
-                    const pkg = curr.package_product_bill;
-                    return (acc += Number(pkg?.record));
-                  }, 0)}
-                </Text>
-                <Text style={styles.tableCell}>-</Text>
-                <Text style={[styles.tableCell, { flex: 2 }]}>
-                  {Number(
-                    bill.product_bills.reduce((acc, curr) => {
+            <>
+              <Text style={[styles.subtitle, { marginTop: 5 }]}>Emballages</Text>
+              <View style={styles.table}>
+                <View style={[styles.tableRow, styles.tableHeader]}>
+                  <Text style={styles.tableCell}>Article</Text>
+                  <Text
+                    style={[styles.tableCell, { flex: 3, textAlign: "center" }]}
+                  >
+                    Emballage
+                  </Text>
+                  <Text style={styles.tableCell}>Qté</Text>
+                  <Text style={styles.tableCell}>P.U</Text>
+                  <Text style={[styles.tableCell, { flex: 2 }]}>Total</Text>
+                </View>
+                {bill?.product_bills.map((product: ProductBill, index) => {
+                  const packageProduct = product?.package_product_bill;
+                  if (packageProduct) {
+                    return (
+                      <View style={styles.tableRow} key={index}>
+                        <Text style={styles.tableCell}>
+                          {product.product_details.product_code}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.tableCell,
+                            { flex: 3, textAlign: "center" },
+                          ]}
+                        >
+                          {packageProduct.name}
+                        </Text>
+                        <Text style={styles.tableCell}>
+                          {packageProduct.record}
+                        </Text>
+                        <Text style={styles.tableCell}>
+                          {Number(packageProduct.price)}
+                        </Text>
+                        <Text style={[styles.tableCell, { flex: 2 }]}>
+                          {Number(packageProduct.total_amount)}
+                        </Text>
+                      </View>
+                    );
+                  }
+                })}
+                <View style={styles.tableRow}>
+                  <Text style={styles.tableCell}></Text>
+                  <Text
+                    style={[
+                      styles.tableCell,
+                      { fontWeight: "bold", flex: 3, textAlign: "center" },
+                    ]}
+                  >
+                    Total
+                  </Text>
+                  <Text style={styles.tableCell}>
+                    {bill.product_bills.reduce((acc, curr) => {
                       const pkg = curr.package_product_bill;
-                      return (acc += Number(
-                        pkg?.record * pkg?.price
-                      ));
-                    }, 0)
-                  )}
-                </Text>
+                      return (acc += Number(pkg?.record));
+                    }, 0)}
+                  </Text>
+                  <Text style={styles.tableCell}>-</Text>
+                  <Text style={[styles.tableCell, { flex: 2 }]}>
+                    {Number(
+                      bill.product_bills.reduce((acc, curr) => {
+                        const pkg = curr.package_product_bill;
+                        return (acc += Number(
+                          pkg?.record * pkg?.price
+                        ));
+                      }, 0)
+                    )}
+                  </Text>
+                </View>
               </View>
-            </View>
-          </>
-        )}
+            </>
+          )}
 
         <View>
           {bill?.taxes.map((tax, index) => (
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableCell}>{tax.name}</Text>
               <Text style={styles.tableCell}>
-                {formatteCurrency(tax.total)}
+                {formatteCurrency(tax.amount)}
               </Text>
             </View>
           ))}
@@ -317,11 +317,16 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
             {
               justifyContent: "space-between",
               alignItems: "center",
-              marginTop: 100,
+              marginTop: 60,
+              position: 'absolute',
+              bottom: 30, 
+              left: 40,
+              right: 40,
+              fontSize: 10,
             },
           ]}
         >
-          <Text style={styles.footer}></Text>
+          {/* <Text style={styles.footer}></Text> */}
           <Text style={styles.footer}>
             Made by{" "}
             <Text style={{ fontWeight: "extrabold" }}>inventoryFlow</Text>

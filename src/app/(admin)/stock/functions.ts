@@ -49,7 +49,7 @@ const createVariant = async (params: {
 function formatNumber(number: number) {
   if (!Number.isFinite(number)) return "Invalid number";
 
-  const hasDecimals = number % 1 !== 0; // Vérifie si le nombre a des décimales
+  const hasDecimals = number % 1 !== 0;
   const decimals = hasDecimals ? number.toString().split(".")[1].length : 0;
 
   return number

@@ -179,8 +179,8 @@ const InventoryPDF: React.FC<InventoryPDFProps> = ({ inventory, title }) => {
           <View style={[styles.tableRow, styles.tableHeader]}>
             <Text style={styles.tableCell}>Code</Text>
             <Text style={[styles.tableCell, { flex: 2.5 }]}>Article</Text>
-            <Text style={styles.tableCell}>Anciènne qte </Text>
-            <Text style={[styles.tableCell]}>Nouvelle qte</Text>
+            <Text style={styles.tableCell}>Qte préc.</Text>
+            <Text style={[styles.tableCell]}>Nlle qte</Text>
             <Text style={styles.tableCell}>Différence</Text>
           </View>
           {inventory.inventory_products?.map((pr, index) => {

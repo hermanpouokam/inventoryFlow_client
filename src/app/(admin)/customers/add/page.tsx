@@ -18,11 +18,14 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { createClient } from "../functions";
 import { fetchClientCat } from "@/redux/clientCatSlicer";
-import { UserPlus } from "lucide-react";
+import { ChevronDown, UserPlus } from "lucide-react";
+import { usePermission } from "@/context/PermissionContext";
+import SelectPopover from "@/components/SelectPopover";
+import { Combobox } from "@/components/ComboBox";
 
 export default function Page() {
   const [salesPoint, setSalesPoint] = React.useState<number | null>();
-  const [client_category, setCategory] = React.useState<number | null>();
+  const [client_category, setCategory] = React.useState<number | null>(null);
   const [message, setMessage] = React.useState<{
     type: "success" | "error";
     text: string;
@@ -30,7 +33,7 @@ export default function Page() {
   const [loading, setLoading] = React.useState(false);
 
   const dispatch: AppDispatch = useDispatch();
-
+  const { isAdmin, user } = usePermission()
   const { data, error, status } = useSelector(
     (state: RootState) => state.salesPoints
   );
@@ -42,7 +45,10 @@ export default function Page() {
 
   React.useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchSalesPoints({}));
+      dispatch(fetchSalesPoints());
+    }
+    if (!isAdmin() && statuscat === 'idle') {
+      dispatch(fetchClientCat({ sales_points: [user?.sales_point] }))
     }
     document.title = "Ajouter un client";
   }, [status, statuscat, dispatch]);
@@ -52,7 +58,7 @@ export default function Page() {
     setLoading(true);
     try {
       const { data: fieldData, isEmpty } = getFormData(event.currentTarget);
-      const data = { ...fieldData, sales_point: salesPoint, client_category };
+      const data = { ...fieldData, sales_point: isAdmin() ? salesPoint : user?.sales_point, client_category };
       const res = await createClient({ ...data, salesPoint });
       if (res) {
         setMessage({
@@ -76,8 +82,11 @@ export default function Page() {
     setSalesPoint(event.target.value);
     dispatch(fetchClientCat({ sales_points: [event.target.value] }));
   };
-  const handleChangeCat = (event: SelectChangeEvent) => {
-    setCategory(event.target.value);
+  const handleChangeCat = (item: Category) => {
+    if (client_category) {
+      return setCategory(null)
+    }
+    setCategory(item.id);
   };
 
   return (
@@ -109,16 +118,14 @@ export default function Page() {
           <div className="max-w-lg w-full py-5 px-2 mt-5 shadow rounded bg-white border  border-neutral-300 space-x-5">
             {message && (
               <div
-                className={`${
-                  message.type == "success" ? "bg-green-200" : "bg-red-200"
-                } text-center rounded-sm p-3 self-center max-w-[100%] mb-5`}
+                className={`${message.type == "success" ? "bg-green-200" : "bg-red-200"
+                  } text-center rounded-sm p-3 self-center max-w-[100%] mb-5`}
               >
                 <p
-                  className={`${
-                    message.type == "success"
-                      ? "text-green-600"
-                      : "text-red-500"
-                  } text-base font-semibold`}
+                  className={`${message.type == "success"
+                    ? "text-green-600"
+                    : "text-red-500"
+                    } text-base font-semibold`}
                 >
                   {message.text}
                 </p>
@@ -128,7 +135,7 @@ export default function Page() {
               Remplissez les informations
             </h2>
             <div className="grid mt-5 pb-5 sm:px-[10%] px-[5%]  grid-cols-1 gap-5">
-              <FormControl size="small" required fullWidth>
+              {isAdmin() ? <FormControl size="small" required fullWidth>
                 <InputLabel id="demo-simple-select-label">
                   Point de vente
                 </InputLabel>
@@ -146,26 +153,17 @@ export default function Page() {
                     </MenuItem>
                   ))}
                 </Select>
-              </FormControl>
-              <FormControl size="small" required fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Catégorie du client
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={client_category}
-                  label="Catégorie du client"
-                  onChange={handleChangeCat}
-                  size="small"
-                >
-                  {categories.map((sp) => (
-                    <MenuItem key={sp.id} value={sp.id}>
-                      {sp.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              </FormControl> : null}
+              <Combobox
+                options={categories}
+                getOptionLabel={(option) => `${option.name}`}
+                getOptionValue={(option) => `${option.name}${option.id}`}
+                onValueChange={(item) => handleChangeCat(item)}
+                RightIcon={ChevronDown}
+                buttonLabel="Catégorie de client"
+                placeholder="Catégorie de client"
+                value={categories.find(el => el.id == client_category)}
+              />
               {fields.map((field) => (
                 <TextField
                   required={field.reuired}

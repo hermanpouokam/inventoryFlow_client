@@ -24,7 +24,6 @@ export async function enterpriseMiddleware(req) {
 
         if (userResponse.ok) {
             const userData = await userResponse.json();
-            console.log(userData.enterprise_details.plan.id)
             // 🔎 Si l'utilisateur n'a pas d'entreprise
             if (!userData.enterprise) {
                 // ✅ Accès uniquement aux pages autorisées

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Serpents de circuit lumineux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: white;
+        }
+
+        .circuit-path {
+            stroke: #0ea5e9;
+            fill: none;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 4px #0ea5e9);
+            animation: dashMove linear infinite;
+        }
+
+        @keyframes dashMove {
+            0% {
+                stroke-dashoffset: 1000;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SVG animé en arrière-plan -->
+    <svg id="circuit" class="absolute top-0 left-0 w-full h-full z-0" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <!-- Contenu principal au-dessus -->
+    <div class="relative z-10 flex items-center justify-center h-screen">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-gray-800">Bienvenue</h1>
+            <p class="text-lg text-gray-600 mt-2">Voici votre fond d’écran animé style carte mère</p>
+        </div>
+    </div>
+
+    <script>
+        const svg = document.getElementById("circuit");
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        function getRandomEdgePosition() {
+            const edge = Math.floor(Math.random() * 4);
+            switch (edge) {
+                case 0: return { x: Math.random() * width, y: 0 };
+                case 1: return { x: width, y: Math.random() * height };
+                case 2: return { x: Math.random() * width, y: height };
+                case 3: return { x: 0, y: Math.random() * height };
+            }
+        }
+
+        function createSegmentLine(x, y, segments = 8, length = 100) {
+            const directions = [
+                [1, 0], [-1, 0], [0, 1], [0, -1]
+            ];
+            let d = `M${x},${y}`;
+            let points = [[x, y]];
+            for (let i = 0; i < segments; i++) {
+                const [dx, dy] = directions[Math.floor(Math.random() * 4)];
+                x += dx * length;
+                y += dy * length;
+                x = Math.max(0, Math.min(width, x));
+                y = Math.max(0, Math.min(height, y));
+                d += ` L${x},${y}`;
+                points.push([x, y]);
+            }
+            return { d, points };
+        }
+
+        function createAnimatedLine() {
+            const start = getRandomEdgePosition();
+            const segments = 8;
+            const { d, points } = createSegmentLine(start.x, start.y, segments);
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", d);
+            path.setAttribute("class", "circuit-path");
+
+            // Ajout animation fluide
+            path.style.strokeDasharray = "1000";
+            path.style.strokeDashoffset = "1000";
+            path.style.animationDuration = `${3 + Math.random() * 3}s`;
+
+            svg.appendChild(path);
+
+            // Animation de l’épaisseur dégressive
+            let thickness = 6;
+            let step = 0;
+            const interval = setInterval(() => {
+                if (step >= points.length) {
+                    clearInterval(interval);
+                } else {
+                    path.setAttribute("stroke-width", Math.max(1, thickness - step * 0.6));
+                    step++;
+                }
+            }, 180);
+
+            setTimeout(() => {
+                svg.removeChild(path);
+            }, 5000);
+        }
+
+        // Génère une ligne toutes les 400ms
+        setInterval(createAnimatedLine, 400);
+    </script>
+</body>
+
+</html>

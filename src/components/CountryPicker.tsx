@@ -9,10 +9,19 @@ import {
 import metadata from "libphonenumber-js/metadata.min.json";
 import "react-phone-number-input/style.css";
 import TextField from "@mui/material/TextField";
+import { useTranslation } from "react-i18next";
 
 type PhoneNumberFieldProps = {
   value?: string;
-  onChange: ({ number, country }: { number: string; country: string }) => void;
+  onChange: ({
+    number,
+    country,
+    error,
+  }: {
+    number: string;
+    country: string;
+    error: boolean;
+  }) => void;
 };
 
 const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({
@@ -34,6 +43,7 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({
   };
 
   const maxLength = getMaxLength(country);
+  const { t: tCommon } = useTranslation('common');
 
   useEffect(() => {
     if (inputRef.current) {
@@ -58,22 +68,26 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({
   const handleBlur = () => {
     if (!inputValue) {
       setError(false);
+      onChange({ number: "", country, error: false });
       return;
     }
 
     const phoneNumber = parsePhoneNumberFromString(inputValue, country);
-    if (phoneNumber && phoneNumber.isValid()) {
-      onChange({ number: phoneNumber.formatInternational(), country });
-      setError(false);
-    } else {
-      setError(true);
-    }
+    const isValid = phoneNumber?.isValid() ?? false;
+
+    setError(!isValid);
+
+    onChange({
+      number: phoneNumber?.formatInternational() ?? inputValue,
+      country,
+      error: !isValid,
+    });
   };
 
   return (
     <PhoneInput
       international
-      defaultCountry={"CM"}
+      defaultCountry={"CI"}
       value={inputValue}
       onChange={handleChange}
       onCountryChange={(newCountry) => {
@@ -98,7 +112,7 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({
             variant="outlined"
             fullWidth
             error={error}
-            helperText={error ? "Invalid phone number" : ""}
+            helperText={error ? tCommon("invalid_phone_number") : ""}
           />
         )
       )}

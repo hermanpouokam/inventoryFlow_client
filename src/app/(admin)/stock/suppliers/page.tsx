@@ -54,6 +54,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { deleteSupplier, getSupplies } from "../../sell/functions";
 import { instance } from "@/components/fetch";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
+import { useAppContext } from "@/context/GlobalContext";
+import { usePermission } from "@/context/PermissionContext";
 
 export default function Page() {
   const dispatch: AppDispatch = useDispatch();
@@ -91,6 +93,7 @@ export default function Page() {
     }
     handleSearch();
   }, []);
+  const { hasPermission, user } = usePermission();
 
   const buttonRef = React.useRef<HTMLButtonElement>(null);
 
@@ -99,15 +102,16 @@ export default function Page() {
       buttonRef.current.click();
     }
   };
-
   const inputs = [
-    {
-      name: "sales_point",
-      label: "Point de vente",
-      required: true,
-      type: "select",
-      options: salespoints,
-    },
+    ...(user?.user_type === "admin"
+      ? [{
+        name: "sales_point",
+        label: "Point de vente",
+        required: true,
+        type: "select",
+        options: salespoints,
+      }]
+      : []),
     {
       name: "name",
       label: "Nom",
@@ -120,7 +124,12 @@ export default function Page() {
       required: false,
       type: "text",
     },
-    { name: "email", label: "Email", required: false, type: "email" },
+    {
+      name: "email",
+      label: "Email",
+      required: false,
+      type: "email",
+    },
     {
       name: "contact",
       label: "Numero de téléphone",
@@ -128,6 +137,7 @@ export default function Page() {
       type: "text",
     },
   ];
+
 
   const handleDeleteSupplier = async () => {
     try {
@@ -186,7 +196,7 @@ export default function Page() {
 
   const submitForm = async () => {
     setLoading(true);
-    if (!values.sales_point) {
+    if (!values.sales_point && user?.user_type == 'admin') {
       return setFieldError("sales_point", "Sélectionnez un point de vente");
     }
 
@@ -219,6 +229,211 @@ export default function Page() {
     }
   };
 
+  const SupplierActions = ({ row }) => {
+    const [load, setLoad] = React.useState(false);
+    const [opened, setOpened] = React.useState(false);
+    const inputsModifications = [
+      {
+        label: "Nom du fournisseur",
+        name: "name",
+        type: "text",
+        value: row.original.name,
+        required: true,
+      },
+      {
+        label: "Abréviation",
+        name: "ab_name",
+        type: "text",
+        value: row.original.ab_name || "",
+        required: false,
+      },
+      {
+        label: "Email",
+        name: "email",
+        type: "email",
+        value: row.original.email || "",
+        required: false,
+      },
+      {
+        label: "Numéro",
+        name: "contact",
+        type: "text",
+        value: row.original.contact || "",
+        required: false,
+      },
+    ];
+    const {
+      values: valuesM,
+      errors: errorsM,
+      handleChange: handleChangeM,
+      resetForm: resetFormM,
+      handleSubmit: handleSubmitM,
+    } = useForm(initializeFormValues(inputsModifications));
+
+
+
+    const handleModify = async () => {
+      setLoad(true);
+      try {
+        const res = await instance.put(
+          `/suppliers/${row.original.id}/`,
+          valuesM,
+          {
+            withCredentials: true,
+          }
+        );
+        if (res.status === 200) {
+          resetFormM();
+          setSelectedSalesPoints([]);
+          handleSearch();
+          toast({
+            title: "Succès",
+            description: "Le fournisseur a été modifié avec succès",
+            variant: "success",
+            className: "bg-green-600 border-green-600",
+            icon: <Check className="mr-2" />,
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Erreur",
+          description: "Une erreur est survenue lors de la modification du fournisseur",
+          variant: "destructive",
+          className: "bg-red-600 border-red-600",
+          icon: <X className="mr-2" />,
+        });
+      } finally {
+        setLoad(false);
+      }
+    };
+
+    const handleDelete = async () => {
+      setLoading(true);
+      try {
+        const res = await instance.get(
+          `/supplies/?suppliers=${row.original.id}`,
+          { withCredentials: true }
+        );
+        if (res.data.length > 0) {
+          toast({
+            title: "Erreur",
+            description: "Impossible de supprimer le fournisseur car il est associé à des approvisionnements.",
+            variant: "destructive",
+            className: "bg-red-600 border-red-600",
+            icon: <X className="mr-2" />,
+          });
+        } else {
+          setCurrentSupplier(row.original);
+          setOpen(true);
+        }
+      } catch (error) {
+        toast({
+          title: "Erreur",
+          description: "Une erreur est survenue lors de la suppression du fournisseur",
+          variant: "destructive",
+          className: "bg-red-600 border-red-600",
+          icon: <X className="mr-2" />,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    return (
+      <div className="flex justify-center items-center">
+        <DropdownMenu open={opened}>
+          <DropdownMenuTrigger asChild>
+            <Button
+              onClick={() => setOpened(true)}
+              variant="ghost"
+            >
+              <EllipsisVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-36">
+            {hasPermission("edit_supplier") && (
+              <AlertDialog>
+                <AlertDialogTrigger className="w-full">
+                  <DropdownMenuItem className="w-full">
+                    Modifier
+                    <DropdownMenuShortcut>
+                      <Pencil className="h-4 w-4" />
+                    </DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Modifier un fournisseur</AlertDialogTitle>
+                  </AlertDialogHeader>
+                  <form onSubmit={(e) => handleSubmitM(e, handleModify)}>
+                    <div className="mb-4 space-y-4">
+                      {inputsModifications.map((input) => (
+                        <TextField
+                          fullWidth
+                          margin="dense"
+                          label={input.label}
+                          type={input.type}
+                          required={input.required}
+                          size="small"
+                          name={input.name}
+                          value={valuesM[input.name]}
+                          onChange={handleChangeM}
+                          error={
+                            !!errorsM[input.name] &&
+                            valuesM[input.name] !== ""
+                          }
+                          helperText={
+                            valuesM[input.name] !== "" && errorsM[input.name]
+                          }
+                        />
+                      ))}
+                    </div>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel
+                        onClick={() => {
+                          resetFormM();
+                          setOpened(false);
+                        }}
+                      >
+                        Annuler
+                      </AlertDialogCancel>
+                      <Button type="submit" disabled={load}>
+                        {!load ? "Modifier" : "Veuillez patienter..."}
+                      </Button>
+                    </AlertDialogFooter>
+                  </form>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+            {hasPermission("delete_supplier") && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-red-600 hover:text-white hover:bg-red-600"
+                  onClick={handleDelete}
+                >
+                  Supprimer
+                  <DropdownMenuShortcut>
+                    <Trash className="h-4 w-4" />
+                  </DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    );
+  };
+
+  const actionsColumn = hasPermission('edit_supplier') || hasPermission('delete_supplier')
+    ? {
+      id: "actions",
+      enableHiding: false,
+      header: () => <div className="text-center w-[50px]">Actions</div>,
+      cell: ({ row }) => <SupplierActions row={row} />,
+    }
+    : null;
+
   const columns: ColumnDef<Supplier>[] = [
     {
       accessorKey: "number",
@@ -227,23 +442,24 @@ export default function Page() {
         <div className="lowercase ">{row.getValue("number")}</div>
       ),
     },
-    {
-      accessorKey: "Point de vente",
-      header: () => <div className="text-center w-[220px]">Point de vente</div>,
-      cell: ({ row }) => (
-        <div className="text-center capitalize truncate">
-          {row.original.sales_point_details.name} -{" "}
-          {row.original.sales_point_details.address}
-        </div>
-      ),
-    },
+    ...(user?.user_type === 'admin' ?
+      [{
+        accessorKey: "Point de vente",
+        header: () => <div className="text-center w-[220px]">Point de vente</div>,
+        cell: ({ row }:{row:Row<Supplier>}) => (
+          <div className="text-center capitalize truncate">
+            {row.original.sales_point_details.name} -{" "}
+            {row.original.sales_point_details.address}
+          </div>
+        ),
+      }] : []),
     {
       accessorKey: "Nom du fournisseur",
       header: ({ column }) => {
         return (
           <div
             className="text-center w-[220px]"
-            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Nom du fournisseur
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -265,7 +481,7 @@ export default function Page() {
         return (
           <div
             className="text-center w-[220px]"
-            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Abréviation
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -325,214 +541,8 @@ export default function Page() {
         </div>
       ),
     },
-    {
-      id: "actions",
-      enableHiding: false,
-      header: () => <div className="text-center w-[50px]">Actions</div>,
-      cell: ({ row }) => {
-        const [load, setLoad] = React.useState(false);
-        const [opened, setOpened] = React.useState(false);
-
-        const inputsModifications = [
-          {
-            label: "Nom du fournisseur",
-            name: "name",
-            type: "text",
-            value: row.original.name,
-            required: true,
-          },
-          {
-            label: "Abréviation",
-            name: "ab_name",
-            type: "text",
-            value: row.original.ab_name || "",
-            required: false,
-          },
-          {
-            label: "Email",
-            name: "email",
-            type: "email",
-            value: row.original.email || "",
-            required: false,
-          },
-          {
-            label: "Numéro",
-            name: "contact",
-            type: "text",
-            value: row.original.contact || "",
-            require: false,
-          },
-        ];
-
-        const {
-          values: valuesM,
-          errors: errorsM,
-          handleChange: handleChangeM,
-          resetForm: resetFormM,
-          handleSubmit: handleSubmitM,
-        } = useForm(initializeFormValues(inputsModifications));
-
-        const handleModify = async () => {
-          setLoad(true);
-          try {
-            const res = await instance.put(
-              `/suppliers/${row.original.id}/`,
-              valuesM,
-              {
-                withCredentials: true,
-              }
-            );
-            if (res.status === 200) {
-              // setOpened(false);
-              resetFormM();
-              setSelectedSalesPoints([]);
-              handleSearch();
-              return toast({
-                title: "Succès",
-                description: "Le fournisseur a été modifié avec succès",
-                variant: "success",
-                className: "bg-green-600 border-green-600",
-                icon: <Check className="mr-2" />,
-              });
-            }
-          } catch (error) {
-            return toast({
-              title: "Erreur",
-              description:
-                "Une erreur est survenue lors de la modification du fournisseur",
-              variant: "destructive",
-              className: "bg-red-600 border-red-600",
-              icon: <X className="mr-2" />,
-            });
-          } finally {
-            setLoad(false);
-          }
-        };
-
-        const handleDelete = async () => {
-          setLoading(true);
-          try {
-            const params = {
-              suppliers: [row.original.id],
-            };
-            const res = await instance.get(
-              `/supplies/?suppliers=${row.original.id}`,
-              { withCredentials: true }
-            );
-            if (res.data.length > 0) {
-              return toast({
-                title: "Erreur",
-                description:
-                  "Impossible de supprimer le fournisseur car il est associé à des approvisionements.",
-                variant: "destructive",
-                className: "bg-red-600 border-red-600",
-                icon: <X className="mr-2" />,
-              });
-            } else {
-              setCurrentSupplier(row.original);
-              setOpen(true);
-            }
-          } catch (error) {
-            console.log(error);
-            return toast({
-              title: "Erreur",
-              description:
-                "Une erreur est survenue lors de la suppression du fournisseur",
-              variant: "destructive",
-              className: "bg-red-600 border-red-600",
-              icon: <X className="mr-2" />,
-            });
-          } finally {
-            setLoading(false);
-          }
-        };
-
-        return (
-          <div className="flex justify-center items-center">
-            <DropdownMenu open={opened}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  onClick={() => setOpened(true)}
-                  variant="ghost"
-                  className=""
-                >
-                  <EllipsisVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-36">
-                <AlertDialog>
-                  <AlertDialogTrigger className="w-full">
-                    <DropdownMenuItem className="w-full">
-                      Modifier
-                      <DropdownMenuShortcut>
-                        <Pencil className="h-4 w-4" />
-                      </DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Modifier un fournisseur
-                      </AlertDialogTitle>
-                      <AlertDialogDescription></AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <form onSubmit={(e) => handleSubmitM(e, handleModify)}>
-                      <div className="mb-4 space-y-4">
-                        {inputsModifications.map((input) => {
-                          return (
-                            <TextField
-                              fullWidth
-                              margin="dense"
-                              label={input.label}
-                              type={input.type}
-                              required={input.required}
-                              size="small"
-                              name={input.name}
-                              value={valuesM[input.name]}
-                              onChange={handleChangeM}
-                              error={
-                                !!errorsM[input.name] &&
-                                valuesM[input.name] != ""
-                              }
-                              helperText={
-                                valuesM[input.name] != "" && errorsM[input.name]
-                              }
-                            />
-                          );
-                        })}
-                      </div>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel
-                          onClick={() => {
-                            resetFormM;
-                            setOpened(false);
-                          }}
-                        >
-                          Annuler
-                        </AlertDialogCancel>
-                        <Button type="submit" disabled={loading}>
-                          {!loading ? "Ajouter" : "Veuillez patienter..."}
-                        </Button>
-                      </AlertDialogFooter>
-                    </form>
-                  </AlertDialogContent>
-                </AlertDialog>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-red-600 hover:text-white hover:bg-red-600"
-                  onClick={handleDelete}
-                >
-                  Supprimer
-                  <DropdownMenuShortcut>
-                    <Trash className="h-4 w-4" />
-                  </DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        );
-      },
-    },
+    ...(actionsColumn ? [actionsColumn] : [])
+    ,
   ];
 
   return (
@@ -545,106 +555,115 @@ export default function Page() {
       </Backdrop>
       <CardBodyContent className="flex justify-between items-center">
         <h2 className="text-lg font-semibold">Fournisseurs</h2>
-        <AlertDialog>
-          <AlertDialogTrigger className="p-2 rounded text-sm font-normal bg-indigo-600 hover:bg-indigo-700 text-white">
-            Ajouter un fournisseur
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Ajouter un fournisseur</AlertDialogTitle>
-              <AlertDialogDescription></AlertDialogDescription>
-            </AlertDialogHeader>
-            <form onSubmit={(e) => handleSubmit(e, submitForm)}>
-              <div className="mb-4 space-y-4">
-                {inputs.map((input) => {
-                  if (input.type === "select" && Array.isArray(input.options)) {
-                    return (
-                      <div>
-                        <Combobox
-                          RightIcon={ChevronDown}
-                          options={input.options}
-                          buttonLabel={input.label}
-                          onValueChange={(e) =>
-                            setFieldValue(input.name, e?.id)
-                          }
-                          value={salespoints.find(
-                            (s) => s.id === values[input.name]
-                          )}
-                          getOptionValue={(option) =>
-                            `${option.name} ${option.address}`
-                          }
-                          placeholder={input.label}
-                          className="z-[99999] popover-content-width-full"
-                          getOptionLabel={(option) =>
-                            `${option.name} - ${option.address}`
-                          }
-                        />
-                        {errors[input.name] && (
-                          <p className="text-red-500 text-xs font-medium ml-4 mt-1">
-                            {errors[input.name]}
-                          </p>
-                        )}
-                      </div>
-                    );
-                  }
-                  if (input.type === "text" || input.type === "email") {
-                    return (
-                      <TextField
-                        fullWidth
-                        margin="dense"
-                        label={input.label}
-                        type={input.type}
-                        required={input.required}
-                        size="small"
-                        name={input.name}
-                        value={values[input.name]}
-                        onChange={handleChange}
-                        error={!!errors[input.name] && values[input.name] != ""}
-                        helperText={
-                          values[input.name] != "" && errors[input.name]
-                        }
-                      />
-                    );
+
+        {
+          hasPermission('add_supplier') ?
+            <AlertDialog>
+              <AlertDialogTrigger className="p-2 rounded text-sm font-normal bg-green-600 hover:bg-green-700 text-white">
+                Ajouter un fournisseur
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Ajouter un fournisseur</AlertDialogTitle>
+                  <AlertDialogDescription></AlertDialogDescription>
+                </AlertDialogHeader>
+                <form onSubmit={(e) => handleSubmit(e, submitForm)}>
+                  <div className="mb-4 space-y-4">
+                    {inputs.map((input) => {
+                      if (input.type === "select" && Array.isArray(input.options)) {
+                        return (
+                          <div>
+                            <Combobox
+                              RightIcon={ChevronDown}
+                              options={input.options}
+                              buttonLabel={input.label}
+                              onValueChange={(e) =>
+                                setFieldValue(input.name, e?.id)
+                              }
+                              value={salespoints.find(
+                                (s) => s.id === values[input.name]
+                              )}
+                              getOptionValue={(option) =>
+                                `${option.name} ${option.address}`
+                              }
+                              placeholder={input.label}
+                              className="z-[99999] popover-content-width-full"
+                              getOptionLabel={(option) =>
+                                `${option.name} - ${option.address}`
+                              }
+                            />
+                            {errors[input.name] && (
+                              <p className="text-red-500 text-xs font-medium ml-4 mt-1">
+                                {errors[input.name]}
+                              </p>
+                            )}
+                          </div>
+                        );
+                      }
+                      if (input.type === "text" || input.type === "email") {
+                        return (
+                          <TextField
+                            fullWidth
+                            margin="dense"
+                            label={input.label}
+                            type={input.type}
+                            required={input.required}
+                            size="small"
+                            name={input.name}
+                            value={values[input.name]}
+                            onChange={handleChange}
+                            error={!!errors[input.name] && values[input.name] != ""}
+                            helperText={
+                              values[input.name] != "" && errors[input.name]
+                            }
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={resetForm} ref={buttonRef}>
+                      Annuler
+                    </AlertDialogCancel>
+                    <Button type="submit" disabled={loading}>
+                      {!loading ? "Ajouter" : "Veuillez patienter..."}
+                    </Button>
+                  </AlertDialogFooter>
+                </form>
+              </AlertDialogContent>
+            </AlertDialog>
+            : null
+        }
+      </CardBodyContent>
+      {
+        user?.user_type === 'admin' ?
+
+          <CardBodyContent className="space-y-4">
+            {/* <h4 className="text-base font-semibold">Liste de fournisseurs</h4> */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 content-center">
+              <SelectPopover
+                items={salespoints}
+                getOptionLabel={(option) => `${option.name} - ${option.address}`}
+                onSelect={(e) => handleSelect(e.id)}
+                selectedItems={selectedSalesPoints.map((id) => {
+                  {
+                    const sp = salespoints.find((s) => s.id === id);
+                    return { ...sp } as SalesPoint;
                   }
                 })}
-              </div>
-              <AlertDialogFooter>
-                <AlertDialogCancel onClick={resetForm} ref={buttonRef}>
-                  Annuler
-                </AlertDialogCancel>
-                <Button type="submit" disabled={loading}>
-                  {!loading ? "Ajouter" : "Veuillez patienter..."}
-                </Button>
-              </AlertDialogFooter>
-            </form>
-          </AlertDialogContent>
-        </AlertDialog>
-      </CardBodyContent>
-      <CardBodyContent className="space-y-4">
-        {/* <h4 className="text-base font-semibold">Liste de fournisseurs</h4> */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 content-center">
-          <SelectPopover
-            items={salespoints}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            onSelect={(e) => handleSelect(e.id)}
-            selectedItems={selectedSalesPoints.map((id) => {
-              {
-                const sp = salespoints.find((s) => s.id === id);
-                return { ...sp } as SalesPoint;
-              }
-            })}
-            searchPlaceholder="Points de vente"
-            noItemText="Aucun point de vente"
-            placeholder="Point de vente"
-          />
-          <Button
-            className="bg-green-600 hover:bg-green-700"
-            onClick={() => handleSearch(selectedSalesPoints)}
-          >
-            Rechercher
-          </Button>
-        </div>
-      </CardBodyContent>
+                searchPlaceholder="Points de vente"
+                noItemText="Aucun point de vente"
+                placeholder="Point de vente"
+              />
+              <Button
+                className="bg-green-600 hover:bg-green-700"
+                onClick={() => handleSearch(selectedSalesPoints)}
+              >
+                Rechercher
+              </Button>
+            </div>
+          </CardBodyContent>
+          : null}
       <div className="shadow border select-none border-neutral-300 rounded-lg bg-white p-5">
         <h3 className="font-medium text-base">Liste de fournisseurs</h3>
         <DataTableDemo

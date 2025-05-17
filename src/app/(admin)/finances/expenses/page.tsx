@@ -34,7 +34,7 @@ import {
   TextField,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import {
   ArrowDown,
   Check,
@@ -48,6 +48,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { deleteExpense, validateExpense } from "./functions";
+import { usePermission } from "@/context/PermissionContext";
+import { useTranslation } from "react-i18next";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -72,10 +74,11 @@ export default function Page() {
     value: null,
   });
   const [table, setTable] = React.useState<any | null>(null);
-
+  const { user, hasPermission, isAdmin } = usePermission()
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const { t: tCommon } = useTranslation('common');
 
   const handleClose = () => {
     setOpen(false);
@@ -100,7 +103,7 @@ export default function Page() {
         "YYYY-MM-DDT00:00:00.SSS"
       ),
       end_date: moment(pickedDateRange?.to).format("YYYY-MM-DDT23:59:59.SSS"),
-      sales_point: selectedSalesPoints,
+      sales_point: isAdmin() ? selectedSalesPoints : [user?.sales_point],
       ...(status != null ? { is_validated: status.value } : {}),
     };
     dispatch(fetchExpenses(params));
@@ -117,14 +120,14 @@ export default function Page() {
 
   const { toast } = useToast();
 
-  const inputs: Field[] = [
-    {
+  const inputs = [
+    ...(isAdmin() ? [{
       name: "sales_point",
       required: true,
       label: "Point de vente",
       type: "select",
       options: salespoints,
-    },
+    }] : []),
     {
       name: "amount",
       required: true,
@@ -155,15 +158,15 @@ export default function Page() {
       setLoading(false);
       return setFieldError("amount", "Entrez un montant valide");
     }
-    if (!values.sales_point) {
+    if (!values.sales_point && isAdmin()) {
       setLoading(false);
       return setFieldError("sales_point", "Sélectionnez un point de vente");
     }
-    const data = { ...values, remove_from_balance: true };
-    const res = await instance.post("/expenses/", data, {
-      withCredentials: true,
-    });
     try {
+      const data = { ...values, remove_from_balance: true, ...(isAdmin() ? {} : { sales_point: user?.sales_point }) };
+      const res = await instance.post("/expenses/", data, {
+        withCredentials: true,
+      });
       if (res.status == 201) {
         toast({
           variant: "default",
@@ -227,17 +230,17 @@ export default function Page() {
         );
       },
     },
-    {
+    ...(isAdmin() ? [{
       accessorKey: "Point de vente",
       header: () => <div className="text-center w-[140px]">Point de vente</div>,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<Expense> }) => {
         return (
           <div className="text-center font-medium">
             {row.original.sales_point_details?.name}
           </div>
         );
       },
-    },
+    }] : []),
     {
       accessorKey: "operateur",
       header: () => <div className="text-center w-[140px]">Opérateur</div>,
@@ -278,9 +281,8 @@ export default function Page() {
           <div className="text-center font-medium">
             <p>
               <span
-                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${
-                  row.original.is_validated ? "green" : "red"
-                }-500 text-${row.original.is_validated ? "white" : "black"}`}
+                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${row.original.is_validated ? "green" : "red"
+                  }-500 text-${row.original.is_validated ? "white" : "black"}`}
               >
                 {row.original.is_validated ? "Validé" : "Non validé"}
               </span>
@@ -328,7 +330,7 @@ export default function Page() {
         );
       },
     },
-    {
+    ...(hasPermission('validate_expense') || hasPermission('delete_expense') ? [{
       accessorKey: "Action",
       enableHiding: false,
       header: () => <div className="text-right w-[30px]">Action</div>,
@@ -343,7 +345,7 @@ export default function Page() {
                 title: "Succès",
                 variant: "success",
                 className: "bg-green-500 border-green-500",
-                description: res.data.success,
+                description: tCommon(`${res.data.success}`),
                 icon: <Check className="mr-2 h-4 w-4" />,
               });
             }
@@ -351,10 +353,9 @@ export default function Page() {
             toast({
               title: "Erreur",
               className: "bg-red-500 border-red-500",
-              description: `${
-                error.response.data.error ??
+              description: `${error.response.data.error ??
                 "Erreur lors de la validation de la perte"
-              }`,
+                }`,
               icon: <X className="mr-2 h-4 w-4" />,
               variant: "destructive",
             });
@@ -383,10 +384,9 @@ export default function Page() {
               title: "Erreur",
               className: "bg-red-500 border-red-500",
               variant: "destructive",
-              description: `${
-                error.response.data.error.replace("[", "") ??
+              description: `${error.response.data.error.replace("[", "") ??
                 "Erreur lors de la suppression de l'inventaire"
-              }`,
+                }`,
               icon: <X className="mr-2 h-4 w-4" />,
             });
           } finally {
@@ -406,7 +406,7 @@ export default function Page() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {!row.original.is_validated && (
+                {!row.original.is_validated && hasPermission('validate_expense') && (
                   <DropdownMenuItem
                     disabled={row.original.is_validated}
                     onClick={handleValidateLoss}
@@ -415,7 +415,7 @@ export default function Page() {
                     Valider la dépense
                   </DropdownMenuItem>
                 )}
-                {!row.original.is_validated && (
+                {!row.original.is_validated && hasPermission('delete_expense') && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -433,7 +433,7 @@ export default function Page() {
           );
         }
       },
-    },
+    }] : []),
   ];
 
   return (
@@ -450,12 +450,15 @@ export default function Page() {
       </Backdrop>
       <CardBodyContent className="flex justify-between items-center">
         <h2 className="text-base font-medium">Dépenses</h2>
-        <Button
-          onClick={handleClickOpen}
-          className="bg-indigo-600 hover:bg-indigo-700 transition"
-        >
-          Entrer une depense
-        </Button>
+        {
+          hasPermission('add_expense') ?
+            <Button
+              onClick={handleClickOpen}
+              className="bg-indigo-600 hover:bg-indigo-700 transition"
+            >
+              Entrer une depense
+            </Button> : null
+        }
       </CardBodyContent>
       <CardBodyContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5">
         <DateRangePicker
@@ -467,18 +470,23 @@ export default function Page() {
             }
           }}
         />
-        <SelectPopover
-          items={salespoints}
-          getOptionLabel={(option) => `${option.name} - ${option.address}`}
-          selectedItems={selectedSalesPoints.map((s) => {
-            const sp = salespoints.find((salespoint) => salespoint.id === s);
-            return { ...sp } as SalesPoint;
-          })}
-          onSelect={(el) => handleSelect(el.id)}
-          noItemText="Aucun point de vente"
-          placeholder="Point de vente"
-          searchPlaceholder="Rechercher un point de vente"
-        />
+        {
+          isAdmin() ?
+
+            <SelectPopover
+              items={salespoints}
+              getOptionLabel={(option) => `${option.name} - ${option.address}`}
+              selectedItems={selectedSalesPoints.map((s) => {
+                const sp = salespoints.find((salespoint) => salespoint.id === s);
+                return { ...sp } as SalesPoint;
+              })}
+              onSelect={(el) => handleSelect(el.id)}
+              noItemText="Aucun point de vente"
+              placeholder="Point de vente"
+              searchPlaceholder="Rechercher un point de vente"
+            />
+            : null
+        }
         <Combobox
           options={[
             { name: "Tous", value: null },

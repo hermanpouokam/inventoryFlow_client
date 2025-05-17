@@ -20,7 +20,7 @@ import moment from "moment";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { DataTableDemo } from "@/components/TableComponent";
 import { Input } from "@/components/ui/input";
 import {
@@ -51,6 +51,7 @@ import { createLoss, validateLoss, deleteLoss } from "./functions";
 import { transformVariants } from "../../sell/newsell/functions";
 import { fetchProducts } from "@/redux/productsSlicer";
 import { fetchLosses } from "@/redux/losses";
+import { usePermission } from "@/context/PermissionContext";
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
@@ -87,7 +88,7 @@ export default function Page() {
   const { data: products, status: productsStatus } = useSelector(
     (state: RootState) => state.products
   );
-
+  const { hasPermission, user, isAdmin } = usePermission()
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -98,14 +99,14 @@ export default function Page() {
     setOpen(false);
   };
 
-  const inputs = [
-    {
+  const inputs = React.useMemo(() => [
+    ...(isAdmin() ? [{
       name: "sales_point",
       label: "Point de vente",
       required: true,
       type: "select",
       options: salespoints,
-    },
+    },] : []),
     {
       name: "product",
       label: "Article",
@@ -125,7 +126,7 @@ export default function Page() {
       required: true,
       type: "text",
     },
-  ];
+  ], [products, salespoints])
 
   const {
     values,
@@ -155,7 +156,7 @@ export default function Page() {
   const getData = async (id: number) => {
     setLoading(true);
     const params = {
-      sales_points: [id],
+      sales_points: isAdmin() ? [id] : [user?.sales_point],
     };
     dispatch(fetchProducts(params));
     setLoading(false);
@@ -167,7 +168,7 @@ export default function Page() {
         "YYYY-MM-DDT00:00:00.SSS"
       ),
       end_date: moment(pickedDateRange?.to).format("YYYY-MM-DDT23:59:59.SSS"),
-      sales_point: selectedSalesPoints,
+      sales_point: isAdmin() ? selectedSalesPoints : [user?.sales_point],
       ...(status != null ? { is_validated: status.value } : {}),
     };
     dispatch(fetchLosses(params));
@@ -180,6 +181,9 @@ export default function Page() {
     if (lossesStatus == "idle") {
       getLosses();
     }
+    if (!isAdmin()) {
+      dispatch(fetchProducts({ sales_points: [user?.sales_point] }))
+    }
   }, []);
 
   const columns: ColumnDef<Loss>[] = [
@@ -190,31 +194,31 @@ export default function Page() {
         <div className="text-center">{row.getValue("number")}</div>
       ),
     },
-    {
+    ...(isAdmin() ? [{
       accessorKey: "Point de vente",
       header: () => <div className="text-center w-[140px]">Point de vente</div>,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<Loss> }) => {
         return (
           <div className="text-center font-medium">
             {row.original.sales_point_details.name}
           </div>
         );
       },
-    },
+    },] : []),
     {
       accessorKey: "operateur",
       header: () => <div className="text-center w-[140px]">Opérateur</div>,
       cell: ({ row }) => {
         return (
           <div className="text-center font-medium">
-            {row.original.created_by_name}
+            {row.original.created_by_full_name}
           </div>
         );
       },
     },
     {
       accessorKey: "Article",
-      header: () => <div className="text-center w-[140px]">Article</div>,
+      header: () => <div className="text-center w-[240px]">Article</div>,
       cell: ({ row }) => {
         const variant = row.original;
         return (
@@ -226,7 +230,7 @@ export default function Page() {
     },
     {
       accessorKey: "Quantité",
-      header: () => <div className="text-center w-[140px]">Quantité</div>,
+      header: () => <div className="text-center w-[80px]">Quantité</div>,
       cell: ({ row }) => {
         const variant = row.original;
         return (
@@ -242,9 +246,8 @@ export default function Page() {
           <div className="text-center font-medium">
             <p>
               <span
-                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${
-                  row.original.is_validated ? "green" : "red"
-                }-500 text-${row.original.is_validated ? "white" : "black"}`}
+                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${row.original.is_validated ? "green" : "red"
+                  }-500 text-${row.original.is_validated ? "white" : "black"}`}
               >
                 {row.original.is_validated ? "Validé" : "Non validé"}
               </span>
@@ -259,7 +262,7 @@ export default function Page() {
       cell: ({ row }) => {
         return (
           <div className="text-center font-medium">
-            {row.original.validated_by_name ?? "-"}
+            {row.original.validated_by_full_name ?? "-"}
           </div>
         );
       },
@@ -279,12 +282,12 @@ export default function Page() {
     {
       accessorKey: "Date de création",
       header: () => (
-        <div className="text-right w-[140px]">Date de création</div>
+        <div className="text-center w-[140px]">Date de création</div>
       ),
       cell: ({ row }) => {
         return (
-          <div className="text-right font-medium">
-            {new Date(row.original.created_at).toDateString()}
+          <div className="text-center font-medium">
+            {new Date(row.original.created_at).toLocaleDateString()}
           </div>
         );
       },
@@ -304,17 +307,17 @@ export default function Page() {
         );
       },
     },
-    {
+    ...(hasPermission('delete_loss') || hasPermission('validate_loss') ? [{
       accessorKey: "Action",
       enableHiding: false,
       header: () => <div className="text-right w-[30px]">Action</div>,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<Loss> }) => {
         const handleValidateLoss = async () => {
           setLoading(true);
           try {
             const res = await validateLoss(row.original.id);
             if (res.data.success) {
-              await getLosses();
+              getLosses();
               return toast({
                 title: "Succès",
                 variant: "success",
@@ -327,10 +330,9 @@ export default function Page() {
             toast({
               title: "Erreur",
               className: "bg-red-500 border-red-500",
-              description: `${
-                error.response.data.error ??
+              description: `${error.response.data.error ??
                 "Erreur lors de la validation de la perte"
-              }`,
+                }`,
               icon: <X className="mr-2 h-4 w-4" />,
               variant: "destructive",
             });
@@ -358,10 +360,9 @@ export default function Page() {
               title: "Erreur",
               className: "bg-red-500 border-red-500",
               variant: "destructive",
-              description: `${
-                error.response.data.error ??
+              description: `${error.response.data.error ??
                 "Erreur lors de la suppression de l'inventaire"
-              }`,
+                }`,
               icon: <X className="mr-2 h-4 w-4" />,
             });
           } finally {
@@ -381,7 +382,7 @@ export default function Page() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {!row.original.is_validated && (
+                {!row.original.is_validated && hasPermission('validate_loss') && (
                   <DropdownMenuItem
                     disabled={row.original.is_validated}
                     onClick={handleValidateLoss}
@@ -390,7 +391,7 @@ export default function Page() {
                     Valider la perte
                   </DropdownMenuItem>
                 )}
-                {!row.original.is_validated && (
+                {!row.original.is_validated && hasPermission('delete_loss') && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -408,14 +409,14 @@ export default function Page() {
           );
         }
       },
-    },
+    },] : [])
   ];
 
   const handleSubmitForm = async () => {
     setLoading(true);
     let tempErrors = { ...errors };
 
-    if (!values.sales_point) {
+    if (!values.sales_point && isAdmin()) {
       tempErrors.sales_point = "Sélectionnez un point de vente.";
     } else {
       delete tempErrors.sales_point; // Supprime l'erreur si corrigée
@@ -443,7 +444,7 @@ export default function Page() {
     }
 
     try {
-      const res = await createLoss(values);
+      const res = await createLoss({ ...values, sales_point: user?.sales_point });
       setLoading(false);
       if (res.status === 201) {
         setSelectedSalesPoints([]);
@@ -489,13 +490,16 @@ export default function Page() {
       <CardBodyContent>
         <div className="flex justify-between items-center">
           <h3 className="text-base font-semibold">Gestion de pertes</h3>
+          {
+            hasPermission('add_loss') ?
 
-          <Button
-            onClick={handleClickOpen}
-            className="bg-indigo-600 hover:bg-indigo-700"
-          >
-            Entrer une perte
-          </Button>
+              <Button
+                onClick={handleClickOpen}
+                className="bg-indigo-600 hover:bg-indigo-700"
+              >
+                Entrer une perte
+              </Button> : null
+          }
         </div>
       </CardBodyContent>
       <div className="shadow border select-none border-neutral-300 rounded-lg bg-white p-5">
@@ -509,13 +513,13 @@ export default function Page() {
               }
             }}
           />
-          <SelectPopover
+          {isAdmin() ? <SelectPopover
             selectedItems={selectedSalesPoints}
             items={salespoints}
             getOptionLabel={(option) => `${option.name} - ${option.address}`}
             onSelect={handleSelect}
             placeholder="Points de vente"
-          />
+          /> : null}
           <Combobox
             options={[
               { name: "Tous", value: null },
@@ -532,7 +536,7 @@ export default function Page() {
           />
           <Button
             variant={"outline"}
-            onClick={getData}
+            onClick={getLosses}
             className={cn(
               "w-full bg-green-600 hover:bg-green-700 hover:text-white text-white"
             )}
@@ -600,13 +604,7 @@ export default function Page() {
                     <div key={input.name}>
                       <Combobox
                         RightIcon={ChevronDown}
-                        options={
-                          input.name === "product"
-                            ? values["sales_point"]
-                              ? input.options
-                              : []
-                            : input.options
-                        }
+                        options={input.options}
                         buttonLabel={input.label + "*"}
                         onValueChange={(e) => {
                           if (input.name === "sales_point") {
@@ -629,25 +627,23 @@ export default function Page() {
                         value={
                           input.name === "sales_point"
                             ? salespoints.find(
-                                (s) => s.id == values["sales_point"]
-                              )
+                              (s) => s.id == values["sales_point"]
+                            )
                             : transformVariants(products).find(
-                                (pr) => pr.id == values["product"]
-                              )
+                              (pr) => pr.id == values["product"]
+                            )
                         }
                         getOptionValue={(option) =>
-                          `${option.id} ${option.name} ${
-                            input.name == "sales_point" ? option?.address : ""
+                          `${option.id} ${option.name} ${input.name == "sales_point" ? option?.address : ""
                           }`
                         }
                         placeholder={input.label}
                         className="z-[99999] popover-content-width-full"
                         buttonClassName={errors[input.name] && "border-red-500"}
                         getOptionLabel={(option) =>
-                          `${option.name} ${
-                            input.name == "sales_point"
-                              ? " - " + option?.address
-                              : ""
+                          `${option.name} ${input.name == "sales_point"
+                            ? " - " + option?.address
+                            : ""
                           }`
                         }
                       />

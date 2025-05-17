@@ -54,6 +54,7 @@ import { fetchProducts } from "@/redux/productsSlicer";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
 import { formatteCurrency } from "../../stock/functions";
 import { instance } from "@/components/fetch";
+import { usePermission } from "@/context/PermissionContext";
 
 export default function Page() {
   const dispatch: AppDispatch = useDispatch();
@@ -73,7 +74,7 @@ export default function Page() {
   const { toast } = useToast();
   const [open, setOpen] = React.useState(false);
   const textFieldRef = React.useRef<HTMLInputElement>(null);
-
+  const { user, isAdmin } = usePermission()
   const [customerPrices, setCustomerPrices] = React.useState<
     ClientProductPrice[]
   >([]);
@@ -96,14 +97,14 @@ export default function Page() {
   } = useSelector((state: RootState) => state.salesPoints);
 
   React.useEffect(() => {
-    if (statusCustomers == "idle") {
-      dispatch(fetchClients({}));
+    if (statusCustomers == "idle" && !isAdmin()) {
+      dispatch(fetchClients({ sales_points: [user?.sales_point] }));
     }
-    if (statusProducts == "idle") {
-      dispatch(fetchProducts({}));
+    if (statusProducts == "idle" && !isAdmin()) {
+      dispatch(fetchProducts({ sales_points: [user?.sales_point] }));
     }
     if (statusSalespoint == "idle") {
-      dispatch(fetchSalesPoints({}));
+      dispatch(fetchSalesPoints());
     }
   }, [statusCustomers, statusProducts, statusSalespoint, dispatch]);
 
@@ -295,10 +296,10 @@ export default function Page() {
           <div className="capitalize text-center">
             {item.is_beer
               ? formatteCurrency(
-                  Number(item.package_price) ?? 0,
-                  "XAF",
-                  "fr-FR"
-                )
+                Number(item.package_price) ?? 0,
+                "XAF",
+                "fr-FR"
+              )
               : "-"}
           </div>
         );
@@ -324,10 +325,10 @@ export default function Page() {
           <div className="capitalize text-center">
             {item.is_beer
               ? formatteCurrency(
-                  Number(item.package) * Number(item.package_price),
-                  "XAF",
-                  "fr-FR"
-                )
+                Number(item.package) * Number(item.package_price),
+                "XAF",
+                "fr-FR"
+              )
               : "-"}
           </div>
         );
@@ -603,10 +604,9 @@ export default function Page() {
       setLoading(false);
       toast({
         title: "Erreur",
-        description: `${
-          error.response.data.error ??
+        description: `${error.response.data.error ??
           "Une erreur inattendu est survenu verifiez votre connexion et réessayez"
-        }`,
+          }`,
         variant: "destructive",
         icon: <X className="mr-2" />,
       });
@@ -636,27 +636,29 @@ export default function Page() {
       >
         {/* <p className='text-muted-foreground text-base font-medium'>NB: si vous ne sélectionner de point de vente la facture sera attribué automatiquement au point de vente du client. En dehors des clients divers.</p> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-          <FormControl size="small" fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              Point de vente
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              name="sales_point"
-              label="Point de vente"
-              disabled={data.length > 0}
-              size="small"
-              value={salespoint}
-              onChange={handleChangeSalesPoint}
-            >
-              {salespoints.map((s) => (
-                <MenuItem key={s.id} value={s.id}>
-                  {s.name} - {s.address}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          {
+            isAdmin() ? <FormControl size="small" fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Point de vente
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                name="sales_point"
+                label="Point de vente"
+                disabled={data.length > 0}
+                size="small"
+                value={salespoint}
+                onChange={handleChangeSalesPoint}
+              >
+                {salespoints.map((s) => (
+                  <MenuItem key={s.id} value={s.id}>
+                    {s.name} - {s.address}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl> : null
+          }
           <Autocomplete
             size="small"
             fullWidth
@@ -664,11 +666,7 @@ export default function Page() {
             required
             disablePortal
             id="combo-box-demo"
-            options={
-              salespoint
-                ? [{ id: 0, name: "Client", surname: "divers" }, ...customers]
-                : []
-            }
+            options={[{ id: 0, name: "Client", surname: "divers" }, ...customers]}
             //@ts-ignore
             onChange={onChangeCustomer}
             getOptionLabel={(item) => `${item.name} ${item.surname ?? ""}`}
@@ -686,7 +684,7 @@ export default function Page() {
             label="Nom du client"
             variant="outlined"
           />
-          <TextField
+          {/* <TextField
             required
             name="command_number"
             fullWidth
@@ -694,7 +692,7 @@ export default function Page() {
             id="outlined-basic"
             label="No de commande"
             variant="outlined"
-          />
+          /> */}
           {/* <Popover>
                         <PopoverTrigger asChild>
                             <Button

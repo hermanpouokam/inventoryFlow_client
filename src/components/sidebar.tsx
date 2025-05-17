@@ -105,7 +105,7 @@ export default function Sidebar() {
         )}
       >
         <img src={logo.src} alt="logo" className="w-32 h-auto" />
-        <ul className="space-y-2 w-full px-2 flex-1">
+        <ul className="space-y-2 w-full pr-3 pl-5 flex-1">
           {menuItems.map((item, index) => {
             const Icon = item.icon;
 

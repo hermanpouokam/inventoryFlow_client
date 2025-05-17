@@ -45,6 +45,7 @@ import { DataTableDemo } from "@/components/TableComponent";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { createSupply } from "@/components/fetch";
+import { usePermission } from "@/context/PermissionContext";
 
 export default function Page() {
   const dispatch: AppDispatch = useDispatch();
@@ -86,7 +87,7 @@ export default function Page() {
   //   error: productsCatError,
   //   status: productsCatStatus,
   // } = useSelector((state: RootState) => state.productsCat);
-
+  const { user, isAdmin, hasPermission } = usePermission()
   const columns: ColumnDef<Payment>[] = [
     // {
     //     id: "select",
@@ -130,7 +131,7 @@ export default function Page() {
       header: ({ column }) => {
         return (
           <div
-            className="flex w-[130px]"
+            className="flex w-[240px]"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Article
@@ -139,7 +140,7 @@ export default function Page() {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize text-left w-[130px]">
+        <div className="capitalize text-left w-[240px]">
           {row.getValue("article")}
         </div>
       ),
@@ -264,7 +265,10 @@ export default function Page() {
 
   React.useEffect(() => {
     if (statusSalespoint == "idle") {
-      dispatch(fetchSalesPoints({}));
+      dispatch(fetchSalesPoints());
+    }
+    if (!isAdmin() && statusSuppliers == 'idle') {
+      dispatch(fetchSuppliers({ sales_points_id: [user?.sales_point] }));
     }
   }, [statusSalespoint, dispatch]);
 
@@ -275,7 +279,7 @@ export default function Page() {
   };
   const handleChangeSupplier = (e: any) => {
     dispatch(
-      fetchProducts({ suppliers: [e.target.value], sales_points: [salespoint] })
+      fetchProducts({ suppliers: [e.target.value], sales_points: isAdmin() ? [salespoint] : [user?.sales_point] })
     );
     setSupplier(e.target.value);
   };
@@ -329,7 +333,7 @@ export default function Page() {
     try {
       const supplyData = {
         supplier,
-        sales_point: salespoint,
+        sales_point: isAdmin() ? salespoint : user?.sales_point,
         supply_products: data.map((obj: any) => {
           return {
             product: obj.product_id ?? obj.id,
@@ -379,7 +383,7 @@ export default function Page() {
       <CardBodyContent className="space-y-5">
         <h3 className="font-medium text-base">Bon de commande</h3>
         <div className="grid sm:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-5">
-          <FormControl required size="small" fullWidth>
+          {isAdmin() ? <FormControl required size="small" fullWidth>
             <InputLabel id="demo-simple-select-label">
               Point de vente
             </InputLabel>
@@ -399,7 +403,7 @@ export default function Page() {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> : null}
           <FormControl required size="small" fullWidth>
             <InputLabel id="demo-simple-select-label">Founisseurs</InputLabel>
             <Select

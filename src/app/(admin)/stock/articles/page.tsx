@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { fetchProductsCat } from "@/redux/productsCat";
 import { DataTableDemo } from "@/components/TableComponent";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -27,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { fetchProducts } from "@/redux/productsSlicer";
-import { calculateTotalAmount } from "../functions";
+import { calculateTotalAmount, formatteCurrency } from "../functions";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Backdrop,
@@ -53,6 +53,7 @@ import SelectPopover from "@/components/SelectPopover";
 import StockPDF from "@/app/pdf/stockPdf";
 import { encryptParam } from "@/utils/encryptURL";
 import { transformVariants } from "../../sell/newsell/functions";
+import { usePermission } from "@/context/PermissionContext";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -65,6 +66,7 @@ const Transition = React.forwardRef(function Transition(
 
 export default function Page() {
   const dispatch: AppDispatch = useDispatch();
+  const { hasPermission, user } = usePermission();
 
   const {
     data: salespoints,
@@ -187,7 +189,7 @@ export default function Page() {
     //     enableSorting: false,
     //     enableHiding: false,
     // },
-    {
+    ...(hasPermission('edit_product') ? [{
       id: "actions",
       header: () => <div className="w-10 text-center">Actions</div>,
       enableHiding: false,
@@ -213,10 +215,10 @@ export default function Page() {
             <DropdownMenuContent align="start">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => {}}>
+              {/* <DropdownMenuItem onClick={() => { }}>
                 <Edit size={14} className="mr-3" />
                 Modifier
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem onClick={handleNavigate}>
                 {" "}
                 <EyeIcon className="mr-3" size={14} /> Details
@@ -225,7 +227,7 @@ export default function Page() {
           </DropdownMenu>
         );
       },
-    },
+    }] : []),
     {
       accessorKey: "number",
       header: () => <div className="w-5">#</div>,
@@ -235,10 +237,10 @@ export default function Page() {
     },
     {
       accessorKey: "product_code",
-      header: () => <div className="text-left w-24">Code</div>,
-      cell: ({ row }) => {
+      header: () => <div className="text-center w-24">Code</div>,
+      cell: ({ row }: { row: Row<Product> }) => {
         const product = row.original;
-        return <div className="capitalize">{product.product_code}</div>;
+        return <div className="capitalize text-center">{product.product_code}</div>;
       },
     },
     {
@@ -246,22 +248,22 @@ export default function Page() {
       header: ({ column }) => {
         return (
           <div
-            className="flex w-32"
-            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-center w-[240px]"
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Nom du produit
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
           </div>
         );
       },
       cell: ({ row }) => {
         const product = row.original;
-        return <div className="capitalize">{product.name}</div>;
+        return <div className="capitalize text-center">{product.name}</div>;
       },
     },
     {
       accessorKey: "categorie",
-      header: () => <div className="text-center w-28">Categorie</div>,
+      header: () => <div className="text-center w-[140px]">Categorie</div>,
       cell: ({ row }) => {
         const product = row.original;
         return (
@@ -271,10 +273,10 @@ export default function Page() {
         );
       },
     },
-    {
+    ...(user?.user_type === 'admin' ? [{
       accessorKey: "point de vente",
       header: () => <div className="text-center w-32">Point de vente</div>,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<Product> }) => {
         const product = row.original;
         return (
           <div className="text-center font-medium">
@@ -282,7 +284,8 @@ export default function Page() {
           </div>
         );
       },
-    },
+    },] : []),
+
     {
       accessorKey: "prix d'achat",
       header: ({ column }) => {
@@ -292,13 +295,13 @@ export default function Page() {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             <span>Prix d&apos;achat</span>
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
           </div>
         );
       },
       cell: ({ row }) => {
         const product = row.original;
-        return <div className="capitalize text-center">{product.price}</div>;
+        return <div className="capitalize text-center">{formatteCurrency(product.price)}</div>;
       },
       footer: () => <div className="text-center">Total</div>,
     },
@@ -311,7 +314,7 @@ export default function Page() {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             <span>Quantité</span>
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
           </div>
         );
       },
@@ -344,13 +347,8 @@ export default function Page() {
       },
       footer: () => {
         const total = calculateTotalAmount(products);
-        // Format the amount as a dollar amount
-        const formatted = new Intl.NumberFormat("fr-FR", {
-          style: "currency",
-          currency: "XAF",
-        }).format(total);
 
-        return <div className="text-right">{formatted}</div>;
+        return <div className="text-right">{formatteCurrency(total)}</div>;
       },
     },
     {
@@ -401,7 +399,7 @@ export default function Page() {
     );
   };
   const handleOpenPDF = () => {
-    if (selectedSalesPoints.length !== 1) {
+    if (selectedSalesPoints.length !== 1 && user?.user_type == 'admin') {
       return toast({
         title: "Erreur",
         variant: "destructive",
@@ -420,24 +418,23 @@ export default function Page() {
     newWindow.document.write("<p>Loading PDF...</p>");
 
     // Récupérer les données
-    const selectedSalesPoint = salespoints.find(
+    const selectedSalesPoint = user?.user_type === 'admin' ? salespoints.find(
       (s) => s.id === selectedSalesPoints[0]
-    );
-    const filteredProducts = transformVariants(
-      products.filter((p) => p.sales_point === selectedSalesPoints[0])
+    ) : user?.sales_point_details;
+    const filteredProducts = transformVariants(user?.user_type == 'admin' ?
+      products.filter((p) => p.sales_point === selectedSalesPoints[0]) :
+      products.filter((p) => p.sales_point === user?.sales_point)
     );
 
     // Générer le document PDF
     const pdfDocument = (
       <StockPDF
         salespoint={selectedSalesPoint}
-        title={`Fiche de stock du ${new Date().toLocaleDateString()} ${
-          selectedCategories.length > 0 || selectedSuppliers.length > 0
-            ? "filtré par"
-            : ""
-        } ${selectedSuppliers.length > 0 ? "fournisseur" : ""} ${
-          selectedCategories.length > 0 ? "catégorie" : ""
-        }`}
+        title={`Fiche de stock du ${new Date().toLocaleDateString()} ${selectedCategories.length > 0 || selectedSuppliers.length > 0
+          ? "filtré par"
+          : ""
+          } ${selectedSuppliers.length > 0 ? "fournisseur" : ""} ${selectedCategories.length > 0 ? "catégorie" : ""
+          }`}
         products={filteredProducts}
       />
     );
@@ -483,38 +480,43 @@ export default function Page() {
       </Backdrop>
       <CardBodyContent className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between items-center">
         <h4 className="text-base font-semibold">Stock</h4>
-        <div className="grid grid-cols-1 gap-x-4 mt-4 sm:mt-0 sm:grid-cols-2 md:grid-cols-2">
-          <Button
-            variant={"default"}
-            onClick={handleClickOpen}
-            className=" bg-violet-600 hover:bg-violet-700 text-white"
-          >
-            Ajouter une catégorie d&apos;article
-          </Button>
-          <Button
-            variant={"default"}
-            onClick={() => window.location.assign("/stock/articles/new")}
-            className=" bg-sky-600 hover:bg-sky-700 text-white"
-          >
-            Ajouter un article
-          </Button>
-        </div>
+        {hasPermission('add_product') ?
+          <div className="grid grid-cols-1 gap-x-4 mt-4 sm:mt-0 sm:grid-cols-2 md:grid-cols-2">
+            <Button
+              variant={"default"}
+              onClick={handleClickOpen}
+              className=" bg-violet-600 hover:bg-violet-700 text-white"
+            >
+              Ajouter une catégorie d&apos;article
+            </Button>
+            <Button
+              variant={"default"}
+              onClick={() => window.location.assign("/stock/articles/new")}
+              className=" bg-sky-600 hover:bg-sky-700 text-white"
+            >
+              Ajouter un article
+            </Button>
+          </div>
+          : null}
       </CardBodyContent>
       <CardBodyContent className="space-y-4">
         <h4 className="text-base font-semibold">Filtrer les articles</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <SelectPopover
-            items={salespoints}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            selectedItems={selectedSalesPoints.map((s) => {
-              const sp = salespoints.find((salespoint) => salespoint.id === s);
-              return { ...sp } as SalesPoint;
-            })}
-            onSelect={(el) => handleSelect(el.id)}
-            noItemText="Aucun point de vente"
-            placeholder="Point de vente"
-            searchPlaceholder="Rechercher un point de vente"
-          />
+          {
+            user?.user_type == 'admin' ?
+              <SelectPopover
+                items={salespoints}
+                getOptionLabel={(option) => `${option.name} - ${option.address}`}
+                selectedItems={selectedSalesPoints.map((s) => {
+                  const sp = salespoints.find((salespoint) => salespoint.id === s);
+                  return { ...sp } as SalesPoint;
+                })}
+                onSelect={(el) => handleSelect(el.id)}
+                noItemText="Aucun point de vente"
+                placeholder="Point de vente"
+                searchPlaceholder="Rechercher un point de vente"
+              />
+              : null}
           <SelectPopover
             items={productsCat}
             getOptionLabel={(option) => `${option.name}`}
@@ -523,8 +525,8 @@ export default function Page() {
               const category = productsCat.find((el) => el.id === cat);
               return { ...category };
             })}
-            noItemText="Aucune categorie de produits"
-            placeholder="Categorie de produits"
+            noItemText="Aucune categorie d'article"
+            placeholder="Categorie d'article"
             searchPlaceholder="Rechercher une categorie"
           />
           <SelectPopover
@@ -646,25 +648,27 @@ export default function Page() {
       >
         <DialogTitle>{"Ajouter une catégorie de produit"}</DialogTitle>
         <DialogContent sx={{ maxWidth: 450 }} className="py-3 space-y-3">
-          <MuiFormControl margin="dense" size="small" fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              Point de vente
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              name="sales_point"
-              label="Point de vente"
-              size="small"
-              margin="dense"
-            >
-              {salespoints.map((s) => (
-                <MenuItem key={s.id} value={s.id}>
-                  {s.name} - {s.address}
-                </MenuItem>
-              ))}
-            </Select>
-          </MuiFormControl>
+          {user?.user_type == 'admin' ?
+            <MuiFormControl margin="dense" size="small" fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Point de vente
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                name="sales_point"
+                label="Point de vente"
+                size="small"
+                margin="dense"
+              >
+                {salespoints.map((s) => (
+                  <MenuItem key={s.id} value={s.id}>
+                    {s.name} - {s.address}
+                  </MenuItem>
+                ))}
+              </Select>
+            </MuiFormControl>
+            : null}
           <TextField
             size="small"
             required

@@ -248,10 +248,10 @@ export const createProductCat = async (category: Category) => {
 export const createPackaging = async (packaging: any) => {
   try {
     const res = await instance.post("/packagings/", { ...packaging });
-    return res.data;
+    return res;
   } catch (error) {
     if (error.response) {
-      return error.response.data;
+      return error;
     } else if (error.request) {
       throw new Error("Error creatting packaging");
     } else {

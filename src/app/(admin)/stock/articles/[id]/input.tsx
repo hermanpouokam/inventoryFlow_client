@@ -1,6 +1,7 @@
 import { instance } from "@/components/fetch";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { usePermission } from "@/context/PermissionContext";
 import { cn } from "@/lib/utils";
 import { TextField } from "@mui/material";
 import { Check, Pencil, X } from "lucide-react";
@@ -33,7 +34,7 @@ const InputComponent = ({
   const { toast } = useToast();
   const [text, setText] = React.useState(input?.value ?? "");
   const inputRef = React.useRef<HTMLInputElement | null>(null);
-
+  const { hasPermission, user } = usePermission()
   React.useEffect(() => {
     if (isSelected && inputRef.current) {
       inputRef.current.focus();
@@ -116,14 +117,14 @@ const InputComponent = ({
               {typeof input.value == "string"
                 ? input.value
                 : typeof input.value == "number"
-                ? Number(input.value)
-                : new Date(input.value).toLocaleString()}
+                  ? Number(input.value)
+                  : new Date(input.value).toLocaleString()}
             </h4>
           </div>
         )}
         {["name", "product_code", "price"].includes(input.name) && (
           <div>
-            {!isSelected ? (
+            {(hasPermission('edit_product') && link == 'products') || (hasPermission('modifiy_packaging') && link == 'packagings') ? !isSelected ? (
               <Button
                 variant="secondary"
                 onClick={() => onSelect(input?.name ?? "")}
@@ -149,7 +150,7 @@ const InputComponent = ({
                   <Check className="w-4 h-4" />
                 </Button>
               </div>
-            )}
+            ) : null}
           </div>
         )}
       </div>

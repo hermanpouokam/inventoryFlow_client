@@ -155,7 +155,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
               <Text style={styles.tableCell}>{product.quantity}</Text>
               <Text style={styles.tableCell}>{Number(product.price)}</Text>
               <Text style={styles.tableCell}>
-                {formatteCurrency(Number(product.price))}
+                {formatteCurrency(Number(product.price) * product.quantity )}
               </Text>
             </View>
           ))}
@@ -204,7 +204,7 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
                     <Text style={styles.tableCell}>
                       {formatteCurrency(
                         Number(packaging.packaging_cost) *
-                          packaging.missing_quantity,
+                        packaging.missing_quantity,
                         "XAF",
                         "fr-FR"
                       )}
@@ -344,9 +344,9 @@ const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
           <Text style={[styles.subtitle]}>
             {formatteCurrency(
               Number(supply?.total_cost) +
-                Number(taxDetails?.total_tax_amount) +
-                Number(feeDetails?.total_fee_amount) +
-                totalPackagings,
+              Number(taxDetails?.total_tax_amount) +
+              Number(feeDetails?.total_fee_amount) +
+              totalPackagings,
               "XAF",
               "fr-Fr"
             )}

@@ -79,7 +79,7 @@ const useForm = (initialValues: FormFields) => {
     }));
   };
 
-  // Fonction de soumission avec gestion correcte des erreurs
+  // Fonction de soumission avec gestion des erreurs
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
     callback: () => void
@@ -90,7 +90,7 @@ const useForm = (initialValues: FormFields) => {
     const isValid = validate();
 
     // Vérifier si des erreurs existent
-    if (!isValid) return;
+    if (!isValid) return console.log('error from use form');
 
     try {
       await callback();

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import * as React from "react";
 
-import { createClientCat, getClient } from "../functions";
+import { createClientCat } from "../functions";
 import {
   Backdrop,
   CircularProgress,
@@ -16,19 +16,13 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import getFormData from "@/components/functions";
 import { useToast } from "@/components/ui/use-toast";
 import {
-  ArrowUpDown,
   Check,
-  Edit,
   EllipsisVertical,
-  Eye,
   EyeIcon,
-  Trash,
   X,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
@@ -37,11 +31,10 @@ import { useSelector } from "react-redux";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { useRouter, useSearchParams } from "next/navigation";
 import { fetchClients } from "@/redux/clients";
 import { DataTableDemo } from "@/components/TableComponent";
 import { Input } from "@/components/ui/input";
-import { ColumnDef, Table } from "@tanstack/react-table";
+import { Column, ColumnDef, Row } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,8 +45,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { fetchClientCat } from "@/redux/clientCatSlicer";
 import moment from "moment";
-import { Combobox } from "@/components/ComboBox";
 import SelectPopover from "@/components/SelectPopover";
+import { usePermission } from "@/context/PermissionContext";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -92,7 +85,7 @@ export default function Page() {
   const [open, setOpen] = React.useState(false);
   const [table, setTable] = React.useState(null);
   const [salesPoint, setSalePoint] = React.useState<SalesPoint | null>(null);
-
+  const { hasPermission, user, isAdmin } = usePermission()
   const handleChange = (event: any) => {
     setSalePoint(event.target.value);
   };
@@ -134,18 +127,19 @@ export default function Page() {
     },
     {
       accessorKey: "code",
-      header: () => <div className="text-left">Code</div>,
+      header: () => <div className="text-center">Code</div>,
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("code")}</div>
+        <div className="capitalize text-center">{row.getValue("code")}</div>
       ),
     },
+
     {
       accessorKey: "name",
       header: ({ column }) => {
         return (
           <div
-            className="flex w-[140px]"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-center w-[220px]"
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Nom du client
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -155,33 +149,55 @@ export default function Page() {
       cell: ({ row }) => {
         const el = row.original;
         return (
-          <div className="capitalize text-left w-[140px]">
+          <div className="capitalize text-center w-[220px]">
             {" "}
             {el.name} {el.surname}
           </div>
         );
       },
     },
+    ...(isAdmin() ? [{
+      accessorKey: "sales_point",
+      header: ({ column }: { column: Column<Customer, unknown> }) => {
+        return (
+          <div
+            className="flex justify-center w-[220px]"
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <span>Point de vente</span>
+          </div>
+        );
+      },
+      cell: ({ row }: { row: Row<Customer> }) => {
+        const el = row.original;
+
+        return (
+          <div className="text-center font-medium first-letter:capitalize w-[220px]">
+            {el.sales_point_details.name} - {el.sales_point_details.address}
+          </div>
+        );
+      },
+    },] : []),
     {
       accessorKey: "number",
-      header: () => <div className="text-center w-[140px]">Email</div>,
+      header: () => <div className="text-center w-[220px]">Email</div>,
       cell: ({ row }) => {
         const el = row.original.number;
         return (
           <div className="text-center font-medium">
-            {el == "" || !el ? "Non defini" : el}
+            {el == "" || !el ? "N/A" : el}
           </div>
         );
       },
     },
     {
       accessorKey: "email",
-      header: () => <div className="text-center w-[140px]">Numero</div>,
+      header: () => <div className="text-center w-[220px]">Numero</div>,
       cell: ({ row }) => {
         const el = row.original.email;
         return (
           <div className="text-center font-medium">
-            {el == "" || !el ? "Non defini" : el}
+            {el == "" || !el ? "N/A" : el}
           </div>
         );
       },
@@ -212,28 +228,6 @@ export default function Page() {
       },
     },
     {
-      accessorKey: "sales_point",
-      header: ({ column }) => {
-        return (
-          <div
-            className="flex justify-center w-[140px]"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            <span>Point de vente</span>
-          </div>
-        );
-      },
-      cell: ({ row }) => {
-        const el = row.original;
-
-        return (
-          <div className="text-center font-medium first-letter:capitalize w-[140px]">
-            {el.sales_point_details.name} - {el.sales_point_details.address}
-          </div>
-        );
-      },
-    },
-    {
       accessorKey: "created_at",
       header: () => (
         <div className="text-center w-[140px]">Date de création</div>
@@ -244,10 +238,10 @@ export default function Page() {
         return <div className="text-center font-medium">{formatted}</div>;
       },
     },
-    {
+    ...(hasPermission('view_customer') ? [{
       id: "actions",
       enableHiding: false,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<Customer> }) => {
         const el = row.original;
         return (
           <DropdownMenu>
@@ -262,9 +256,9 @@ export default function Page() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
-                //   window.location.assign(
-                //     `${window.location.pathname}/${el.code}`
-                //   );
+                  //   window.location.assign(
+                  //     `${window.location.pathname}/${el.code}`
+                  //   );
                 }}
               >
                 <EyeIcon size={14} className="mr-3" />
@@ -280,18 +274,18 @@ export default function Page() {
           </DropdownMenu>
         );
       },
-    },
+    }] : []),
   ];
 
   React.useEffect(() => {
     if (clientsStatus === "idle") {
-      dispatch(fetchClients({ categories: [], sales_points: [] }));
+      dispatch(fetchClients({ categories: [], sales_points: [user?.sales_point] }));
     }
-    if (salespointsStatus === "idle") {
-      dispatch(fetchClientCat({ sales_points: [] }));
+    if (clientsStatus === "idle") {
+      dispatch(fetchClientCat({ sales_points: [user?.sales_point] }));
     }
     if (status === "idle") {
-      dispatch(fetchSalesPoints({ sales_points: [] }));
+      dispatch(fetchSalesPoints());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [salespointsStatus, status, clientsStatus, dispatch]);
@@ -318,7 +312,7 @@ export default function Page() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await createClientCat(name, salesPoint?.id);
+      const res = await createClientCat(name, isAdmin() ? salesPoint?.id : user?.sales_point);
       if (res) {
         toast({
           variant: "success",
@@ -365,88 +359,90 @@ export default function Page() {
       <div className="w-full p-5 shadow rounded bg-white border border-neutral-300">
         <div className="flex flex-row justify-between items-center">
           <h2 className="font-medium text-base">Gerer les clients</h2>
-          <Button
-            className="bg-indigo-600 hover:bg-indigo-700"
-            onClick={() => setOpen(true)}
-          >
-            Ajouter une categorie de client
-          </Button>
-          <Dialog
-            open={open}
-            TransitionComponent={Transition}
-            keepMounted
-            aria-describedby="alert-dialog-slide-description"
-          >
-            <DialogTitle>{"Ajouter une categorie de client"}</DialogTitle>
-            <form onSubmit={addClientCat}>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-slide-description">
-                  Créer des categories de client. <br />
-                  Cela vous permetra de classer vos clients par categorie
-                </DialogContentText>
-                <div className="w-full my-3 space-y-4">
-                  <TextField
-                    value={name ?? ""}
-                    onChange={(e) => setName(e.target.value)}
-                    fullWidth
-                    // error={name != ''}
-                    // helperText={name && name != '' ? "Entrez un nom de categorie" : undefined}
-                    required
-                    label="nom de la categorie"
-                    placeholder="Ex: gros, demi-gros, detail, etc..."
-                    size="small"
-                  />
-                  <FormControl size="small" required fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Point de vente
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      value={salesPoint}
-                      label="Point de vente"
-                      onChange={handleChange}
-                    >
-                      {salespoints.map((s) => (
-                        <MenuItem key={s.id} value={s}>
-                          {s.name} - {s.address}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </div>
-              </DialogContent>
-              <DialogActions>
-                <Button variant="destructive" onClick={() => setOpen(false)}>
-                  Annuler
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  {loading && <CircularProgress size={14} />}
-                  Continuer
-                </Button>
-              </DialogActions>
-            </form>
-          </Dialog>
+          {hasPermission('add_customer') ?
+            <Dialog
+              open={open}
+              TransitionComponent={Transition}
+              keepMounted
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogTitle>{"Ajouter une categorie de client"}</DialogTitle>
+              <form onSubmit={addClientCat}>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-slide-description">
+                    Créer des categories de client. <br />
+                    Cela vous permetra de classer vos clients par categorie
+                  </DialogContentText>
+                  <div className="w-full my-3 space-y-4">
+                    <TextField
+                      value={name ?? ""}
+                      onChange={(e) => setName(e.target.value)}
+                      fullWidth
+                      // error={name != ''}
+                      // helperText={name && name != '' ? "Entrez un nom de categorie" : undefined}
+                      required
+                      label="nom de la categorie"
+                      placeholder="Ex: gros, demi-gros, detail, etc..."
+                      size="small"
+                    />
+                    {isAdmin() ?
+                      <FormControl size="small" required fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                          Point de vente
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          value={salesPoint}
+                          label="Point de vente"
+                          onChange={handleChange}
+                        >
+                          {salespoints.map((s) => (
+                            <MenuItem key={s.id} value={s}>
+                              {s.name} - {s.address}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      : null}
+                  </div>
+                </DialogContent>
+                <DialogActions>
+                  <Button variant="destructive" onClick={() => setOpen(false)}>
+                    Annuler
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    {loading && <CircularProgress size={14} />}
+                    Continuer
+                  </Button>
+                </DialogActions>
+              </form>
+            </Dialog>
+            : null}
         </div>
       </div>
       <div className="w-full p-5 shadow rounded bg-white border space-y-3 border-neutral-300">
         <h2 className="font-medium text-base mb-3">Filter les clients</h2>
         <div className="grid grid-cols-1 my-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          <SelectPopover
-            items={salespoints}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            onSelect={(item) => handleSelect(item.id)}
-            selectedItems={selectedSalesPoints.map((s) => {
-              const sp = salespoints.find((el) => el.id === s);
-              return { ...sp } as SalesPoint;
-            })}
-            noItemText="Aucun point de vente"
-            placeholder="Point de vente"
-            searchPlaceholder="Rechercher un point de vente"
-          />
+          {
+            isAdmin() ?
+              <SelectPopover
+                items={salespoints}
+                getOptionLabel={(option) => `${option.name} - ${option.address}`}
+                onSelect={(item) => handleSelect(item.id)}
+                selectedItems={selectedSalesPoints.map((s) => {
+                  const sp = salespoints.find((el) => el.id === s);
+                  return { ...sp } as SalesPoint;
+                })}
+                noItemText="Aucun point de vente"
+                placeholder="Point de vente"
+                searchPlaceholder="Rechercher un point de vente"
+              />
+              : null
+          }
           <SelectPopover
             items={data}
             getOptionLabel={(option) => `${option.name}`}
@@ -461,11 +457,11 @@ export default function Page() {
           />
           <Button
             onClick={searchClient}
-            className="w-full bg-green-600 hover:bg-green-700 text-white"
+            className="w-full bg-green-600 hover:bg-green-700 text-white hover:text-white"
             type="submit"
             variant={"outline"}
           >
-            Chercher
+            Rechercher
           </Button>
         </div>
       </div>

@@ -20,13 +20,14 @@ import { ChevronDown } from "lucide-react";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import moment from "moment";
 import { getBill, getSupplies } from "../../sell/functions";
 import { formatteCurrency } from "../../stock/functions";
 import { ActionComponent } from "../in_progress/ActionComponent";
 import { fetchSuppliers } from "@/redux/suppliersSlicer";
+import { usePermission } from "@/context/PermissionContext";
 
 function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
@@ -58,6 +59,8 @@ function Page() {
   const handleDateRangeChange = (range: DateRange) => {
     setPickedDateRange(range);
   };
+
+  const { hasPermission, isAdmin, user } = usePermission()
 
   const columns: ColumnDef<Supply>[] = [
     {
@@ -99,16 +102,16 @@ function Page() {
         return <div className="capitalize">{row.original.supply_number}</div>;
       },
     },
-    {
+    ...(isAdmin() ? [{
       accessorKey: "Point de vente",
       header: () => <div className="text-center w-[220px]">Point de vente</div>,
-      cell: ({ row }) => (
+      cell: ({ row }: { row: Row<Supply> }) => (
         <div className="text-center capitalize truncate">
           {row.original.sales_point_details.name} -{" "}
           {row.original.sales_point_details.address}
         </div>
       ),
-    },
+    }] : []),
     {
       accessorKey: "customer_name",
       header: ({ column }) => {
@@ -138,7 +141,7 @@ function Page() {
         return (
           <div
             className="flex justify-center w-[110px]"
-            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             <span>Nombre de colis</span>
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -262,8 +265,8 @@ function Page() {
           <div className="text-right font-medium">
             {formatteCurrency(
               sup.total_cost +
-                Number(sup.invoice_history[0]["tax_details"].total_tax_amount) +
-                Number(sup.invoice_history[0]["fee_details"].total_fee_amount),
+              Number(sup.invoice_history[0]["tax_details"].total_tax_amount) +
+              Number(sup.invoice_history[0]["fee_details"].total_fee_amount),
               "XAF",
               "fr-FR"
             )}
@@ -273,15 +276,15 @@ function Page() {
       footer: () => {
         const total = data.reduce(
           (acc, curr) =>
-            (acc =
-              acc +
-              (curr.total_cost +
-                Number(
-                  curr.invoice_history[0]["tax_details"].total_tax_amount
-                ) +
-                Number(
-                  curr.invoice_history[0]["fee_details"].total_fee_amount
-                ))),
+          (acc =
+            acc +
+            (curr.total_cost +
+              Number(
+                curr.invoice_history[0]["tax_details"].total_tax_amount
+              ) +
+              Number(
+                curr.invoice_history[0]["fee_details"].total_fee_amount
+              ))),
           0
         );
         return (
@@ -386,7 +389,7 @@ function Page() {
           "YYYY-MM-DDT00:00:00.SSS"
         ),
         end_date: moment(pickedDateRange?.to).format("YYYY-MM-DDT23:59:59.SSS"),
-        sales_point: selectedSalesPoints,
+        sales_point: isAdmin() ? selectedSalesPoints : [user?.sales_point_details],
         suppliers: selectedSuppliers,
       };
       const res: Supply[] = await getSupplies(params);
@@ -399,6 +402,9 @@ function Page() {
 
   React.useEffect(() => {
     getData();
+    if (!isAdmin() && suppliersStatus === 'idle') {
+      dispatch(fetchSuppliers({ sales_points_id: [user?.sales_point] }))
+    }
   }, []);
 
   return (
@@ -424,22 +430,25 @@ function Page() {
               }
             }}
           />
-          <SelectPopover
-            selectedItems={selectedSalesPoints}
-            items={salespoints}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            onSelect={handleSelect}
-            placeholder="Points de vente"
-          />
+          {
+            isAdmin() ? <SelectPopover
+              selectedItems={selectedSalesPoints}
+              items={salespoints}
+              getOptionLabel={(option) => `${option.name} - ${option.address}`}
+              onSelect={handleSelect}
+              placeholder="Points de vente"
+            /> : null
+          }
           <SelectPopover
             selectedItems={selectedSuppliers}
             items={suppliers}
             getOptionLabel={(option) =>
-              `${option.name} - ${option.sales_point_details.name}`
+              `${option.name} ${isAdmin() ? '-' + option.sales_point_details.name : ''}`
             }
             onSelect={handleSelectSupplier}
             placeholder="Fournisseurs"
             noItemText="Aucun fournisseur trouvé"
+            searchPlaceholder="Rechercher un fournisseur"
           />
           <Button
             variant={"outline"}

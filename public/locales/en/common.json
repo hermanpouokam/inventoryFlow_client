@@ -1,0 +1,19 @@
+{
+  "user_permission_text": "This represents the actions the user can perform. If you wish to remove a permission, click the cross.",
+  "user_page_permission_text": "This represents the pages the user can visit. If you wish to remove a permission, click the cross.",
+  "user_type_select_error": "Please select a user type",
+  "sales_point_type_select_error": "Please select a sales point",
+  "username_exists_message": "This username already exists. Please enter another one.",
+  "email_exists_message": "This email is already in use. Please enter another one.",
+  "invalid_phone_number": "Invalid phone number.",
+  "user_creation": "User creation",
+  "adding_permissions": "Adding permissions",
+  "adding_page_permissions": "Adding page permissions",
+  "user_created": "User successfully created",
+  "loading": "loading",
+  "user": "user",
+  "no_permission": "no permission",
+  "expense_validation_success_message": "Expense successfully validated",
+  "supplie_packaging_warning": "NB: If for each item with packaging you do not have enough, additional fees will apply at the time of payment.",
+  "confirm_supply_validation": "Are you sure you want to validate this supply? {{total_cost}} will be deducted from the sales point balance."
+}

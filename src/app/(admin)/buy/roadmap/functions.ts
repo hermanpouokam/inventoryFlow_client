@@ -1,5 +1,6 @@
 import moment from "moment";
 import { parse } from "json2csv";
+import { unparse } from "papaparse";
 
 function groupBySupplierAndCategory(data) {
   return data.reduce((acc, supply) => {
@@ -39,44 +40,103 @@ function groupBySupplierAndCategory(data) {
   }, {});
 }
 
+// const generateCSV = ({ groupedData, title, salespoint }) => {
+//   const csvData = [];
+
+//   csvData.push([`${salespoint?.name ?? "N/A"}`]);
+//   csvData.push(["Adresse", salespoint?.address ?? "N/A"]);
+//   csvData.push(["Numéro", salespoint?.number ?? "N/A"]);
+//   csvData.push(["Email", salespoint?.email ?? "N/A"]);
+//   csvData.push([]);
+//   csvData.push([title]);
+//   csvData.push([]);
+
+//   Object.entries(groupedData).forEach(([customerId, customerData]) => {
+//     // csvData.push([`Client: ${customerData}`]);
+//     csvData.push(["Product ID", "Product Name", "Total Quantity"]);
+
+//     Object.entries(customerData).forEach(([catId, cat]) => {
+//       csvData.push([catId]);
+//       Object.entries(cat).forEach(([productId, product]) => {
+//         csvData.push([product.code, productId, product.quantity]);
+//       });
+//     });
+
+//     csvData.push([]);
+//   });
+
+//   csvData.push([`Generated on: ${moment().format("DD/MM/YYYY hh:mm:ss")}`]);
+//   csvData.push(["© 2025 InventoryFlow by Interact | Tous droits réservés."]);
+
+//   const csvString = csvData.map((row) => row.join(",")).join("\n");
+
+//   // Create a Blob and trigger download
+//   const blob = new Blob([csvString], { type: "text/csv" });
+//   const url = window.URL.createObjectURL(blob);
+//   const a = document.createElement("a");
+//   a.href = url;
+//   a.download = `${title.replace(/\s+/g, "_")}.csv`;
+//   a.click();
+//   window.URL.revokeObjectURL(url);
+// };
+
 const generateCSV = ({ groupedData, title, salespoint }) => {
-  const csvData = [];
+  const rows = [];
 
-  csvData.push([`${salespoint?.name ?? "N/A"}`]);
-  csvData.push(["Adresse", salespoint?.address ?? "N/A"]);
-  csvData.push(["Numéro", salespoint?.number ?? "N/A"]);
-  csvData.push(["Email", salespoint?.email ?? "N/A"]);
-  csvData.push([]);
-  csvData.push([title]);
-  csvData.push([]);
+  // --- En-tête du point de vente ---
+  rows.push([salespoint?.name || "N/A"]);
+  rows.push(["Adresse", salespoint?.address || "N/A"]);
+  rows.push(["Numéro", salespoint?.number || "N/A"]);
+  rows.push(["Email", salespoint?.email || "N/A"]);
+  rows.push([]);
+  rows.push([title.toUpperCase()]);
+  rows.push([]);
 
-  Object.entries(groupedData).forEach(([customerId, customerData]) => {
-    // csvData.push([`Client: ${customerData}`]);
-    csvData.push(["Product ID", "Product Name", "Total Quantity"]);
+  // --- Données groupées par client ---
+  Object.entries(groupedData).forEach(([customerId, customerData], index) => {
+    rows.push([`Client ID: ${customerId}`]);
 
     Object.entries(customerData).forEach(([catId, cat]) => {
-      csvData.push([catId]);
+      rows.push([`Catégorie: ${catId}`]);
+      rows.push(["Code Produit", "Nom Produit", "Quantité Totale"]);
+
       Object.entries(cat).forEach(([productId, product]) => {
-        csvData.push([product.code, productId, product.quantity]);
+        rows.push([
+          product.code || "N/A",
+          productId || "N/A",
+          product.quantity ?? 0
+        ]);
       });
+
+      rows.push([]);
     });
 
-    csvData.push([]);
+    if (index < Object.keys(groupedData).length - 1) {
+      rows.push([]);
+    }
   });
 
-  csvData.push([`Generated on: ${moment().format("DD/MM/YYYY hh:mm:ss")}`]);
-  csvData.push(["© 2025 InventoryFlow by Interact | Tous droits réservés."]);
+  // --- Pied de page ---
+  rows.push([]);
+  rows.push([`Généré le : ${moment().format("DD/MM/YYYY HH:mm:ss")}`]);
+  rows.push(["© 2025 InventoryFlow by Interact | Tous droits réservés."]);
 
-  const csvString = csvData.map((row) => row.join(",")).join("\n");
+  // Génération CSV avec papaparse
+  const csvString = unparse(rows, {
+    quotes: true,
+    skipEmptyLines: false
+  });
 
-  // Create a Blob and trigger download
-  const blob = new Blob([csvString], { type: "text/csv" });
-  const url = window.URL.createObjectURL(blob);
+  // BOM pour Excel
+  const blob = new Blob(["\uFEFF" + csvString], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  // Déclenche le téléchargement
   const a = document.createElement("a");
   a.href = url;
   a.download = `${title.replace(/\s+/g, "_")}.csv`;
   a.click();
-  window.URL.revokeObjectURL(url);
+  URL.revokeObjectURL(url);
 };
 
 export { groupBySupplierAndCategory, generateCSV };

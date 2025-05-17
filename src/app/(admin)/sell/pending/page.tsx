@@ -14,7 +14,7 @@ import {
 import { CircularProgress, Backdrop } from "@mui/material";
 import { DataTableDemo } from "@/components/TableComponent";
 import { Input } from "@/components/ui/input";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { getBill } from "../functions";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -28,6 +28,7 @@ import { fetchClients } from "@/redux/clients";
 import DateRangePicker from "@/components/DateRangePicker";
 import { ActionComponent } from "./ActionComponent";
 import { formatteCurrency } from "../../stock/functions";
+import { usePermission } from "@/context/PermissionContext";
 
 const datesData = [
   {
@@ -98,7 +99,7 @@ export default function Page() {
   const [selectedSalesPoints, setSelectedSalesPoints] = React.useState<
     SalesPoint[]
   >([]);
-
+  const { user, hasPermission, isAdmin } = usePermission()
   const dispatch: AppDispatch = useDispatch();
 
   const { data: salespoints, status: salespointStatus } = useSelector(
@@ -146,28 +147,28 @@ export default function Page() {
     {
       accessorKey: "bill_number",
       header: () => (
-        <div className="text-left w-[140px]">Numero de facture</div>
+        <div className="text-center w-[140px]">Numero de facture</div>
       ),
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("bill_number")}</div>
+        <div className="capitalize text-center">{row.getValue("bill_number")}</div>
       ),
     },
-    {
-      accessorKey: "sales_point",
-      header: () => <div className="text-left w-[220px]">Point de vente</div>,
-      cell: ({ row }) => (
-        <div className="text-left capitalize truncate">
+    ...(isAdmin() ? [{
+      accessorKey: "Point de vente",
+      header: () => <div className="text-center w-[220px]">Point de vente</div>,
+      cell: ({ row }: { row: Row<Bill> }) => (
+        <div className="text-center capitalize truncate">
           {row.original.sales_point_details.name} -{" "}
           {row.original.sales_point_details.address}
         </div>
       ),
-    },
+    }] : []),
     {
       accessorKey: "customer_name",
       header: ({ column }) => {
         return (
           <div
-            className="flex cursor-pointer w-[220px]"
+            className="text-center cursor-pointer w-[220px]"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Nom du cilent
@@ -178,7 +179,7 @@ export default function Page() {
       cell: ({ row }) => {
         const customer_name: string = row.original.customer_name;
         return (
-          <div className="capitalize text-left text-base font-medium">
+          <div className="capitalize text-center text-base font-medium">
             {customer_name}
           </div>
         );
@@ -408,12 +409,12 @@ export default function Page() {
     setLoading(true);
     try {
       const params = {
-        customer: customer,
+        customer: customer.map(el => el.id),
         start_date: moment(pickedDateRange?.from).format(
           "YYYY-MM-DDT00:00:00.SSS"
         ),
         end_date: moment(pickedDateRange?.to).format("YYYY-MM-DDT23:59:59.SSS"),
-        sales_point: selectedSalesPoints,
+        sales_point: isAdmin() ? selectedSalesPoints.map(el => el.id) : [user?.sales_point],
       };
       const res: Bill[] = await getBill(params);
       setData(res.filter((el) => el.state == "created"));
@@ -439,6 +440,7 @@ export default function Page() {
         fetchClients({ sales_points: selectedSalesPoints.map((el) => el.id) })
       );
     }
+
   }, [salespointStatus, statusEmployees, dispatch]);
 
   React.useEffect(() => {
@@ -483,13 +485,18 @@ export default function Page() {
               }
             }}
           />
-          <SelectPopover
-            selectedItems={selectedSalesPoints}
-            items={salespoints}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            onSelect={handleSelect}
-            placeholder="Points de vente"
-          />
+          {
+            isAdmin() ?
+              <SelectPopover
+                selectedItems={selectedSalesPoints}
+                items={salespoints}
+                getOptionLabel={(option) => `${option.name} - ${option.address}`}
+                onSelect={handleSelect}
+                placeholder="Points de vente"
+                noItemText="Aucun point de vente"
+                searchPlaceholder="Rechercher un point de vente"
+              /> : null
+          }
           <SelectPopover
             selectedItems={customer}
             items={customers}

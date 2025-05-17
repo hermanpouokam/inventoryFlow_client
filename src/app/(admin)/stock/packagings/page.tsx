@@ -31,7 +31,7 @@ import {
   X,
 } from "lucide-react";
 import { DataTableDemo } from "@/components/TableComponent";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -65,6 +65,8 @@ import StockPackagingsPDF from "@/app/pdf/stockPackagingsPdf";
 import { BlobProvider } from "@react-pdf/renderer";
 import ReactDOM from "react-dom/client";
 import { encryptParam } from "@/utils/encryptURL";
+import { usePermission } from "@/context/PermissionContext";
+import SelectPopover from "@/components/SelectPopover";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -102,7 +104,7 @@ export default function Page() {
     []
   );
   const [open, setOpen] = React.useState(false);
-
+  const { hasPermission, user, isAdmin } = usePermission()
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -179,11 +181,11 @@ export default function Page() {
     //     enableSorting: false,
     //     enableHiding: false,
     // },
-    {
+    ...(hasPermission('modifiy_packaging') ? [{
       id: "actions",
       header: () => <div className="w-10 text-center">Actions</div>,
       enableHiding: false,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<Packaging> }) => {
         const pk = row.original;
         const handleNavigate = () => {
           try {
@@ -204,10 +206,10 @@ export default function Page() {
             <DropdownMenuContent align="start">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => {}}>
+              {/* <DropdownMenuItem onClick={() => { }}>
                 <Edit size={14} className="mr-3" />
                 Modifier
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem onClick={handleNavigate}>
                 {" "}
                 <EyeIcon className="mr-3" size={14} /> Details
@@ -216,7 +218,7 @@ export default function Page() {
           </DropdownMenu>
         );
       },
-    },
+    }] : []),
     {
       accessorKey: "number",
       header: () => <div className="w-5 text-center">#</div>,
@@ -244,7 +246,7 @@ export default function Page() {
         );
       },
     },
-    {
+    ...(isAdmin() ? [{
       accessorKey: "point de vente",
       header: () => <div className="text-center w-[160px]">Point de vente</div>,
       cell: ({ row }) => {
@@ -255,7 +257,7 @@ export default function Page() {
           </div>
         );
       },
-    },
+    }] : []),
     {
       accessorKey: "fournisseur",
       header: () => <div className="text-center w-[160px]">Founisseur</div>,
@@ -392,7 +394,7 @@ export default function Page() {
           <div className="capitalize text-center">
             {formatteCurrency(
               Number(product.price) *
-                (product.empty_quantity + product.full_quantity),
+              (product.empty_quantity + product.full_quantity),
               "XAF",
               "fr-FR"
             )}
@@ -424,17 +426,24 @@ export default function Page() {
     );
   };
 
-  const filterSuppliers = async (id: number) => {
+  const filterSuppliers = async () => {
     const asyncFetch = await dispatch(
-      fetchSuppliers({ sales_points_id: [id] })
+      fetchSuppliers({ sales_points_id: [user?.sales_point] })
     );
     if (fetchSuppliers.fulfilled.match(asyncFetch)) {
       setSuppliersData(asyncFetch.payload);
     }
   };
 
+  React.useEffect(() => {
+    if (!isAdmin()) {
+      filterSuppliers()
+    }
+  }, [])
+
+
   const handleOpenPDF = () => {
-    if (selectedSalesPoints.length != 1) {
+    if (selectedSalesPoints.length != 1 && isAdmin()) {
       return toast({
         title: "Erreur",
         variant: "destructive",
@@ -454,15 +463,14 @@ export default function Page() {
       <BlobProvider
         document={
           <StockPackagingsPDF
-            salespoint={salespoints.find(
+            salespoint={isAdmin() ? salespoints.find(
               (s) => s.id === selectedSalesPoints[0]
-            )}
+            ) : user?.sales_point_details}
             //@ts-ignore
-            title={`Fiche de stock d'emballage du ${new Date().toLocaleDateString()} ${
-              selectedSuppliers.length > 0 ? "filtré par" : ""
-            } ${selectedSuppliers.length > 0 ? "fournisseur" : ""} `}
+            title={`Fiche de stock d'emballage du ${new Date().toLocaleDateString()} ${selectedSuppliers.length > 0 ? "filtré par" : ""
+              } ${selectedSuppliers.length > 0 ? "fournisseur" : ""} `}
             packagings={packagings.filter(
-              (p) => p.sales_point === selectedSalesPoints[0]
+              (p) => p.sales_point === (isAdmin() ? selectedSalesPoints[0] : user?.sales_point)
             )}
           />
         }
@@ -500,125 +508,51 @@ export default function Page() {
       </Backdrop>
       <CardBodyContent className="flex lg:flex-row md:flex-row sm:flex-row flex-col justify-between items-center">
         <h4 className="text-base font-semibold">Emballages</h4>
-        <Button
-          variant={"default"}
-          onClick={handleClickOpen}
-          className=" bg-violet-600 hover:bg-violet-700 text-white"
-        >
-          Ajouter un emballage
-        </Button>
+        {hasPermission('add_packaging') ?
+          <Button
+            variant={"default"}
+            onClick={handleClickOpen}
+            className=" bg-green-600 hover:bg-green-700 text-white"
+          >
+            Ajouter un emballage
+          </Button>
+          : null
+        }
       </CardBodyContent>
       <CardBodyContent className="space-y-4">
         <h4 className="text-base font-semibold">Filtrer les emballages</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                className={cn(
-                  "justify-between",
-                  selectedSalesPoints.length < 1 && "text-muted-foreground"
-                )}
-              >
-                <div className="overflow-hidden max-w-[90%]">
-                  {selectedSalesPoints.length > 0
-                    ? selectedSalesPoints.length > 1
-                      ? selectedSalesPoints.length + " selectionnés"
-                      : selectedSalesPoints
-                          .map((obj) => {
-                            const el = salespoints.find((sp) => sp.id === obj);
-                            return `${el?.name} - ${el?.address}`;
-                          })
-                          .join(", ")
-                    : "Point de vente"}
-                </div>
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="p-0">
-              <Command>
-                <CommandInput placeholder="Rechercher par nom ou adresse..." />
-                <CommandList>
-                  <CommandEmpty>Aucun élément trouvé.</CommandEmpty>
-                  <CommandGroup>
-                    {salespoints.map((salespoint) => (
-                      <CommandItem
-                        value={`${salespoint.name} ${salespoint.address}`}
-                        key={salespoint.id}
-                        onSelect={() => handleSelect(salespoint.id)}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedSalesPoints?.some(
-                              (el) => el == salespoint.id
-                            )
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {salespoint.name} - {salespoint.address}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                className={cn(
-                  "justify-between",
-                  selectedSuppliers.length < 1 && "text-muted-foreground"
-                )}
-              >
-                <div className="overflow-hidden">
-                  {selectedSuppliers.length > 0
-                    ? selectedSuppliers.length > 1
-                      ? selectedSuppliers.length + " selectionnés"
-                      : selectedSuppliers
-                          .map((obj) => {
-                            const el = suppliers.find((cat) => cat.id === obj);
-                            return `${el?.name}`;
-                          })
-                          .join(", ")
-                    : "Fournisseur"}
-                </div>
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="p-0">
-              <Command>
-                <CommandInput placeholder="Rechercher par nom..." />
-                <CommandList>
-                  <CommandEmpty>Aucun élément trouvé.</CommandEmpty>
-                  <CommandGroup>
-                    {suppliers.map((sup) => (
-                      <CommandItem
-                        value={`${sup.name} ${sup.id}`}
-                        key={sup.id}
-                        onSelect={() => handleSelectSupplier(sup.id)}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedSuppliers?.some((el) => el == sup.id)
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {sup.name} - {sup.sales_point_details.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {isAdmin() ?
+            <SelectPopover
+              items={salespoints}
+              getOptionLabel={(option) => `${option.name} - ${option.address}`}
+              onSelect={(e) => handleSelect(e.id)}
+              selectedItems={selectedSalesPoints.map((id) => {
+                {
+                  const sp = salespoints.find((s) => s.id === id);
+                  return { ...sp } as SalesPoint;
+                }
+              })}
+              searchPlaceholder="Points de vente"
+              noItemText="Aucun point de vente"
+              placeholder="Point de vente"
+            />
+            :
+            null
+          }
+          <SelectPopover
+            items={suppliers}
+            getOptionLabel={(option) => `${option.name}`}
+            onSelect={(el) => handleSelectSupplier(el.id)}
+            selectedItems={selectedSuppliers.map((sup) => {
+              const supplier = suppliers.find((el) => el.id === sup);
+              return { ...supplier };
+            })}
+            noItemText="Aucune fournisseur"
+            placeholder="Fournisseurs"
+            searchPlaceholder="Rechercher un fournisseur"
+          />
+
           <Button
             variant={"default"}
             onClick={handleFilterProduct}
@@ -649,7 +583,7 @@ export default function Page() {
           <div className="flex items-center flex-col sm:flex-row space-y-3 justify-between py-4">
             <div className="flex gap-3 flex-col sm:flex-row">
               <Input
-                placeholder="Filtrer par articles..."
+                placeholder="Filtrer par nom d'emballage..."
                 value={table?.getColumn("name")?.getFilterValue() as string}
                 onChange={(event) =>
                   table?.getColumn("name")?.setFilterValue(event.target.value)
@@ -719,48 +653,58 @@ export default function Page() {
               //@ts-ignore
               const res = await createPackaging(formJson);
               handleClose();
-              if (res.id) {
+              if (res.status === 201) {
                 toast({
                   variant: "default",
                   className: "border-green-600 bg-green-600 text-white",
                   title: "Succès",
-                  description: "Embalage crée avec succès",
+                  description: res.data.success ?? "Embalage crée avec succès",
+                });
+                setTimeout(() => {
+                  window.location.reload();
+                }, 3000);
+              } else {
+                toast({
+                  variant: "default",
+                  className: "border-red-500 bg-red-500 text-white",
+                  title: "Erreur",
+                  description: res.response.data.error ?? "Une erreur est survenue.",
                 });
               }
-              setTimeout(() => {
-                window.location.reload();
-              }, 3000);
             } catch (error) {
               console.log(error);
             }
           },
         }}
       >
-        <DialogTitle>{"Ajouter une catégorie de produit"}</DialogTitle>
+        <DialogTitle>{"Ajouter un emballage"}</DialogTitle>
         <DialogContent sx={{ maxWidth: 450 }} className="py-3 space-y-3">
-          <MuiFormControl margin="dense" size="small" fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              Point de vente
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              name="sales_point"
-              label="Point de vente"
-              size="small"
-              required
-              onChange={(e) => {
-                //@ts-ignore
-                filterSuppliers(e.target.value);
-              }}
-              margin="dense"
-            >
-              {salespoints.map((s) => (
-                <MenuItem key={s.id} value={s.id}>
-                  {s.name} - {s.address}
-                </MenuItem>
-              ))}
-            </Select>
-          </MuiFormControl>
+          {
+            isAdmin() ?
+              <MuiFormControl margin="dense" size="small" fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Point de vente
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  name="sales_point"
+                  label="Point de vente"
+                  size="small"
+                  required
+                  onChange={(e) => {
+                    //@ts-ignore
+                    filterSuppliers(e.target.value);
+                  }}
+                  margin="dense"
+                >
+                  {salespoints.map((s) => (
+                    <MenuItem key={s.id} value={s.id}>
+                      {s.name} - {s.address}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </MuiFormControl>
+              : null}
           <MuiFormControl margin="dense" size="small" fullWidth>
             <InputLabel id="simple-select-label">Fournisseur</InputLabel>
             <Select
@@ -802,7 +746,7 @@ export default function Page() {
             size="small"
             required
             margin="dense"
-            helperText="Cette quantité correspond au nombre d'emballe vide avec le quel vous commencerez"
+            helperText={"Cette quantité correspond au nombre d'emballe vide avec le quel vous commencerez. Le montant total sera deduit de votre caisse."}
             name="empty_quantity"
             label="Quantité"
             type="number"

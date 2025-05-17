@@ -130,10 +130,10 @@ function SalesPoint() {
 
   const [openModal, setOpenModal] = React.useState(false);
   const [modalType, setModalType] = React.useState<
-    "employee" | "taxes" | "addinional_fees"
+    "employee" | "taxes" | "addinional_fees" | "users"
   >("addinional_fees");
   const handleClickOpenModal = (
-    type: "employee" | "taxes" | "addinional_fees"
+    type: "employee" | "taxes" | "addinional_fees" | "users"
   ) => {
     setOpenModal(true);
     setModalType(type);
@@ -201,9 +201,8 @@ function SalesPoint() {
           ].reduce((acc, sp) => acc + Number(sp.cash_register.balance), 0);
           return `${formatteCurrency(total, "XAF", "fr-FR")}`;
         },
-        subText: `${
-          salespoint ? "1 point de vente" : data.length + " points de vente"
-        }`,
+        subText: `${salespoint ? "1 point de vente" : data.length + " points de vente"
+          }`,
       },
       {
         icon: Package,
@@ -216,9 +215,9 @@ function SalesPoint() {
           );
           const totalPackagings = packagings.reduce(
             (acc, packaging) =>
-              (acc +=
-                (packaging.empty_quantity + packaging.full_quantity) *
-                Number(packaging.price)),
+            (acc +=
+              (packaging.empty_quantity + packaging.full_quantity) *
+              Number(packaging.price)),
             0
           );
           return `${formatteCurrency(total + totalPackagings, "XAF", "fr-FR")}`;
@@ -233,7 +232,7 @@ function SalesPoint() {
             .filter(
               (bill) =>
                 Number(bill.paid) !=
-                  Number(bill.total_amount_with_taxes_fees) &&
+                Number(bill.total_amount_with_taxes_fees) &&
                 bill.state != "created"
             )
             .reduce(
@@ -245,13 +244,12 @@ function SalesPoint() {
             );
           return `${formatteCurrency(total, "XAF", "fr-FR")}`;
         },
-        subText: `${
-          bills.filter(
-            (bill) =>
-              Number(bill.paid) != Number(bill.total_amount_with_taxes_fees) &&
-              bill.state != "created"
-          ).length
-        } factures(s)`,
+        subText: `${bills.filter(
+          (bill) =>
+            Number(bill.paid) != Number(bill.total_amount_with_taxes_fees) &&
+            bill.state != "created"
+        ).length
+          } factures(s)`,
       },
       {
         icon: DollarSign,
@@ -279,9 +277,9 @@ function SalesPoint() {
           );
           const totalPackagings = packagings.reduce(
             (acc, packaging) =>
-              (acc +=
-                (packaging.empty_quantity + packaging.full_quantity) *
-                Number(packaging.price)),
+            (acc +=
+              (packaging.empty_quantity + packaging.full_quantity) *
+              Number(packaging.price)),
             0
           );
           return `${formatteCurrency(
@@ -296,9 +294,8 @@ function SalesPoint() {
         value: function () {
           return `${employees.length}`;
         },
-        subText: `${
-          salespoint ? "1 point de vente" : data.length + " points de vente"
-        }`,
+        subText: `${salespoint ? "1 point de vente" : data.length + " points de vente"
+          }`,
       },
       {
         icon: Users,
@@ -309,9 +306,8 @@ function SalesPoint() {
           }, 0);
           return `${formatteCurrency(total)}`;
         },
-        subText: `${employees.length + " employee"}${
-          employees.length > 1 ? "s" : ""
-        }`,
+        subText: `${employees.length + " employee"}${employees.length > 1 ? "s" : ""
+          }`,
       },
       {
         icon: UsersRound,
@@ -319,9 +315,8 @@ function SalesPoint() {
         value: function () {
           return `${clients.length}`;
         },
-        subText: `${
-          salespoint ? "1 point de vente" : data.length + " points de vente"
-        }`,
+        subText: `${salespoint ? "1 point de vente" : data.length + " points de vente"
+          }`,
       },
     ],
     [data, stock, bills, packagings]
@@ -607,6 +602,87 @@ function SalesPoint() {
             <CardBodyContent className="col-span-1 md:col-span-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
+                  <h3>{"Liste d'utilisateurs"}</h3>
+                  <Button
+                    onClick={() => window.location.assign("/enterprise/salespoints/newUser")}
+                    variant={"outline"}
+                  >
+                    Ajouter
+                    <UserPlus2 className="w-4 h-4 ml-1" />
+                  </Button>
+                </div>
+                <Button variant={"link"}>Voir tout</Button>
+              </div>
+              { }
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[10px]">#</TableHead>
+                    <TableHead className="w-[100px]">Nom Prenom</TableHead>
+                    <TableHead className="w-[80px]">Username</TableHead>
+                    <TableHead className="w-[80px]">Role</TableHead>
+                    <TableHead className="w-[40px]">Statut</TableHead>
+                    <TableHead className="w-[20px]">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {employees.length > 0 ? (
+                    [
+                      ...employees.map((el, index) => {
+                        return { number: index + 1, ...el };
+                      }),
+                    ]
+                      .slice(0, 9)
+                      .map((el, index) => (
+                        <TableRow key={el.id}>
+                          <TableCell className="font-medium">
+                            {el.number}
+                          </TableCell>
+                          <TableCell className="font-medium capitalize truncate">
+                            {el.name} {el.surname}
+                          </TableCell>
+                          <TableCell className="font-medium capitalize">
+                            {el.role}
+                          </TableCell>
+                          <TableCell className="truncate">
+                            {formatteCurrency(el.salary)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {el.is_active ? (
+                              <div className="flex justify-left items-center gap-1">
+                                <div className="pulse w-3 h-3" />
+                                <p className="text-green-800 font-medium">
+                                  Actif
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="flex justify-left items-center gap-1">
+                                <div className="bg-muted-foreground w-2 h-2 rounded-full" />
+                                <p className="text-muted-foreground font-medium">
+                                  Inactif
+                                </p>
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                      ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={6}
+                        className="font-medium text-center"
+                      >
+                        Aucun utilisateur enregistré
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardBodyContent>
+            <CardBodyContent className="col-span-1 md:col-span-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
                   <h3>Liste d'employés</h3>
                   <Button
                     onClick={() => handleClickOpenModal("employee")}
@@ -618,7 +694,7 @@ function SalesPoint() {
                 </div>
                 <Button variant={"link"}>Voir tout</Button>
               </div>
-              {}
+              { }
               <Table>
                 {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
                 <TableHeader>
@@ -706,7 +782,7 @@ function SalesPoint() {
                 </div>
                 {/* <Button variant={"link"}>Voir tout</Button> */}
               </div>
-              {}
+              { }
               <Table>
                 {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
                 <TableHeader>
@@ -737,8 +813,7 @@ function SalesPoint() {
                             onClick: async () => {
                               try {
                                 const res = await instance.post(
-                                  `/taxes/${el.id}/${
-                                    el.is_active ? "deactivate" : "activate"
+                                  `/taxes/${el.id}/${el.is_active ? "deactivate" : "activate"
                                   }/`
                                 );
                                 if (res.status === 200) {
@@ -827,6 +902,7 @@ function SalesPoint() {
                 </TableFooter> */}
               </Table>
             </CardBodyContent>
+
           </div>
         )}
         {status === "failed" && <div className="text-red-600">{error}</div>}
@@ -837,15 +913,14 @@ function SalesPoint() {
           onClose={handleCloseModal}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{`Ajouter ${
-            modalType == "taxes"
-              ? " une taxe"
-              : modalType == "addinional_fees"
-              ? " frais supplémentaire"
+          <DialogTitle>{`Ajouter ${modalType == "taxes"
+            ? "une taxe"
+            : modalType == "addinional_fees"
+              ? "frais supplémentaire"
               : modalType == "employee"
-              ? " un employé"
-              : null
-          }`}</DialogTitle>
+                ? " un employé"
+                : null
+            }`}</DialogTitle>
           {modalType == "employee" ? (
             <form
               onSubmit={(e) => handleChangeN(e, handleSubmitForm)}
@@ -883,8 +958,7 @@ function SalesPoint() {
                             (s) => s.id == values["sales_point"]
                           )}
                           getOptionValue={(option) =>
-                            `${option.id} ${option.name} ${
-                              input.name == "sales_point" ? option?.address : ""
+                            `${option.id} ${option.name} ${input.name == "sales_point" ? option?.address : ""
                             }`
                           }
                           placeholder={input.label}
@@ -893,10 +967,9 @@ function SalesPoint() {
                             errorsM[input.name] && "border-red-500"
                           }
                           getOptionLabel={(option) =>
-                            `${option.name} ${
-                              input.name == "sales_point"
-                                ? " - " + option?.address
-                                : ""
+                            `${option.name} ${input.name == "sales_point"
+                              ? " - " + option?.address
+                              : ""
                             }`
                           }
                         />
@@ -1011,10 +1084,9 @@ function SalesPoint() {
                               (s) => s.id == values["sales_point"]
                             )}
                             getOptionValue={(option) =>
-                              `${option.id} ${option.name} ${
-                                input.name == "sales_point"
-                                  ? option?.address
-                                  : ""
+                              `${option.id} ${option.name} ${input.name == "sales_point"
+                                ? option?.address
+                                : ""
                               }`
                             }
                             placeholder={input.label}
@@ -1023,10 +1095,9 @@ function SalesPoint() {
                               errorsN[input.name] && "border-red-500"
                             }
                             getOptionLabel={(option) =>
-                              `${option.name} ${
-                                input.name == "sales_point"
-                                  ? " - " + option?.address
-                                  : ""
+                              `${option.name} ${input.name == "sales_point"
+                                ? " - " + option?.address
+                                : ""
                               }`
                             }
                           />
@@ -1099,6 +1170,128 @@ function SalesPoint() {
                     }
                   })}
                 </div>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  className="hover:bg-red-600 transition bg-red-500"
+                  onClick={handleCloseModal}
+                >
+                  Annuler
+                </Button>
+                <Button
+                  className="hover:bg-green-600 transition bg-green-500"
+                  type="submit"
+                >
+                  Ajouter
+                </Button>
+              </DialogActions>
+            </form>
+          ) : null}
+          {modalType == "users" ? (
+            <form
+              onSubmit={(e) => handleChangeN(e, handleSubmitForm)}
+              className="space-y-3 mt-3"
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                  {
+                    "Vous allez ajouter un nouvel employé. Entrez les informations et continuez"
+                  }
+                </DialogContentText>
+                {fieldsM.map((input) => {
+                  if (input.type === "select" && Array.isArray(input.options)) {
+                    return (
+                      <div key={input.name} className="mt-3">
+                        <Combobox
+                          RightIcon={ChevronDown}
+                          options={input.options}
+                          buttonLabel={input.label + " *"}
+                          onValueChange={(e) => {
+                            if (input.name === "sales_point") {
+                              setFieldValueM(input.name, e?.id);
+                              setValuesM((prevValues) => ({
+                                ...prevValues,
+                              }));
+                              getData();
+                            }
+                            if (input.name === "product") {
+                              setValuesM((prevValues) => ({
+                                ...prevValues,
+                              }));
+                            }
+                          }}
+                          value={data.find(
+                            (s) => s.id == values["sales_point"]
+                          )}
+                          getOptionValue={(option) =>
+                            `${option.id} ${option.name} ${input.name == "sales_point" ? option?.address : ""
+                            }`
+                          }
+                          placeholder={input.label}
+                          className="z-[99999] popover-content-width-full"
+                          buttonClassName={
+                            errorsM[input.name] && "border-red-500"
+                          }
+                          getOptionLabel={(option) =>
+                            `${option.name} ${input.name == "sales_point"
+                              ? " - " + option?.address
+                              : ""
+                            }`
+                          }
+                        />
+                        {errorsM[input.name] && (
+                          <p className="text-red-500 text-xs font-medium ml-4 mt-1">
+                            {errorsM[input.name]}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  }
+                  if (
+                    input.type === "text" ||
+                    input.type === "email" ||
+                    input.type === "number"
+                  ) {
+                    return (
+                      <TextField
+                        key={input.name}
+                        fullWidth
+                        margin="dense"
+                        label={input.label}
+                        type={input.type}
+                        required={input.required}
+                        size="small"
+                        name={input.name}
+                        value={valuesM[input.name]}
+                        onChange={handleChangeM}
+                        error={!!errorsM[input.name]}
+                        helperText={errorsM[input.name]}
+                      />
+                    );
+                  }
+                  if (input.type === "checkbox") {
+                    return (
+                      <div
+                        className="flex items-center mt-4 space-x-2"
+                        key={input.name}
+                      >
+                        <Checkbox
+                          id={input.name}
+                          checked={valuesM[input.name]}
+                          onCheckedChange={(checked) =>
+                            setFieldValueM(input.name, checked)
+                          }
+                        />
+                        <label
+                          htmlFor={input.name}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {input.label}
+                        </label>
+                      </div>
+                    );
+                  }
+                })}
               </DialogContent>
               <DialogActions>
                 <Button

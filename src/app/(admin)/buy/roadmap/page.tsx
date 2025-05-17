@@ -21,6 +21,7 @@ import { BlobProvider } from "@react-pdf/renderer";
 import BuyRoadmap from "@/app/pdf/buyRoadMap";
 import ReactDOM from "react-dom/client";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
+import { usePermission } from "@/context/PermissionContext";
 
 export default function Page() {
   const dispatch: AppDispatch = useDispatch();
@@ -48,12 +49,12 @@ export default function Page() {
   } = useSelector((state: RootState) => state.productsCat);
 
   const { toast } = useToast();
-
+  const { isAdmin, user } = usePermission()
   React.useEffect(() => {
     if (status === "idle") {
       dispatch(
         fetchSupplies({
-          sales_point: selectedSalesPoint ? [selectedSalesPoint.id] : [],
+          sales_point: isAdmin() ? selectedSalesPoint ? [selectedSalesPoint.id] : [] : [user?.sales_point],
           start_date: moment(pickedDateRange?.from).format(
             "YYYY-MM-DDT00:00:00.SSS"
           ),
@@ -63,13 +64,16 @@ export default function Page() {
         })
       );
     }
+    if (productsCatStatus == 'idle' && !isAdmin()) {
+      dispatch(fetchProductsCat({ sales_points_id: [user?.sales_point] }))
+    }
     if (statusSalesPoints == "idle") {
       dispatch(fetchSalesPoints());
     }
   }, []);
 
   const getData = async () => {
-    if (!selectedSalesPoint) {
+    if (!selectedSalesPoint && isAdmin()) {
       return toast({
         variant: "destructive",
         className:
@@ -80,7 +84,7 @@ export default function Page() {
     }
     const fetch = await dispatch(
       fetchSupplies({
-        sales_point: [selectedSalesPoint?.id],
+        sales_point: isAdmin() ? [selectedSalesPoint?.id] : [user?.sales_point],
         start_date: moment(pickedDateRange?.from).format(
           "YYYY-MM-DDT00:00:00.SSS"
         ),
@@ -141,22 +145,20 @@ export default function Page() {
       return;
     }
     newWindow.document.write("<p>Loading PDF...</p>");
-    console.log(organizedData);
     const pdfBlobProvider = (
       <BlobProvider
         document={
           <BuyRoadmap
-            salespoint={selectedSalesPoint}
+            salespoint={isAdmin() ? selectedSalesPoint : user?.sales_point_details}
             //@ts-ignore
             groupedData={organizedData}
-            title={`Feuille de route d'achat du ${
-              moment(pickedDateRange?.from).valueOf() ==
+            title={`Feuille de route d'achat du ${moment(pickedDateRange?.from).valueOf() ==
               moment(pickedDateRange?.to).valueOf()
-                ? `${moment(pickedDateRange?.from).format("DD/MM/YYYY")}.`
-                : `${moment(pickedDateRange?.from).format("L")} au ${moment(
-                    pickedDateRange?.to
-                  ).format("L")}`
-            }
+              ? `${moment(pickedDateRange?.from).format("DD/MM/YYYY")}.`
+              : `${moment(pickedDateRange?.from).format("L")} au ${moment(
+                pickedDateRange?.to
+              ).format("L")}`
+              }
         `}
           />
         }
@@ -214,15 +216,14 @@ export default function Page() {
   const handleGenerateCSV = () => {
     generateCSV({
       groupedData: organizedData,
-      title: `Feuille de route d'achat du ${
-        moment(pickedDateRange?.from).valueOf() ==
+      title: `Feuille de route d'achat du ${moment(pickedDateRange?.from).valueOf() ==
         moment(pickedDateRange?.to).valueOf()
-          ? `${moment(pickedDateRange?.from).format("DD/MM/YYYY")}.`
-          : `${moment(pickedDateRange?.from).format("L")} au ${moment(
-              pickedDateRange?.to
-            ).format("L")}`
-      } ${selectedSalesPoint?.name}`,
-      salespoint: selectedSalesPoint,
+        ? `${moment(pickedDateRange?.from).format("DD/MM/YYYY")}.`
+        : `${moment(pickedDateRange?.from).format("L")} au ${moment(
+          pickedDateRange?.to
+        ).format("L")}`
+        } ${isAdmin() ? selectedSalesPoint?.name : user?.sales_point_details.name}`,
+      salespoint: isAdmin() ? selectedSalesPoint : user?.sales_point_details,
     });
   };
 
@@ -249,16 +250,17 @@ export default function Page() {
               }
             }}
           />
-          <Combobox
-            options={salesPoints}
-            RightIcon={ChevronDown}
-            onValueChange={handleValueChange}
-            getOptionValue={(option) => `${option.name} - ${option.address}`}
-            value={selectedSalesPoint}
-            buttonLabel="Points de vente"
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            placeholder="Points de vente"
-          />
+          {isAdmin() ?
+            <Combobox
+              options={salesPoints}
+              RightIcon={ChevronDown}
+              onValueChange={handleValueChange}
+              getOptionValue={(option) => `${option.name} - ${option.address}`}
+              value={selectedSalesPoint}
+              buttonLabel="Points de vente"
+              getOptionLabel={(option) => `${option.name} - ${option.address}`}
+              placeholder="Points de vente"
+            /> : null}
           <SelectPopover
             items={productsCat}
             getOptionLabel={(option) => `${option.name}`}
@@ -271,7 +273,7 @@ export default function Page() {
           <Button
             variant={"outline"}
             onClick={getData}
-            disabled={!selectedSalesPoint}
+            disabled={!selectedSalesPoint && isAdmin()}
             className={cn(
               "w-full bg-green-600 hover:bg-green-700 hover:text-white text-white"
             )}
@@ -286,11 +288,11 @@ export default function Page() {
             <h4 className="text-center">
               Feuille de route de vente du{" "}
               {moment(pickedDateRange?.from).valueOf() ==
-              moment(pickedDateRange?.to).valueOf()
+                moment(pickedDateRange?.to).valueOf()
                 ? `${moment(pickedDateRange?.from).format("DD/MM/YYYY")}.`
                 : `${moment(pickedDateRange?.from).format("L")} au ${moment(
-                    pickedDateRange?.to
-                  ).format("L")}`}
+                  pickedDateRange?.to
+                ).format("L")}`}
             </h4>
             <div className="flex mt-3 items-center justify-center space-x-3">
               <PDFButton />{" "}

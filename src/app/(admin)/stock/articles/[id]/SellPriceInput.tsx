@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Check, CircleAlert, Pencil, X } from "lucide-react";
 import { instance } from "@/components/fetch";
 import { useToast } from "@/components/ui/use-toast";
+import { usePermission } from "@/context/PermissionContext";
 
 const InputPrice = ({
   input,
@@ -24,7 +25,7 @@ const InputPrice = ({
   const [text, setText] = React.useState(Number(input?.price) ?? "");
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const { toast } = useToast();
-
+  const { hasPermission } = usePermission()
   React.useEffect(() => {
     if (isSelected && inputRef.current) {
       inputRef.current.focus();
@@ -142,7 +143,7 @@ const InputPrice = ({
           </div>
         )}
       </div>
-      {!isSelected ? (
+      {hasPermission('edit_product') ? !isSelected ? (
         <Button
           variant="secondary"
           onClick={() => onSelect(`price${input.id}`)} // Sélectionne cet élément et désélectionne les autres
@@ -173,7 +174,7 @@ const InputPrice = ({
             )}
           </Button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

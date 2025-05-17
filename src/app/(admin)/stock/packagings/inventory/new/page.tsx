@@ -46,6 +46,7 @@ import { createSupply } from "@/components/fetch";
 import { transformVariants } from "@/app/(admin)/sell/newsell/functions";
 import { createEmptyPackagingInventory } from "../../../inventory/functions";
 import { fetchPackagings } from "@/redux/packagingsSlicer";
+import { usePermission } from "@/context/PermissionContext";
 
 interface InventoryPackage {
   id: number;
@@ -74,6 +75,7 @@ export default function Page() {
   }, []);
   const textFieldRef = React.useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const { user, hasPermission, isAdmin } = usePermission()
 
   const {
     data: salespoints,
@@ -247,6 +249,13 @@ export default function Page() {
     if (statusSalespoint == "idle") {
       dispatch(fetchSalesPoints());
     }
+    if (!isAdmin()) {
+      dispatch(
+        fetchPackagings({
+          sales_points: [user?.sales_point],
+        })
+      );
+    }
   }, [statusSalespoint, dispatch]);
 
   const handleChangeSalesPoint = (e: any) => {
@@ -294,7 +303,7 @@ export default function Page() {
     setLoading(true);
     try {
       const inventoryData = {
-        sales_point: salespoint,
+        sales_point: isAdmin() ? salespoint : user?.sales_point,
         items: data.map((obj) => {
           return {
             new_quantity: parseFloat(obj.quantity),
@@ -308,7 +317,7 @@ export default function Page() {
           title: "Succès",
           description: `Inventaire créé avec succès`,
           variant: "destructive",
-          className: "bg-green-800 border-green-800",
+          className: "bg-green-600 border-green-600",
           icon: <Check className="mr-2 h-4 w-4" />,
         });
         setTimeout(() => {
@@ -340,30 +349,33 @@ export default function Page() {
       </Backdrop>
       <CardBodyContent className="space-y-5">
         <h3 className="font-medium text-base">Inventaire</h3>
-        <div className="grid sm:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-5">
-          <FormControl required size="small" fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              Point de vente
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              name="sales_point"
-              label="Point de vente"
-              disabled={data.length > 0}
-              size="small"
-              value={salespoint}
-              onChange={handleChangeSalesPoint}
-            >
-              {salespoints.map((s) => (
-                <MenuItem key={s.id} value={s.id}>
-                  {s.name} - {s.address}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-      </CardBodyContent>
+        {
+          isAdmin() ?
+            <div className="grid sm:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-5">
+              <FormControl required size="small" fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Point de vente
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  name="sales_point"
+                  label="Point de vente"
+                  disabled={data.length > 0}
+                  size="small"
+                  value={salespoint}
+                  onChange={handleChangeSalesPoint}
+                >
+                  {salespoints.map((s) => (
+                    <MenuItem key={s.id} value={s.id}>
+                      {s.name} - {s.address}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+            : null}
+      </CardBodyContent >
       <form autoComplete="off" action={handleAddProduct}>
         <CardBodyContent className="space-y-5">
           <ul className="px-1 text-sm font-medium text-orange-700">
@@ -393,7 +405,7 @@ export default function Page() {
             <Combobox
               options={packagings}
               placeholder="Rechercher un emballage..."
-              buttonLabel="emballage* "
+              buttonLabel="Emballage* "
               getOptionLabel={(option) => `${option.name}`}
               value={selectedProduct}
               getOptionValue={(option) => `${option.name}`}
@@ -499,6 +511,6 @@ export default function Page() {
           </div>
         </DataTableDemo>
       </div>
-    </div>
+    </div >
   );
 }

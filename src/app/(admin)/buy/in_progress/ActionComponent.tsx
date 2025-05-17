@@ -43,6 +43,9 @@ import { check_warnings, receiptSupply } from "./functions";
 import { cn } from "@/lib/utils";
 import SupplyPdf from "@/app/pdf/supplyPdf";
 import { instance } from "@/components/fetch";
+import { usePermission } from "@/context/PermissionContext";
+import { useTranslation } from "react-i18next";
+import { formatteCurrency } from "../../stock/functions";
 
 export const ActionComponent = ({
   supply,
@@ -63,6 +66,7 @@ export const ActionComponent = ({
   const [loadingState, setLoadingState] = useState(false);
 
   const { toast } = useToast();
+  const { t: tCommon } = useTranslation('common');
 
   const check_warning = async ({ supplyId }: { supplyId: number }) => {
     try {
@@ -80,7 +84,7 @@ export const ActionComponent = ({
       setLoadingState(false);
     }
   };
-
+  const { hasPermission } = usePermission()
   const handleReceiptSupply = async (supplyId: number) => {
     setLoadingState(true);
     try {
@@ -196,7 +200,7 @@ export const ActionComponent = ({
             <Printer className="mr-3" size={14} />
             Imprimer le bon
           </DropdownMenuItem>
-          {page == "in_progress" && (
+          {page == "in_progress" && hasPermission('validate_supply') && (
             <DropdownMenuItem
               onClick={() => {
                 check_warning({ supplyId: supply.id });
@@ -207,7 +211,7 @@ export const ActionComponent = ({
               Receptionner
             </DropdownMenuItem>
           )}
-          {page == "in_progress" && (
+          {page == "in_progress" && hasPermission('delete_supply') && (
             <DropdownMenuItem
               onClick={() => setOpenModalDelete(true)}
               className="text-red-500 hover:text-white hover:bg-red-600 "
@@ -252,7 +256,8 @@ export const ActionComponent = ({
               warnings?.message ? (
                 <AlertDialogDescription>
                   {/*  @ts-ignore */}
-                  {warnings?.message}
+
+                  {tCommon(`${warnings?.message_key}`, { total_cost: formatteCurrency(warnings?.total_cost) })}
                 </AlertDialogDescription>
               ) : warnings?.warnings ? (
                 warnings?.warnings.map((warning: any) => {

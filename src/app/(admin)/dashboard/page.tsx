@@ -316,7 +316,7 @@ export default function Page() {
       {
         name: "Valeur totale du capital",
         data: () => {
-          const salespointsBalance = calculateTotal(salespoint, "balance");
+          const salespointsBalance = calculateTotal(salespoint, "cash_register.balance");
           const productValue = products.reduce(
             (acc, product) =>
               acc + product.total_quantity * parseFloat(product.price),

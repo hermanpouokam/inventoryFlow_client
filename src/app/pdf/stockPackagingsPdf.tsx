@@ -142,7 +142,7 @@ const StockPackagingsPDF: React.FC<GroupedDataPDFProps> = ({
             <Text style={styles.tableCell}>Qte vide</Text>
             <Text style={styles.tableCell}>Total</Text>
             <Text style={styles.tableCell}>P.U</Text>
-            <Text style={[styles.tableCell, { flex: 1.5 }]}>Montant Total</Text>
+            <Text style={[styles.tableCell, { flex: 2 }]}>Montant Total</Text>
           </View>
           {packagings?.map((packaging, index) => (
             <View style={styles.tableRow} key={index}>
@@ -156,7 +156,7 @@ const StockPackagingsPDF: React.FC<GroupedDataPDFProps> = ({
               </Text>
               <Text style={styles.tableCell}>{Number(packaging.price)}</Text>
               <Text
-                style={[styles.tableCell, { flex: 1.5, textAlign: "right" }]}
+                style={[styles.tableCell, { flex: 2, textAlign: "right" }]}
               >
                 {formatteCurrency(
                   Number(packaging.price) *
@@ -187,7 +187,7 @@ const StockPackagingsPDF: React.FC<GroupedDataPDFProps> = ({
               )}
             </Text>
             <Text style={styles.tableCell}>-</Text>
-            <Text style={[styles.tableCell, { flex: 1.5, textAlign: "right" }]}>
+            <Text style={[styles.tableCell, { flex: 2, textAlign: "right" }]}>
               {formatteCurrency(
                 packagings.reduce((acc, curr) => {
                   return (acc +=

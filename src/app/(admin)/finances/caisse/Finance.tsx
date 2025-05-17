@@ -36,7 +36,7 @@ import {
   Slide,
   TextField,
 } from "@mui/material";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { DataTableDemo } from "@/components/TableComponent";
 import { Input } from "@/components/ui/input";
 import {
@@ -54,6 +54,7 @@ import useForm, { Field, initializeFormValues } from "@/utils/useFormHook";
 import { Combobox } from "@/components/ComboBox";
 import { toast } from "@/components/ui/use-toast";
 import { deleteOperation, validateOperation } from "./function";
+import { usePermission } from "@/context/PermissionContext";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -101,7 +102,7 @@ export default function Finances() {
   const [text, setText] = React.useState("");
   const dispatch: AppDispatch = useDispatch();
   const [page, setPage] = React.useState<"deposit" | "withdrawal" | null>(null);
-
+  const { user, hasPermission, isAdmin } = usePermission()
   const handleClickOpen = (pageText: "withdrawal" | "deposit") => {
     setPage(pageText);
   };
@@ -146,15 +147,7 @@ export default function Finances() {
           "YYYY-MM-DDT00:00:00.SSS"
         ),
         end_date: moment(pickedDateRange?.to).format("YYYY-MM-DDT23:59:59.SSS"),
-        sales_points: [
-          ...(selectedSalesPoints.length < 1
-            ? salespoints
-            : selectedSalesPoints),
-        ]
-          .map((s) => {
-            return s.id;
-          })
-          .join(","),
+        sales_points: isAdmin() ? [...(selectedSalesPoints.length < 1 ? salespoints : selectedSalesPoints),].map((s) => { return s.id; }).join(",") : user?.sales_point,
       };
       const res = await instance.get(`/sales-points/cash-data/`, { params });
       if (res.status == 200) {
@@ -197,10 +190,9 @@ export default function Finances() {
         error: [errorSalespoint],
         icon: DollarSign,
         subText: () =>
-          `${
-            data?.transactions.filter(
-              (x) => x.transaction_type === "deposit" && x.is_validated == true
-            ).length
+          `${data?.transactions.filter(
+            (x) => x.transaction_type === "deposit" && x.is_validated == true
+          ).length
           } transaction(s)`,
         subTextColor: () => {
           return "text-neutral-800";
@@ -213,10 +205,9 @@ export default function Finances() {
         error: [errorSalespoint],
         icon: DollarSign,
         subText: () =>
-          `${
-            data?.transactions.filter(
-              (x) => x.transaction_type === "withdrawal" && x.is_validated
-            ).length
+          `${data?.transactions.filter(
+            (x) => x.transaction_type === "withdrawal" && x.is_validated
+          ).length
           } transaction(s)`,
         subTextColor: () => {
           return "text-neutral-800";
@@ -235,11 +226,11 @@ export default function Finances() {
         <div className="lowercase">{row.getValue("number")}</div>
       ),
     },
-    {
+    ...(hasPermission('manage_cash') ? [{
       id: "actions",
       enableHiding: false,
       header: () => <div className="text-center w-[60px]">Actions</div>,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<Transaction> }) => {
         const is_validated = row.original.is_validated;
         if (!is_validated) {
           return (
@@ -276,7 +267,8 @@ export default function Finances() {
           );
         }
       },
-    },
+    }] : [])
+    ,
     {
       accessorKey: "transction_number",
       header: () => (
@@ -312,7 +304,7 @@ export default function Finances() {
         return (
           <div
             className="flex justify-center w-[110px] "
-            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             <span>Status</span>
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -334,15 +326,15 @@ export default function Finances() {
         );
       },
     },
-    {
+    ...(isAdmin() ? [{
       accessorKey: "sales_point",
       header: () => <div className="text-center w-[140px]">Point de vente</div>,
-      cell: ({ row }) => (
+      cell: ({ row }: { row: Row<Transaction> }) => (
         <div className="text-center capitalize truncate">
           {row.original.sales_point}
         </div>
       ),
-    },
+    },] : []),
     {
       accessorKey: "opérateur",
       header: ({ column }) => {
@@ -356,7 +348,7 @@ export default function Finances() {
       cell: ({ row }) => {
         return (
           <div className="capitalize text-center text-base font-medium">
-            {row.original.created_by}
+            {row.original.created_by_full_name}
           </div>
         );
       },
@@ -454,8 +446,8 @@ export default function Finances() {
           <div className="text-center font-medium">
             {row.original.is_validated
               ? moment(row.original.validated_at ?? "").format(
-                  "DD/MM/YYYY HH:mm:ss"
-                )
+                "DD/MM/YYYY HH:mm:ss"
+              )
               : "-"}
           </div>
         );
@@ -469,7 +461,7 @@ export default function Finances() {
       cell: ({ row }) => {
         return (
           <div className="capitalize text-center text-base font-medium">
-            {row.original.validated_by ?? "-"}
+            {row.original.validated_by_full_name ?? "-"}
           </div>
         );
       },
@@ -479,16 +471,16 @@ export default function Finances() {
   const filteredTransactions =
     type || status
       ? [...(data ? data?.transactions : [])]
-          .filter((t) => {
-            return (
-              (!type || t.transaction_type === type) &&
-              (!status || String(t.is_validated) == status)
-            );
-          })
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .filter((t) => {
+          return (
+            (!type || t.transaction_type === type) &&
+            (!status || String(t.is_validated) == status)
+          );
+        })
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       : [...(data ? data?.transactions : [])].sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
 
   const dataType = [
     {
@@ -512,24 +504,14 @@ export default function Finances() {
     },
   ];
 
-  const fields: Field[] = [
-    {
+  const fields = [
+    ...(isAdmin() ? [{
       name: "sales_point",
       type: "select",
       label: "point de vente",
       required: true,
       options: salespoints,
-    },
-    // {
-    //   name: "transaction_type",
-    //   type: "select",
-    //   label: "Type de transaction",
-    //   required: true,
-    //   options: [
-    //     { label: "Entrée de fonds", value: "deposit" },
-    //     { label: "Sortie de fonds", value: "withdrawal" },
-    //   ],
-    // },
+    },] : []),
     {
       name: "amount",
       type: "number",
@@ -559,7 +541,7 @@ export default function Finances() {
   const handleValidate = async () => {
     try {
       if (page && ["withdrawal", "deposit"].includes(page)) {
-        if (!values.sales_point) {
+        if (!values.sales_point && isAdmin()) {
           return setFieldError("sales_point", "Selectionnez un point de vente");
         }
         if (values.amount < 1) {
@@ -581,6 +563,7 @@ export default function Finances() {
         if (response.status == 201) {
           await getData();
           setPage(null);
+          resetForm()
           return toast({
             title: "Succès",
             description: "Transaction ajoutée avec succès.",
@@ -675,7 +658,7 @@ export default function Finances() {
       <CardBodyContent>
         <div className="flex justify-between items-center">
           <h2 className="text-base font-medium">Ma caisse</h2>
-          <div className="flex">
+          {hasPermission('manage_cash') ? <div className="flex">
             <Button
               onClick={() => handleClickOpen("withdrawal")}
               className="bg-red-600 hover:bg-red-700 text-white text-sm "
@@ -688,7 +671,7 @@ export default function Finances() {
             >
               Entrée de fonds
             </Button>
-          </div>
+          </div> : null}
         </div>
       </CardBodyContent>
       <CardBodyContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -701,13 +684,16 @@ export default function Finances() {
             }
           }}
         />
-        <SelectPopover
-          selectedItems={selectedSalesPoints}
-          items={salespoints}
-          getOptionLabel={(option) => `${option.name} - ${option.address}`}
-          onSelect={handleSelect}
-          placeholder="Points de vente"
-        />
+        {
+          isAdmin() ?
+            <SelectPopover
+              selectedItems={selectedSalesPoints}
+              items={salespoints}
+              getOptionLabel={(option) => `${option.name} - ${option.address}`}
+              onSelect={handleSelect}
+              placeholder="Points de vente"
+            /> : null
+        }
         <Button
           variant={"outline"}
           onClick={getData}
@@ -741,7 +727,7 @@ export default function Finances() {
               <Skeleton className="h-[0.73rem] mt-2" />
             ) : _.status.includes("failed") ? (
               <span className={`text-xs font-medium -mt-2 ${_.subTextColor}`}>
-                {}
+                { }
               </span>
             ) : (
               <span className={`text-xs font-medium -mt-2 ${_.subTextColor()}`}>
@@ -848,16 +834,15 @@ export default function Finances() {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>
-          {page == "deposit" ? "Retirer des fonds" : "Entrer des fonds"}
+          {page !== "deposit" ? "Retirer des fonds" : "Entrer des fonds"}
         </DialogTitle>
         <form onSubmit={(e) => handleSubmit(e, handleValidate)}>
           <DialogContent sx={{ maxWidth: 500 }}>
             <DialogContentText id="alert-dialog-slide-description">
-              {`Vous allez faire une ${
-                page == "withdrawal" ? "entrée" : "sortie"
-              } de fonds. Remplissez les informations et validez.`}
+              {`Vous allez faire une ${page == "withdrawal" ? "entrée" : "sortie"
+                } de fonds. Remplissez les informations et validez.`}
             </DialogContentText>
-            <div className="space-y-4 mt-3">
+            <div className="space-y-3 mt-3">
               {fields.map((input) => {
                 if (input.type == "select" && input.name == "sales_point") {
                   return (
@@ -880,18 +865,16 @@ export default function Finances() {
                           (s) => s.id == values["sales_point"]
                         )}
                         getOptionValue={(option) =>
-                          `${option.id} ${option.name} ${
-                            input.name == "sales_point" ? option?.address : ""
+                          `${option.id} ${option.name} ${input.name == "sales_point" ? option?.address : ""
                           }`
                         }
                         placeholder={input.label}
                         className="z-[99999] popover-content-width-full"
                         buttonClassName={errors[input.name] && "border-red-500"}
                         getOptionLabel={(option) =>
-                          `${option.name} ${
-                            input.name == "sales_point"
-                              ? " - " + option?.address
-                              : ""
+                          `${option.name} ${input.name == "sales_point"
+                            ? " - " + option?.address
+                            : ""
                           }`
                         }
                       />
@@ -928,10 +911,6 @@ export default function Finances() {
                     //   </SelectContent>
                     // </Select>
                     <div>
-                      <div className="text-right -my-2 text-sm mr-2 font-medium">
-                        {input.name == "reason" &&
-                          `${values["reason"].length}/255`}
-                      </div>
                       <TextField
                         fullWidth
                         margin="dense"
@@ -948,6 +927,11 @@ export default function Finances() {
                         error={!!errors[input.name]}
                         helperText={errors[input.name]}
                       />
+                      <div className="text-right -my-1 text-sm mr-2 font-medium">
+                        {input.name == "reason" &&
+                          `${values["reason"].length}/255`
+                        }
+                      </div>
                     </div>
                   );
                 }
@@ -980,9 +964,8 @@ export default function Finances() {
         </DialogTitle>
         <DialogContent sx={{ maxWidth: 500 }}>
           <DialogContentText id="alert-dialog-slide-description">
-            {`Vous allez ${
-              operation == "delete" ? "supprimmer" : "valider"
-            } cette transaction.`}
+            {`Vous allez ${operation == "delete" ? "supprimmer" : "valider"
+              } cette transaction.`}
             <p className="text-red-500">NB: Cette action est irreversible</p>
           </DialogContentText>
           <div className="space-y-4 mt-3">

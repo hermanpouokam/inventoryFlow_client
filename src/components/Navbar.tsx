@@ -25,8 +25,6 @@ import Sidebar from "./sidebar";
 export default function Navbar() {
   const dispatch: AppDispatch = useDispatch();
 
-  const [sidebarOpened, setSidebarOpened] = React.useState<boolean>(true);
-
   const {
     data: user,
     error,

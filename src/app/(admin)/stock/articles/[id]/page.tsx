@@ -26,6 +26,7 @@ import { useToast } from "@/components/ui/use-toast";
 import InputComponent from "./input";
 import InputPrice from "./SellPriceInput";
 import { PlusOneTwoTone } from "@mui/icons-material";
+import { usePermission } from "@/context/PermissionContext";
 
 export default function Page({ params }: { params: { id: string } }) {
   const decryptedParam = decryptParam(decodeURIComponent(params.id));
@@ -37,7 +38,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const { toast } = useToast();
   const [selectedInput, setSelectedInput] = React.useState<string | null>(null);
   const [newPrice, setNewPrice] = React.useState<SellPrice | null>(null);
-
+  const { hasPermission, user } = usePermission()
   const getProduct = async (decryptedParam: string) => {
     try {
       const res = await instance.get(`/products/${decryptedParam}/`);
@@ -64,7 +65,7 @@ export default function Page({ params }: { params: { id: string } }) {
         return (
           <div
             className="text-center w-[180px]"
-            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Nom de la variante
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -225,12 +226,12 @@ export default function Page({ params }: { params: { id: string } }) {
         typeof value === "string"
           ? "text"
           : typeof value === "number"
-          ? "number"
-          : typeof value === "boolean"
-          ? "boolean"
-          : typeof value === "object"
-          ? "object"
-          : "option",
+            ? "number"
+            : typeof value === "boolean"
+              ? "boolean"
+              : typeof value === "object"
+                ? "object"
+                : "option",
 
       label: key,
       disabled: key === "id",
@@ -258,7 +259,7 @@ export default function Page({ params }: { params: { id: string } }) {
       </Backdrop>
       <CardBodyContent className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">{product?.name}</h3>
-        {product?.with_variant && (
+        {product?.with_variant && hasPermission('edit_product') && (
           <Button
             onClick={() => setOpen(true)}
             className="bg-green-600 hover:bg-green-600"
@@ -270,20 +271,25 @@ export default function Page({ params }: { params: { id: string } }) {
       <CardBodyContent className="space-y-5">
         <Divider>DETAILS DE PRODUITS </Divider>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {inputData.map((input) => (
-            <InputComponent
-              key={input?.name}
-              input={input}
-              isSelected={selectedInput === input?.name}
-              onSelect={(el) => setSelectedInput(el)}
-              loading={loading}
-              onSetLoading={(el) => setLoading(el)}
-              product={product}
-              setProduct={(el) => setProduct(el)}
-              translations={translations}
-              link="products"
-            />
-          ))}
+          {inputData.map((input) => {
+            if (input?.name == 'sales_point_details' && user?.user_type !== 'admin') {
+              return null
+            }
+            return (
+              <InputComponent
+                key={input?.name}
+                input={input}
+                isSelected={selectedInput === input?.name}
+                onSelect={(el) => setSelectedInput(el)}
+                loading={loading}
+                onSetLoading={(el) => setLoading(el)}
+                product={product}
+                setProduct={(el) => setProduct(el)}
+                translations={translations}
+                link="products"
+              />
+            )
+          })}
         </div>
         <Divider>
           {" "}

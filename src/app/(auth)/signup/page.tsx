@@ -127,8 +127,9 @@ export default function Page() {
                 return (
                   <>
                     <PhoneNumberField
-                      key={phoneNumber?.number} // Réinitialise l'input lorsque la valeur change
+                      key={phoneNumber?.number} 
                       value={phoneNumber?.number}
+                      required={true}
                       onChange={handlePhoneNumberChange}
                     />
                   </>
@@ -174,10 +175,10 @@ export default function Page() {
                     )}
                     {inputsValue["password"] !=
                       inputsValue["confirmPassword"] && (
-                      <FormHelperText>
-                        Les mot de passes ne correspondent pas
-                      </FormHelperText>
-                    )}
+                        <FormHelperText>
+                          Les mot de passes ne correspondent pas
+                        </FormHelperText>
+                      )}
                     {input.name == "confirmPassword" &&
                       inputsValue["password"]?.length > 0 &&
                       !passwordVerify.isValid && (
@@ -186,11 +187,10 @@ export default function Page() {
                             if (key != "isValid") {
                               return (
                                 <li
-                                  className={`${
-                                    passwordVerify[key]
+                                  className={`${passwordVerify[key]
                                       ? "text-green-700"
                                       : "text-red-600"
-                                  } text-xs ml-3 mt-1 list-item`}
+                                    } text-xs ml-3 mt-1 list-item`}
                                   key={key}
                                 >
                                   {passwordTest[key]}

@@ -6,6 +6,10 @@ const nextConfig = {
     experimental: {
         strictNextHead: false,
     },
+    // webpack: (config) => {
+    //     config.resolve.alias['konva'] = 'konva/lib/index.js'; 
+    //     return config;
+    // },
 };
 
 export default nextConfig;

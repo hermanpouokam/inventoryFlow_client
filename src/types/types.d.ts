@@ -4,11 +4,19 @@ interface User {
   surname: string;
   username: string;
   email: string;
-  enterprise: null;
-  number: null;
-  user_type: string;
+  is_active: boolean;
+  country: null;
+  enterprise: number;
+  number: string;
+  user_type: 'admin' | 'manager' | 'employee';
   created_at: Date;
   last_update: Date;
+  img: null;
+  sales_point: number;
+  sales_point_details: SalesPoint;
+  enterprise_details: EnterpriseDetails;
+  permissions: Permission[];
+  action_permissions: ActionPermission[];
 }
 
 interface MenuItem {
@@ -585,11 +593,11 @@ interface Loss {
 }
 
 interface InventoryPackage {
+  created_by_full_name: string;
+  validated_by_full_name: string;
   id: number;
   sales_point: number;
   created_by: number;
-  created_by_name: string;
-  validated_by_name: null | string;
   validated_by: number | null;
   inventory_number: string;
   sales_point_details: SalesPointDetails;
@@ -653,6 +661,8 @@ interface Transaction {
   new_balance: string;
   created_by: string;
   validated_by?: string;
+  created_by_full_name: string;
+  validated_by_full_name?: string;
   created_at: Date;
   validated_at: Date | null;
   is_validated: boolean;
@@ -689,4 +699,19 @@ interface paymentMethod {
   exp_year: number;
   id: string;
   type: string;
+}
+interface ActionPermission {
+  id: number;
+  name: string;
+  label: number;
+  created_at: Date;
+  last_update: Date;
+}
+
+interface Role {
+  id: number;
+  name: string;
+  action_permissions: ActionPermission[];
+  created_at: Date;
+  last_update: Date;
 }

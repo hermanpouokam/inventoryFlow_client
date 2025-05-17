@@ -51,7 +51,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BillDetails from "../pending/BillDetails";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { formatteCurrency } from "../../stock/functions";
 import { instance, updatePaid } from "@/components/fetch";
 import { useToast } from "@/components/ui/use-toast";
@@ -62,6 +62,7 @@ import InvoicePDF from "@/app/pdf/invoiceA4Pdf";
 import InvoiceSmallPDF from "@/app/pdf/invoiceSmallPDF";
 import { BlobProvider } from "@react-pdf/renderer";
 import ReactDOM from "react-dom/client";
+import { usePermission } from "@/context/PermissionContext";
 
 export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<{
@@ -111,17 +112,16 @@ export default function Page() {
         : [...prev, data]
     );
   };
-
   const getData = async () => {
     setLoading(true);
     try {
       const params = {
-        customer: customer,
+        customer: customer.map(el => el.id),
         start_date: moment(pickedDateRange?.from).format(
           "YYYY-MM-DDT00:00:00.SSS"
         ),
         end_date: moment(pickedDateRange?.to).format("YYYY-MM-DDT23:59:59.SSS"),
-        sales_point: selectedSalespoint,
+        sales_point: isAdmin() ? selectedSalespoint : [user?.sales_point],
       };
       //@ts-ignore
       const res: Bill[] = await getBill(params);
@@ -131,7 +131,7 @@ export default function Page() {
       console.log(error);
     }
   };
-
+  const { user, hasPermission, isAdmin } = usePermission()
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -322,12 +322,12 @@ export default function Page() {
                           onCheckedChange={(checked) => {
                             return checked
                               ? setProduct_bill_ids([
-                                  ...product_bill_ids,
-                                  pb.id,
-                                ])
+                                ...product_bill_ids,
+                                pb.id,
+                              ])
                               : setProduct_bill_ids((items) => {
-                                  return items.filter((item) => item !== pb.id);
-                                });
+                                return items.filter((item) => item !== pb.id);
+                              });
                           }}
                           id={`product-${pb.id}`}
                         />
@@ -438,7 +438,7 @@ export default function Page() {
               <PrinterIcon size={14} className="mr-3" />
               Imprimer en petit format
             </DropdownMenuItem>
-            {bill.product_bills.some((pb) => pb.record_package > 0) ? (
+            {bill.product_bills.some((pb) => pb.record_package > 0) && hasPermission('back_packaging') ? (
               <DropdownMenuItem
                 onClick={() => {
                   setOpenPopup(true);
@@ -450,7 +450,7 @@ export default function Page() {
                 Retour d&apos;emballage
               </DropdownMenuItem>
             ) : null}
-            <DropdownMenuItem
+            {hasPermission('cash_in_invoices') ? <DropdownMenuItem
               onClick={() => {
                 setOpenPopup(true);
                 setType("receipt");
@@ -459,7 +459,7 @@ export default function Page() {
               {" "}
               <WalletCards className="mr-3" size={14} />
               Encaisser la facture
-            </DropdownMenuItem>
+            </DropdownMenuItem> : null}
           </DropdownMenuContent>
         </DropdownMenu>
       </>
@@ -513,16 +513,16 @@ export default function Page() {
         <div className="capitalize">{row.getValue("bill_number")}</div>
       ),
     },
-    {
-      accessorKey: "sales_point",
+    ...(isAdmin() ? [{
+      accessorKey: "Point de vente",
       header: () => <div className="text-center w-[220px]">Point de vente</div>,
-      cell: ({ row }) => (
+      cell: ({ row }: { row: Row<Bill> }) => (
         <div className="text-center capitalize truncate">
           {row.original.sales_point_details.name} -{" "}
           {row.original.sales_point_details.address}
         </div>
       ),
-    },
+    }] : []),
     {
       accessorKey: "customer_name",
       header: ({ column }) => {
@@ -740,19 +740,27 @@ export default function Page() {
                 }
               }}
             />
-            <SelectPopover
-              selectedItems={selectedSalespoint}
-              items={salesPoints}
-              onSelect={handleSelect}
-              getOptionLabel={(el) => `${el.name} - ${el.address}`}
-              placeholder="Points de vente"
-            />
+            {
+              isAdmin() ?
+                <SelectPopover
+                  selectedItems={selectedSalespoint}
+                  items={salesPoints}
+                  onSelect={handleSelect}
+                  getOptionLabel={(el) => `${el.name} - ${el.address}`}
+                  placeholder="Points de vente"
+                  noItemText="Aucun point de vente"
+                  searchPlaceholder="Rechercher un point de vente"
+                />
+                : null
+            }
             <SelectPopover
               selectedItems={customer}
               items={customers}
               onSelect={handleSelectCustomers}
               getOptionLabel={(el) => `${el.name}`}
               placeholder="Clients"
+              noItemText="Aucun client"
+              searchPlaceholder="Rechercher un client"
             />
             <Button
               variant={"outline"}

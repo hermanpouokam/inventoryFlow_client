@@ -14,7 +14,6 @@ import {
   Check,
   ChevronDown,
   EllipsisVertical,
-  EyeIcon,
   Printer,
   Trash,
   X,
@@ -23,7 +22,7 @@ import moment from "moment";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { DataTableDemo } from "@/components/TableComponent";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,7 +41,6 @@ import { toast } from "@/components/ui/use-toast";
 import { BlobProvider } from "@react-pdf/renderer";
 import ReactDOM from "react-dom/client";
 import InventoryPDF from "@/app/pdf/inventorPDF";
-import { Inventory } from "@mui/icons-material";
 import {
   Dialog,
   DialogContent,
@@ -51,8 +49,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AlertDialogHeader } from "@/components/ui/alert-dialog";
-import { useFieldArray } from "react-hook-form";
+import { usePermission } from "@/context/PermissionContext";
 
 export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
@@ -85,7 +82,7 @@ export default function Page() {
   );
   const [dialogFor, setDialogFor] = React.useState<null | string>(null);
   const [inventory, setInventory] = React.useState<null | Inventory>(null);
-
+  const { isAdmin, hasPermission, user } = usePermission()
   const handleSelect = (data: SalesPoint) => {
     setSelectedSalesPoints((prev) =>
       prev.includes(data)
@@ -102,7 +99,7 @@ export default function Page() {
         "YYYY-MM-DDT00:00:00.SSS"
       ),
       end_date: moment(pickedDateRange?.to).format("YYYY-MM-DDT23:59:59.SSS"),
-      sales_point: selectedSalesPoints.map((s) => s.id),
+      sales_point: isAdmin() ? selectedSalesPoints.map((s) => s.id) : [user?.sales_point],
       ...(status != null ? { is_validated: status.value } : {}),
     };
     dispatch(fetchInventories(params));
@@ -111,7 +108,7 @@ export default function Page() {
 
   React.useEffect(() => {
     getData();
-    if (salespointStatus == "idle") {
+    if (salespointStatus == "idle" && isAdmin()) {
       dispatch(fetchSalesPoints());
     }
   }, []);
@@ -134,10 +131,9 @@ export default function Page() {
       toast({
         title: "Erreur",
         className: "bg-red-500 border-red-500",
-        description: `${
-          error.response.data.error ??
+        description: `${error.response.data.error ??
           "Erreur lors de la validation de l'inventaire"
-        }`,
+          }`,
         icon: <X className="mr-2" />,
         variant: "destructive",
       });
@@ -151,7 +147,7 @@ export default function Page() {
   const handleDeleteInventory = async () => {
     setLoading(true);
     try {
-      const res = await deleteInventory(inventory.id);
+      const res = await deleteInventory(inventory?.id);
       if (res.data.success) {
         await getData();
         return toast({
@@ -167,10 +163,9 @@ export default function Page() {
         title: "Erreur",
         className: "bg-red-500 border-red-500",
         variant: "destructive",
-        description: `${
-          error.response.data.error ??
+        description: `${error.response.data.error ??
           "Erreur lors de la suppression de l'inventaire"
-        }`,
+          }`,
         icon: <X className="mr-2" />,
       });
     } finally {
@@ -194,7 +189,7 @@ export default function Page() {
         return (
           <div
             className="text-center w-[180px]"
-            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             N<sup>o</sup> d&apos;inventaire
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -206,18 +201,18 @@ export default function Page() {
           <div className="capitalize">{row.original.inventory_number}</div>
         );
       },
-    },
-    {
-      accessorKey: "Prix d'achat",
-      header: () => <div className="text-center w-[140px]">Point de vente</div>,
-      cell: ({ row }) => {
-        return (
-          <div className="text-center font-medium">
-            {row.original.sales_point_details.name}
-          </div>
-        );
-      },
-    },
+    }, ...(isAdmin() ? [
+      {
+        accessorKey: "Point de vente",
+        header: () => <div className="text-center w-[140px]">Point de vente</div>,
+        cell: ({ row }: { row: Row<Inventory> }) => {
+          return (
+            <div className="text-center font-medium">
+              {row.original.sales_point_details.name}
+            </div>
+          );
+        },
+      }] : []),
     {
       accessorKey: "operateur",
       header: () => <div className="text-center w-[140px]">Opérateur</div>,
@@ -237,9 +232,8 @@ export default function Page() {
           <div className="text-center font-medium">
             <p>
               <span
-                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${
-                  row.original.is_validated ? "green" : "red"
-                }-500 text-${row.original.is_validated ? "white" : "black"}`}
+                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${row.original.is_validated ? "green" : "red"
+                  }-500 text-${row.original.is_validated ? "white" : "black"}`}
               >
                 {row.original.is_validated ? "Validé" : "Non validé"}
               </span>
@@ -354,7 +348,7 @@ export default function Page() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {!row.original.is_validated && (
+              {!row.original.is_validated && hasPermission('validate_inventory') && (
                 <DropdownMenuItem
                   disabled={row.original.is_validated}
                   onClick={() => {
@@ -371,7 +365,7 @@ export default function Page() {
                 <Printer className="mr-3 w-4 h-4" size={14} />
                 Imprimer l&apos;inventaire
               </DropdownMenuItem>
-              {!row.original.is_validated && (
+              {!row.original.is_validated &&hasPermission('delete_inventory') && (
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -409,12 +403,14 @@ export default function Page() {
       <CardBodyContent>
         <div className="flex justify-between items-center">
           <h3 className="text-base font-semibold">Inventaires</h3>
-          <Button
-            onClick={() => window.location.assign("/stock/inventory/new")}
-            className="bg-indigo-600 hover:bg-indigo-700"
-          >
-            Nouvel un inventaire
-          </Button>
+          {hasPermission('add_inventory') ?
+            <Button
+              onClick={() => window.location.assign("/stock/inventory/new")}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Nouvel un inventaire
+            </Button>
+            : null}
         </div>
       </CardBodyContent>
       <div className="shadow border select-none border-neutral-300 rounded-lg bg-white p-5">
@@ -428,13 +424,16 @@ export default function Page() {
               }
             }}
           />
-          <SelectPopover
-            selectedItems={selectedSalesPoints}
-            items={salespoints}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            onSelect={handleSelect}
-            placeholder="Points de vente"
-          />
+          {
+            isAdmin() ?
+              <SelectPopover
+                selectedItems={selectedSalesPoints}
+                items={salespoints}
+                getOptionLabel={(option) => `${option.name} - ${option.address}`}
+                onSelect={handleSelect}
+                placeholder="Points de vente"
+              />
+              : null}
           <Combobox
             options={[
               { name: "Tous", value: null },

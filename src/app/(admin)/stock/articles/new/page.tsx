@@ -3,6 +3,7 @@ import CardBodyContent from "@/components/CardContent";
 import { createProduct, createSellPrice } from "@/components/fetch";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { usePermission } from "@/context/PermissionContext";
 import { fetchPackagings } from "@/redux/packagingsSlicer";
 import { fetchProductsCat } from "@/redux/productsCat";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
@@ -29,6 +30,8 @@ import { useSelector } from "react-redux";
 
 export default function Page() {
   const dispatch: AppDispatch = useDispatch();
+  const { hasPermission, user } = usePermission();
+
   const { data, error, status } = useSelector(
     (state: RootState) => state.salesPoints
   );
@@ -54,13 +57,13 @@ export default function Page() {
   const [loading, setLoading] = React.useState(false);
 
   const fields = [
-    {
+    ...(user?.user_type === 'admin' ? [{
       name: "sales_point",
       label: "Point de vente",
       required: true,
       type: "select",
       options: data,
-    },
+    }] : []),
     {
       name: "supplier_id",
       label: "Fournisseur du produit",
@@ -137,8 +140,12 @@ export default function Page() {
   }, [status, dispatch]);
 
   React.useEffect(() => {
-    console.log(values);
-  }, [values]);
+    if (user?.user_type != 'admin') {
+      dispatch(fetchSuppliers({ sales_points_id: [user?.sales_point] }));
+      dispatch(fetchProductsCat({ sales_points_id: [user?.sales_point] }));
+      dispatch(fetchPackagings({ sales_points: [user?.sales_point] }));
+    }
+  }, [user?.user_type, dispatch]);
 
   const { toast } = useToast();
 
@@ -154,7 +161,7 @@ export default function Page() {
       if (Object.keys(sellsPricesValue).length == 0) {
         return setFieldError("form", "Entrez au moins 1 prix de vente");
       }
-      if (!values["sales_point"]) {
+      if (!values["sales_point"] && user?.user_type == 'admin') {
         return setFieldError("form", "Veuillez sélectionner un point de vente");
       }
       if (values["price"] == 0 || values["price"] < 0) {
@@ -331,9 +338,9 @@ export default function Page() {
                       {field.label}
                     </label>
                     <p className="text-sm text-muted-foreground">
-                      {field.name == "is_beer"
+                      {field.name != "is_beer"
                         ? "Notez que si ce produit a des variantes, vous devez obligatoirement ajouter des variantes pour pouvoir ajouter aux factures."
-                        : "Si ce produit a des emballages payants, cochez ici et sélectionnez un emballage pré-enregistré."}
+                        : "Si ce produit a des emballages payants, cochez ici et sélectionnez un emballage que vous avez pré-enregistré."}
                     </p>
                   </div>
                 </div>

@@ -9,6 +9,9 @@ import { getToken, getUserData, storeUserData } from "@/components/auth";
 import { instance } from "@/components/fetch";
 import usePageTracking from "@/utils/usePageTracking";
 import useInteractionTracking from "@/utils/useInteractionTracking";
+import { AppProvider } from "@/context/GlobalContext";
+import { PermissionProvider } from "@/context/PermissionContext";
+import InitPermissions from "@/context/InitPermissions";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +20,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [user, setUser] = React.useState(null)
   React.useEffect(() => {
     const asyncFunc = async () => {
       const res = await instance.get("current-user");
+      setUser(res.data)
       await storeUserData(res.data);
       console.log(getToken());
     };

@@ -5,7 +5,6 @@ import DateRangePicker from "@/components/DateRangePicker";
 import SelectPopover from "@/components/SelectPopover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { fetchInventories } from "@/redux/inventory";
 import { fetchSalesPoints } from "@/redux/salesPointsSlicer";
 import { AppDispatch, RootState } from "@/redux/store";
 import { datesData } from "@/utils/constants";
@@ -14,7 +13,6 @@ import {
   Check,
   ChevronDown,
   EllipsisVertical,
-  EyeIcon,
   Printer,
   Trash,
   X,
@@ -23,7 +21,7 @@ import moment from "moment";
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { DataTableDemo } from "@/components/TableComponent";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,12 +40,12 @@ import { BlobProvider } from "@react-pdf/renderer";
 import ReactDOM from "react-dom/client";
 import InventoryPDF from "@/app/pdf/inventorPDF";
 import {
-  deleteInventory,
   deleteInventoryPackage,
-  validateInventory,
   validateInventoryPackage,
 } from "../../inventory/functions";
 import { fetchPackagingInventory } from "@/redux/packagingInventory";
+import { usePermission } from "@/context/PermissionContext";
+import InventoryPackagingPDF from "@/app/pdf/inventoryPackagingPdf";
 
 export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<DateRange>({
@@ -73,6 +71,8 @@ export default function Page() {
     (state: RootState) => state.salesPoints
   );
   const [table, setTable] = React.useState<any | null>(null);
+
+  const { user, hasPermission, isAdmin } = usePermission()
 
   const { packagingInventory, status: statusInventoriesPackaging } =
     useSelector((state: RootState) => state.packagingInventories);
@@ -120,7 +120,7 @@ export default function Page() {
         return (
           <div
             className="text-center w-[180px]"
-            // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          // onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             N<sup>o</sup> d&apos;inventaire
             {/* <ArrowUpDown className="ml-2 h-4 w-4" /> */}
@@ -129,28 +129,28 @@ export default function Page() {
       },
       cell: ({ row }) => {
         return (
-          <div className="capitalize">{row.original.inventory_number}</div>
+          <div className="capitalize text-center">{row.original.inventory_number}</div>
         );
       },
     },
-    {
+    ...(isAdmin() ? [{
       accessorKey: "Prix d'achat",
       header: () => <div className="text-center w-[140px]">Point de vente</div>,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: Row<InventoryPackage> }) => {
         return (
           <div className="text-center font-medium">
             {row.original.sales_point_details.name}
           </div>
         );
       },
-    },
+    }] : []),
     {
       accessorKey: "operateur",
       header: () => <div className="text-center w-[140px]">Opérateur</div>,
       cell: ({ row }) => {
         return (
           <div className="text-center font-medium">
-            {row.original.created_by_name}
+            {row.original.created_by_full_name}
           </div>
         );
       },
@@ -163,9 +163,8 @@ export default function Page() {
           <div className="text-center font-medium">
             <p>
               <span
-                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${
-                  row.original.is_validated ? "green" : "red"
-                }-500 text-${row.original.is_validated ? "white" : "black"}`}
+                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-${row.original.is_validated ? "green" : "red"
+                  }-500 text-${row.original.is_validated ? "white" : "black"}`}
               >
                 {row.original.is_validated ? "Validé" : "Non validé"}
               </span>
@@ -180,7 +179,7 @@ export default function Page() {
       cell: ({ row }) => {
         return (
           <div className="text-center font-medium">
-            {row.original.validated_by_name ?? "-"}
+            {row.original.validated_by_full_name ?? "-"}
           </div>
         );
       },
@@ -213,7 +212,7 @@ export default function Page() {
       },
     },
     {
-      accessorKey: "Date de création",
+      accessorKey: "Date de validation",
       header: () => (
         <div className="text-right w-[140px]">Date de validation</div>
       ),
@@ -251,10 +250,9 @@ export default function Page() {
             toast({
               title: "Erreur",
               className: "bg-red-500 border-red-500",
-              description: `${
-                error.response.data.error ??
+              description: `${error.response.data.error ??
                 "Erreur lors de la validation de l'inventaire"
-              }`,
+                }`,
               icon: <X className="mr-2" />,
               variant: "destructive",
             });
@@ -282,10 +280,9 @@ export default function Page() {
               title: "Erreur",
               className: "bg-red-500 border-red-500",
               variant: "destructive",
-              description: `${
-                error.response.data.error ??
+              description: `${error.response.data.error ??
                 "Erreur lors de la suppression de l'inventaire"
-              }`,
+                }`,
               icon: <X className="mr-2" />,
             });
           } finally {
@@ -305,8 +302,8 @@ export default function Page() {
           const pdfBlobProvider = (
             <BlobProvider
               document={
-                <InventoryPDF
-                  title={`Inventaire du ${new Date(
+                <InventoryPackagingPDF
+                  title={`Inventaire d'emballage du ${new Date(
                     row.original.created_at
                   ).toLocaleDateString()}`}
                   inventory={row.original}
@@ -341,7 +338,7 @@ export default function Page() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {!row.original.is_validated && (
+              {!row.original.is_validated && !hasPermission('validate_packaging_inventory') && (
                 <DropdownMenuItem
                   disabled={row.original.is_validated}
                   onClick={handleValidateInventory}
@@ -355,7 +352,7 @@ export default function Page() {
                 <Printer className="mr-3 w-4 h-4" size={14} />
                 Imprimer l&apos;inventaire
               </DropdownMenuItem>
-              {!row.original.is_validated && (
+              {!row.original.is_validated && hasPermission('validate_packaging_inventory') && (
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -390,14 +387,17 @@ export default function Page() {
       <CardBodyContent>
         <div className="flex justify-between items-center">
           <h3 className="text-base font-semibold">Inventaires d&apos;emballage</h3>
-          <Button
-            onClick={() =>
-              window.location.assign("/stock/packagings/inventory/new/")
-            }
-            className="bg-indigo-600 hover:bg-indigo-700"
-          >
-            Nouvel un inventaire
-          </Button>
+          {
+            hasPermission('add_packaging_inventory') ?
+              <Button
+                onClick={() =>
+                  window.location.assign("/stock/packagings/inventory/new/")
+                }
+                className="bg-indigo-600 hover:bg-indigo-700"
+              >
+                Nouvel un inventaire
+              </Button>
+              : null}
         </div>
       </CardBodyContent>
       <div className="shadow border select-none border-neutral-300 rounded-lg bg-white p-5">
@@ -411,13 +411,15 @@ export default function Page() {
               }
             }}
           />
-          <SelectPopover
-            selectedItems={selectedSalesPoints}
-            items={salespoints}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            onSelect={handleSelect}
-            placeholder="Points de vente"
-          />
+          {isAdmin() ?
+            <SelectPopover
+              selectedItems={selectedSalesPoints}
+              items={salespoints}
+              getOptionLabel={(option) => `${option.name} - ${option.address}`}
+              onSelect={handleSelect}
+              placeholder="Points de vente"
+            />
+            : null}
           <Combobox
             options={[
               { name: "Tous", value: null },
