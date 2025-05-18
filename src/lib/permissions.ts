@@ -2,6 +2,7 @@
 import { cookies } from "next/headers";
 import { sanitizePermissions } from "@/constants/permissions";
 import API_URL from "@/config";
+import { sanitizePagePermissions } from "@/constants/pagePermissions";
 
 export async function getUserWithPermissions(): Promise<User | null> {
     const cookie = cookies().get("access_token")?.value;
@@ -15,5 +16,7 @@ export async function getUserWithPermissions(): Promise<User | null> {
     const data = await res.json();
 
     const safePerms = sanitizePermissions(data ? data?.action_permissions?.map((el: ActionPermission) => el.name) : []);
-    return { ...data, action_permissions: safePerms };
+    const safePagePerms = sanitizePagePermissions(data ? data?.permissions?.map((el: Permission) => el.path) : []);
+    console.log('safePagePerms', safePagePerms)
+    return { ...data, action_permissions: safePerms, permissions: safePagePerms };
 }

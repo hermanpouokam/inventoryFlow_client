@@ -13,6 +13,7 @@ import { AppProvider } from "@/context/GlobalContext";
 import { PermissionProvider } from "@/context/PermissionContext";
 import { getUserWithPermissions } from "@/lib/permissions";
 import { sanitizePermissions } from "@/constants/permissions";
+import { sanitizePagePermissions } from "@/constants/pagePermissions";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -36,6 +37,7 @@ export default async function RootLayout({
   await initI18nServer(lng);
   const user = await getUserWithPermissions();
   const permissions = sanitizePermissions(user?.action_permissions || []);
+  const pagePermissions = sanitizePagePermissions(user?.permissions || []);
   return (
     <html lang={lng}>
       <body
@@ -45,7 +47,7 @@ export default async function RootLayout({
         )}
       >
         <AppProvider>
-          <PermissionProvider initialPermissions={permissions} user={user}>
+          <PermissionProvider initialPermissions={permissions} initialPagePermissions={pagePermissions} user={user}>
             <I18nProvider locale={lng}>
               {children}
             </I18nProvider>

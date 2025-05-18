@@ -3,7 +3,7 @@ import { instance } from "@/components/fetch";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface CustomerState {
-  data: Customer[];
+  data: Category[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }

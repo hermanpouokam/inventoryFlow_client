@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState } from "react";
 import logo from "@/assets/img/logo.png";
-import { menuItems, menuTranslate } from "@/utils/constants";
+import { useMenuItems, menuTranslate } from "@/utils/constants";
 import { Button } from "./ui/button";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -9,7 +9,7 @@ import { IndeterminateCheckBox } from "@mui/icons-material";
 
 export default function Sidebar() {
   const [open, setOpen] = useState<boolean>(false);
-
+  const menuItems = useMenuItems()
   const pathname = usePathname();
   const basePath = pathname.split("/")[1] || "";
   const submenuRefs = useRef<(HTMLUListElement | null)[]>([]);
@@ -117,7 +117,7 @@ export default function Sidebar() {
                   className={cn(
                     "flex rounded justify-between items-center text-sm hover:text-indigo-700 hover:bg-indigo-100 font-medium text-neutral-800 w-full",
                     basePath.toLowerCase() === item.name.toLowerCase() &&
-                      "text-indigo-700 bg-indigo-100"
+                    "text-indigo-700 bg-indigo-100"
                   )}
                 >
                   <div className="flex gap-2 items-center capitalize justify-between">

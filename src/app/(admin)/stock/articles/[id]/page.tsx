@@ -136,12 +136,12 @@ export default function Page({ params }: { params: { id: string } }) {
       label: "Nom de variante",
       type: "text",
     },
-    {
-      name: "quantity",
-      required: true,
-      label: "Quantité",
-      type: "text",
-    },
+    // {
+    //   name: "quantity",
+    //   required: true,
+    //   label: "Quantité",
+    //   type: "text",
+    // },
   ];
 
   const { errors, handleChange, handleSubmit, resetForm, values } = useForm(
@@ -164,7 +164,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const handleCreateVariant = async () => {
     console.log("creating variant...");
     try {
-      const res = await createVariant({ ...values, product: product.id });
+      const res = await createVariant({ ...values, product: product.id, quantity: 0 });
       if (res.status === 201) {
         setOpen(false);
         setTimeout(() => {
@@ -333,7 +333,7 @@ export default function Page({ params }: { params: { id: string } }) {
           ) : null}
         </div>
       </CardBodyContent>
-      {product?.variants?.length > 0 && (
+      {product?.with_variant && (
         <CardBodyContent>
           <h4 className="text-base font-semibold">Liste d&#39;articles</h4>
           <DataTableDemo

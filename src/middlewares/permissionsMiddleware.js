@@ -9,7 +9,7 @@ export async function permissionsMiddleware(req) {
 
   try {
     // 🔍 Récupérer les infos utilisateur (y compris les permissions)
-    const userResponse = await fetch(`${API_URL}/user-permissions/`, {
+    const userResponse = await fetch(`${API_URL}/current-user/`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -17,8 +17,8 @@ export async function permissionsMiddleware(req) {
       return NextResponse.redirect(new URL("/signin", req.url));
     }
 
-    const userPermissions = await userResponse.json();
-    const mapPermissions = userPermissions.map((el) => {
+    const user = await userResponse.json();
+    const mapPermissions = user.permissions.map((el) => {
       return el.id;
     });
     // 🔎 Vérification des permissions
@@ -36,6 +36,6 @@ export async function permissionsMiddleware(req) {
     return NextResponse.next();
   } catch (error) {
     console.error("❌ Erreur permissionsMiddleware:", error);
-    return NextResponse.redirect(new URL("/signin", req.url));
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 }

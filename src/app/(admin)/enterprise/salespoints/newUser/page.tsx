@@ -7,12 +7,13 @@ import { AppDispatch, RootState } from '@/redux/store';
 import useForm, { Field, initializeFormValues } from '@/utils/useFormHook';
 import { Button as MuiButton, Divider, TextField, Menu, MenuItem, CircularProgress, Backdrop } from '@mui/material'
 import { Check, ChevronDown, XCircle } from 'lucide-react';
-import React, {  } from 'react'
+import React, { } from 'react'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { getActionsPermissions, getPermissions, getRoles, registerEmployee } from '../function';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '@/components/ui/use-toast';
+import { usePermission } from '@/context/PermissionContext';
 
 export default function Page() {
 
@@ -49,16 +50,17 @@ export default function Page() {
     const { data, error, status } = useSelector(
         (state: RootState) => state.salesPoints
     );
+    const { hasPermission, user, isAdmin } = usePermission()
 
     const fields: Field[] = React.useMemo(
         () => [
-            {
+            ...(isAdmin() ? [{
                 name: "sales_point",
                 required: true,
                 label: "Point de vente",
                 type: "select",
                 options: data,
-            },
+            }] : []),
             {
                 name: "user_type",
                 required: true,
@@ -112,6 +114,7 @@ export default function Page() {
         [status]
     );
 
+
     React.useEffect(() => {
         getData();
     }, [
@@ -141,7 +144,7 @@ export default function Page() {
         setLoading(true);
         console.log('submitted')
         try {
-            if (!values["sales_point"]) {
+            if (!values["sales_point"] && isAdmin()) {
                 return setFieldError("sales_point", tCommon("sales_point_type_select_error"));
             }
             if (!values["user_type"]) {
@@ -150,7 +153,7 @@ export default function Page() {
             // setSteps(tCommon('user_creation'))
             const ids = pagePermissions?.map(pms => pms.id)
             const idsActions = permissions?.map(pms => pms.id)
-            const res = await registerEmployee({ ...values, permission_ids: ids, action_permission_ids: idsActions });
+            const res = await registerEmployee({ ...values, permission_ids: ids, action_permission_ids: idsActions, sales_point: isAdmin() ? values.sales_point : user?.sales_point });
             if (res?.status === 201) {
                 resetForm();
                 toast({
@@ -202,9 +205,9 @@ export default function Page() {
                             <Button
                                 variant="default"
                                 type='submit'
-                                className="bg-green-600 hover:bg-green-500"
+                                className="bg-indigo-600 hover:bg-indigo-500"
                             >
-                                Terminer
+                                Ajouter l'utilisateur
                             </Button>
                         </div>
                     </CardBodyContent>
@@ -359,7 +362,7 @@ export default function Page() {
                                     permissions.map((pms, i) => (
                                         <div key={i} className='px-2 border w-auto rounded-full flex items-center space-x-1'>
                                             <span className='text-sm select-none'>{tPermissions(`${pms.name}`)}</span>
-                                            <Button
+                                            <a
                                                 onClick={() => {
                                                     console.log("Before:", permissions);
                                                     const index = permissions.findIndex(perm => perm.name === pms.name);
@@ -370,12 +373,11 @@ export default function Page() {
                                                     }
                                                 }}
 
-                                                className='h-[25px] p-1'
-                                                variant={'ghost'}
-                                                size={'sm'}
+                                                className='h-[25px] p-1 hover:bg-slate-200/55 cursor-pointer rounded-full'
+                                                // size={'sm'}
                                             >
                                                 <XCircle className='w-4 h-4 text-red-500' />
-                                            </Button>
+                                            </a>
                                         </div>
                                     ))
                                     : <p className='text-base text-center font-normal w-full'>{tCommon('no_permission')}</p>
@@ -391,7 +393,7 @@ export default function Page() {
                                     pagePermissions.map((pms, i) => (
                                         <div key={i} className='px-2 border w-auto rounded-full flex items-center space-x-1'>
                                             <span className='text-sm select-none'>{tPermissions(`${pms.name}`)}</span>
-                                            <Button
+                                            <a
                                                 onClick={() => {
                                                     console.log("Before:", pagePermissions);
                                                     const index = pagePermissions.findIndex(perm => perm.name === pms.name);
@@ -401,13 +403,12 @@ export default function Page() {
                                                         setPagePermissions(updatedPermissions);
                                                     }
                                                 }}
-
+                                                type='button'
                                                 className='h-[25px] p-1'
-                                                variant={'ghost'}
                                                 size={'sm'}
                                             >
                                                 <XCircle className='w-4 h-4 text-red-500' />
-                                            </Button>
+                                            </a>
                                         </div>
                                     ))
                                     : <p className='text-base text-center font-normal w-full'>{tCommon('no_permission')}</p>

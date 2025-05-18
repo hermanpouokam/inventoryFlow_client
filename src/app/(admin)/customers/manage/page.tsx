@@ -279,7 +279,7 @@ export default function Page() {
 
   React.useEffect(() => {
     if (clientsStatus === "idle") {
-      dispatch(fetchClients({ categories: [], sales_points: [user?.sales_point] }));
+      dispatch(fetchClients({ categories: [], sales_points: isAdmin() ? [] : [user?.sales_point] }));
     }
     if (clientsStatus === "idle") {
       dispatch(fetchClientCat({ sales_points: [user?.sales_point] }));
@@ -360,68 +360,75 @@ export default function Page() {
         <div className="flex flex-row justify-between items-center">
           <h2 className="font-medium text-base">Gerer les clients</h2>
           {hasPermission('add_customer') ?
-            <Dialog
-              open={open}
-              TransitionComponent={Transition}
-              keepMounted
-              aria-describedby="alert-dialog-slide-description"
+            <Button
+              onClick={() => setOpen(!open)}
+              className="ml-2 bg-green-600 hover:bg-green-700 text-white text-sm "
             >
-              <DialogTitle>{"Ajouter une categorie de client"}</DialogTitle>
-              <form onSubmit={addClientCat}>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-slide-description">
-                    Créer des categories de client. <br />
-                    Cela vous permetra de classer vos clients par categorie
-                  </DialogContentText>
-                  <div className="w-full my-3 space-y-4">
-                    <TextField
-                      value={name ?? ""}
-                      onChange={(e) => setName(e.target.value)}
-                      fullWidth
-                      // error={name != ''}
-                      // helperText={name && name != '' ? "Entrez un nom de categorie" : undefined}
-                      required
-                      label="nom de la categorie"
-                      placeholder="Ex: gros, demi-gros, detail, etc..."
-                      size="small"
-                    />
-                    {isAdmin() ?
-                      <FormControl size="small" required fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Point de vente
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          value={salesPoint}
-                          label="Point de vente"
-                          onChange={handleChange}
-                        >
-                          {salespoints.map((s) => (
-                            <MenuItem key={s.id} value={s}>
-                              {s.name} - {s.address}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      : null}
-                  </div>
-                </DialogContent>
-                <DialogActions>
-                  <Button variant="destructive" onClick={() => setOpen(false)}>
-                    Annuler
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-green-600 hover:bg-green-700"
-                  >
-                    {loading && <CircularProgress size={14} />}
-                    Continuer
-                  </Button>
-                </DialogActions>
-              </form>
-            </Dialog>
+              Ajouter une categorie
+            </Button>
+
             : null}
+          <Dialog
+            open={open}
+            TransitionComponent={Transition}
+            keepMounted
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle>{"Ajouter une categorie de client"}</DialogTitle>
+            <form onSubmit={addClientCat}>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                  Créer des categories de client. <br />
+                  Cela vous permetra de classer vos clients par categorie
+                </DialogContentText>
+                <div className="w-full my-3 space-y-4">
+                  <TextField
+                    value={name ?? ""}
+                    onChange={(e) => setName(e.target.value)}
+                    fullWidth
+                    // error={name != ''}
+                    // helperText={name && name != '' ? "Entrez un nom de categorie" : undefined}
+                    required
+                    label="nom de la categorie"
+                    placeholder="Ex: gros, demi-gros, detail, etc..."
+                    size="small"
+                  />
+                  {isAdmin() ?
+                    <FormControl size="small" required fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Point de vente
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        value={salesPoint}
+                        label="Point de vente"
+                        onChange={handleChange}
+                      >
+                        {salespoints.map((s) => (
+                          <MenuItem key={s.id} value={s}>
+                            {s.name} - {s.address}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    : null}
+                </div>
+              </DialogContent>
+              <DialogActions>
+                <Button variant="destructive" onClick={() => setOpen(false)}>
+                  Annuler
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {loading && <CircularProgress size={14} />}
+                  Continuer
+                </Button>
+              </DialogActions>
+            </form>
+          </Dialog>
         </div>
       </div>
       <div className="w-full p-5 shadow rounded bg-white border space-y-3 border-neutral-300">

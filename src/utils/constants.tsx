@@ -1,6 +1,8 @@
 // import { handleLogout } from "@/components/auth";
 import { clearStorageAndCookies } from "@/app/(auth)/signup/functions";
 import { logoutUser } from "@/components/auth";
+import type { PagePermission } from "@/constants/pagePermissions";
+import { usePermission } from "@/context/PermissionContext";
 import {
   User,
   LogOutIcon,
@@ -14,166 +16,116 @@ import {
   MessageSquare,
 } from "lucide-react";
 import moment from "moment";
+import React from "react";
 
-export const menuItems: Menu[] = [
-  {
-    name: "dashboard",
-    link: "/dashboard",
-    icon: ChartPie,
-    menu: null,
-  },
-  // {
-  //   name: "Bouclage journalier",
-  //   link: "/dailyclosure",
-  //   menu: null,
-  // },
-  {
-    name: "sell",
-    link: null,
-    icon: FileText,
-    menu: [
-      {
-        text: "Nouvelle vente",
-        link: "/sell/newsell",
-      },
-      {
-        text: "Commandes à livrer",
-        link: "/sell/pending",
-      },
-      {
-        text: "Encaisser une facture",
-        link: "/sell/receipt",
-      },
-      {
-        text: "Feuille de route",
-        link: "/sell/roadmap",
-      },
-      {
-        text: "Historique",
-        link: "/sell/history",
-      },
-    ],
-  },
-  {
-    name: "customers",
-    link: null,
-    icon: UsersRoundIcon,
-    menu: [
-      {
-        text: "Ajouter un client",
-        link: "/customers/add",
-      },
-      {
-        text: "Gérer",
-        link: "/customers/manage",
-      },
-    ],
-  },
-  {
-    name: "purchases",
-    link: null,
-    icon: Receipt,
-    menu: [
-      {
-        text: "Creer un bon",
-        link: "/buy/new",
-      },
-      {
-        text: "Achat en cours",
-        link: "/buy/in_progress",
-      },
-      {
-        text: "Feuille de route",
-        link: "/buy/roadmap",
-      },
-      {
-        text: "Historique",
-        link: "/buy/history",
-      },
-    ],
-  },
-  {
-    name: "stock",
-    link: null,
-    icon: Layers,
-    menu: [
-      {
-        text: "Fournisseurs",
-        link: "/stock/suppliers",
-      },
-      {
-        text: "Articles",
-        link: "/stock/articles",
-      },
-      {
-        text: "Inventaire",
-        link: "/stock/inventory",
-      },
-      {
-        text: "Emballages",
-        link: "/stock/packagings",
-      },
-      {
-        text: "Inventaire d'emballages",
-        link: "/stock/packagings/inventory",
-      },
-      {
-        text: "Pertes",
-        link: "/stock/lose",
-      },
-    ],
-  },
-  {
-    name: "finances",
-    link: null,
-    icon: WalletCards,
-    menu: [
-      {
-        text: "Ma caisse",
-        link: "/finances/caisse",
-      },
-      {
-        text: "Depenses",
-        link: "/finances/expenses",
-      },
-      // {
-      //   text: "Gestion de pertes",
-      //   link: "/finances/lose",
-      // },
-    ],
-  },
-  {
-    name: "enterprise",
-    link: null,
-    icon: LandmarkIcon,
-    menu: [
-      {
-        text: "Point de vente",
-        link: "/enterprise/salespoints",
-      },
-      {
-        text: "Informations",
-        link: "/enterprise/informations",
-      },
-      {
-        text: "Utilisateurs",
-        link: "/enterprise/inventory",
-      },
-    ],
-  },
-  {
-    name: "reports",
-    link: null,
-    icon: MessageSquare,
-    menu: [
-      {
-        text: "Consulter ",
-        link: "report/all",
-      },
-    ],
-  },
-];
+type RawMenu = {
+  name: string;
+  link: PagePermission | null;
+  icon: any; // ou React.ComponentType si les icônes sont des composants
+  menu: { text: string; link: PagePermission }[] | null;
+};
+export function useMenuItems(): Menu[] {
+  const { hasPagePermission } = usePermission();
 
+  const rawMenu: RawMenu[] = [
+    {
+      name: "dashboard",
+      link: "/dashboard",
+      icon: ChartPie,
+      menu: null,
+    },
+    {
+      name: "sell",
+      link: null,
+      icon: FileText,
+      menu: [
+        { text: "Nouvelle vente", link: "/sell/newsell" },
+        { text: "Commandes à livrer", link: "/sell/pending" },
+        { text: "Encaisser une facture", link: "/sell/receipt" },
+        { text: "Feuille de route", link: "/sell/roadmap" },
+        { text: "Historique", link: "/sell/history" },
+      ],
+    },
+    {
+      name: "customers",
+      link: null,
+      icon: UsersRoundIcon,
+      menu: [
+        { text: "Ajouter un client", link: "/customers/add" },
+        { text: "Gérer", link: "/customers/manage" },
+      ],
+    },
+    {
+      name: "purchases",
+      link: null,
+      icon: Receipt,
+      menu: [
+        { text: "Creer un bon", link: "/buy/new" },
+        { text: "Achat en cours", link: "/buy/in_progress" },
+        { text: "Feuille de route", link: "/buy/roadmap" },
+        { text: "Historique", link: "/buy/history" },
+      ],
+    },
+    {
+      name: "stock",
+      link: null,
+      icon: Layers,
+      menu: [
+        { text: "Fournisseurs", link: "/stock/suppliers" },
+        { text: "Articles", link: "/stock/articles" },
+        { text: "Inventaire", link: "/stock/inventory" },
+        { text: "Emballages", link: "/stock/packagings" },
+        { text: "Inventaire d'emballages", link: "/stock/packagings/inventory" },
+        { text: "Pertes", link: "/stock/lose" },
+      ],
+    },
+    {
+      name: "finances",
+      link: null,
+      icon: WalletCards,
+      menu: [
+        { text: "Ma caisse", link: "/finances/caisse" },
+        { text: "Depenses", link: "/finances/expenses" },
+      ],
+    },
+    {
+      name: "enterprise",
+      link: null,
+      icon: LandmarkIcon,
+      menu: [
+        { text: "Point de vente", link: "/enterprise/salespoints" },
+        { text: "Informations", link: "/enterprise/informations" },
+        { text: "Utilisateurs", link: "/enterprise/inventory" },
+      ],
+    },
+    {
+      name: "reports",
+      link: null,
+      icon: MessageSquare,
+      menu: [
+        { text: "Consulter ", link: "report/all" },
+      ],
+    },
+  ];
+
+  const filteredMenu: Menu[] = rawMenu
+    .map((item) => {
+      if (item.menu === null) {
+        return hasPagePermission(item.link!)
+          ? { ...item, menu: null }
+          : null;
+      } else {
+        const filteredSubmenu = item.menu.filter((sub) =>
+          hasPagePermission(sub.link)
+        );
+        return filteredSubmenu.length > 0
+          ? { ...item, menu: filteredSubmenu }
+          : null;
+      }
+    })
+    .filter(Boolean) as Menu[];
+  return filteredMenu;
+}
 export const handleLogout = async () => {
   try {
     await fetch("/api/logout");

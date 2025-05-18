@@ -9,7 +9,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { menuItems, menuTranslate, userMenu } from "@/utils/constants";
+import { useMenuItems, menuTranslate, userMenu } from "@/utils/constants";
 import { DropdownMenuCard } from "@/components/DropdownMenuCard";
 import { DropdownMenuPaper } from "@/components/DropdownMenuPaper";
 import CardDemo from "./notificationCard";
@@ -30,13 +30,12 @@ export default function Navbar() {
     error,
     status,
   } = useSelector((state: RootState) => state.user);
-
+  const menuItems = useMenuItems()
   React.useEffect(() => {
     if (status == "idle") {
       dispatch(getCurrentUser());
     }
   }, [status, dispatch]);
-
   return (
     <nav className="backdrop-blur-md z-[999] bg-white/30 shadow fixed w-full">
       <div className="mx-auto max-w-screen-[1600px] px-4 sm:px-6 lg:px-8">
@@ -52,7 +51,7 @@ export default function Navbar() {
             </a>
           </div>
           <div className="hidden  xl:flex xl:flex-row">
-            {menuItems.map((menuItem,index) => (
+            {menuItems.map((menuItem, index) => (
               <MenuItem key={index} menuItem={menuItem} />
             ))}
           </div>

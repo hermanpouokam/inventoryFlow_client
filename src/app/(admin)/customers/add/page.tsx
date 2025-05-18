@@ -55,6 +55,12 @@ export default function Page() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!client_category) {
+      return setMessage({
+        type: "error",
+        text: "Sélectionnez une catégorie de client",
+      });
+    }
     setLoading(true);
     try {
       const { data: fieldData, isEmpty } = getFormData(event.currentTarget);
@@ -103,13 +109,13 @@ export default function Page() {
               <>
                 <CircularProgress size={15} color={"inherit"} />
                 {"  "}
-                Veuillez patienter
+                <span>Veuillez patienter</span>
               </>
             ) : (
               <>
-                <UserPlus className="w-4 h-4 mr-3" />
+                <UserPlus className="w-4 h-4" />
                 {"   "}
-                Enregistrer le client
+                <span>Enregistrer le client</span>
               </>
             )}
           </Button>
