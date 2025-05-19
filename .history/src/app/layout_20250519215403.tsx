@@ -40,8 +40,8 @@ export default async function RootLayout({
   const permissions = sanitizePermissions(user?.action_permissions || []);
   const pagePermissions = sanitizePagePermissions(user?.permissions || []);
   console.log("API_URL:", process.env.API_URL);
-  console.log("STRIPE_SECRET_KEY:", process.env.STRIPE_SECRET_KEY);
-  console.log("STRIPE_PUBLIC_KEY:", process.env.STRIPE_PUBLIC_KEY);
+  console.log("STRIPE_SECRET_KEY:", process.env.API_URL);
+  console.log("API_URL:", process.env.API_URL);
 
   return (
     <html lang={lng}>

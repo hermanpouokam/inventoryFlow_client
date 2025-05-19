@@ -39,9 +39,7 @@ export default async function RootLayout({
   const user = await getUserWithPermissions();
   const permissions = sanitizePermissions(user?.action_permissions || []);
   const pagePermissions = sanitizePagePermissions(user?.permissions || []);
-  console.log("API_URL:", process.env.API_URL);
-  console.log("STRIPE_SECRET_KEY:", process.env.STRIPE_SECRET_KEY);
-  console.log("STRIPE_PUBLIC_KEY:", process.env.STRIPE_PUBLIC_KEY);
+  console.log("Stripe key:", process.env.STRIPE_SECRET_KEY_LIVE);
 
   return (
     <html lang={lng}>
