@@ -78,7 +78,7 @@ export default function Page() {
     name: string;
     value: boolean | null;
   } | null>({
-    name: "tous",
+    name: "tout",
     value: null,
   });
   const { data: salespoints, status: salespointStatus } = useSelector(
@@ -522,7 +522,7 @@ export default function Page() {
           /> : null}
           <Combobox
             options={[
-              { name: "Tous", value: null },
+              { name: "Tout", value: null },
               { name: "Validé", value: true },
               { name: "Non validé", value: false },
             ]}

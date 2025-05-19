@@ -15,5 +15,8 @@
   "no_permission": "aucune permission",
   "expense_validation_success_message": "Dépense validée avec succès",
   "supplie_packaging_warning": "NB: Si pour chaque article possedant des emballages vous n'en disposez pas suffisament, des frais supplementaires y afférent s'appliqueront lors du paiment.",
-  "confirm_supply_validation": "Êtes-vous sûr de vouloir valider cet approvisionnement ? {{total_cost}} sera déduit du solde du point de vente."
+  "confirm_supply_validation": "Êtes-vous sûr de vouloir valider cet approvisionnement ? {{total_cost}} sera déduit du solde du point de vente.",
+  "monthly": "mensuel",
+  "yearly": "annuel",
+  "select_plan": "Sélectionnez un plan"
 }

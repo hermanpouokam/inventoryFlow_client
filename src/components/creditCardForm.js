@@ -31,7 +31,7 @@ export default function CustomCardForm({ onChange }) {
     };
 
     return (
-        <div className="p-4 rounded-lg bg-white shadow-md">
+        <div className="p-4 rounded-lg bg-white ">
             <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Numero de carte</label>
                 <div className="border border-gray-300 rounded-lg p-2">

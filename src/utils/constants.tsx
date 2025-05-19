@@ -16,7 +16,6 @@ import {
   MessageSquare,
 } from "lucide-react";
 import moment from "moment";
-import React from "react";
 
 type RawMenu = {
   name: string;
@@ -89,13 +88,13 @@ export function useMenuItems(): Menu[] {
       ],
     },
     {
-      name: "enterprise",
+      name: "sales point",
       link: null,
       icon: LandmarkIcon,
       menu: [
-        { text: "Point de vente", link: "/enterprise/salespoints" },
+        { text: "Details", link: "/enterprise/salespoints" },
         { text: "Informations", link: "/enterprise/informations" },
-        { text: "Utilisateurs", link: "/enterprise/inventory" },
+        { text: "Utilisateurs", link: "/enterprise/users" },
       ],
     },
     {
@@ -103,7 +102,7 @@ export function useMenuItems(): Menu[] {
       link: null,
       icon: MessageSquare,
       menu: [
-        { text: "Consulter ", link: "report/all" },
+        { text: "Consulter ", link: "/reports/all" },
       ],
     },
   ];
@@ -268,6 +267,7 @@ export const menuTranslate = {
   finances: "finances",
   enterprise: "entreprise",
   reports: "plaintes",
+  "sales point": "point de vente",
 };
 
 export const plansDataTranslate = {

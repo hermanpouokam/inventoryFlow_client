@@ -41,10 +41,10 @@ export default function CreateEnterprise() {
       setLoading(true);
       const { data, isEmpty } = getFormData(e.currentTarget);
       setInputsValue(data);
-      if (isEmpty) return;
+      if (isEmpty) return setLoading(false);
       const response = await registerEnterprise({
         ...data,
-        plan_id: 1,
+        plan_id: 2,
         phone: phoneNumber?.number,
         country: phoneNumber?.country,
       });
@@ -58,7 +58,7 @@ export default function CreateEnterprise() {
         error.response ? error.response.data : error.message
       );
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 

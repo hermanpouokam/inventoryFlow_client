@@ -66,7 +66,7 @@ const Transition = React.forwardRef(function Transition(
 
 export default function Page() {
   const dispatch: AppDispatch = useDispatch();
-  const { hasPermission, user } = usePermission();
+  const { hasPermission, user, isAdmin } = usePermission();
 
   const {
     data: salespoints,
@@ -123,8 +123,9 @@ export default function Page() {
       dispatch(fetchProducts({}));
     }
     if (statusSuppliers == "idle") {
-      dispatch(fetchSuppliers({}));
+      dispatch(fetchSuppliers({ sales_points_id: isAdmin() ? [] : [user?.sales_point] }));
     }
+    document.title = "Articles";
   }, [status, productsCatStatus, productsStatus, statusSuppliers, dispatch]);
 
   const handleSelect = (id: number) => {
@@ -140,7 +141,6 @@ export default function Page() {
     dispatch(fetchSuppliers({ sales_points_id: selectedSalesPoints }));
     setSelectedCategories([]);
     setSelectedSuppliers([]);
-    document.title = "Articles";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSalesPoints]);
 

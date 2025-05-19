@@ -18,6 +18,7 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 export const metadata: Metadata = {
   title: "InventoryFlow",
@@ -49,7 +50,9 @@ export default async function RootLayout({
         <AppProvider>
           <PermissionProvider initialPermissions={permissions} initialPagePermissions={pagePermissions} user={user}>
             <I18nProvider locale={lng}>
-              {children}
+              <NuqsAdapter>
+                {children}
+              </NuqsAdapter>
             </I18nProvider>
           </PermissionProvider>
         </AppProvider>

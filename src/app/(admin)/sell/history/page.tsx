@@ -28,6 +28,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { formatteCurrency } from "../../stock/functions";
 import { ActionComponent } from "./ActionComponent";
+import { usePermission } from "@/context/PermissionContext";
 
 export default function Page() {
   const [pickedDateRange, setPickedDateRange] = React.useState<{
@@ -41,7 +42,7 @@ export default function Page() {
   >([]);
   const [data, setData] = React.useState<Bill[]>([]);
   const [table, setTable] = React.useState<any | null>(null);
-
+  const { hasPermission, user, isAdmin } = usePermission()
   const handleDateRangeChange = (range: {
     from: Date | null;
     to: Date | null;
@@ -77,7 +78,7 @@ export default function Page() {
           "YYYY-MM-DDT00:00:00.SSS"
         ),
         end_date: moment(pickedDateRange?.to).format("YYYY-MM-DDT23:59:59.SSS"),
-        sales_point: selectedSalesPoints.map((el) => el.id),
+        sales_point: isAdmin() ? selectedSalesPoints.map((el) => el.id) : [user?.sales_point],
       };
       const res: Bill[] = await getBill(params);
       setData(res);
@@ -88,12 +89,12 @@ export default function Page() {
   };
 
   React.useEffect(() => {
-    if (salespointStatus == "idle") {
+    if (salespointStatus == "idle" && isAdmin()) {
       dispatch(fetchSalesPoints());
     }
     if (statusCustomers == "idle") {
       dispatch(
-        fetchClients({ sales_points: selectedSalesPoints.map((el) => el.id) })
+        fetchClients({ sales_points: isAdmin() ? selectedSalesPoints.map((el) => el.id) : [] })
       );
     }
   }, [dispatch, salespointStatus, statusCustomers]);
@@ -109,7 +110,7 @@ export default function Page() {
   React.useEffect(() => {
     if (statusCustomers !== "idle") {
       dispatch(
-        fetchClients({ sales_points: selectedSalesPoints.map((el) => el.id) })
+        fetchClients({ sales_points: isAdmin() ? selectedSalesPoints.map((el) => el.id) : [user?.sales_point] })
       );
     }
     getData();
@@ -147,13 +148,13 @@ export default function Page() {
     {
       accessorKey: "bill_number",
       header: () => (
-        <div className="text-left w-[140px]">Numero de facture</div>
+        <div className="text-center w-[140px]">Numero de facture</div>
       ),
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("bill_number")}</div>
+        <div className="capitalize text-center">{row.getValue("bill_number")}</div>
       ),
     },
-    {
+    ...(isAdmin() ? [{
       accessorKey: "sales_point",
       header: () => <div className="text-center w-[220px]">Point de vente</div>,
       cell: ({ row }) => (
@@ -162,7 +163,7 @@ export default function Page() {
           {row.original.sales_point_details.address}
         </div>
       ),
-    },
+    }] : []),
     {
       accessorKey: "customer_name",
       header: ({ column }) => {
@@ -248,7 +249,7 @@ export default function Page() {
         return <div className="text-right">{formatted}</div>;
       },
     },
-    {
+    ...(hasPermission('view_daily_report') || hasPermission('view_monthly_report') ? [{
       accessorKey: "product_bills",
       header: () => (
         <div>
@@ -277,7 +278,7 @@ export default function Page() {
         const formatted = formatteCurrency(totalAmount, "XAF", "fr-FR");
         return <div className="text-right">{formatted}</div>;
       },
-    },
+    }] : []),
     {
       accessorKey: "Taxes",
       header: () => (
@@ -387,14 +388,16 @@ export default function Page() {
               }
             }}
           />
-          <SelectPopover
-            selectedItems={selectedSalesPoints}
-            items={salespoints}
-            onSelect={handleSelect}
-            getOptionLabel={(option) => `${option.name} - ${option.address}`}
-            placeholder="Point de vente"
-            searchPlaceholder="Rechercher un point de vente"
-          />
+          {isAdmin() ?
+            <SelectPopover
+              selectedItems={selectedSalesPoints}
+              items={salespoints}
+              onSelect={handleSelect}
+              getOptionLabel={(option) => `${option.name} - ${option.address}`}
+              placeholder="Point de vente"
+              searchPlaceholder="Rechercher un point de vente"
+            /> : null
+          }
           <SelectPopover
             selectedItems={customer}
             items={customers}

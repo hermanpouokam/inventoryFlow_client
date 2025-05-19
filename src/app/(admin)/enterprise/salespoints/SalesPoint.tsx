@@ -86,6 +86,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { fetchTaxes } from "@/redux/taxesSlicer";
 import ActionsDropdown from "@/components/ActionButton";
 import { translate } from "@/utils/constants";
+import { usePermission } from "@/context/PermissionContext";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -114,6 +115,9 @@ function SalesPoint() {
   const { taxes, status: taxesStatus } = useSelector(
     (state: RootState) => state.taxes
   );
+
+  const { hasPermission, user, isAdmin } = usePermission()
+
   const {
     data: employees,
     status: statusEmployees,
@@ -157,25 +161,25 @@ function SalesPoint() {
     setOpen(false);
   };
   const getData = () => {
-    if (status === "idle") {
+    if (status === "idle" && isAdmin()) {
       dispatch(fetchSalesPoints());
     }
     if (statusStock === "idle") {
-      dispatch(fetchProducts({ sales_points: salespoint ? [salespoint] : [] }));
+      dispatch(fetchProducts({ sales_points: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
     }
     if (statusPackagings == "idle") {
       dispatch(
-        fetchPackagings({ sales_points: salespoint ? [salespoint] : [] })
+        fetchPackagings({ sales_points: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] })
       );
     }
     if (statusBills === "idle") {
-      dispatch(fetchBills({ sales_point: salespoint ? [salespoint] : [] }));
+      dispatch(fetchBills({ sales_point: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
     }
     if (statusEmployees === "idle") {
-      dispatch(fetchEmployees({ sales_point: salespoint ? [salespoint] : [] }));
+      dispatch(fetchEmployees({ sales_point: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
     }
     if (taxesStatus === "idle") {
-      dispatch(fetchTaxes({ sales_point: salespoint ? [salespoint] : [] }));
+      dispatch(fetchTaxes({ sales_point: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
     }
   };
 

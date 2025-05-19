@@ -173,7 +173,7 @@ const MenuItem = ({ menuItem }: { menuItem: Menu }) => {
           {menuItem.link && (
             <NavigationMenuLink
               href={menuItem.link}
-              className={cn(navigationMenuTriggerStyle(), "first-letter:uppercase")}
+              className={cn(navigationMenuTriggerStyle(), "first-letter:capitalize")}
             >
               {menuTranslate[menuItem.name]}
             </NavigationMenuLink>

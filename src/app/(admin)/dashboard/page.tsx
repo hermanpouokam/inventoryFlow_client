@@ -55,6 +55,7 @@ import { cn } from "@/lib/utils";
 import { People } from "@mui/icons-material";
 import { fetchPackagings } from "@/redux/packagingsSlicer";
 import BillTable from "./table";
+import { usePermission } from "@/context/PermissionContext";
 
 const chartConfig = {
   ventes: {
@@ -166,26 +167,26 @@ export default function Page() {
   } = useSelector((state: RootState) => state.employees);
 
   const dispatch: AppDispatch = useDispatch();
-
+  const { user, hasPermission, isAdmin } = usePermission()
   React.useEffect(() => {
     if (billsStatus === "idle") {
-      dispatch(fetchBills({}));
+      dispatch(fetchBills({ ...(!isAdmin() ? { sales_point: [user?.sales_point] } : {}) }));
     }
     if (productsStatus === "idle") {
-      dispatch(fetchProducts({}));
+      dispatch(fetchProducts({ ...(!isAdmin() ? { sales_points: [user?.sales_point] } : {}) }));
     }
     if (salespointStatus === "idle") {
       dispatch(fetchSalesPoints());
     }
     if (clientsStatus === "idle") {
-      dispatch(fetchClients({}));
+      dispatch(fetchClients({ ...(!isAdmin() ? { sales_points: [user?.sales_point] } : {}) }));
     }
-    if (employeesStatus === "idle") {
-      dispatch(fetchEmployees({}));
+    if (employeesStatus === "idle" && hasPermission('view_employee')) {
+      dispatch(fetchEmployees({ ...(!isAdmin() ? { sales_point: [user?.sales_point] } : {}) }));
     }
     if (packagingsStatus === "idle") {
       dispatch(
-        fetchPackagings({ sales_points: salespoint.map((el) => el.id) })
+        fetchPackagings({ ...(!isAdmin() ? { sales_points: [user?.sales_point] } : {}) })
       );
     }
   }, [
@@ -235,23 +236,23 @@ export default function Page() {
     );
 
     return [
-      {
+      ...(hasPermission('manage_cash') || hasPermission('add_transaction') || hasPermission('view_daily_report') || hasPermission('view_monthly_report') ? [{
         name: "Montant en caisse",
         data: () =>
           formatteCurrency(
-            calculateTotal(salespoint, "cash_register.balance"),
+            calculateTotal(isAdmin() ? salespoint : [user?.sales_point_details], "cash_register.balance"),
             "XAF",
             "fr-FR"
           ),
-        status: [salespointStatus],
-        error: [salespointError],
+        status: isAdmin() ? [salespointStatus] : [],
+        error: isAdmin() ? [salespointError] : [],
         icon: DollarSign,
         subText: () => "",
         subTextColor: () => {
           return "text-neutral-800";
         },
-      },
-      {
+      }] : []),
+      ...(hasPermission('view_products') || hasPermission('view_daily_report') || hasPermission('view_monthly_report') ? [{
         name: "Valeur du stock",
         data: () => {
           const productValue = products.reduce(
@@ -263,7 +264,7 @@ export default function Page() {
             (acc, packaging) =>
               acc +
               (packaging.empty_quantity + packaging.full_quantity) *
-                parseFloat(packaging.price),
+              parseFloat(packaging.price),
             0
           );
 
@@ -281,8 +282,8 @@ export default function Page() {
         subTextColor: () => {
           return "text-neutral-800";
         },
-      },
-      {
+      }] : []),
+      ...(hasPermission('cash_in_invoices') || hasPermission('view_invoices') || hasPermission('view_daily_report') || hasPermission('view_monthly_report') ? [{
         name: "Commandes non encaissées",
         data: () =>
           formatteCurrency(
@@ -294,15 +295,14 @@ export default function Page() {
         error: [billsError],
         icon: Receipt,
         subText: () =>
-          `${
-            bills.filter((bill) => ["created", "pending"].includes(bill.state))
-              .length
+          `${bills.filter((bill) => ["created", "pending"].includes(bill.state))
+            .length
           } facture(s)`,
         subTextColor: () => {
           return "text-neutral-800";
         },
-      },
-      {
+      }] : []),
+      ...(hasPermission('cash_in_invoices') || hasPermission('view_invoices') ? [{
         name: "Dettes client",
         data: () => formatteCurrency(unpaidBillAmount, "XAF", "fr-FR"),
         status: [billsStatus],
@@ -312,8 +312,8 @@ export default function Page() {
         subTextColor: () => {
           return "text-neutral-800";
         },
-      },
-      {
+      }] : []),
+      ...(hasPermission('view_daily_report') || hasPermission('view_monthly_report') ? [{
         name: "Valeur totale du capital",
         data: () => {
           const salespointsBalance = calculateTotal(salespoint, "cash_register.balance");
@@ -326,7 +326,7 @@ export default function Page() {
             (acc, packaging) =>
               acc +
               (packaging.empty_quantity + packaging.full_quantity) *
-                parseFloat(packaging.price),
+              parseFloat(packaging.price),
             0
           );
           const pendingBillAmount = calculateBillAmount(bills, [
@@ -335,10 +335,10 @@ export default function Page() {
           ]);
           return formatteCurrency(
             productValue +
-              packagingValue +
-              pendingBillAmount +
-              unpaidBillAmount +
-              salespointsBalance,
+            packagingValue +
+            pendingBillAmount +
+            unpaidBillAmount +
+            salespointsBalance,
             "XAF",
             "fr-FR"
           );
@@ -350,19 +350,19 @@ export default function Page() {
         subTextColor: () => {
           return "text-neutral-800";
         },
-      },
-      {
+      }] : []),
+      ...(hasPermission('view_customer') ? [{
         name: "Clients actifs",
         data: () => clients.length,
-        status: [salespointStatus],
-        error: [salespointError],
+        status: [clientsStatus],
+        error: [clientsError],
         icon: People,
         subText: () => "",
         subTextColor: () => {
           return "text-neutral-800";
         },
-      },
-      {
+      }] : []),
+      ...(hasPermission('view_monthly_report') ? [{
         name: "Ventes du mois",
         data: () => {
           const currentMonthSales = bills.filter(
@@ -376,8 +376,8 @@ export default function Page() {
           );
           return formatteCurrency(monthlySales, "XAF", "fr-FR");
         },
-        status: [salespointStatus],
-        error: [salespointError],
+        status: [billsStatus],
+        error: [billsError],
         icon: ChartBar,
         subText: () => {
           const currentMonthSales = bills
@@ -403,8 +403,8 @@ export default function Page() {
             previousMonthSales === 0
               ? 100
               : ((currentMonthSales - previousMonthSales) /
-                  previousMonthSales) *
-                100;
+                previousMonthSales) *
+              100;
 
           return previousMonthSales === 0
             ? "N/A"
@@ -434,8 +434,8 @@ export default function Page() {
             previousMonthSales === 0
               ? 100
               : ((currentMonthSales - previousMonthSales) /
-                  previousMonthSales) *
-                100;
+                previousMonthSales) *
+              100;
 
           if (percentageChange > 0) {
             return "text-green-500";
@@ -445,8 +445,8 @@ export default function Page() {
             return "text-neutral-800";
           }
         },
-      },
-      {
+      }] : []),
+      ...(hasPermission('view_monthly_report') ? [{
         name: "Benefice du mois",
         data: () => {
           const currentMonthSales = bills.filter(
@@ -466,8 +466,8 @@ export default function Page() {
           );
           return formatteCurrency(monthlySales, "XAF", "fr-FR");
         },
-        status: [salespointStatus],
-        error: [salespointError],
+        status: [billsStatus],
+        error: [billsError],
         icon: DollarSign,
         subText: () => {
           const currentMonthSales = bills
@@ -511,14 +511,13 @@ export default function Page() {
             previousMonthSales === 0
               ? 100
               : ((currentMonthSales - previousMonthSales) /
-                  previousMonthSales) *
-                100;
+                previousMonthSales) *
+              100;
 
           return previousMonthSales === 0
             ? "N/A"
-            : `${percentageChange.toFixed(2)}% ${
-                percentageChange >= 0 ? "de plus" : "de moins"
-              } rapport au mois précédent`;
+            : `${percentageChange.toFixed(2)}% ${percentageChange >= 0 ? "de plus" : "de moins"
+            } rapport au mois précédent`;
         },
         subTextColor: () => {
           const currentMonthSales = bills
@@ -562,8 +561,8 @@ export default function Page() {
             previousMonthSales === 0
               ? 100
               : ((currentMonthSales - previousMonthSales) /
-                  previousMonthSales) *
-                100;
+                previousMonthSales) *
+              100;
 
           if (percentageChange > 0) {
             return "text-green-500";
@@ -573,7 +572,7 @@ export default function Page() {
             return "text-neutral-800";
           }
         },
-      },
+      }] : []),
     ];
   }, [
     products,
@@ -603,68 +602,40 @@ export default function Page() {
       selectedPeriod.startDate,
       selectedPeriod.endDate
     );
-    const dataChart = Object.keys(groupedBills).map((key) => {
-      switch (selectedPeriod.groupBy) {
+    const formatXAxis = (key: string, groupBy: string) => {
+      const date = moment(key);
+      switch (groupBy) {
         case "day":
-          return {
-            xAxis: weeksInFrench[moment(key).get("day") - 1]?.slice(0, 3),
-            ventes: groupedBills[key].reduce(
-              (acc, curr) => (acc += curr.total_amount_with_taxes_fees),
-              0
-            ),
-            benefices: groupedBills[key].reduce(
-              (acc, curr) =>
-                acc +
-                curr.product_bills.reduce(
-                  (accumulator, product_bill) =>
-                    accumulator + parseFloat(product_bill.benefit.toString()),
-                  0
-                ),
-              0
-            ),
-          };
+          return weeksInFrench[date.day() - 1]?.slice(0, 3);
         case "day-number":
-          return {
-            xAxis: `${moment(key).format("D")} ${monthsInFrench[
-              moment(key).get("month")
-            ].slice(0, 3)}`,
-            ventes: groupedBills[key].reduce(
-              (acc, curr) => (acc += curr.total_amount_with_taxes_fees),
-              0
-            ),
-            benefices: groupedBills[key].reduce(
-              (acc, curr) =>
-                acc +
-                curr.product_bills.reduce(
-                  (accumulator, product_bill) =>
-                    accumulator + parseFloat(product_bill.benefit.toString()),
-                  0
-                ),
-              0
-            ),
-          };
+          return `${date.format("D")} ${monthsInFrench[date.month()].slice(0, 3)}`;
         case "month":
-          return {
-            xAxis: `${monthsInFrench[moment(key).get("month")].slice(0, 3)} `,
-            ventes: groupedBills[key].reduce(
-              (acc, curr) => (acc += curr.total_amount_with_taxes_fees),
-              0
-            ),
-            benefices: groupedBills[key].reduce(
-              (acc, curr) =>
-                acc +
-                curr.product_bills.reduce(
-                  (accumulator, product_bill) =>
-                    accumulator + parseFloat(product_bill.benefit.toString()),
-                  0
-                ),
-              0
-            ),
-          };
+          return `${monthsInFrench[date.month()].slice(0, 3)}`;
         default:
-          break;
+          return "";
       }
-    });
+    };
+
+    const calculateVentes = (bills: any[]) =>
+      bills.reduce((acc, curr) => acc + curr.total_amount_with_taxes_fees, 0);
+
+    const calculateBenefices = (bills: any[]) =>
+      bills.reduce(
+        (acc, curr) =>
+          acc +
+          curr.product_bills.reduce(
+            (sum, product_bill) => sum + parseFloat(product_bill.benefit.toString()),
+            0
+          ),
+        0
+      );
+
+    const dataChart = Object.entries(groupedBills).map(([key, bills]) => ({
+      xAxis: formatXAxis(key, selectedPeriod.groupBy),
+      ventes: calculateVentes(bills),
+      ...(hasPermission('view_daily_report') ? { benefices: calculateBenefices(bills), } : {})
+    }));
+
     setChartData(dataChart);
     setLoadingData(false);
   }, [selectedPeriod, bills]);
@@ -694,7 +665,7 @@ export default function Page() {
               <Skeleton className="h-[0.73rem] mt-2" />
             ) : _.status.includes("failed") ? (
               <span className={`text-xs font-medium -mt-2 ${_.subTextColor}`}>
-                {}
+                { }
               </span>
             ) : (
               <span className={`text-xs font-medium -mt-2 ${_.subTextColor()}`}>
@@ -713,19 +684,17 @@ export default function Page() {
           )}
           <CardHeader className="flex flex-row justify-between items-center flex-wrap">
             <div>
-              <CardTitle>Ventes - Bénéfices</CardTitle>
+              <CardTitle>Ventes {hasPermission('view_daily_report') ? "- Bénéfices" : ''}</CardTitle>
               <CardDescription className="capitalize ">
-                {`${moment(selectedPeriod.startDate).format("D")} ${
-                  monthsInFrench[moment(selectedPeriod.startDate).get("month")]
-                } -  ${moment(selectedPeriod.endDate)
-                  .subtract(1, "day")
-                  .format("D")} ${
-                  monthsInFrench[
+                {`${moment(selectedPeriod.startDate).format("D")} ${monthsInFrench[moment(selectedPeriod.startDate).get("month")]
+                  } -  ${moment(selectedPeriod.endDate)
+                    .subtract(1, "day")
+                    .format("D")} ${monthsInFrench[
                     moment(selectedPeriod.endDate)
                       .subtract(1, "day")
                       .get("month")
-                  ]
-                }`}
+                    ]
+                  }`}
               </CardDescription>
             </div>
             <div>
@@ -818,67 +787,69 @@ export default function Page() {
             </ChartContainer>
           </CardContent>
         </Card>
-        <CardBodyContent className="col-span-1 lg:col-span-2">
-          <h4 className="text-lg font-bold text-neutral-950">
-            Liste des employés
-          </h4>
-          <h6 className="text-sm font-normal text-muted-foreground">
-            {employees.length} employé(s) dans {salespoint.length} point(s) de
-            ventes
-          </h6>
-          <div className="overflow-y-auto scrollbar h-[550px]">
-            {employeesStatus !== "succeeded" && !employeesError ? (
-              <div className="w-full h-full flex flex-col justify-center items-center pb-5">
-                <CircularProgress color="primary" size="small" />
-                <h2 className="text-base font-semibold">
-                  Veuillez patienter...
-                </h2>
-              </div>
-            ) : employees.length < 1 ? (
-              <div className="w-full h-full flex justify-center items-center pb-5">
-                <div className="flex flex-col justify-center items-center">
-                  <BadgeX className="w-12 h-12 text-muted-foreground" />
+        {
+          hasPermission('view_employee') ? <CardBodyContent className="col-span-1 lg:col-span-2">
+            <h4 className="text-lg font-bold text-neutral-950">
+              Liste des employés
+            </h4>
+            <h6 className="text-sm font-normal text-muted-foreground">
+              {employees.length} employé(s) dans {salespoint.length} point(s) de
+              ventes
+            </h6>
+            <div className="overflow-y-auto scrollbar h-[550px]">
+              {employeesStatus !== "succeeded" && !employeesError ? (
+                <div className="w-full h-full flex flex-col justify-center items-center pb-5">
+                  <CircularProgress color="primary" size="small" />
                   <h2 className="text-base font-semibold">
-                    Vous n&apos;avez aucun employé
+                    Veuillez patienter...
                   </h2>
                 </div>
-              </div>
-            ) : (
-              <div className="mt-3 divide-y divide-slate-100 cursor-pointer">
-                {employees.map((employee) => (
-                  <div
-                    className="py-2 flex hover:bg-slate-100 px-2 justify-between items-center"
-                    key={employee.id}
-                  >
-                    <div>
-                      <h2 className="font-semibold text-base capitalize">
-                        {" "}
-                        {employee.name} {employee.surname}
-                      </h2>
-                      <h2 className="font-normal text-sm text-muted-foreground capitalize">
-                        {translateRole[employee.role]}
-                      </h2>
-                    </div>
-                    <Badge
-                      variant={"destructive"}
-                      className={cn(
-                        parseFloat(employee.monthly_salary) >
+              ) : employees.length < 1 ? (
+                <div className="w-full h-full flex justify-center items-center pb-5">
+                  <div className="flex flex-col justify-center items-center">
+                    <BadgeX className="w-12 h-12 text-muted-foreground" />
+                    <h2 className="text-base font-semibold">
+                      Vous n&apos;avez aucun employé
+                    </h2>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-3 divide-y divide-slate-100 cursor-pointer">
+                  {employees.map((employee) => (
+                    <div
+                      className="py-2 flex hover:bg-slate-100 px-2 justify-between items-center"
+                      key={employee.id}
+                    >
+                      <div>
+                        <h2 className="font-semibold text-base capitalize">
+                          {" "}
+                          {employee.name} {employee.surname}
+                        </h2>
+                        <h2 className="font-normal text-sm text-muted-foreground capitalize">
+                          {translateRole[employee.role]}
+                        </h2>
+                      </div>
+                      <Badge
+                        variant={"destructive"}
+                        className={cn(
+                          parseFloat(employee.monthly_salary) >
                           parseFloat(employee.salary) / 2 &&
                           "bg-green-600 hover:bg-green-700"
-                      )}
-                    >
-                      {formatteCurrency(
-                        employee.monthly_salary,
-                        "XAF",
-                        "fr-FR"
-                      )}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </CardBodyContent>
+                        )}
+                      >
+                        {formatteCurrency(
+                          employee.monthly_salary,
+                          "XAF",
+                          "fr-FR"
+                        )}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CardBodyContent> : null
+        }
         <CardBodyContent className="col-span-1 sm:col-span-6">
           <h4 className="text-base font-medium mb-5">
             Dernières MAJ de factures

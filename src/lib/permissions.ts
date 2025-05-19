@@ -17,6 +17,5 @@ export async function getUserWithPermissions(): Promise<User | null> {
 
     const safePerms = sanitizePermissions(data ? data?.action_permissions?.map((el: ActionPermission) => el.name) : []);
     const safePagePerms = sanitizePagePermissions(data ? data?.permissions?.map((el: Permission) => el.path) : []);
-    console.log('safePagePerms', safePagePerms)
     return { ...data, action_permissions: safePerms, permissions: safePagePerms };
 }

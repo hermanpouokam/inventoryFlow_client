@@ -44,7 +44,7 @@ export default function Page() {
       const { data, isEmpty } = getFormData(e.currentTarget);
       setInputsValue(data);
       setPasswordVerify(validatePassword(data.password));
-      if (isEmpty) return;
+      if (isEmpty) return setLoading(false) ;
       if (!validatePassword(data.password).isValid) {
         return;
       }
@@ -69,9 +69,8 @@ export default function Page() {
     } catch (error) {
       const code = error.response.data.code;
       setError(userRegErrors[code]);
-    } finally {
       setLoading(false);
-    }
+    } 
   };
 
   const onChange = (

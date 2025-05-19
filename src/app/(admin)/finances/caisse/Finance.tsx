@@ -162,11 +162,14 @@ export default function Finances() {
   };
 
   React.useEffect(() => {
-    if (statusSalespoint == "idle") {
+    if (statusSalespoint == "idle" && isAdmin()) {
       dispatch(fetchSalesPoints());
     }
-    if (statusSalespoint == "succeeded") {
+    if (statusSalespoint == "succeeded" && isAdmin()) {
       getData();
+    }
+    if (!isAdmin()) {
+      getData()
     }
   }, [statusSalespoint]);
 
@@ -175,8 +178,8 @@ export default function Finances() {
       {
         name: "Montant en caisse",
         data: () => formatteCurrency(data?.total_balance ?? 0),
-        status: [statusSalespoint],
-        error: [errorSalespoint],
+        status: [isAdmin() ? statusSalespoint : []],
+        error: [isAdmin() ? errorSalespoint : []],
         icon: DollarSign,
         subText: () => `${data?.cash_registers.length} point(s) de vente`,
         subTextColor: () => {
@@ -186,8 +189,8 @@ export default function Finances() {
       {
         name: "Total des entrée",
         data: () => formatteCurrency(data?.total_deposits ?? 0),
-        status: [statusSalespoint],
-        error: [errorSalespoint],
+        status: [isAdmin() ? statusSalespoint : []],
+        error: [isAdmin() ? errorSalespoint : []],
         icon: DollarSign,
         subText: () =>
           `${data?.transactions.filter(
@@ -201,8 +204,8 @@ export default function Finances() {
       {
         name: "Total des sorties",
         data: () => formatteCurrency(data?.total_withdrawals ?? 0),
-        status: [statusSalespoint],
-        error: [errorSalespoint],
+        status: [isAdmin() ? statusSalespoint : []],
+        error: [isAdmin() ? errorSalespoint : []],
         icon: DollarSign,
         subText: () =>
           `${data?.transactions.filter(
@@ -651,7 +654,7 @@ export default function Finances() {
     <div className="space-y-5">
       <Backdrop
         sx={{ color: "#8b5cf6", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={statusSalespoint != "succeeded" || loading}
+        open={(statusSalespoint != "succeeded" && isAdmin()) || loading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -910,7 +913,7 @@ export default function Finances() {
                     //     </SelectGroup>
                     //   </SelectContent>
                     // </Select>
-                    <div>
+                    <div key={input.name}>
                       <TextField
                         fullWidth
                         margin="dense"

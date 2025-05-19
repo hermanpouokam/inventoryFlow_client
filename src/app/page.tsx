@@ -31,26 +31,26 @@ const links = [
 
 export const tiers = [
   {
-    id: "free",
+    id: "gratuit",
     description:
       "Le plan qui vous permettra de faire un essai sur ce que nous vous proposons.",
     features: ["1 point de vente", "1 utilisateur", "Articles illimités"],
     featured: false,
   },
   {
-    id: "starter",
+    id: "standard",
     description:
       "Le plan parfait si vous êtes une petite entreprise avec un petit personnel.",
     features: [
       "1 point de vente",
-      "3 utilisateurS",
+      "3 utilisateurs",
       "Articles illimités",
       "Assistance personalisée",
     ],
     featured: false,
   },
   {
-    id: "enterprise",
+    id: "pro",
     description:
       "Le plan dont vous a besoin pour gérer plusieurs points de vente de votre entreprise.",
     features: [
@@ -64,14 +64,14 @@ export const tiers = [
     featured: true,
   },
   {
-    id: "business",
+    id: "entreprise",
     description:
       "Le plan parfait pour les grandes entreprise qui vous donne accès à toutes nos fonctionnalités.",
     features: [
       "Points de vente illimités",
-      "Analyse de vos ventes par l'IA",
+      "Analyse des ventes par l'IA",
       "Prévision de maché",
-      "Caracterisques du plan entreprise",
+      "Caracterisques du plan pro",
     ],
     featured: false,
   },

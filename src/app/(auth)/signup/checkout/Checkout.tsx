@@ -30,7 +30,7 @@ export default function Checkout() {
   });
   const initialTime = 5; // Different initial time
   const onTimerEnd = () => {
-    // window.location.assign("/dashboard");
+    window.location.assign("/dashboard");
   };
 
   const { timeLeft, isActive, resetTimer, stopTimer } = useTimer({
@@ -144,7 +144,7 @@ export default function Checkout() {
             type: "success",
             msg: result.message,
           });
-          setLoading(false);
+          // setLoading(false);
           resetTimer();
         }
       } else {
@@ -179,12 +179,12 @@ export default function Checkout() {
         <div className="p-1 sm:py-14 sm:px-10  bg-neutral-200 flex w-screen body">
           <div className="bg-neutral-100 border rounded  max-w-[1600px] shadow-sm py-16 px-10 space-y-5 col-span-4">
             {error && error.type == "error" && (
-              <h3 className="p-3 rounded bg-red-200 text-red-500 border border-red-500">
+              <h3 className="p-3 rounded bg-red-200 text-center text-red-500 border border-red-500">
                 {error.msg}
               </h3>
             )}
             {error && error.type == "success" && (
-              <h3 className="p-3 rounded bg-green-200 text-green-700 border border-green-500">
+              <h3 className="p-3 rounded bg-green-200 text-center text-green-700 border border-green-500">
                 {error.msg} vous serez redirigé vers votre tableau de bord dans{" "}
                 {timeLeft} sec
               </h3>
@@ -420,10 +420,10 @@ export default function Checkout() {
                     {loading
                       ? "Veuillez patienter..."
                       : `Payer ${formatteCurrency(
-                          planData?.price ?? 0,
-                          "XAF",
-                          "fr-FR"
-                        )}`}
+                        planData?.price ?? 0,
+                        "XAF",
+                        "fr-FR"
+                      )}`}
                   </Button>
                   {moment(
                     user?.enterprise_details?.last_payment?.next_due_date
