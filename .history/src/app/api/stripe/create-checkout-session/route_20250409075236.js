@@ -46,7 +46,6 @@
 // }
 
 import Stripe from 'stripe';
-  console.log("CLÉ UTILISÉE :", process.env.STRIPE_SECRET_KEY); // Ajoute ce log
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
