@@ -193,7 +193,7 @@ export default function Page() {
             placeholder="Entrez votre prénom"
           />
         </div>
-        {[...Array(8)].map((el) => (
+        {[...Array(8)].map(() => (
 
           <div>
             <label htmlFor="name" className="mt-3">Email</label>

@@ -7,7 +7,6 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { SettingsDataProvider } from "./account/context/settingsData";
-import { Input } from "@/components/ui/input";
 
 export default function RootLayout({
   children,
@@ -51,9 +50,8 @@ export default function RootLayout({
       <div className="grid grid-cols-1 md:grid-cols-6 min-h-screen gap-3 xl:px-56">
         {/* Sidebar */}
         <div className="md:col-span-2">
-          <div className="sticky space-y-4 top-[70px] max-h-screen overflow-auto">
-            <Input className="focus:ring-2 focus:ring-neutral-400" />
-            <div className=" divide-y-2 divide-neutral-100">
+          <div className="sticky top-16 max-h-screen overflow-auto">
+            <div className="divide-y divide-neutral-200">
               {menu.map((el, i) => {
                 const Icon = el.icon;
                 return (
@@ -61,14 +59,14 @@ export default function RootLayout({
                     <Link
                       href={el.link}
                       className={cn(
-                        "text-gray-800 py-4 text-base font-medium flex items-center justify-start truncate max-w-full overflow-x-hidden hover:bg-white px-2 rounded",
-                        basePath === el.link && "bg-white"
+                        "text-gray-800 py-4 text-base font-medium flex items-center justify-start truncate max-w-full overflow-x-hidden hover:bg-muted px-2",
+                        basePath === el.link && "bg-muted"
                       )}
                     >
                       <Icon className="w-5 h-5 mr-2" />
-                      <div className="max-w-full pr-3">
+                      <div>
                         {el.name}
-                        <p className="text-muted-foreground first-letter:capitalize text-xs font-normal max-w-full truncate">
+                        <p className="text-muted-foreground capitalize text-xs font-normal w-full truncate">
                           {el.subText}
                         </p>
                       </div>

@@ -41,7 +41,7 @@ export default function Page() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>, attempt: number = 0) => {
     e.preventDefault();
-    clearStorageAndCookies('/signup')
+
     console.log('attemp', attempt)
     if (attempt > 1) {
 

@@ -36,7 +36,7 @@ export default function Signin() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    clearStorageAndCookies('/signin')
+    // clearStorageAndCookies('/signin')
     try {
       setLoading(true);
       const { data, isEmpty } = getFormData(e.currentTarget);

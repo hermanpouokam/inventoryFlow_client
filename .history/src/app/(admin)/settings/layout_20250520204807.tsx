@@ -52,7 +52,7 @@ export default function RootLayout({
         {/* Sidebar */}
         <div className="md:col-span-2">
           <div className="sticky space-y-4 top-[70px] max-h-screen overflow-auto">
-            <Input className="focus:ring-2 focus:ring-neutral-400" />
+            <Input className="focus:ring-2 focus" />
             <div className=" divide-y-2 divide-neutral-100">
               {menu.map((el, i) => {
                 const Icon = el.icon;

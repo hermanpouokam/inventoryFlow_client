@@ -39,19 +39,25 @@ const updatePaimentMethod = async (paymentMethodId: string, customerId: string) 
     console.log('erreur survenu', error)
   }
 }
-const clearStorageAndCookies = (page: string) => {
-  // Clear local storage
-  localStorage.clear();
-  sessionStorage.clear();
 
-  document.cookie =
-    "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  document.cookie =
-    "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  if (page != '/signup') {
-    window.location.assign(page);
+const clearStorageAndCookies = (page: string) => {
+  try {
+    localStorage.clear();
+    sessionStorage.clear();
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const name = cookie.split('=')[0].trim();
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+    const authPages = ['/signup', '/signin'];
+    if (!authPages.includes(page)) {
+      window.location.assign(page);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la suppression des données locales :', error);
   }
-  
 };
+
+
 
 export { handlePaymentSuccess, clearStorageAndCookies, updatePaimentMethod };

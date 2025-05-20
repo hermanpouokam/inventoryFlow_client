@@ -36,14 +36,14 @@ export default function Signin() {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    clearStorageAndCookies('/signin')
+    // clearStorageAndCookies('/signin')
     try {
       setLoading(true);
       const { data, isEmpty } = getFormData(e.currentTarget);
       setInputsValue(data);
       if (isEmpty) return setLoading(false);
       const response = await login({ ...data });
-      if (response) {
+      if (response.status == 200) {
         const { access, refresh } = response;
         setCookie(null, "access_token", response.access, {
           maxAge: LONG_LIFE_DURATION,

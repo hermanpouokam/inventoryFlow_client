@@ -41,12 +41,12 @@ export default function Page() {
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: `Une erreur est survenue. Vérifiez votre connexion et réessayez.`,
-        variant: "success",
-        className: "bg-red-600 border-red-600 text-white",
-        icon: <Check className="mr-2" />,
-      });
+          title: "Error",
+          description: `Une erreur est survenue. Vérifiez votre connexion et réessayez.`,
+          variant: "success",
+          className: "bg-red-600 border-red-600 text-white",
+          icon: <Check className="mr-2" />,
+        });
     } finally {
       setSendingEmail(false)
     }
@@ -193,40 +193,38 @@ export default function Page() {
             placeholder="Entrez votre prénom"
           />
         </div>
-        {[...Array(8)].map((el) => (
+        {[...Array(8)]}
+        <div>
+          <label htmlFor="name" className="mt-3">Email</label>
+          <div className="flex items-start gap-2">
+            <TextField
+              type="email"
+              id="name"
+              disabled={user?.user_configurations_details.email_verified}
+              defaultValue={user?.email}
+              required
+              fullWidth
+              size="small"
+              name="email"
+              className="flex-1"
+              placeholder="Entrez votre nom"
+              helperText="Une fois votre e-email verifié vous ne pouvez plus modifier"
+            />
+            {user?.user_configurations_details.email_verified ?
+              <div className="text-green-700 gap-2 flex items-center px-4 text-base font-semibold">
+                <CheckCircle className="h-4 w-4" /> Verifié
+              </div>
+              :
+              <Button onClick={sendVerifyEmail} disabled={sendingEmail} className="bg-indigo-500 hover:bg-indigo-600">
+                {sendingEmail ?
+                  "Envoie du lien..." : "Envoyer le lien"
+                }
 
-          <div>
-            <label htmlFor="name" className="mt-3">Email</label>
-            <div className="flex items-start gap-2">
-              <TextField
-                type="email"
-                id="name"
-                disabled={user?.user_configurations_details.email_verified}
-                defaultValue={user?.email}
-                required
-                fullWidth
-                size="small"
-                name="email"
-                className="flex-1"
-                placeholder="Entrez votre nom"
-                helperText="Une fois votre e-email verifié vous ne pouvez plus modifier"
-              />
-              {user?.user_configurations_details.email_verified ?
-                <div className="text-green-700 gap-2 flex items-center px-4 text-base font-semibold">
-                  <CheckCircle className="h-4 w-4" /> Verifié
-                </div>
-                :
-                <Button onClick={sendVerifyEmail} disabled={sendingEmail} className="bg-indigo-500 hover:bg-indigo-600">
-                  {sendingEmail ?
-                    "Envoie du lien..." : "Envoyer le lien"
-                  }
-
-                </Button>
-              }
-            </div>
+              </Button>
+            }
           </div>
-        ))}
-
+        </div>
+        
         <div className=" flex items-center justify-start">
           <p className="text-muted-foreground font-medium">Numero de téléphone</p>
           <p className="text-base font-medium">{user?.number}</p>

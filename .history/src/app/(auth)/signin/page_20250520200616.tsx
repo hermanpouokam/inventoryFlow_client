@@ -35,22 +35,20 @@ export default function Signin() {
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    clearStorageAndCookies('/signin')
-    try {
+    e.preventDefault();    try {
       setLoading(true);
       const { data, isEmpty } = getFormData(e.currentTarget);
       setInputsValue(data);
       if (isEmpty) return setLoading(false);
       const response = await login({ ...data });
-      if (response) {
-        const { access, refresh } = response;
-        setCookie(null, "access_token", response.access, {
+      if (response.status == 200) {
+        const { access, refresh } = response.data;
+        setCookie(null, "access_token", response.data.access, {
           maxAge: LONG_LIFE_DURATION,
           path: "/",
           secure: process.env.NODE_ENV === "production", // Ensure cookies are secure in production
         });
-        setCookie(null, "refresh_token", response.refresh, {
+        setCookie(null, "refresh_token", response.data.refresh, {
           maxAge: LONG_LIFE_DURATION,
           path: "/",
           secure: process.env.NODE_ENV === "production", // Ensure cookies are secure in production
@@ -60,7 +58,6 @@ export default function Signin() {
         const redirect = params.get("next");
 
         if (response) {
-          console.log(response)
           if (redirect) {
             router.replace(redirect);
           } else {

@@ -52,7 +52,7 @@ export default function RootLayout({
         {/* Sidebar */}
         <div className="md:col-span-2">
           <div className="sticky space-y-4 top-[70px] max-h-screen overflow-auto">
-            <Input className="focus:ring-2 focus:ring-neutral-400" />
+            <Input />
             <div className=" divide-y-2 divide-neutral-100">
               {menu.map((el, i) => {
                 const Icon = el.icon;
@@ -66,9 +66,9 @@ export default function RootLayout({
                       )}
                     >
                       <Icon className="w-5 h-5 mr-2" />
-                      <div className="max-w-full pr-3">
+                      <div className="max-w-full">
                         {el.name}
-                        <p className="text-muted-foreground first-letter:capitalize text-xs font-normal max-w-full truncate">
+                        <p className="text-muted-foreground capitalize text-xs font-normal max-w-full truncate pr-5">
                           {el.subText}
                         </p>
                       </div>
