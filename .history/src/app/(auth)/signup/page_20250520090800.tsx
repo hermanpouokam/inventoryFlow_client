@@ -67,7 +67,7 @@ export default function Page() {
         });
         router.replace(`/signup/create_enterprise`);
       } else {
-        clearStorageAndCookies('/singup')
+clearStorageAndCookies()
       }
     } catch (error) {
       const code = error.response.data.code;

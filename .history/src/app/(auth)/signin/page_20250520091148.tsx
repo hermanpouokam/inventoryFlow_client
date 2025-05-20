@@ -39,7 +39,7 @@ export default function Signin() {
       setLoading(true);
       const { data, isEmpty } = getFormData(e.currentTarget);
       setInputsValue(data);
-      if (isEmpty) return setLoading(false);
+      if (isEmpty) return;
       const response = await login({ ...data });
       if (response.status == 200) {
         const { access, refresh } = response.data;

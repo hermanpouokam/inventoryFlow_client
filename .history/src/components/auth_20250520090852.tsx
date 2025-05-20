@@ -123,7 +123,7 @@ export const login = async ({
     await storeToken(response.data.access);
     await storeRefreshToken(response.data.refresh);
     await storeUserData(response.data.user);
-    return response;
+    return response.;
   } catch (error) {
     throw error;
   }

@@ -20,7 +20,6 @@ import { setCookie } from "nookies";
 import { LONG_LIFE_DURATION, userRegErrors } from "@/utils/constants";
 import logo from "@/assets/img/logo.png";
 import PhoneNumberField from "@/components/CountryPicker";
-import { clearStorageAndCookies } from "./functions";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
@@ -45,7 +44,7 @@ export default function Page() {
       const { data, isEmpty } = getFormData(e.currentTarget);
       setInputsValue(data);
       setPasswordVerify(validatePassword(data.password));
-      if (isEmpty) return setLoading(false);
+      if (isEmpty) return setLoading(false) ;
       if (!validatePassword(data.password).isValid) {
         return;
       }
@@ -55,7 +54,7 @@ export default function Page() {
         number: phoneNumber?.number,
         country: phoneNumber?.country,
       });
-      if (response.status == 201) {
+      if (response.) {
         setCookie(null, "access_token", response.access, {
           maxAge: LONG_LIFE_DURATION,
           path: "/",
@@ -66,14 +65,12 @@ export default function Page() {
           path: "/",
         });
         router.replace(`/signup/create_enterprise`);
-      } else {
-        clearStorageAndCookies('/singup')
       }
     } catch (error) {
       const code = error.response.data.code;
       setError(userRegErrors[code]);
       setLoading(false);
-    }
+    } 
   };
 
   const onChange = (
@@ -129,7 +126,7 @@ export default function Page() {
                 return (
                   <>
                     <PhoneNumberField
-                      key={phoneNumber?.number}
+                      key={phoneNumber?.number} 
                       value={phoneNumber?.number}
                       required={true}
                       onChange={handlePhoneNumberChange}
@@ -190,8 +187,8 @@ export default function Page() {
                               return (
                                 <li
                                   className={`${passwordVerify[key]
-                                    ? "text-green-700"
-                                    : "text-red-600"
+                                      ? "text-green-700"
+                                      : "text-red-600"
                                     } text-xs ml-3 mt-1 list-item`}
                                   key={key}
                                 >

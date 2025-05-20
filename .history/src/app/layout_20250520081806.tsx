@@ -39,6 +39,7 @@ export default async function RootLayout({
   const user = await getUserWithPermissions();
   const permissions = sanitizePermissions(user?.action_permissions || []);
   const pagePermissions = sanitizePagePermissions(user?.permissions || []);
+  console.log("API_URL:", process.env.NEXT_PUBLIC_API_URL);
 
   return (
     <html lang={lng}>

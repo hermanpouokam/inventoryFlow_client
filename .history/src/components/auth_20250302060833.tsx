@@ -57,7 +57,7 @@ export const registerUser = async ({
     await storeToken(response.data.access);
     await storeRefreshToken(response.data.refresh);
     await storeUserData(response.data.user);
-    return response;
+    return response.data;
   } catch (error) {
     console.log(
       "User registration failed:",
@@ -123,7 +123,7 @@ export const login = async ({
     await storeToken(response.data.access);
     await storeRefreshToken(response.data.refresh);
     await storeUserData(response.data.user);
-    return response;
+    return response.data;
   } catch (error) {
     throw error;
   }

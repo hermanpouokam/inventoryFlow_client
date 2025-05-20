@@ -39,7 +39,7 @@ const updatePaimentMethod = async (paymentMethodId: string, customerId: string) 
     console.log('erreur survenu', error)
   }
 }
-const clearStorageAndCookies = (page:string) => {
+const clearStorageAndCookies = (page) => {
   // Clear local storage
   localStorage.clear();
   sessionStorage.clear();
@@ -49,7 +49,7 @@ const clearStorageAndCookies = (page:string) => {
   document.cookie =
     "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-  window.location.assign(page);
+  window.location.assign('/signin');
 };
 
 export { handlePaymentSuccess, clearStorageAndCookies, updatePaimentMethod };

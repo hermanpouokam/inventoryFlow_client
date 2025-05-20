@@ -92,7 +92,7 @@ export function useMenuItems(): Menu[] {
       link: null,
       icon: LandmarkIcon,
       menu: [
-        { text: !isAdmin() ? "Details" : 'point de vente', link: "/enterprise/salespoints" },
+        { text: isAdmin()?"Details":'p', link: "/enterprise/salespoints" },
         { text: "Informations", link: "/enterprise/informations" },
         { text: "Utilisateurs", link: "/enterprise/users" },
       ],
@@ -152,7 +152,7 @@ export const userMenu: DropdownMenuProps[] = [
         //@ts-ignore
         icon: LogOutIcon,
         menu: null,
-        onClick: () => clearStorageAndCookies('/signin'),
+        onClick: () => clearStorageAndCookies(),
       },
     ],
   },

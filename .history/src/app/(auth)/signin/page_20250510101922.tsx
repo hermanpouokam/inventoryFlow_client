@@ -39,33 +39,29 @@ export default function Signin() {
       setLoading(true);
       const { data, isEmpty } = getFormData(e.currentTarget);
       setInputsValue(data);
-      if (isEmpty) return setLoading(false);
+      if (isEmpty) return;
       const response = await login({ ...data });
-      if (response.status == 200) {
-        const { access, refresh } = response.data;
-        setCookie(null, "access_token", response.data.access, {
-          maxAge: LONG_LIFE_DURATION,
-          path: "/",
-          secure: process.env.NODE_ENV === "production", // Ensure cookies are secure in production
-        });
-        setCookie(null, "refresh_token", response.data.refresh, {
-          maxAge: LONG_LIFE_DURATION,
-          path: "/",
-          secure: process.env.NODE_ENV === "production", // Ensure cookies are secure in production
-          sameSite: "strict",
-        });
-        const params = new URLSearchParams(window.location.search);
-        const redirect = params.get("next");
+      const { access, refresh } = response;
+      setCookie(null, "access_token", response.access, {
+        maxAge: LONG_LIFE_DURATION,
+        path: "/",
+        secure: process.env.NODE_ENV === "production", // Ensure cookies are secure in production
+      });
+      setCookie(null, "refresh_token", response.refresh, {
+        maxAge: LONG_LIFE_DURATION,
+        path: "/",
+        secure: process.env.NODE_ENV === "production", // Ensure cookies are secure in production
+        sameSite: "strict",
+      });
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get("next");
 
-        if (response) {
-          if (redirect) {
-            router.replace(redirect);
-          } else {
-            router.replace("/dashboard");
-          }
+      if (response) {
+        if (redirect) {
+          router.replace(redirect);
+        } else {
+          router.replace("/dashboard");
         }
-      } else {
-
       }
     } catch (error) {
       const code = error.response.data.code;

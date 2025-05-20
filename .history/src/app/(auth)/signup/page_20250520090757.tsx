@@ -20,7 +20,6 @@ import { setCookie } from "nookies";
 import { LONG_LIFE_DURATION, userRegErrors } from "@/utils/constants";
 import logo from "@/assets/img/logo.png";
 import PhoneNumberField from "@/components/CountryPicker";
-import { clearStorageAndCookies } from "./functions";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
@@ -67,7 +66,7 @@ export default function Page() {
         });
         router.replace(`/signup/create_enterprise`);
       } else {
-        clearStorageAndCookies('/singup')
+clear
       }
     } catch (error) {
       const code = error.response.data.code;

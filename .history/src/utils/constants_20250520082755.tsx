@@ -24,7 +24,7 @@ type RawMenu = {
   menu: { text: string; link: PagePermission }[] | null;
 };
 export function useMenuItems(): Menu[] {
-  const { hasPagePermission, isAdmin } = usePermission();
+  const { hasPagePermission, } = usePermission();
 
   const rawMenu: RawMenu[] = [
     {
@@ -88,11 +88,11 @@ export function useMenuItems(): Menu[] {
       ],
     },
     {
-      name: isAdmin() ? "enterprise" : "sales point",
+      name: "sales point",
       link: null,
       icon: LandmarkIcon,
       menu: [
-        { text: !isAdmin() ? "Details" : 'point de vente', link: "/enterprise/salespoints" },
+        { text: "Details", link: "/enterprise/salespoints" },
         { text: "Informations", link: "/enterprise/informations" },
         { text: "Utilisateurs", link: "/enterprise/users" },
       ],
@@ -152,7 +152,7 @@ export const userMenu: DropdownMenuProps[] = [
         //@ts-ignore
         icon: LogOutIcon,
         menu: null,
-        onClick: () => clearStorageAndCookies('/signin'),
+        onClick: () => clearStorageAndCookies(),
       },
     ],
   },

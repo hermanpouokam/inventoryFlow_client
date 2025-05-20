@@ -39,9 +39,10 @@ export default function Signin() {
       setLoading(true);
       const { data, isEmpty } = getFormData(e.currentTarget);
       setInputsValue(data);
-      if (isEmpty) return setLoading(false);
+      if (isEmpty) return;
       const response = await login({ ...data });
-      if (response.status == 200) {
+      if (response.status==200) {
+        console.log(response.status)
         const { access, refresh } = response.data;
         setCookie(null, "access_token", response.data.access, {
           maxAge: LONG_LIFE_DURATION,
@@ -56,7 +57,7 @@ export default function Signin() {
         });
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get("next");
-
+        
         if (response) {
           if (redirect) {
             router.replace(redirect);
@@ -64,8 +65,6 @@ export default function Signin() {
             router.replace("/dashboard");
           }
         }
-      } else {
-
       }
     } catch (error) {
       const code = error.response.data.code;

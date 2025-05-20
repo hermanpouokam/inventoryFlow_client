@@ -152,7 +152,7 @@ export const userMenu: DropdownMenuProps[] = [
         //@ts-ignore
         icon: LogOutIcon,
         menu: null,
-        onClick: () => clearStorageAndCookies('/signin'),
+        onClick: () => clearStorageAndCookies(),
       },
     ],
   },
