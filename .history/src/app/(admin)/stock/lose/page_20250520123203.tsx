@@ -444,7 +444,7 @@ export default function Page() {
     }
 
     try {
-      const res = await createLoss({ ...values, sales_point: isAdmin() ? values.sales_point : user?.sales_point });
+      const res = await createLoss({ ...values, sales_point: isAdmin()? sales user?.sales_point });
       setLoading(false);
       if (res.status === 201) {
         setSelectedSalesPoints([]);

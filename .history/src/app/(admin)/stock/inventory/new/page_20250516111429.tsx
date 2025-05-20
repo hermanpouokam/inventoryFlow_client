@@ -421,7 +421,7 @@ export default function Page() {
               le matin.
             </li>
             <li>
-              Vous ne pouvez faire un inventaire que si vous n&apos;avez
+              Vous ne pouvez faire un inventaire que si vous n&apos;avez pas
               aucune facture pour la journée.
             </li>
             <li>

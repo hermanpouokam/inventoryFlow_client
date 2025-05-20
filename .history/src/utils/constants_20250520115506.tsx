@@ -267,7 +267,7 @@ export const menuTranslate = {
   finances: "finances",
   enterprise: "entreprise",
   reports: "plaintes",
-  buy: "Achats",
+  "buy":"Achats",
   "sales point": "point de vente",
 };
 

@@ -444,7 +444,7 @@ export default function Page() {
     }
 
     try {
-      const res = await createLoss({ ...values, sales_point: isAdmin() ? values.sales_point : user?.sales_point });
+      const res = await createLoss({ ...values, sales_point: user?.sales_point });
       setLoading(false);
       if (res.status === 201) {
         setSelectedSalesPoints([]);
@@ -464,7 +464,7 @@ export default function Page() {
         title: "Erreur",
         description:
           error.response.data.error ??
-          "Une erreur est survenue lors de l'ajout de la perte",
+          "Une erreur est survenue lors de l'ajout de la ",
         variant: "destructive",
         className: "bg-red-600 border-red-600",
         icon: <X className="mr-2 h-4 w-4" />,

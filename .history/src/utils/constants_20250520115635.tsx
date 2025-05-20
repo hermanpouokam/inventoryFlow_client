@@ -55,7 +55,7 @@ export function useMenuItems(): Menu[] {
       ],
     },
     {
-      name: "purchases",
+      name: "buy",
       link: null,
       icon: Receipt,
       menu: [

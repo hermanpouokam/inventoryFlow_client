@@ -55,7 +55,7 @@ export function useMenuItems(): Menu[] {
       ],
     },
     {
-      name: "purchases",
+      name: "buy",
       link: null,
       icon: Receipt,
       menu: [
@@ -267,7 +267,6 @@ export const menuTranslate = {
   finances: "finances",
   enterprise: "entreprise",
   reports: "plaintes",
-  buy: "Achats",
   "sales point": "point de vente",
 };
 

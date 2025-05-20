@@ -19,11 +19,30 @@ export const PERMISSIONS = {
     "/enterprise/informations": "Informations sur l'entreprise",
     "/enterprise/users": "Utilisateurs de l'entreprise",
     "/reports/all": "Rapports",
-    "/buy/new": "Nouvel achat",
-    "/buy/in_progress": "Achat en cours",
-    "/buy/roadmap": "Feuille de route d'achat",
-    "/buy/history": "Historique d'achat"
-
+    {
+            "id": 21,
+            "number": 21,
+            "name": "/buy/new",
+            "path": "/buy/new"
+        },
+        {
+            "id": 22,
+            "number": 22,
+            "name": "/buy/in_progress",
+            "path": "/buy/in_progress"
+        },
+        {
+            "id": 23,
+            "number": 23,
+            "name": "/buy/roadmap",
+            "path": "/buy/roadmap"
+        },
+        {
+            "id": 24,
+            "number": 24,
+            "name": "/buy/history",
+            "path": "/buy/history"
+        }
 } as const;
 
 export type PagePermission = keyof typeof PERMISSIONS;
