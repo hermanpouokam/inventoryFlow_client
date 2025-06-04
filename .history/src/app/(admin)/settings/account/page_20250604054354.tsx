@@ -250,7 +250,7 @@ export default function Page() {
               placeholder="Entrez votre nom"
               helperText="Une fois votre e-email verifié vous ne pouvez plus modifier"
             />
-            {user?.user_configurations_details?.email_verified ?
+            {user?.user_configurations_details.email_verified ?
               <div className="text-green-700 gap-2 flex items-center px-4 text-base font-semibold">
                 <CheckCircle className="h-4 w-4" /> Verifié
               </div>
