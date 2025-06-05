@@ -1,0 +1,16 @@
+.slider-wrapper {
+    overflow: hidden;
+    width: 100%;
+    margin: auto;
+}
+
+.slider {
+    display: flex;
+    transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.slide {
+    min-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}

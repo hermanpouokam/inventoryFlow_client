@@ -451,26 +451,74 @@ html {
 }
 
 .animate-spin-infinite {
-  animation: spin-stretch 1.2s linear infinite; border-style: solid;;
+  animation: spin-stretch 1.2s linear infinite;
+  border-style: solid;
+  ;
 }
 
 @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
   }
 
-  @keyframes dash {
-    0% {
-      stroke-dasharray: 1, 150;
-      stroke-dashoffset: 0;
-    }
-    50% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -35;
-    }
-    100% {
-      stroke-dasharray: 1, 150;
-      stroke-dashoffset: -125;
-    }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
   }
+
+  100% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: -125;
+  }
+}
+
+.otp-container {
+  display: flex;
+  gap: 12px;
+  cursor: text;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.otp-hidden-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.otp-box {
+  width: 48px;
+  height: 56px;
+  border: 2px solid #bbb;
+  border-radius: 8px;
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  color: #3f51b5;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  background-color: #fff;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.otp-box.filled {
+  border-color: #3f51b5;
+  background-color: #e8eaf6;
+}
+
+.otp-container:focus-within .otp-box:not(.filled) {
+  border-color: #3f51b5;
+}

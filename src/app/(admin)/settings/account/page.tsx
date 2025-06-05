@@ -1,15 +1,11 @@
 "use client";
-import { getUserData } from "@/components/auth";
-import { Backdrop, CircularProgress, Divider, TextField } from "@mui/material";
+import { Backdrop, CircularProgress, TextField } from "@mui/material";
 import React, { FormEvent, useCallback, useEffect, useState } from "react";
-import { useSettingsData } from "./context/settingsData";
 import { Button } from "@/components/ui/button";
 import getFormData from "@/components/functions";
 import { Check, CheckCircle, X } from "lucide-react";
 import PhoneNumberField from "@/components/CountryPicker";
 import useForm, { initializeFormValues } from "@/utils/useFormHook";
-import { cn } from "@/lib/utils";
-import userProfile from "@/assets/img/user.png";
 import { usePermission } from "@/context/PermissionContext";
 import { instance } from "@/components/fetch";
 import { useToast } from "@/components/ui/use-toast";
@@ -99,6 +95,7 @@ export default function Page() {
       toast({
         title: "Erreur",
         description: error.response.data.username ? tCommon(`error_username_exist`) : tCommon(`unknown_error`),
+          className: "bg-red-600 border-red-600 text-white",
         variant: 'destructive',
         icon: <X className="mr-2" />,
 

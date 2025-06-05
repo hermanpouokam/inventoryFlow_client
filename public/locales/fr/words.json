@@ -1,3 +1,13 @@
 {
-    "cancel":"annuler"
+  "cancel": "annuler",
+  "password": "mot de passe",
+  "new password": "nouveau mot de passe",
+  "confirm password": "confirmer le mot de passe",
+  "previous password": "ancien mot de passe",
+  "loading": "chargement",
+  "modify": "modifier",
+  "confirm": "confirmer",
+  "validate": "valider",
+  "click here": "cliquez ici",
+  "submit": "soumettre"
 }

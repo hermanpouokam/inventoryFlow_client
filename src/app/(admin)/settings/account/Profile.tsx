@@ -4,7 +4,7 @@ import { usePermission } from '@/context/PermissionContext';
 import * as React from 'react'
 import userProfile from "@/assets/img/user.png";
 import { Check, X } from 'lucide-react';
-import { CircularProgress, Tooltip } from '@mui/material';
+import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { capitalizeFirstLetter } from '@/utils/utils';
 import { useToast } from '@/components/ui/use-toast';
@@ -28,6 +28,7 @@ export default function Profile() {
 
     const fileInputRef = React.useRef<HTMLInputElement>(null);
     const { toast } = useToast()
+
     React.useEffect(() => {
         return () => {
             if (preview) {
@@ -56,22 +57,51 @@ export default function Profile() {
                 className: "bg-green-600 border-green-600 text-white",
                 icon: <Check className="mr-2" />,
             })
+            setPreview(null)
+            setImage(null)
             window.location.reload()
         } catch (error: any) {
             setMessage("Échec de l'upload : " + error.response?.data?.error || error.message);
             toast({
-                title: "Succès",
+                title: "Erreur",
                 description: error.response?.data?.error ? tCommon(`${error.response?.data?.error}`) : tCommon(`unknown_error`),
-                variant: "success",
-                className: "bg-green-600 border-green-600 text-white",
-                icon: <Check className="mr-2" />,
+                variant: "destructive",
+                // className: "bg-green-600 border-green-600 text-white",
+                icon: <X className="mr-2" />,
             })
         } finally {
             setLoading(false)
-            setPreview(null)
-            setImage(null)
+
         }
     };
+
+    const onDelete = async () => {
+        try {
+            const data = { img: null }
+            const res = await instance.put(`/user/update-info/`, data, { withCredentials: true })
+            if (res.status == 200) {
+                toast({
+                    title: "Succès",
+                    description: tCommon(`image_deleted`),
+                    variant: "success",
+                    className: "bg-green-600 border-green-600 text-white",
+                    icon: <Check className="mr-2" />,
+                });
+                window.location.reload()
+            }
+        } catch (error) {
+            console.log('error', error.response);
+            toast({
+                title: "Erreur",
+                description: tCommon(`unknown_error`),
+                className: "bg-red-600 border-red-600 text-white",
+                variant: 'destructive',
+                icon: <X className="mr-2" />,
+
+            })
+        }
+    };
+
 
     const handleButtonClick = () => {
         fileInputRef.current?.click();
@@ -148,7 +178,7 @@ export default function Profile() {
                                 {tCommon('btn_choose_image')}
                             </Button>
                     }
-                    <Button disabled={!user?.img || preview} variant={"destructive"}>
+                    <Button disabled={!user?.img || preview} variant={"destructive"} onClick={onDelete}>
                         {" "}
                         Supprimer la photo
                     </Button>

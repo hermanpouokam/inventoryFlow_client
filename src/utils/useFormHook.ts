@@ -3,6 +3,7 @@ export type Field<T = any> = {
   label: string;
   required: boolean;
   value?: string | boolean | number;
+  placeholder?: string;
   type: 'number' | 'select' | 'email' | 'password' | 'checkbox' | 'text';
   options?: T[];
 };
@@ -48,6 +49,16 @@ const useForm = (initialValues: FormFields) => {
     if ("password" in fieldValues)
       tempErrors.password =
         fieldValues.password.length >= 8
+          ? ""
+          : "Le mot de passe doit contenir au moins 8 caractères.";
+    if ("new_password" in fieldValues)
+      tempErrors.new_password =
+        fieldValues.new_password.length >= 8
+          ? ""
+          : "Le mot de passe doit contenir au moins 8 caractères.";
+    if ("confirm_password" in fieldValues)
+      tempErrors.confirm_password =
+        fieldValues.confirm_password.length >= 8
           ? ""
           : "Le mot de passe doit contenir au moins 8 caractères.";
 
