@@ -80,14 +80,18 @@ export const tiers = [
   },
 ];
 
-export default async function page({ searchParams }: Props) {
+export default async function page({
+  searchParams,
+}: {
+  searchParams: { success?: number };
+}) {
   const res = await fetch(`${API_URL}/plans/`, {
     cache: "no-store",
   });
   const plans: Plan[] = await res.json();
   const success = searchParams.success;
 
-  if (success == "1") {
+  if (searchParams.success && searchParams.success == 1) {
     // alert("Message envoyé avec succès");
   }
 
@@ -416,10 +420,10 @@ export default async function page({ searchParams }: Props) {
                     tier?.featured
                       ? ""
                       : index === 0
-                        ? "rounded-t-3xl sm:rounded-b-none lg:rounded-tr-none lg:rounded-bl-3xl"
-                        : index === 2
-                          ? "rounded-t-3xl sm:rounded-b-none lg:rounded-tl-none lg:rounded-br-3xl"
-                          : "sm:rounded-t-none lg:rounded-tr-3xl lg:rounded-bl-none",
+                      ? "rounded-t-3xl sm:rounded-b-none lg:rounded-tr-none lg:rounded-bl-3xl"
+                      : index === 2
+                      ? "rounded-t-3xl sm:rounded-b-none lg:rounded-tl-none lg:rounded-br-3xl"
+                      : "sm:rounded-t-none lg:rounded-tr-3xl lg:rounded-bl-none",
                     "rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10"
                   )}
                 >
@@ -481,7 +485,7 @@ export default async function page({ searchParams }: Props) {
                     ))}
                   </ul>
                   <a
-                    href={""}
+                    href={tier?.href}
                     aria-describedby={tier?.id}
                     className={cn(
                       tier?.featured
@@ -506,12 +510,12 @@ export default async function page({ searchParams }: Props) {
             Si vous avez besoin de plus d'informations contactez-nous
           </span>
         </h2>
-        {success == "1" && (
+        {searchParams?.success == 1 && (
           <div className="p-3 bg-green-100 border font-medium border-green-500 text-green-600 text-center rounded-md mb-4">
             Message envoyé avec succès !
           </div>
         )}
-        {success == "0" && (
+        {searchParams?.success == 0 && (
           <div className="p-3 bg-red-100 border font-medium border-red-500 text-red-600 text-center rounded-md mb-4">
             Erreur lors de l'envoi du message !
           </div>

@@ -481,7 +481,7 @@ export default async function page({ searchParams }: Props) {
                     ))}
                   </ul>
                   <a
-                    href={""}
+                    href={tier?.href}
                     aria-describedby={tier?.id}
                     className={cn(
                       tier?.featured

@@ -481,7 +481,7 @@ export default async function page({ searchParams }: Props) {
                     ))}
                   </ul>
                   <a
-                    href={""}
+                    href={tier?.href}
                     aria-describedby={tier?.id}
                     className={cn(
                       tier?.featured
@@ -511,7 +511,7 @@ export default async function page({ searchParams }: Props) {
             Message envoyé avec succès !
           </div>
         )}
-        {success == "0" && (
+        {success == 0 && (
           <div className="p-3 bg-red-100 border font-medium border-red-500 text-red-600 text-center rounded-md mb-4">
             Erreur lors de l'envoi du message !
           </div>
