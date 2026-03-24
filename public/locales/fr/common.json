@@ -1,0 +1,127 @@
+{
+  "user_permission_text": "Ceci représente les actions que l'utilisateur peut éffectuer. Si vous souhaitez retirer une permission cliquez sur la croix.",
+  "user_page_permission_text": "Ceci représente les pages que l'utilisateur peut visiter. Si vous souhaitez retirer une permission cliquez sur la croix.",
+  "user_type_select_error": "Sélectionnez un type d'utilisateur",
+  "sales_point_type_select_error": "Sélectionnez un point de vente",
+  "username_exists_message": "Ce nom d'utilisateur existe déjà. Veuillez entrer un autre.",
+  "email_exists_message": "Cet email est déjà utilisée. Veuillez entrer un autre.",
+  "invalid_phone_number": "Numéro de téléphone invalide.",
+  "user_creation": "Crétion de l'utilisateur",
+  "adding_permissions": "Ajout des permissions",
+  "adding_page_permissions": "Ajout des permissions de page",
+  "user_created": "Utilisateur créé avec succès",
+  "loading": "chargement",
+  "user": "utilisateur",
+  "edit": "Modifier",
+  "delete": "Supprimer",
+  "user_not_found": "Aucun utilisateur trouvé",
+  "no_permission": "aucune permission",
+  "expense_validation_success_message": "Dépense validée avec succès",
+  "supplie_packaging_warning": "NB: Si pour chaque article possedant des emballages vous n'en disposez pas suffisament, des frais supplementaires y afférent s'appliqueront lors du paiment.",
+  "confirm_supply_validation": "Êtes-vous sûr de vouloir valider cet approvisionnement ? {{total_cost}} sera déduit du solde du point de vente.",
+  "monthly": "mensuel",
+  "annual": "annuel",
+  "select_plan": "Sélectionnez un plan",
+  "error_username_exist": "Ce nom d'utilisateur est déjà pris. Veuillez choisir un autre.",
+  "unknown_error": "Une erreur inatendue s'est produite.",
+  "user_update_success": "Informatins mis à jour avec succès.",
+  "btn_save_image": "Enregistrer l'image",
+  "btn_choose_image": "Selectionnez une image",
+  "profile_picture_updated": "Image de profile mis à jour avec succès",
+  "image_deleted": "Image de profile supprimée avec succès",
+  "image_too_large": "Fichier trop volumineux",
+  "image_not_found": "Image introuvable",
+  "unsupported_file_type": "Format invalid",
+  "invalid_image": "Le fichier fourni n'est pas une image",
+  "placeholder_password_input": "Entrez le {{text}}",
+  "please wait": "veuillez patienter",
+  "email_verification_text": "Code de vérification",
+  "new_password_text": "Definir un mot de passe",
+  "not_received_code": "Vous n'avez pas recu de code ?",
+  "invalid_old_password": "Mot de passe incorrect.",
+  "invalid_new_password": "ce mot de passe est trop similaire au nom d'utilisateur, choisissez un autre.",
+  "password_not_match": "les mots de passe ne correspondent pas.",
+  "too_soon_password_change_code": "Vous devez attendre avant de redemander un code.",
+  "too_soon_password_reset_code": "Trop de tentatives. Vous devez attendre avant de redemander un code.",
+  "code_expired": "ce code a expiré.",
+  "invalid_code": "Code invalid",
+  "forgot_password_text": "récuperez votre mot de passe.",
+  "forgot_password_sub_text": "Entrez l’adresse e-mail associée à votre compte. Nous vous enverrons un code pour réinitialiser votre mot de passe.",
+  "email_input_placeholder": "entrez votre adresse email",
+  "recover_password_page_title": "Mot de passe oublié",
+  "ask_opt_code_text": "renvoyer le code",
+  "timer_sec": "{{time}} secondes",
+  "new_password_sub_text": "Veuillez entrer votre nouveau mot de passe. Assurez-vous que votre nouveau mot de passe soit suffisamment sécurisé pour protéger votre compte.",
+  "The password is too similar to the username.": "ce mot de passe est trop similaire au nom d'utilisateur, choisissez un autre.",
+  "email_verification_subtext": "Nous vous avons envoyé un code de vérification à l'adresse e-mail {{email}}. Veuillez entrer ce code ci-dessous pour confirmer la mise à jour de votre mot de passe.",
+  "billing_monthly": "Mois",
+  "billing_annual": "An",
+  "subtext_off": "Economisez {{amount}}",
+  "pricing_card_subtext": "30 jours gratuits • Sans engagement",
+  "pricing_page_subtext": "Tous les plans incluent un essai gratuit de 30 jours. Aucune carte bancaire requise.",
+  "pricing_card_btn_text": "Commencer maintenant",
+  "plans": {
+    "basic": {
+      "name": "Basic",
+      "name_fr": "Basique",
+      "desc": "Pour les petites boutiques",
+      "features": [
+        "1 magasin",
+        "500 produits",
+        "Facturation de base",
+        "1 utilisateur",
+        "Support email"
+      ]
+    },
+    "pro": {
+      "name": "Pro",
+      "name_fr": "Pro",
+      "desc": "Pour les entreprises en croissance",
+      "features": [
+        "5 magasins",
+        "Produits illimités",
+        "Facturation avancée",
+        "10 utilisateurs",
+        "Gestion fournisseurs",
+        "Support prioritaire"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "name_fr": "Entreprise",
+      "desc": "Pour les grandes structures",
+      "features": [
+        "Magasins illimités",
+        "Produits illimités",
+        "API & intégrations",
+        "Utilisateurs illimités",
+        "Rôles personnalisés",
+        "Support dédié 24/7"
+      ]
+    }
+  },
+  "popular": "Populaire",
+  "recommended": "Recommandé",
+  "invoice": "{{count}} Facture",
+  "invoices": "{{count}} Factures",
+  "debts":"Dette client",
+  "payment": {
+    "status": {
+      "pending": "En attente",
+      "completed": "Terminé",
+      "failed": "Échoué",
+      "refunded": "Remboursé"
+    },
+    "status_label": {
+      "pending": "En attente",
+      "completed": "payé",
+      "failed": "échoué",
+      "refunded": "remboursé"
+    }
+  },
+  "print": "Imprimer",
+  "pay": "Payer",
+  "balance": "Solde client",
+  "customer details": "Détails du client"
+  
+}
