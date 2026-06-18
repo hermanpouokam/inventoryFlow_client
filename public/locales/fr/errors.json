@@ -1,0 +1,8 @@
+{
+    "invalid price": "Prix de vente invalide",
+    "invalid amount": "Montant invalide",
+    "invalid date": "Date invalide",
+    "invalid client": "Client invalide",
+    "invalid product": "Produit invalide",
+    "invalid operation type": "Type d'opération invalide"
+}

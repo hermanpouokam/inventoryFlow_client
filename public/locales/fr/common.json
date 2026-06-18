@@ -1,0 +1,1938 @@
+{
+  "user_permission_text": "Ceci représente les actions que l'utilisateur peut effectuer. Si vous souhaitez retirer une permission cliquez sur la croix.",
+  "user_page_permission_text": "Ceci représente les pages que l'utilisateur peut visiter. Si vous souhaitez retirer une permission cliquez sur la croix.",
+  "user_type_select_error": "Sélectionnez un type d'utilisateur",
+  "sales_point_type_select_error": "Sélectionnez un point de vente",
+  "username_exists_message": "Ce nom d'utilisateur existe déjà. Veuillez entrer un autre.",
+  "email_exists_message": "Cet email est déjà utilisée. Veuillez entrer un autre.",
+  "invalid_phone_number": "Numéro de téléphone invalide.",
+  "user_creation": "Création de l'utilisateur",
+  "adding_permissions": "Ajout des permissions",
+  "adding_page_permissions": "Ajout des permissions de page",
+  "user_created": "Utilisateur créé avec succès",
+  "loading": "Chargement",
+  "user": "Utilisateur",
+  "add": "Ajouter",
+  "redirecting": "Redirection",
+  "unexpected_error": "Une erreur inattendue s'est produite. Vérifiez votre connexion et réessayez",
+  "continue": "Continuer",
+  "edit": "Modifier",
+  "delete": "Supprimer",
+  "name": "Nom",
+  "modify": "Modifier",
+  "cancel": "Annuler",
+  "surname": "Prénom",
+  "username": "Nom d'utilisateur",
+  "email": "Email",
+  "number": "Numéro de téléphone",
+  "address": "Adresse",
+  "user_not_found": "Aucun utilisateur trouvé",
+  "no_permission": "Aucune permission",
+  "expense_validation_success_message": "Dépense validée avec succès",
+  "supplie_packaging_warning": "NB: Si pour chaque article possédant des emballages vous n'en disposez pas suffisamment, des frais supplémentaires y afférent s'appliqueront lors du paiement.",
+  "confirm_supply_validation": "Êtes-vous sûr de vouloir valider cet approvisionnement ? {{total_cost}} sera déduit du solde du point de vente.",
+  "monthly": "mensuel",
+  "annual": "annuel",
+  "select_plan": "Sélectionnez un plan",
+  "error_username_exist": "Ce nom d'utilisateur est déjà pris. Veuillez choisir un autre.",
+  "unknown_error": "Une erreur inattendue s'est produite.",
+  "user_update_success": "Informations mis à jour avec succès.",
+  "btn_save_image": "Enregistrer l'image",
+  "btn_choose_image": "Sélectionnez une image",
+  "profile_picture_updated": "Image de profil mis à jour avec succès",
+  "image_deleted": "Image de profil supprimée avec succès",
+  "image_too_large": "Fichier trop volumineux",
+  "image_not_found": "Image introuvable",
+  "unsupported_file_type": "Format invalide",
+  "invalid_image": "Le fichier fourni n'est pas une image",
+  "placeholder_password_input": "Entrez le {{text}}",
+  "please wait": "Veuillez patienter",
+  "email_verification_text": "Code de vérification",
+  "new_password_text": "Définir un mot de passe",
+  "not_received_code": "Vous n'avez pas reçu de code ?",
+  "invalid_old_password": "Mot de passe incorrect.",
+  "invalid_new_password": "ce mot de passe est trop similaire au nom d'utilisateur, choisissez un autre.",
+  "password_not_match": "les mots de passe ne correspondent pas.",
+  "too_soon_password_change_code": "Vous devez attendre avant de redemander un code.",
+  "too_soon_password_reset_code": "Trop de tentatives. Vous devez attendre avant de redemander un code.",
+  "code_expired": "ce code a expiré.",
+  "invalid_code": "Code invalide",
+  "forgot_password_text": "récupérez votre mot de passe.",
+  "forgot_password_sub_text": "Entrez l’adresse e-mail associée à votre compte. Nous vous enverrons un code pour réinitialiser votre mot de passe.",
+  "email_input_placeholder": "entrez votre adresse email",
+  "recover_password_page_title": "Mot de passe oublié",
+  "ask_opt_code_text": "renvoyer le code",
+  "timer_sec": "{{time}} secondes",
+  "new_password_sub_text": "Veuillez entrer votre nouveau mot de passe. Assurez-vous que votre nouveau mot de passe soit suffisamment sécurisé pour protéger votre compte.",
+  "The password is too similar to the username.": "ce mot de passe est trop similaire au nom d'utilisateur, choisissez un autre.",
+  "email_verification_subtext": "Nous vous avons envoyé un code de vérification à l'adresse e-mail {{email}}. Veuillez entrer ce code ci-dessous pour confirmer la mise à jour de votre mot de passe.",
+  "billing_monthly": "Mois",
+  "billing_annual": "An",
+  "subtext_off": "Economisez {{amount}}",
+  "pricing_card_subtext": "30 jours gratuits • Sans engagement",
+  "pricing_page_subtext": "Tous les plans incluent un essai gratuit de 30 jours. Aucune carte bancaire requise.",
+  "pricing_card_btn_text": "Commencer maintenant",
+  "plans": {
+    "basic": {
+      "name": "Basic",
+      "name_fr": "Basique",
+      "desc": "Pour les petites boutiques",
+      "features": [
+        "1 magasin",
+        "500 produits",
+        "Facturation de base",
+        "1 utilisateur",
+        "Support email"
+      ]
+    },
+    "pro": {
+      "name": "Pro",
+      "name_fr": "Pro",
+      "desc": "Pour les entreprises en croissance",
+      "features": [
+        "5 magasins",
+        "Produits illimités",
+        "Facturation avancée",
+        "10 utilisateurs",
+        "Gestion fournisseurs",
+        "Support prioritaire"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "name_fr": "Entreprise",
+      "desc": "Pour les grandes structures",
+      "features": [
+        "Magasins illimités",
+        "Produits illimités",
+        "API & intégrations",
+        "Utilisateurs illimités",
+        "Rôles personnalisés",
+        "Support dédié 24/7"
+      ]
+    }
+  },
+  "popular": "Populaire",
+  "recommended": "Recommandé",
+  "invoice": {
+    "success": {
+      "received": "Facture réceptionnée avec succés",
+      "deleted": "Facture supprimée avec succés",
+      "updated": "Facture modifiée avec succés"
+    },
+    "actions": {
+      "save": "Enregistrer la facture"
+    },
+    "contract_number": "N° contrat",
+    "number": "Facture N°",
+    "consigned": "Consigné",
+    "seller_signature": "Signature du vendeur",
+    "customer_signature": "Signature du client"
+  },
+  "invoices": "{{count}} Factures",
+  "invoices_sin": "{{count}} Facture",
+  "debts": "Dette client",
+  "payment": {
+    "status": {
+      "pending": "En attente",
+      "completed": "Terminé",
+      "failed": "Échoué",
+      "refunded": "Remboursé"
+    },
+    "status_label": {
+      "pending": "En attente",
+      "completed": "payé",
+      "failed": "échoué",
+      "refunded": "remboursé"
+    }
+  },
+  "print": "Imprimer",
+  "pay": "Payer",
+  "balance": "Solde client",
+  "customer details": "Détails du client",
+  "buying_total": "Total d'achat",
+  "amount_paid": "Montant payée",
+  "amount_due": "Montant dû",
+  "search": {
+    "by_name": "Rechercher par nom...",
+    "action": "Rechercher"
+  },
+  "bills_client": "Historique de factures",
+  "unpaid_client": "Historique de dettes",
+  "packaging_client": "Historique d'emballage",
+  "no_bills": "Aucune facture trouvée",
+  "no_debts": "Aucune dette trouvée",
+  "balance_client": "Historique de transactions",
+  "new balance": "Nouveau solde",
+  "previous balance": "Solde précédent",
+  "paid": "Payé",
+  "bill number": "Numéro de facture",
+  "amount to pay": "Montant à payer",
+  "created_at": "Date",
+  "amount left": "Reste à verser",
+  "amount": "Montant",
+  "actions": {
+    "print_order": "Imprimer la commande",
+    "print_invoice": "Imprimer la facture",
+    "print_small": "Imprimer petit format",
+    "receive": "Réceptionner",
+    "receive_invoice": "Réceptionner la facture",
+    "packaging_return": "Retour emballage",
+    "view_details": "Voir les détails",
+    "activate": "Activer",
+    "deactivate": "Désactiver",
+    "title": "Actions",
+    "edit": "Modifier",
+    "delete": "Supprimer"
+  },
+  "buy": "Payer",
+  "debt payments list": "Liste de payment de dette {{bill_number}}",
+  "see details": "Voir les details",
+  "receipt_title": "Encaisser la facture {{bill_number}}",
+  "receipt_subtitle": "Entrez le montant versée pour cette facture et validez",
+  "filter_bill_number": "Filtrer par numéro de facture",
+  "filter_reason": "Filtrer par commentaire",
+  "comment": "Commentaire",
+  "date": "Date",
+  "operation type": "Type d'opération",
+  "operation_debit": "Retrait",
+  "operation_credit": "Dépôt",
+  "last_update": "Dernière mise à jour {{date}}",
+  "no_transactions": "Aucune transaction",
+  "new transaction": "Nouvelle transaction",
+  "new_transaction_description": "Entrez les détails de la transaction que vous souhaitez ajouter.",
+  "transaction type": "Type de transaction",
+  "add transaction": "Ajouter une transaction",
+  "select transaction type": "Sélectionnez le type de transaction",
+  "no data found": "Aucune donnée trouvée",
+  "edit customer information": "Modifier les informations du client",
+  "edit_customer_information_description": "Entrez les nouvelles informations du client. Laissez les champs vides pour conserver les valeurs actuelles.",
+  "customer_information": "Informations du client",
+  "success": "Succès",
+  "customer information updated successfully": "Informations du client mises à jour avec succès",
+  "an error occurred while modifying the customer": "Une erreur est survenue lors de la modification du client",
+  "invalid amount": "Montant invalide",
+  "BALANCE_UPDATED": "Solde mis à jour avec succès",
+  "INSUFFICIENT_BALANCE": "Solde insuffisant pour effectuer cette transaction.\nSolde actuel : {{data}}",
+  "operator": "Opérateur",
+  "cash-in": "Encaisser",
+  "payment_method_modal": {
+    "title": "Changer le mode de paiement",
+    "description": "Sélectionnez votre méthode préférée pour les prochaines transactions.",
+    "method_card_title": "Carte bancaire",
+    "method_card_subtitle": "Visa, Mastercard, Amex",
+    "method_mtn_title": "MTN Mobile Money",
+    "method_mtn_subtitle": "12 pays disponibles",
+    "method_orange_title": "Orange Money",
+    "method_orange_subtitle": "18 pays disponibles",
+    "card_number": "Numéro de carte",
+    "card_holder": "Nom du titulaire",
+    "card_expiry": "Expiration",
+    "card_cvc": "CVC",
+    "country": "Pays",
+    "mobile_number": "Numéro mobile",
+    "mobile_confirmation_hint": "Un code de confirmation sera envoyé sur ce numéro.",
+    "security_note": "Vos informations sont chiffrées et ne sont jamais stockées sur nos serveurs.",
+    "btn_cancel": "Annuler",
+    "btn_save": "Enregistrer le mode",
+    "btn_saving": "Enregistrement…",
+    "error_phone_required": "Veuillez entrer un numéro de téléphone.",
+    "error_init": "Impossible d'initialiser le paiement.",
+    "error_network": "Erreur réseau. Veuillez réessayer.",
+    "error_save_card": "Erreur lors de l'enregistrement de la carte.",
+    "error_save": "Erreur lors de l'enregistrement.",
+    "error_phone_digits_only": "Le numéro ne doit contenir que des chiffres.",
+    "error_phone_length": "Ce numéro doit faire {{length}} chiffres pour ce pays.",
+    "error_phone_prefix": "Ce numéro ne correspond pas à un préfixe MTN/Orange reconnu.",
+    "error_phone_inactive": "Ce numéro n'est pas associé à un compte Mobile Money actif."
+  },
+  "stripe_errors": {
+    "card_declined": "Carte refusée par votre banque.",
+    "insufficient_funds": "Fonds insuffisants sur la carte.",
+    "expired_card": "Carte expirée.",
+    "incorrect_cvc": "CVC incorrect.",
+    "incorrect_number": "Numéro de carte invalide.",
+    "invalid_number": "Numéro de carte invalide.",
+    "invalid_expiry_month": "Mois d'expiration invalide.",
+    "invalid_expiry_year": "Année d'expiration invalide.",
+    "invalid_cvc": "CVC invalide.",
+    "do_not_honor": "Transaction refusée par la banque.",
+    "authentication_required": "Authentification 3DS requise et échouée.",
+    "card_velocity_exceeded": "Trop de tentatives. Réessayez plus tard.",
+    "lost_card": "Cette carte a été signalée perdue.",
+    "stolen_card": "Cette carte a été signalée volée.",
+    "pickup_card": "Carte non acceptée. Contactez votre banque.",
+    "restricted_card": "Carte restreinte par votre banque.",
+    "security_violation": "Transaction bloquée pour raison de sécurité.",
+    "service_not_allowed": "Ce type de transaction n'est pas autorisé.",
+    "transaction_not_allowed": "Transaction non autorisée pour cette carte.",
+    "try_again_later": "Erreur temporaire. Réessayez dans quelques instants.",
+    "fallback": "Carte refusée. Vérifiez vos informations ou essayez une autre carte."
+  },
+  "no country found": "Aucun pays trouvé",
+  "search country": "Rechercher un pays",
+  "creating account": "Creation du compte",
+  "dashboard": {
+    "period": {
+      "current-week": "Cette semaine",
+      "prev-week": "Semaine précédente",
+      "current-month": "Ce mois",
+      "prev-month": "Mois précédent",
+      "current-year": "Cette année",
+      "prev-year": "Année précédente"
+    },
+    "cash_balance": {
+      "title": "Montant en caisse",
+      "sub": "Solde disponible"
+    },
+    "stock_value": {
+      "title": "Valeur du stock",
+      "sub": "{{products}} produit(s) et {{packaging}} emballage(s)"
+    },
+    "pending_orders": {
+      "title": "Commandes non encaissées",
+      "sub": "{{count}} facture(s) en attente"
+    },
+    "customer_debt": {
+      "title": "Dettes client",
+      "sub": "{{count}} facture(s) impayée(s)"
+    },
+    "total_capital": {
+      "title": "Valeur totale du capital",
+      "sub": "{{count}} point(s) de vente"
+    },
+    "active_clients": {
+      "title": "Clients actifs",
+      "sub": "{{count}} client(s) actif(s)"
+    },
+    "monthly_sales": {
+      "title": "Ventes du mois",
+      "sub": "{{percentage}} par rapport au mois précédent"
+    },
+    "monthly_profit": {
+      "title": "Bénéfice du mois",
+      "sub": "{{percentage}} par rapport au mois précédent"
+    },
+    "sales_title": "Ventes",
+    "sales_with_profit": "Ventes - Bénéfices",
+    "period_label": "Périodes",
+    "loading": "Veuillez patienter...",
+    "no_bills": "Vous n'avez aucune facture réceptionnée dans cette période.",
+    "employees": {
+      "title": "Liste des employés",
+      "count": "{{count}} employé(s) dans {{salespoints}} point(s) de vente",
+      "empty": "Vous n'avez aucun employé"
+    },
+    "last_bills": "Dernières MAJ de factures",
+    "date": {
+      "from_to": "{{start}} - {{end}}"
+    },
+    "date_presets": {
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "this_week": "Cette semaine",
+      "this_month": "Ce mois-ci",
+      "last_month": "Le mois dernier",
+      "this_year": "Cette année",
+      "last_year": "L'année dernière",
+      "select_placeholder": "Periods"
+    },
+    "chart": {
+      "period_jan_jun_2024": "Janvier - Juin 2024",
+      "trend_up": "En hausse de {{value}} ce mois-ci",
+      "last_6_months": "Affichage du total des visiteurs des 6 derniers mois",
+      "sales": "Ventes",
+      "profits": "Bénéfices"
+    },
+    "employee_role": {
+      "livreur": "Livreur"
+    },
+    "anomalies_title": "Anomalies de ventes détectées",
+    "last_14_days": "14 derniers jours"
+  },
+  "newsell": {
+    "loading": "Veuillez patienter...",
+    "customer_select": "Sélectionner un client",
+    "customer_name": "Nom du client",
+    "sales_point": "Point de vente",
+    "product_select": "Sélectionner l'article",
+    "purchase_price": "Prix d'achat",
+    "stock": "Stock",
+    "quantity": "Quantité",
+    "package": "Emballage à consigner",
+    "sell_price": "Prix de vente",
+    "add": "Ajouter",
+    "save_invoice": "Enregistrer la facture",
+    "filter_articles": "Filtrer par articles...",
+    "columns": "Colonnes",
+    "no_employee": "Vous n'avez aucun employé",
+    "employee_list": "Liste des employés",
+    "employees_count": "{{count}} employé(s) dans {{salespoints}} point(s) de vente",
+    "invoice_updates": "Dernières MAJ de factures",
+    "no_data": "Aucune donnée disponible",
+    "select_sales_point": "Point de vente",
+    "default_customer": "Client divers",
+    "select_product": "Sélectionner un article",
+    "valid_quantity_error": "Entrez une quantité valide",
+    "default_price_question": "Voulez-vous ajouter \"{{price}}\" comme prix par défaut de {{customer}}",
+    "no_price_config": "Aucun prix configuré pour {{product}}",
+    "save_invoice_btn": "Enregistrer la facture",
+    "noproduct": "Aucun article trouvé.",
+    "deposit_packaging": "Emballage à consigner",
+    "new_invoice": "Nouvelle facture",
+    "misc_customer": "Client divers",
+    "errors": {
+      "insufficient_stock": "Vous n'avez pas assez de {{product}} en stock",
+      "missing_packaging": "Vous n'avez pas consigné d'emballage pour {{product}}",
+      "invalid_packaging_quantity": "Le nombre d'emballages consignés ne peut pas tre supérieur  la quantité de produit.",
+      "select_sell_price": "Sélectionnez un prix de vente"
+    },
+    "success": {
+      "price_added": "Prix ajouté avec succès"
+    },
+    "order_number": "No de commande"
+  },
+  "table": {
+    "columns": {
+      "number": "#",
+      "code": "Code",
+      "article": "Article",
+      "purchase_price": "Prix d'achat",
+      "sell_price": "Prix de vente",
+      "quantity": "Qté",
+      "package": "Emballages à consigner",
+      "package_price": "Prix de l'emballage",
+      "total_package": "Total des emballages",
+      "total": "Total"
+    },
+    "actions": {
+      "label": "Actions",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "open_menu": "Ouvrir le menu"
+    },
+    "empty": "Aucun résultat",
+    "selected_rows": "{{selected}} sur {{total}} rangée(s) sélectionnée(s).",
+    "action": "Action",
+    "open_menu": "Ouvrir le menu"
+  },
+  "invoice_response": {
+    "create_success_title": "Succès",
+    "create_success_message": "Facture créée avec succès",
+    "error_title": "Erreur",
+    "unexpected_error": "Une erreur inattendue est survenue. Vérifiez votre connexion et réessayez.",
+    "default_customer": "Client divers"
+  },
+  "filters": {
+    "sales_points": "Points de vente",
+    "no_sales_points": "Aucun point de vente",
+    "search_sales_point": "Rechercher un point de vente",
+    "customers": "Clients",
+    "search": "Rechercher"
+  },
+  "orders": {
+    "to_deliver": "Commandes à livrer",
+    "search_placeholder": "Numéro de facture ou nom du client..."
+  },
+  "bills": {
+    "columns": {
+      "number": "#",
+      "actions": "Actions",
+      "bill_number": "Numéro de facture",
+      "sales_point": "Point de vente",
+      "customer_name": "Nom du client",
+      "packages_count": "Nombre de colis",
+      "amount": "Montant",
+      "article": "Article",
+      "taxes": "Taxes",
+      "additional_fees": "Frais supplémentaires",
+      "total_amount": "Montant total",
+      "benefit": "Bénéfice",
+      "delivery_date": "Date de livraison",
+      "total": "Total",
+      "code": "Code",
+      "quantity": "Quantité",
+      "purchase_price": "Prix d'achat",
+      "phone": "Téléphone",
+      "email": "Email",
+      "address": "Adresse",
+      "category": "Catégorie",
+      "status": "Statut",
+      "received_at": "Date de livraison",
+      "supply_number": "Numéro de bon",
+      "operator": "Opérateur",
+      "fees": "Frais supplémentaires",
+      "supplier_name": "Nom du fournisseur",
+      "abbreviation": "Abréviation",
+      "created_at": "Date de création",
+      "updated_at": "Dernière mise à jour",
+      "open_menu": "Ouvrir le menu",
+      "details": "Détails",
+      "product_name": "Nom du produit",
+      "product_variants": "Variantes de produit",
+      "paid_packaging": "Emballages payants",
+      "yes": "Oui",
+      "no": "Non",
+      "action": "Action"
+    },
+    "actions": {
+      "title": "Actions",
+      "view_details": "Voir les détails",
+      "delete_bill": "Supprimer la facture"
+    },
+    "pending_title": "Facture en attente"
+  },
+  "billing": {
+    "collect_invoice": "Encaisser une facture",
+    "unpaid_invoices": "Factures non encaissées",
+    "invoice_history": "Historique de factures",
+    "invoice_history_caption": "Liste de vos précédentes factures.",
+    "invoice_number": "Numéro de facture",
+    "payment_history": "Historique de paiements",
+    "payment_history_caption": "Liste de vos précédents paiements.",
+    "transaction_id": "Id de transaction",
+    "method": "Méthode",
+    "plan": "Plan",
+    "status": {
+      "title": "Statut",
+      "completed": "Payé",
+      "pending": "En attente",
+      "failed": "Échoué"
+    },
+    "no_payments": "Aucun paiement enregistré.",
+    "columns": {
+      "method": "Méthode"
+    }
+  },
+  "sales": {
+    "points": "Points de vente",
+    "no_points": "Aucun point de vente",
+    "select_sales_point_first": "Sélectionnez un point de vente",
+    "export_xlsx": "Exporter en xlsx",
+    "export_pdf": "Exporter en PDF",
+    "no_data": "Aucune donnée générée",
+    "search_point": "Rechercher un point de vente",
+    "orientation_values": {
+      "asc": "Ascendant",
+      "desc": "Descendant"
+    },
+    "orientation": "Orientation",
+    "pdf_title": "Feuille de route de vente du {{from}}{{to ? ' au ' + to : ''}}",
+    "roadmap": {
+      "result_title": "Feuille de route de vente du {{from}}{{to ? ' au ' + to : ''}}"
+    }
+  },
+  "customers": {
+    "title": "Clients",
+    "empty": "Aucun client",
+    "search": "Rechercher un client",
+    "filter_placeholder": "Filtrer par client...",
+    "add_title": "Ajouter un client",
+    "subtitle": "Remplissez les informations",
+    "category": "Catégorie de client",
+    "submit": "Enregistrer le client",
+    "of_client": "du client",
+    "manage_title": "Gérer les clients",
+    "add_category": "Ajouter une catégorie",
+    "dialog_title": "Ajouter une catégorie de client",
+    "dialog_description": "Créer des catégories de client. Cela vous permet de classer vos clients.",
+    "category_name": "Nom de la catégorie",
+    "category_placeholder": "Ex: gros, demi-gros, détail",
+    "sales_point": "Point de vente",
+    "filter_title": "Filtrer les clients",
+    "list_title": "Liste des clients",
+    "no_salespoint": "Aucun point de vente",
+    "no_category": "Aucune catégorie",
+    "search_salespoint": "Rechercher un point de vente",
+    "search_category": "Rechercher une catégorie",
+    "search_placeholder": "Filtrer par nom de client...",
+    "fields": {
+      "name": "Nom du client",
+      "phone": "Téléphone du client",
+      "email": "Email du client",
+      "address": "Adresse du client",
+      "surname": "Prénom",
+      "number": "Numéro de téléphone"
+    },
+    "errors": {
+      "select_category": "Sélectionnez une catégorie de client",
+      "network": "Une erreur s'est produite. Vérifiez votre connexion et réessayez"
+    },
+    "success": {
+      "created": "Client créé avec succès",
+      "category_created": "Catégorie de client créée avec succès"
+    },
+    "label": "Clients",
+    "page": "Clients",
+    "rfm": {
+      "champion": "Champion",
+      "loyal": "Fidèle",
+      "at_risk": "À risque",
+      "lost": "Perdu",
+      "new": "Nouveau",
+      "promising": "Prometteur",
+      "hibernating": "Inactif"
+    }
+  },
+  "roadmap": {
+    "title": "Feuille de route de ventes",
+    "result_title": "Feuille de route de vente du {{from}}{{to ? ' au ' + to : ''}}",
+    "sales": {
+      "pending_invoices_warning": "Vous avez {{count}} facture(s) non rceptionne(s) dans cette priode",
+      "no_received_invoice": "Aucune facture réceptionnée cette période"
+    },
+    "buy": {
+      "pending_orders_warning": "Vous avez des commandes en attente dans cette période",
+      "pdf_title": "Feuille de route d'achat du {{from}}{{range}}",
+      "csv_title": "Feuille de route d'achat du {{from}}{{range}} {{salespoint}}"
+    },
+    "csv": {
+      "address": "Adresse",
+      "phone": "Numéro",
+      "email": "Email",
+      "customer_id": "Client ID : {{id}}",
+      "category": "Catégorie : {{category}}",
+      "product_code": "Code produit",
+      "product_name": "Nom produit",
+      "total_quantity": "Quantité totale",
+      "generated_on": "Généré le : {{date}}",
+      "footer": " 2025 InventoryFlow by Interact | Tous droits rservs."
+    },
+    "excel": {
+      "customer": "Client",
+      "total_amount": "Montant total",
+      "total_packages": "Total emballages",
+      "total_packages_recorded": "Total emballages enregistrés",
+      "product": "Produit",
+      "total_quantity": "Quantité totale",
+      "sheet_name": "Données"
+    }
+  },
+  "generate": "Générer",
+  "loading_pdf": "Chargement du PDF...",
+  "pdf_error": "Erreur lors du chargement du PDF",
+  "popup_blocked": "Impossible d'ouvrir une nouvelle fenêtre. Veuillez autoriser les popups.",
+  "pdf_title": "Feuille de route de vente du {{from}}{{to ? ' au ' + to : ''}}",
+  "supply": {
+    "title": "Bon de commande",
+    "sales_point": "Point de vente",
+    "supplier": "Fournisseur",
+    "warning": "NB: Pour tout article avec emballage, assurez-vous d'avoir les quantités vides correspondants.",
+    "search_article": "Rechercher un article...",
+    "article": "Article",
+    "stock": "Stock",
+    "purchase_price": "Prix d'achat",
+    "quantity": "Quantité",
+    "add": "Ajouter",
+    "search_articles": "Filtrer par articles...",
+    "save": "Enregistrer le bon",
+    "titles": {
+      "pending_supply_orders": "Bon de commande en attente",
+      "sales_report_of": "Feuille de route de vente du"
+    },
+    "warnings": {
+      "supply_packaging": "NB: Assurez-vous d'avoir les emballages vides nécessaires.",
+      "ALL_OK": "Vous allez valider ce bon {{total_cost}} sera déduit de votre caisse.",
+      "INSUFFICIENT_EMPTY_PACKAGING": "Emballages insuffisants pour {{product_name}} ( {{package_name}} ). Requis: {{ordered_quantity}}, Disponible: {{avail}}. {{packaging_cost}} seront déduis de votre volde.",
+      "INSUFFICIENT_EMPTY_PACKAGING_PRICE": "Coût supplémentaire: {{amount}}.",
+      "INSUFFICIENT_FUNDS": "Fonds insuffisants. Requis: {{total_cost}}, Disponible: {{available}}."
+    },
+    "actions": {
+      "search": "Rechercher",
+      "export_csv": "Exporter en CSV",
+      "export_pdf": "Exporter en PDF"
+    },
+    "placeholders": {
+      "sales_points": "Points de vente",
+      "search_sales_points": "Rechercher un point de vente",
+      "search_supply_orders": "Filtrer les bons de commande...",
+      "product_categories": "Catégories de produits",
+      "search_category": "Rechercher une catégorie"
+    },
+    "empty": {
+      "product_categories": "Aucune catégorie de produit",
+      "no_data_generated": "Aucune donnée générée",
+      "sales_points": "Aucun point de vente"
+    },
+    "errors": {
+      "duplicate_product": "Cet article existe déjà",
+      "network": "Une erreur inattendue est survenue. Vérifiez votre connexion.",
+      "receive": "Une erreur est survenue pendant la réception.",
+      "delete": "Une erreur est survenue pendant la suppression."
+    },
+    "success": {
+      "created": "Facture créée avec succès",
+      "received": "Commande réceptionnée avec succès",
+      "deleted": "Commande supprimée avec succès"
+    },
+    "labels": {
+      "sales_points": "Points de vente"
+    },
+    "common": {
+      "to": "au"
+    },
+    "filters": {
+      "date_range": "Période",
+      "sales_points": "Points de vente",
+      "suppliers": "Fournisseurs",
+      "search": "Rechercher"
+    },
+    "table": {
+      "title": "Historique d'achat",
+      "filter_placeholder": "Filtrer par numéro de bon",
+      "columns": "Colonnes",
+      "no_supplier": "Aucun fournisseur trouvé",
+      "search_supplier": "Rechercher un fournisseur"
+    }
+  },
+  "supplier": {
+    "form": {
+      "name": "Nom du fournisseur",
+      "abbreviation": "Abréviation",
+      "email": "Email",
+      "phone": "Numéro"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "loading": "Veuillez patienter",
+      "add_supplier": "Ajouter un fournisseur"
+    },
+    "modal": {
+      "edit_supplier": "Modifier un fournisseur",
+      "add_supplier": "Ajouter un fournisseur",
+      "delete_supplier": "Supprimer le fournisseur"
+    },
+    "toast": {
+      "success_title": "Succès",
+      "error_title": "Erreur",
+      "update_success": "Le fournisseur a été modifié avec succès",
+      "update_error": "Une erreur est survenue lors de la modification du fournisseur",
+      "delete_blocked": "Impossible de supprimer le fournisseur car il est associé à des approvisionnements.",
+      "delete_error": "Une erreur est survenue lors de la suppression du fournisseur"
+    },
+    "title": "Fournisseurs",
+    "list": {
+      "title": "Liste de fournisseurs"
+    },
+    "filters": {
+      "sales_point": "Point de vente",
+      "search_sales_point": "Rechercher un point de vente",
+      "no_sales_point": "Aucun point de vente",
+      "search_supplier": "Filtrer par nom de fournisseur..."
+    },
+    "confirm": {
+      "delete_message": "Voulez-vous vraiment supprimer {{name}} de la liste de vos fournisseurs ",
+      "delete_warning": "NB : si un approvisionnement est lié à ce fournisseur, il sera impossible de le supprimer."
+    },
+    "select_sales_point_error": "Sélectionnez un point de vente",
+    "supplier_created_success": "Fournisseur ajouté avec succès",
+    "supplier_create_error": "Une erreur est survenue lors de l'ajout du fournisseur",
+    "supplier_deleted_success": "Fournisseur supprimé avec succès.",
+    "supplier_delete_blocked": "Impossible de supprimer le fournisseur car il est associé à des approvisionnements.",
+    "supplier_delete_error": "Une erreur s'est produite lors de la suppression du fournisseur",
+    "singular": "Fournisseur",
+    "plural": "Fournisseurs",
+    "empty": "Aucun fournisseur",
+    "search": "Rechercher un fournisseur"
+  },
+  "productsList": {
+    "title": "Liste de produits",
+    "stock": "Stock",
+    "add_product_category": "Ajouter une catégorie d'article",
+    "add_product": "Ajouter un article",
+    "filter_products": "Filtrer les articles",
+    "product_list": "Liste d'articles",
+    "sales_point": "Point de vente",
+    "search_sales_point": "Rechercher un point de vente",
+    "no_sales_point": "Aucun point de vente",
+    "product_category": "Catégorie d'article",
+    "search_category": "Rechercher une catégorie",
+    "no_product_category": "Aucune catégorie trouvée",
+    "suppliers": "Fournisseurs",
+    "search_supplier": "Rechercher un fournisseur",
+    "no_supplier_found": "Aucun fournisseur trouvé",
+    "search": "Rechercher",
+    "select_sales_point": "Sélectionnez un point de vente",
+    "filter_product_placeholder": "Filtrer par nom ou code d'article...",
+    "print_sheet": "Imprimer la fiche",
+    "category_name": "Nom de la catégorie",
+    "select_salespoint_pdf": "Sélectionnez un point de vente pour imprimer la fiche de stock",
+    "pdf_title": "Fiche de stock du {{date}} {{#hasFilter}}filtré par{{/hasFilter}} {{#supplier}}fournisseur{{/supplier}} {{#category}}catégorie{{/category}}",
+    "popup_blocked": "Impossible d'ouvrir un nouvel onglet. Autorisez les popups.",
+    "loading_pdf": "Chargement du PDF...",
+    "pdf_error": "Erreur lors du chargement du PDF",
+    "category_abbreviation": "Abréviation de la catégorie",
+    "created_success": "Catégorie créée avec succès",
+    "create_error": "Une erreur est survenue lors de la création de la catégorie"
+  },
+  "product": {
+    "fields": {
+      "sales_point": "Point de vente",
+      "supplier": "Fournisseur du produit",
+      "category": "Catégorie du produit",
+      "name": "Nom du produit",
+      "code": "Code du produit",
+      "price": "Prix d'achat",
+      "with_variant": "Ce produit a des variants ?",
+      "quantity": "Quantité du produit",
+      "is_beer": "Ce produit a un emballage payant ?",
+      "package": "Emballage du produit",
+      "sell_price": "Prix de vente {{index}}"
+    },
+    "errors": {
+      "no_sell_price": "Entrez au moins un prix de vente",
+      "select_sales_point": "Veuillez sélectionner un point de vente",
+      "invalid_price": "Prix d'achat invalide",
+      "sell_price_lower_than_buy": "Le prix de vente ne peut pas être inférieur au prix d'achat",
+      "invalid_sell_prices": "Entrez des prix de vente valides",
+      "select_packaging": "Sélectionnez l'emballage du produit"
+    },
+    "success": {
+      "created": "Article ajouté avec succès"
+    },
+    "add": {
+      "title": "Ajouter un article au stock"
+    },
+    "sections": {
+      "info": "Informations du produit",
+      "sell_prices": "Prix de vente du produit"
+    },
+    "hints": {
+      "with_variant": "Notez que si ce produit a des variantes, vous devez obligatoirement ajouter des variantes pour pouvoir l'ajouter aux factures.",
+      "packaging": "Si ce produit a des emballages payants, cochez ici et sélectionnez un emballage que vous avez pré-enregistré."
+    },
+    "details": {
+      "no_change": "Aucun changement",
+      "sell_price_unchanged": "Le prix n'a pas changé",
+      "sell_price_exists": "Il semblerait que ce prix existe déj.",
+      "sell_price_created": "Prix de vente créé avec succès",
+      "sell_price_updated": "Prix mis à jour avec succès",
+      "new_sell_price": "Nouveau prix de vente",
+      "field_unchanged": "Le champ de saisie n'a pas t modifi",
+      "updated": "Le produit a bien t modifi",
+      "update_error": "Une erreur est survenue lors de la modification du produit",
+      "variant_name": "Nom de la variante",
+      "variant_created": "La variante a bien t cre",
+      "variant_create_error": "Une erreur est survenue lors de la création de la variante",
+      "unavailable": "Impossible d'afficher les détails du produit",
+      "add_variant": "Ajouter une variante",
+      "title": "Détails du produit",
+      "sell_prices_title": "Prix de vente",
+      "add_price": "Ajouter un prix",
+      "view_report": "Voir le rapport"
+    }
+  },
+  "error": "Erreur",
+  "open_menu": "Ouvrir le menu",
+  "details": "Détails",
+  "export_pdf": "Exporter en PDF",
+  "payment done": "Paiement effectué",
+  "date_range": {
+    "select_placeholder": "Sélectionner une période"
+  },
+  "select": {
+    "placeholder": "Sélectionner",
+    "search_placeholder": "Rechercher...",
+    "no_items": "Aucun élément trouvé.",
+    "no_data": "Aucune donnée trouve.",
+    "selected_count": "{{count}} sélectionnés"
+  },
+  "pagination": {
+    "previous": "Prcdent",
+    "next": "Suivant"
+  },
+  "navigation": {
+    "notifications": "Notifications",
+    "open_main_menu": "Ouvrir le menu principal",
+    "open_user_menu": "Ouvrir le menu utilisateur",
+    "groups": {
+      "dashboard": "Tableau de bord",
+      "sell": "Ventes",
+      "customers": "Clients",
+      "purchases": "Achats",
+      "stock": "Stock",
+      "finances": "Finances",
+      "enterprise": "Entreprise",
+      "reports": "Plaintes",
+      "buy": "Achats",
+      "sales point": "Point de vente"
+    },
+    "items": {
+      "sell_new": "Nouvelle vente",
+      "sell_pending": "Commandes  livrer",
+      "sell_receipt": "Encaisser une facture",
+      "sell_roadmap": "Feuille de route",
+      "sell_history": "Historique",
+      "customers_add": "Ajouter un client",
+      "customers_manage": "Gérer",
+      "buy_new": "Créer un bon",
+      "buy_in_progress": "Achat en cours",
+      "buy_roadmap": "Feuille de route",
+      "buy_history": "Historique",
+      "stock_suppliers": "Fournisseurs",
+      "stock_articles": "Articles",
+      "stock_inventory": "Inventaire",
+      "stock_packagings": "Emballages",
+      "stock_packaging_inventory": "Inventaire d'emballages",
+      "stock_losses": "Pertes",
+      "finances_cash": "Ma caisse",
+      "finances_expenses": "Dépenses",
+      "enterprise_details": "Détails",
+      "enterprise_sales_points": "Point de vente",
+      "enterprise_payment_info": "Paiement",
+      "enterprise_settings": "Paramètre",
+      "enterprise_users": "Utilisateurs",
+      "reports_all": "Consulter",
+      "upload": "Ajouter des données"
+    },
+    "close_menu": "Fermer le menu"
+  },
+  "user_menu": {
+    "groups": {
+      "information": "Information"
+    },
+    "account_settings": "Paramètres de compte",
+    "sign_out": "Se dconnecter"
+  },
+  "status_values": {
+    "created": "Cre",
+    "pending": "Livre",
+    "success": "Encaisse",
+    "receipt": "Rceptionne"
+  },
+  "supply_status": {
+    "pending": "En attente",
+    "receipt": "Rceptionne"
+  },
+  "pdf": {
+    "address": "Adresse",
+    "phone": "Numéro",
+    "created_on": "Créé le",
+    "printed_on": "Imprimé le",
+    "items": "Articles",
+    "price": "Prix",
+    "packaging": "Emballages",
+    "packaging_item": "Emballage",
+    "missing": "Manquant",
+    "additional_fees": "Frais supplémentaires",
+    "net_to_pay": "Net à payer",
+    "all_rights_reserved": "Tous droits réservés.",
+    "page_count": "Page {{page}} sur {{total}}",
+    "qty": "Qté",
+    "unit_price": "P.U.",
+    "created_by": "Créé par",
+    "made_by": "Réalisé par",
+    "taxes": "Taxes",
+    "total": "Total",
+    "email": "Email"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unread_count": "Vous avez {{count}} message(s) non lu(s).",
+    "push_title": "Notifications push",
+    "push_description": "Envoyer les notifications.",
+    "empty": "Pas de notifications",
+    "mark_all_read": "Tout marquer comme lu",
+    "view": "Voir les notifications"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Grez la configuration de votre magasin",
+    "unsaved_hint": "Les modifications ne sont appliques qu'aprs sauvegarde.",
+    "save_success_title": "Paramètres sauvegardés",
+    "save_success_description": "Modifications enregistres avec succès.",
+    "save_error_description": "Impossible de sauvegarder. Vrifiez votre connexion internet.",
+    "no_settings_found": "Aucun paramètre trouvé.",
+    "clear_search": "Effacer la recherche",
+    "unsaved_changes_count": "{{count}} modification non sauvegarde",
+    "unsaved_changes_count_plural": "{{count}} modifications non sauvegardes",
+    "choose_file": "Choisir un fichier",
+    "parameters_count": "{{count}} paramètre(s)",
+    "modified_count": "{{count}} modifi(s)",
+    "change_avatar": "Changer la photo de profil",
+    "avatar_hint": "JPG, PNG ou WebP — max 2 Mo. Cliquez sur l'avatar pour changer.",
+    "avatar_updated": "Photo de profil mise à jour",
+    "avatar_error": "Erreur lors de l'upload. Veuillez réessayer.",
+    "change_password": "Changer le mot de passe",
+    "send_code": "Envoyer un code de vérification par email",
+    "code_sent_hint": "Un code à 6 chiffres a été envoyé à votre adresse email. Saisissez-le ci-dessous avec votre ancien et nouveau mot de passe.",
+    "otp_code": "Code de vérification",
+    "old_password": "Ancien mot de passe",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmer le changement",
+    "password_changed": "Mot de passe modifié avec succès",
+    "password_code_sent": "Code envoyé ! Vérifiez votre boîte email.",
+    "password_code_error": "Impossible d'envoyer le code. Réessayez.",
+    "password_confirm_error": "Code ou mot de passe incorrect. Veuillez réessayer.",
+    "required_fields_missing": "Champs requis manquants",
+    "fill_required_fields": "Veuillez remplir : {{fields}}",
+    "profile_updated": "Profil mis à jour",
+    "saved_changes_count": "{{count}} modification sauvegardée",
+    "saved_changes_count_plural": "{{count}} modifications sauvegardées"
+  },
+  "landing": {
+    "nav": {
+      "services": "Nos services",
+      "testimonials": "Témoignages",
+      "pricing": "Tarifs",
+      "about": "À propos de nous",
+      "contact": "Nous contacter",
+      "features": "Fonctionnalités",
+      "advantages": "Avantages",
+      "faq": "FAQ"
+    },
+    "actions": {
+      "start": "Commencer",
+      "start_free": "Commencer gratuitement",
+      "view_demo": "Voir la démo",
+      "learn_more": "En savoir plus",
+      "request_demo": "Demander une démo"
+    },
+    "hero": {
+      "badge": "La gestion simplifiée",
+      "title_prefix": "Simplifiez la gestion de votre entreprise avec",
+      "description": "Factures, stocks, magasins, clients & fournisseurs - tout centraliser dans une plateforme intuitive conçue pour les PME et grandes entreprises."
+    },
+    "stats": {
+      "businesses": "Entreprises",
+      "invoices": "Factures créées",
+      "uptime": "Uptime",
+      "satisfaction": "Satisfaction"
+    },
+    "problem": {
+      "section_label": "Problème & Solution",
+      "title": "Passez de la galère à l'efficacité",
+      "problem_badge": "Le problème",
+      "problem_title": "La gestion manuelle freine votre croissance",
+      "problem_stat": "des PME perdent du temps avec des outils inadaptés",
+      "solution_badge": "La solution",
+      "solution_title": "InventoryFlow automatise tout",
+      "solution_stat": "plus rapide qu'une gestion manuelle traditionnelle",
+      "problem_points": {
+        "errors": "Erreurs de saisie et pertes de données fréquentes",
+        "visibility": "Aucune visibilité en temps réel sur les stocks",
+        "multistore": "Difficulté à gérer plusieurs magasins",
+        "invoicing": "Facturation lente et non conforme"
+      },
+      "solution_points": {
+        "stock": "Stock synchronisé en temps réel dans tous vos magasins",
+        "invoices": "Factures générées en quelques clics, conformes et traçables",
+        "dashboard": "Tableau de bord unifié pour piloter votre activité",
+        "permissions": "Rôles et permissions pour sécuriser l'accès"
+      }
+    },
+    "features": {
+      "section_label": "Fonctionnalités",
+      "title": "Tout ce dont vous avez besoin, en un seul outil",
+      "description": "InventoryFlow regroupe les fonctionnalités essentielles pour piloter votre activité commerciale.",
+      "items": {
+        "invoicing": {
+          "title": "Facturation intelligente",
+          "desc": "Créez, envoyez et suivez vos factures en un instant avec des modèles personnalisables."
+        },
+        "stock": {
+          "title": "Gestion avancée des stocks",
+          "desc": "Suivi en temps réel, alertes de seuil et historique complet de vos mouvements."
+        },
+        "multistore": {
+          "title": "Multi-magasins",
+          "desc": "Gérez plusieurs points de vente depuis une seule interface centralisée."
+        },
+        "customers": {
+          "title": "Gestion clients",
+          "desc": "Base clients enrichie avec historique d'achats, soldes et communications."
+        },
+        "suppliers": {
+          "title": "Gestion fournisseurs",
+          "desc": "Commandes, réceptions et suivi des paiements fournisseurs simplifiés."
+        },
+        "permissions": {
+          "title": "Rôles & permissions",
+          "desc": "Contrôle d'accès granulaire pour chaque utilisateur de votre équipe."
+        },
+        "customization": {
+          "title": "Personnalisation complète",
+          "desc": "Thèmes, langues et paramètres adaptés à votre image de marque."
+        }
+      },
+      "featured": {
+        "badge": "Populaire",
+        "title": "Facturation intelligente",
+        "description": "Créez des factures professionnelles en quelques clics. Modèles personnalisables, envoi automatique, suivi des paiements et relances intégrées. Conformité légale garantie.",
+        "tags": {
+          "templates": "Modèles",
+          "auto_send": "Auto-envoi",
+          "reminders": "Relances",
+          "pdf_export": "Export PDF"
+        },
+        "cta": "Explorer la facturation",
+        "recent_invoices": "Factures récentes",
+        "new_count": "3 nouvelles",
+        "monthly_revenue": "Revenus mensuels",
+        "invoice_status": {
+          "paid": "Payée",
+          "pending": "En attente",
+          "sent": "Envoyée"
+        },
+        "invoice_label": "Facture {{number}}"
+      }
+    },
+    "why": {
+      "section_label": "Pourquoi nous",
+      "title": "La plateforme de confiance pour votre business",
+      "description": "Conçu pour la performance, la sécurité et la simplicité.",
+      "items": {
+        "performance": {
+          "title": "Performance",
+          "desc": "Interface ultra-rapide optimisée pour la productivité."
+        },
+        "security": {
+          "title": "Sécurité",
+          "desc": "Données chiffrées, sauvegardes automatiques et conformité."
+        },
+        "cloud": {
+          "title": "Cloud",
+          "desc": "Accessible partout, depuis n'importe quel appareil."
+        },
+        "ease": {
+          "title": "Facilité",
+          "desc": "Prise en main immédiate sans formation technique."
+        },
+        "scalable": {
+          "title": "Scalable",
+          "desc": "De 1 à 1 000+ utilisateurs sans compromis."
+        }
+      }
+    },
+    "pricing": {
+      "section_label": "Tarifs",
+      "title": "Des prix simples et transparents",
+      "description": "Choisissez le plan adapté à la taille de votre activité. Évoluez à tout moment.",
+      "badges": {
+        "starter": "Starter",
+        "custom": "Custom"
+      }
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "description": "Tout ce que vous devez savoir pour démarrer avec InventoryFlow.",
+      "items": {
+        "trial": {
+          "q": "Puis-je tester InventoryFlow gratuitement ?",
+          "a": "Oui, nous offrons un essai gratuit de 14 jours sur tous les plans, sans carte bancaire requise."
+        },
+        "security": {
+          "q": "Mes données sont-elles sécurisées ",
+          "a": "Absolument. Nous utilisons le chiffrement AES-256, des sauvegardes quotidiennes et nos serveurs sont hébergés en Europe."
+        },
+        "multistore": {
+          "q": "Puis-je gérer plusieurs magasins ",
+          "a": "Oui, à partir du plan Pro vous pouvez connecter jusqu'à 5 magasins. Le plan Enterprise offre un nombre illimité."
+        },
+        "support": {
+          "q": "Comment fonctionne le support ?",
+          "a": "Support email sur le plan Basic, prioritaire sur Pro, et un account manager dédié 24/7 sur Enterprise."
+        },
+        "import": {
+          "q": "Puis-je importer mes données existantes ",
+          "a": "Oui, nous supportons l'import CSV/Excel et proposons un accompagnement personnalisé pour la migration."
+        }
+      },
+      "help": {
+        "title": "Besoin d'aide ",
+        "description": "Notre équipe est disponible pour répondre à toutes vos questions et vous accompagner.",
+        "quote": "L'équipe support est incroyablement réactive. Réponse en moins de 2h !",
+        "cta": "Contacter le support"
+      }
+    },
+    "cta": {
+      "badge": "Offre limitée - 14 jours gratuits",
+      "title": "Prêt à transformer votre gestion ",
+      "description": "Rejoignez plus de 10 000 entreprises qui font confiance à InventoryFlow.",
+      "badges": {
+        "ssl": "SSL sécurisé",
+        "gdpr": "RGPD conforme",
+        "setup": "Setup en 5 min"
+      }
+    },
+    "footer": {
+      "description": "La solution complète pour gérer votre activité commerciale en toute simplicité.",
+      "product": "Produit",
+      "company": "Entreprise",
+      "about": "À propos",
+      "careers": "Carrières",
+      "contact": "Contact",
+      "newsletter": "Newsletter",
+      "email_placeholder": "email@inventoryflow.site",
+      "rights": "Tous droits réservés.",
+      "privacy": "Confidentialité",
+      "legal": "Mentions légales",
+      "changelog": "Changelog",
+      "blog": "Blog",
+      "press": "Presse",
+      "terms": "CGU"
+    }
+  },
+  "auth": {
+    "signup": "S'inscrire",
+    "signin": "Se connecter",
+    "password": "Mot de passe",
+    "password_hide": "Masquer le mot de passe",
+    "password_show": "Afficher le mot de passe",
+    "terms_privacy": "CGU & Confidentialit"
+  },
+  "errors": {
+    "retry": "Une erreur est survenue, veuillez réessayer.",
+    "check_connection": "Une erreur est survenue. Vrifiez votre connexion et ressayez.",
+    "invalid_character": "Caractre non accept !"
+  },
+  "dialogs": {
+    "confirm_delete_invoice": "Voulez-vous vraiment supprimer {{number}} ",
+    "delete_invoice_stock_return": "Vous allez supprimer dfinitivement cette facture. Tous les articles disponibles retourneront dans votre stock.",
+    "confirm_receive_invoice": "Voulez-vous vraiment rceptionner {{number}} ",
+    "confirm_delete_supply": "Voulez-vous vraiment supprimer {{number}} ",
+    "delete_supply_stock_return": "Vous allez supprimer dfinitivement cette facture. Tous les articles disponibles retourneront dans votre stock.",
+    "confirm_receive_supply": "Voulez-vous vraiment rceptionner cette commande ",
+    "packaging_return_invoice": "Retour emballage de la facture {{number}}",
+    "irreversible_warning": "Cette action est irrversible."
+  },
+  "deliverer": {
+    "select": "Sélectionner un livreur",
+    "select_then_validate": "Sélectionnez un livreur puis validez",
+    "label": "Livreur"
+  },
+  "none": "Aucun",
+  "close": "Fermer",
+  "common": {
+    "yes": "Oui",
+    "no": "Non",
+    "error": "Erreur",
+    "success": "Succs",
+    "invalid_input": "Entrée invalide"
+  },
+  "packaging_return": {
+    "success": "Retour emballage effectu avec succès",
+    "cash_note": "NB: le montant des emballages retourns sera automatiquement dduit de la caisse et revers dans le solde du client.",
+    "items_intro": "Vous allez effectuer le retour des emballages suivants"
+  },
+  "total": "Total",
+  "sales_points": {
+    "label": "Points de vente",
+    "singular": "Point de vente",
+    "empty": "Aucun point de vente",
+    "search": "Rechercher un point de vente",
+    "select_required": "Sélectionnez un point de vente",
+    "actions": {
+      "create": "Créer un point de vente"
+    },
+    "success": {
+      "employee_created": "Employé créé avec succès.",
+      "tax_created": "Taxe créée avec succès.",
+      "fee_created": "Frais créé avec succès.",
+      "sales_point_created": "Point de vente créé avec succès."
+    },
+    "all": "Tous les points de vente",
+    "empty_description": "Vous n'avez aucun point de vente",
+    "dialog_description": "Entrez les informations du point de vente et enregistrez.",
+    "dialog_warning": "Assurez-vous de ne pas faire d'erreur dans vos entrées.",
+    "payroll": "Masse salariale",
+    "count": "{{count}} point(s) de vente",
+    "fields": {
+      "name": "Nom du point de vente",
+      "address": "Adresse du point de vente",
+      "initial_balance": "Montant initial du solde"
+    },
+    "total_capital": "Total du capital",
+    "stock_amount": "Montant du stock"
+  },
+  "empty": {
+    "no_items_found": "Aucun élément trouvé.",
+    "no_data_found": "Aucune donnée trouve"
+  },
+  "save": "Sauvegarder",
+  "packaging": {
+    "errors": {
+      "details_unavailable": "Impossible d'afficher les détails d'emballage",
+      "select_sales_point_for_pdf": "Sélectionnez un point de vente pour imprimer la fiche de stock",
+      "history_load_failed": "Impossible de charger l'historique emballages."
+    },
+    "title": "Emballages",
+    "list_title": "Liste d'emballages",
+    "filter_placeholder": "Filtrer par nom d'emballage...",
+    "filters": {
+      "title": "Filtrer les emballages"
+    },
+    "history_title": "Historique d'emballages",
+    "columns": {
+      "unit_price": "Prix unitaire",
+      "full": "Emballages pleins",
+      "empty": "Emballages vides",
+      "empty_quantity": "Qté vide",
+      "name": "Emballage",
+      "full_quantity": "Qté pleine",
+      "total_amount": "Montant total"
+    },
+    "actions": {
+      "add": "Ajouter un emballage",
+      "print_sheet": "Imprimer la fiche"
+    },
+    "success": {
+      "created": "Emballage créé avec succès"
+    },
+    "fields": {
+      "empty_quantity_helper": "Cette quantité correspond au nombre d'emballages vides avec lequel vous commencerez. Le montant total sera déduit de votre caisse.",
+      "empty": "Emballage vide"
+    },
+    "pdf": {
+      "stock_title": "Fiche de stock d'emballage du {{date}} {{filtered}}"
+    },
+    "record": "Historique d'emballages",
+    "singular": "Emballage",
+    "search": "Rechercher un emballage...",
+    "return_action": "Retour consigne",
+    "return_title": "Sélectionner les lignes à retourner",
+    "return_description": "Choisissez les produits consignés dont les emballages sont retournés. Le stock sera recrédité et la consigne remboursée.",
+    "return_success": "Retour de consigne enregistré avec succès.",
+    "qty": "Qté consignée",
+    "confirm_return": "Confirmer le retour",
+    "history": {
+      "columns": {
+        "movement": "Mouvement",
+        "full": "Plein",
+        "empty": "Vide",
+        "bill": "Facture",
+        "performed_by": "Effectué par"
+      },
+      "movements": {
+        "full_out": "Sortie plein",
+        "full_in": "Entrée plein",
+        "empty_out": "Sortie vide",
+        "empty_return": "Retour vide",
+        "correction": "Correction"
+      },
+      "filter_placeholder": "Filtrer par emballage, produit, facture, action...",
+      "event_count": "{{count}} événement",
+      "events_count": "{{count}} événements"
+    }
+  },
+  "validate": "Valider",
+  "status_filter": {
+    "all": "Tous",
+    "validated": "Validé",
+    "not_validated": "Non validé"
+  },
+  "inventory": {
+    "title": "Inventaires",
+    "list_title": "Liste d'inventaire",
+    "filter_placeholder": "Filtrer par numéro d'inventaire...",
+    "actions": {
+      "new": "Nouvel inventaire",
+      "validate": "Valider l'inventaire",
+      "print": "Imprimer l'inventaire",
+      "delete": "Supprimer l'inventaire",
+      "save": "Enregistrer l'inventaire"
+    },
+    "dialogs": {
+      "confirm_delete": "Supprimer {{number}} ",
+      "delete_description": "Vous tes sur le point de supprimer cet inventaire.",
+      "confirm_validate": "Valider {{number}} ",
+      "validate_description": "Vous tes sur le point de valider cet inventaire."
+    },
+    "pdf_title": "Inventaire du {{date}}",
+    "errors": {
+      "validate": "Erreur lors de la validation de l'inventaire",
+      "delete": "Erreur lors de la suppression de l'inventaire",
+      "item_exists": "Cet article existe déjà"
+    },
+    "columns": {
+      "inventory_number": "N° d'inventaire",
+      "operator": "Opérateur",
+      "validated_by": "Validé par",
+      "product_count": "Nombre de produits",
+      "created_at": "Date de création",
+      "validated_at": "Date de validation",
+      "new_quantity": "Nouvelle quantité",
+      "difference": "Différence",
+      "previous_quantity": "Qté préc."
+    },
+    "success": {
+      "created": "Inventaire créé avec succès"
+    },
+    "new": {
+      "title": "Nouvel inventaire",
+      "rules": {
+        "once_per_day": "Vous ne pouvez faire qu'un inventaire par jour, de préférence le matin.",
+        "no_invoice_today": "Vous ne pouvez faire un inventaire que si vous n'avez aucune facture pour la journée.",
+        "no_invoice_during_inventory": "Il vous sera impossible de faire une facture si vous avez un inventaire en cours.",
+        "unvalidated_deleted": "Les inventaires non validés sont automatiquement supprimés le lendemain."
+      }
+    }
+  },
+  "description": "Description",
+  "expenses": {
+    "title": "Dépenses",
+    "list_title": "Liste de dépenses",
+    "filter_placeholder": "Filtrer par numéro de dépense...",
+    "actions": {
+      "new": "Entrer une dépense",
+      "validate": "Valider la dépense",
+      "delete": "Supprimer la dépense"
+    },
+    "columns": {
+      "expense_number": "Dépense N°",
+      "operator": "Opérateur",
+      "created_at": "Date de création",
+      "validated_by": "Validé par",
+      "validated_at": "Date de validation"
+    },
+    "success": {
+      "created": "Dépense créée avec succès !",
+      "deleted": "Dépense supprimée avec succès"
+    },
+    "errors": {
+      "invalid_amount": "Entrez un montant valide",
+      "validate": "Erreur lors de la validation de la dépense",
+      "delete": "Erreur lors de la suppression de la dépense"
+    }
+  },
+  "filter": "Filtrer",
+  "confirm": "Confirmer",
+  "cash": {
+    "title": "Ma caisse",
+    "transactions_list": "Liste de transactions",
+    "filter_placeholder": "Filtrer par numéro de transaction...",
+    "cards": {
+      "balance": "Montant en caisse",
+      "sales_points_count": "point(s) de vente",
+      "total_deposits": "Total des entrées",
+      "total_withdrawals": "Total des sorties",
+      "transactions_count": "transaction(s)"
+    },
+    "columns": {
+      "transaction_number": "Numéro de transaction",
+      "transaction_type": "Type de transaction",
+      "operator": "Opérateur",
+      "previous_balance": "Solde précédent",
+      "new_balance": "Nouveau solde",
+      "created_at": "Date de création",
+      "validated_at": "Validé le",
+      "validated_by": "Validé par"
+    },
+    "supply": {
+      "invoice_debit": "Débit facture fournisseur #{{supply_number}}"
+    },
+    "types": {
+      "deposit": "Dépôt",
+      "withdrawal": "Retrait"
+    },
+    "actions": {
+      "deposit": "Entrée de fonds",
+      "withdrawal": "Sortie de fonds"
+    },
+    "errors": {
+      "invalid_amount": "Le montant ne peut pas être inférieur à zéro.",
+      "reason_too_long": "Le texte dépasse la limite de caractères."
+    },
+    "success": {
+      "created": "Transaction ajoutée avec succès.",
+      "deleted": "Transaction supprimée avec succès.",
+      "validated": "Transaction validée avec succès."
+    },
+    "dialogs": {
+      "withdraw_title": "Retirer des fonds",
+      "deposit_title": "Entrer des fonds",
+      "form_description": "Vous allez faire une {{type}} de fonds. Remplissez les informations et validez.",
+      "confirm_delete": "Supprimer la transaction {{number}}",
+      "confirm_validate": "Valider la transaction {{number}}",
+      "delete_description": "Vous allez supprimer cette transaction.",
+      "validate_description": "Vous allez valider cette transaction."
+    }
+  },
+  "article": "Article",
+  "quantity": "Quantité",
+  "losses": {
+    "title": "Gestion de pertes",
+    "list_title": "Liste de pertes",
+    "filter_placeholder": "Filtrer par opérateur...",
+    "fields": {
+      "lost_quantity": "Quantité perdue"
+    },
+    "actions": {
+      "new": "Entrer une perte",
+      "validate": "Valider la perte",
+      "delete": "Supprimer la perte"
+    },
+    "columns": {
+      "operator": "Opérateur",
+      "validated_by": "Validé par",
+      "created_at": "Date de création",
+      "validated_at": "Date de validation"
+    },
+    "success": {
+      "created": "Perte ajoutée avec succès"
+    },
+    "errors": {
+      "validate": "Erreur lors de la validation de la perte",
+      "delete": "Erreur lors de la suppression de la perte",
+      "select_article": "Sélectionnez un article..",
+      "invalid_quantity": "La quantité ne peut pas être inférieure à 1.",
+      "create": "Une erreur est survenue lors de l'ajout de la perte"
+    }
+  },
+  "total_amount": "Montant total",
+  "purchase_price": "Prix d'achat",
+  "filtered_by_supplier": "filtré par fournisseur",
+  "packaging_inventory": {
+    "title": "Inventaires d'emballage",
+    "pdf_title": "Inventaire d'emballage du {{date}}",
+    "columns": {
+      "packaging_count": "Nombre d'emballages"
+    },
+    "success": {
+      "validated": "Inventaire validé avec succès"
+    },
+    "errors": {
+      "validate": "Erreur lors de la validation de l'inventaire d'emballage",
+      "delete": "Erreur lors de la suppression de l'inventaire d'emballage",
+      "item_exists": "Cet emballage existe déjà"
+    },
+    "new": {
+      "title": "Nouvel inventaire d'emballage",
+      "rules": {
+        "empty_only": "Vous ne pouvez faire d'inventaire que sur les emballages vides car les emballages pleins s'ajustent automatiquement avec les inventaires d'articles."
+      }
+    }
+  },
+  "stock": "Stock",
+  "article_search": "Rechercher un article...",
+  "article_filter_placeholder": "Filtrer par articles...",
+  "columns": "Colonnes",
+  "warning": "Attention",
+  "receipt": {
+    "paid_amount": "Montant payé",
+    "deduct_from_client_balance": "Déduire le montant du compte client",
+    "balance_insufficient": "Le solde du client est insuffisant pour encaisser cette facture. Solde actuel {{balance}}, Montant restant {{amount}}",
+    "balance_sufficient": "Le solde du client est suffisant pour encaisser cette facture. Solde actuel : {{amount}} ",
+    "balance_remaining_as_debt": "Le montant restant sera enregistré comme dette du client. Restant: {{debt}}",
+    "success": {
+      "collected": "Facture encaissée avec succès"
+    },
+    "actions": {
+      "collect": "Encaisser",
+      "collect_invoice": "Encaisser la facture",
+      "print_a4": "Imprimer en A4",
+      "print_small": "Imprimer en petit format"
+    },
+    "dialogs": {
+      "collect_title": "Encaisser la facture {{number}}",
+      "collect_description": "Entrez le montant versé pour cette facture et validez"
+    }
+  },
+  "customer": "Client",
+  "customer_code": "Code client",
+  "created_on": "Créé le",
+  "printed_on": "Imprimé le",
+  "products": "Produits",
+  "price": "Prix",
+  "titles": {
+    "sales_report_of": "Feuille de route du"
+  },
+  "users": {
+    "list_title": "Liste d'utilisateurs",
+    "full_name": "Nom Prénom",
+    "role": "Rôle",
+    "salary": "Salaire",
+    "add_employee_description": "Vous allez ajouter un nouvel employé. Entrez les informations et continuez",
+    "empty": "Aucun employé",
+    "empty_registered": "Aucun utilisateur enregistr",
+    "user_information": "Informations de l'utilisateur",
+    "user_permissions": "Permissions de l'utilisateur",
+    "actions": {
+      "add_user": "Ajouter un utilisateur",
+      "add_user_submit": "Ajouter l'utilisateur",
+      "add_employee": "Ajouter un employé"
+    },
+    "user_type": "Type d'utilisateur",
+    "employees_count_label": "Nombre d'employés"
+  },
+  "status": {
+    "active": "Actif",
+    "inactive": "Inactif"
+  },
+  "view_all": "Voir tout",
+  "taxes": {
+    "title": "Taxes",
+    "type": "Type",
+    "value": "Valeur",
+    "application": "Application",
+    "add_description": "Vous allez ajouter une taxe. Entrez les informations et continuez",
+    "actions": {
+      "add": "Ajouter une taxe"
+    },
+    "types": {
+      "percentage": "Pourcentage",
+      "flat": "Fixe"
+    },
+    "applications": {
+      "bill": "Vente",
+      "supply": "Achat"
+    }
+  },
+  "email_verification": {
+    "success_title": "Email vérifié",
+    "success_message": "Votre adresse email a été confirmée avec succès. Vous serez redirigé dans {{time}}",
+    "error_title": "Erreur",
+    "error_message": "Le lien de vérification est invalide ou a expiré.",
+    "invalid_title": "Email invalide",
+    "invalid_message": "Veuillez réessayer plus tard."
+  },
+  "auth_signin": {
+    "welcome": "Bon retour parmi nous",
+    "subtitle": "Connectez-vous à votre espace",
+    "forgot_password": "Mot de passe oublié ?",
+    "loading": "Connexion en cours",
+    "submit": "Se connecter",
+    "no_account": "Pas encore de compte ?",
+    "create_account": "Créer un compte"
+  },
+  "checkout": {
+    "payment_success": "Paiement réussi !",
+    "payment_confirmed": "Paiement confirmé !",
+    "payment_failed": "Paiement échoué",
+    "redirect_message": "{{message}} vous serez redirigé vers votre tableau de bord dans {{time}} sec",
+    "title": "Checkout",
+    "continue_without_payment": "Continuer sans payer",
+    "user_information": "Informations d'utilisateur",
+    "payment_method": "Méthode de paiement",
+    "payment_method_description": "Sélectionnez votre méthode de paiement et continuez",
+    "credit_card": "Carte de crédit",
+    "payment_information": "Informations de paiement",
+    "unavailable": "Indisponible pour le moment",
+    "select_payment_method": "Sélectionnez une méthode de paiement",
+    "purchase_details": "Détails de l'achat",
+    "designation": "Désignation",
+    "due_date": "Date d'échéance",
+    "duration": "Durée",
+    "expiration_date": "Date d'expiration",
+    "offer_details": "Détails d'offre",
+    "terms_acceptance": "En validant ce paiement vous acceptez nos termes et conditions ainsi que notre politique de confidentialité",
+    "plan_already_active": "Vous avez déjà un plan en cours",
+    "months": "Mois"
+  },
+  "plan_invoice": {
+    "tagline": "Facturation & abonnements",
+    "payment": "Paiement",
+    "payment_date": "Date de paiement",
+    "next_due_date": "Prochaine échéance",
+    "reference": "Référence",
+    "payment_id": "ID paiement",
+    "subtotal_excl_tax": "Sous-total HT",
+    "vat": "TVA ({{rate}})",
+    "total_incl_tax": "Total TTC",
+    "notes": "Notes",
+    "subscription": "Abonnement {{plan}}",
+    "issued_valid": "Facture émise le {{date}} - Valable {{days}} jours",
+    "generated_automatically": "Généré automatiquement",
+    "company_address": "300 charles street, Toronto ON M5R 2X6",
+    "company_email": "info@inventoryflow.com",
+    "company_phone": "+1 (237) 123 456 789"
+  },
+  "settings_config": {
+    "parametres_generaux": "Paramètres généraux",
+    "nom_du_magasin": "Nom du magasin",
+    "logo": "Logo",
+    "description": "Description",
+    "email_de_contact": "Email de contact",
+    "telephone": "Téléphone",
+    "adresse": "Adresse",
+    "numero_de_contribuable": "Numero de contribuable",
+    "finances": "Finances",
+    "devise_principale": "Devise principale",
+    "euro": "Euro (€)",
+    "dollar": "Dollar ($)",
+    "dirham_mad": "Dirham (MAD)",
+    "dinar_dzd": "Dinar (DZD)",
+    "position_du_symbole": "Position du symbole",
+    "apres_100": "Après (100 €)",
+    "avant_100": "Avant (€ 100)",
+    "facturation": "Facturation",
+    "prefixe_facture": "Préfixe facture",
+    "envoi_automatique": "Envoi automatique",
+    "notes_par_defaut": "Notes par défaut",
+    "logo_sur_les_factures_pdf": "Logo sur les factures PDF",
+    "produits": "Produits",
+    "sku_automatique": "SKU automatique",
+    "prefixe_sku": "Préfixe SKU",
+    "seuil_stock_bas": "Seuil stock bas",
+    "suivi_des_stocks": "Suivi des stocks",
+    "notifications": "Notifications",
+    "notifications_par_email": "Notifications par email",
+    "alerte_stock_bas": "Alerte stock bas",
+    "nouvelle_commande": "Nouvelle commande",
+    "paiement_recu": "Paiement reçu",
+    "rapport_quotidien": "Rapport quotidien",
+    "securite": "Sécurité",
+    "expiration_de_session_min": "Expiration de session (min)",
+    "filtrage_ip": "Filtrage IP",
+    "journal_d_activite": "Journal d'activité",
+    "informations_du_magasin": "Informations du magasin",
+    "devise": "Devise",
+    "parametres_de_facturation": "Paramètres de facturation",
+    "parametres_produits": "Paramètres produits",
+    "preferences_de_notification": "Préférences de notification",
+    "parametres_de_securite": "Paramètres de sécurité",
+    "configurez_les_informations_de_base_de_votre_entreprise": "Configurez les informations de base de votre entreprise.",
+    "format_recommande_png_512x512px": "Format recommandé : PNG, 512x512px",
+    "envoyer_la_facture_par_email_automatiquement": "Envoyer la facture par email automatiquement",
+    "generer_automatiquement_les_codes_sku": "Générer automatiquement les codes SKU",
+    "alerte_quand_le_stock_descend_en_dessous": "Alerte quand le stock descend en dessous",
+    "recevoir_un_resume_journalier_par_email": "Recevoir un résumé journalier par email",
+    "restreindre_l_acces_a_certaines_adresses_ip": "Restreindre l'accès à certaines adresses IP",
+    "enregistrer_toutes_les_actions_utilisateurs": "Enregistrer toutes les actions utilisateurs",
+    "nom_de_votre_boutique": "Nom de votre boutique",
+    "decrivez_votre_activite": "Décrivez votre activité...",
+    "email_exemple_com": "email@exemple.com",
+    "adresse_complete": "Adresse complète",
+    "notes_affichees_en_bas_de_facture": "Notes affichées en bas de facture",
+    "merci_pour_votre_confiance": "Merci pour votre confiance."
+  },
+  "user_config": {
+    "profil": "Profil",
+    "prenom": "Prénom",
+    "nom": "Nom",
+    "adresse_email": "Adresse email",
+    "photo_de_profil": "Photo de profil",
+    "poste": "Poste",
+    "service": "Service",
+    "direction": "Direction",
+    "ventes": "Ventes",
+    "comptabilite": "Comptabilité",
+    "support": "Support",
+    "mot_de_passe_actuel": "Mot de passe actuel",
+    "nouveau_mot_de_passe": "Nouveau mot de passe",
+    "confirmer_le_mot_de_passe": "Confirmer le mot de passe",
+    "activer_la_2fa": "Activer la 2FA",
+    "methode": "Méthode",
+    "email": "Email",
+    "sms": "SMS",
+    "deconnexion_automatique_min": "Déconnexion automatique (min)",
+    "limiter_a_une_session": "Limiter à une session",
+    "preferences": "Préférences",
+    "theme": "Thème",
+    "clair": "Clair",
+    "sombre": "Sombre",
+    "systeme": "Système",
+    "langue": "Langue",
+    "francais": "Français",
+    "english": "English",
+    "espanol": "Español",
+    "format_de_date": "Format de date",
+    "jj_mm_aaaa": "JJ/MM/AAAA",
+    "mm_jj_aaaa": "MM/JJ/AAAA",
+    "aaaa_mm_jj": "AAAA-MM-JJ",
+    "factures": "Factures",
+    "paiements": "Paiements",
+    "rapports_hebdomadaires": "Rapports hebdomadaires",
+    "alertes_de_securite": "Alertes de sécurité",
+    "activer_les_notifications_push": "Activer les notifications push",
+    "son_de_notification": "Son de notification",
+    "frequence": "Fréquence",
+    "quotidien": "Quotidien",
+    "hebdomadaire": "Hebdomadaire",
+    "mensuel": "Mensuel",
+    "jamais": "Jamais",
+    "informations_personnelles": "Informations personnelles",
+    "role_and_organisation": "Rôle & Organisation",
+    "mot_de_passe": "Mot de passe",
+    "authentification_a_deux_facteurs": "Authentification à deux facteurs",
+    "sessions_actives": "Sessions actives",
+    "affichage": "Affichage",
+    "parametres_regionaux": "Paramètres régionaux",
+    "notifications_push": "Notifications push",
+    "frequence_des_resumes": "Fréquence des résumés",
+    "vos_informations_de_base_visibles_par_les_autres_membres": "Vos informations de base visibles par les autres membres.",
+    "changez_votre_mot_de_passe_regulierement_pour_plus_de_securi": "Changez votre mot de passe régulièrement pour plus de sécurité.",
+    "ajoutez_une_couche_de_securite_supplementaire_a_votre_compte": "Ajoutez une couche de sécurité supplémentaire à votre compte.",
+    "delai_d_inactivite_avant_deconnexion_automatique": "Délai d'inactivité avant déconnexion automatique.",
+    "deconnecter_les_autres_sessions_a_la_connexion": "Déconnecter les autres sessions à la connexion.",
+    "personnalisez_l_apparence_de_votre_interface": "Personnalisez l'apparence de votre interface.",
+    "choisissez_quelles_notifications_recevoir_par_email": "Choisissez quelles notifications recevoir par email.",
+    "recevoir_un_email_a_chaque_nouvelle_facture": "Recevoir un email à chaque nouvelle facture.",
+    "etre_notifie_des_paiements_recus": "Être notifié des paiements reçus.",
+    "resume_des_ventes_chaque_lundi": "Résumé des ventes chaque lundi.",
+    "connexions_suspectes_changements_de_mot_de_passe": "Connexions suspectes, changements de mot de passe.",
+    "votre_prenom": "Votre prénom",
+    "votre_nom": "Votre nom",
+    "ex_directeur_caissier": "Ex : Directeur, Caissier…",
+    "telephone": "Téléphone",
+    "gerant": "Gérant",
+    "securite": "Sécurité",
+    "changez_votre_mot_de_passe_regulierement_pour_plus_de_securite": "Changez votre mot de passe réguliérement pour plus de sécurité."
+  },
+  "important": "Important",
+  "preview": "Aperéu",
+  "daily_closure": {
+    "title": "Bouclage journalier",
+    "select_date": "Sélectionnez une date",
+    "cash_balance": "Solde caisse",
+    "daily_sales": "Ventes du jour",
+    "daily_profit": "Bénéfice du jour",
+    "compared_to_previous_period": "{{percent}}% par rapport à la période précédente",
+    "profit_change": "{{percent}}% {{direction}} par rapport à la période précédente",
+    "more": "de plus",
+    "less": "de moins"
+  },
+  "enterprise_information": {
+    "general_title": "Générales",
+    "currency": "Devise",
+    "save_information": "Enregistrer les informations",
+    "payment_method": "Méthode de paiement",
+    "payment_cycle": "Cycle de paiement",
+    "current_period": "En cours",
+    "next_due_date": "Prochaine échéance",
+    "debt_balance": "Solde de dette",
+    "expires_on": "Expire le",
+    "popup_blocked": "Impossible d'ouvrir un nouvel onglet. Autorisez les popups pour ce site.",
+    "loading_pdf": "Chargement du PDF...",
+    "pdf_load_failed": "Impossible de charger le PDF.",
+    "no_debt": "Aucune dette pour le moment",
+    "no_payment_method": "Aucun moyen de paiement enregistré."
+  },
+  "all": "Tout",
+  "fees": {
+    "actions": {
+      "add": "Ajouter des frais suppélémentaires"
+    },
+    "add_description": "Vous allez ajouter des frais supplémentaires. Entrez les informations et continuez",
+    "type": "Type",
+    "types": {
+      "percentage": "Pourcentage",
+      "flat": "Fixe"
+    },
+    "application": "Application",
+    "applicable_to_bill": "Frais supplémentaires applicables à la vente",
+    "applicable_to_supply": "Frais supplémentaires applicables à l'approvisionement",
+    "applications": {
+      "bill": "Vente",
+      "supply": "Achat"
+    },
+    "amount": "Montant",
+    "order": "Ordre",
+    "orders": {
+      "before_tax": "Avant taxes",
+      "after_tax": "Après taxes"
+    }
+  },
+  "sell": {
+    "filter_articles": "Filtrer par articles..."
+  },
+  "otp": {
+    "enter_code": "Entrer le code de vérification"
+  },
+  "upgrade_banner": {
+    "title": "Fonctionnalité réservée au plan {{plan}}",
+    "subtitle": "Passez au plan {{plan}} pour débloquer cette fonctionnalité et bien plus encore.",
+    "cta": "Passer au plan {{plan}}",
+    "cta_short": "Mettre à niveau",
+    "compact_default": "Disponible avec le plan {{plan}}"
+  },
+  "report": {
+    "title": "Rapport — {{name}}",
+    "last_30_days": "30 derniers jours",
+    "sales_chart": "Évolution des ventes",
+    "kpi": {
+      "revenue": "Chiffre d'affaires",
+      "profit": "Bénéfice net",
+      "quantity_sold": "Quantité vendue",
+      "avg_ticket": "Ticket moyen",
+      "sold": "Quantité totale vendue"
+    },
+    "view_client_report": "Voir le rapport",
+    "rfm": {
+      "segment": "Segment",
+      "recency": "Récence",
+      "frequency": "Fréquence",
+      "monetary": "Montant"
+    },
+    "client": {
+      "total_orders": "Commandes",
+      "avg_order": "Panier moyen",
+      "last_order": "Dernier achat",
+      "favorite_products": "Produits favoris"
+    }
+  },
+  "reorder": {
+    "suggestions_title": "Suggestions de réapprovisionnement",
+    "ia_powered": "Propulsé par l'IA",
+    "no_suggestions": "Aucune suggestion.",
+    "stock_current": "Stock actuel",
+    "suggested_qty": "Qté suggérée",
+    "urgency_critical": "Critique",
+    "urgency_low": "Faible stock"
+  },
+  "employee": {
+    "view_debts": "Voir les dettes",
+    "no_debts": "Aucune dette enregistrée.",
+    "debt_advance": "Avance sur salaire",
+    "debt_paid": "Dette marquée comme remboursée.",
+    "debt_status_paid": "Remboursé",
+    "mark_paid": "Marquer remboursé"
+  },
+  "import": {
+    "fields": {
+      "product": {
+        "name": "Nom du produit",
+        "product_code": "Code produit",
+        "category": "Catégorie",
+        "supplier_name": "Fournisseur",
+        "price": "Prix d'achat",
+        "quantity": "Quantité",
+        "sell_price": "Prix de vente",
+        "is_beer": "Est une bière",
+        "packaging": "Emballage"
+      },
+      "supplier": {
+        "name": "Nom du fournisseur",
+        "email": "Email",
+        "contact": "Téléphone",
+        "ab_name": "Abréviation"
+      },
+      "category": {
+        "name": "Nom",
+        "ab_name": "Abréviation"
+      },
+      "client": {
+        "name": "Prénom",
+        "surname": "Nom de famille",
+        "number": "Téléphone",
+        "email": "Email",
+        "address": "Adresse",
+        "client_category": "Catégorie client"
+      },
+      "packaging": {
+        "name": "Nom",
+        "price": "Prix unitaire",
+        "supplier_name": "Fournisseur",
+        "full_quantity": "Quantité plein",
+        "empty_quantity": "Quantité vide"
+      },
+      "product_variant": {
+        "product_name": "Produit parent",
+        "variant_name": "Variante",
+        "category": "Catégorie",
+        "supplier_name": "Fournisseur",
+        "price": "Prix d'achat",
+        "quantity": "Quantité",
+        "is_beer": "Emballage payant",
+        "packaging": "Emballage"
+      }
+    }
+  },
+  "footer": {
+    "by": "par",
+    "made_by": "Réalisé par"
+  }
+}

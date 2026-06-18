@@ -1,0 +1,371 @@
+import React from "react";
+import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import { formatteCurrency } from "../(admin)/stock/functions";
+import i18n from "i18next";
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 20,
+  },
+  container: {
+    backgroundColor: "#fff",
+    width: "100%",
+    border: "1px solid #CBD5E1",
+    borderStyle: "solid",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+  },
+  title: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 10,
+    textDecoration: "underline",
+    textTransform: "uppercase",
+    fontWeight: "bold",
+  },
+  subtitle: {
+    fontSize: 10,
+    marginBottom: 5,
+    textTransform: "uppercase",
+  },
+  table: {
+    //@ts-ignore
+    display: "table",
+    width: "100%",
+    marginVertical: 10,
+  },
+  tableRow: {
+    flexDirection: "row",
+  },
+  tableCell: {
+    flex: 2,
+    padding: 5,
+    fontSize: 8,
+    borderBottom: "1px solid #E2E8F0",
+    textAlign: "right",
+  },
+  tableHeader: {
+    backgroundColor: "#EEF2FF",
+    fontWeight: "bold",
+  },
+  footer: {
+    textAlign: "center",
+    fontSize: 7,
+    // marginTop: 20,
+    color: "#34495e",
+  },
+  signature: {
+    marginTop: 50,
+    textAlign: "center",
+    fontSize: 10,
+    fontWeight: "bold",
+  },
+});
+
+const SupplyPdf = ({ supply }: { supply: Supply | null }) => {
+  const t = i18n.t.bind(i18n);
+  const packagingDetails = supply?.invoice_history[1]?.packaging_details ?? supply?.invoice_history[0]?.packaging_details;
+  const totalPackagings = Object.keys(packagingDetails).reduce((curr, key) => {
+    const packaging = packagingDetails[key];
+    return (curr +=
+      Number(packaging.packaging_cost) * Number(packaging.missing_quantity));
+  }, 0);
+  const taxDetails = supply?.invoice_history[0]?.tax_details;
+  const feeDetails = supply?.invoice_history[0]?.fee_details;
+  return (
+    <Document>
+      <Page style={styles.page} size="A4">
+        <View style={[styles.container, { justifyContent: "space-between" }]}>
+          <Text style={styles.title}>{supply?.sales_point_details.name}</Text>
+          <View style={styles.tableRow}>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              {t("invoice.contract_number")}: {supply?.sales_point_details?.nc ?? "N/A"}
+            </Text>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              {t("pdf.address")}: {supply?.sales_point_details.address ?? "N/A"}
+            </Text>
+          </View>
+          <View style={[styles.tableRow]}>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              {t("pdf.email")}: {supply?.sales_point_details?.email ?? "N/A"}
+            </Text>
+            <Text style={[styles.subtitle, { flex: 1 }]}>
+              {t("pdf.phone")}: {supply?.sales_point_details.number ?? "N/A"}
+            </Text>
+          </View>
+        </View>
+        <Text style={[styles.title, { marginTop: 15 }]}>
+          {t("supply.title")} #{supply?.supply_number}
+        </Text>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          }}
+        >
+          <View style={{ marginVertical: 20 }}>
+            <Text style={styles.subtitle}>
+              {t("supply.supplier")}: {supply?.supplier_details.name}
+            </Text>
+            <Text style={styles.subtitle}>
+              {t("bills.columns.status")}: {t(`supply_status.${supply?.status}`)}
+            </Text>
+          </View>
+          <View style={{ marginVertical: 20 }}>
+            <Text style={styles.subtitle}>
+              {t("bills.columns.operator")} : {supply?.operator_details?.name}{" "}
+              {supply?.operator_details?.surname}
+            </Text>
+            <Text style={styles.subtitle}>
+              {/* @ts-ignore */}
+              {t("pdf.created_on")}: {new Date(supply?.created_at).toLocaleString()}
+            </Text>
+            <Text style={styles.subtitle}>
+              {t("pdf.printed_on")}: {new Date().toLocaleString()}
+            </Text>
+          </View>
+        </View>
+
+        <Text style={[styles.subtitle, { marginTop: 5 }]}>{t("pdf.items")}</Text>
+        <View style={styles.table}>
+          <View style={[styles.tableRow, styles.tableHeader]}>
+            <Text style={styles.tableCell}>{t("bills.columns.code")}</Text>
+            <Text style={styles.tableCell}>{t("bills.columns.article")}</Text>
+            <Text style={styles.tableCell}>{t("bills.columns.quantity")}</Text>
+            <Text style={styles.tableCell}>{t("pdf.price")}</Text>
+            <Text style={styles.tableCell}>{t("bills.columns.total")}</Text>
+          </View>
+          {supply?.supply_products.map((product, index) => (
+            <View style={styles.tableRow} key={index}>
+              <Text style={styles.tableCell}>
+                {product.product_details.product_code}
+              </Text>
+              <Text style={styles.tableCell}>
+                {product.product_details.name}
+              </Text>
+              <Text style={styles.tableCell}>{product.quantity}</Text>
+              <Text style={styles.tableCell}>{Number(product.price)}</Text>
+              <Text style={styles.tableCell}>
+                {formatteCurrency(Number(product.price) * product.quantity)}
+              </Text>
+            </View>
+          ))}
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCell}></Text>
+            <Text style={[styles.tableCell, { fontWeight: "bold" }]}>{t("pdf.total")}</Text>
+            <Text style={styles.tableCell}>
+              {supply?.supply_products.reduce(
+                (acc, curr) => (acc += curr.quantity),
+                0
+              )}
+            </Text>
+            <Text style={styles.tableCell}>-</Text>
+            <Text style={styles.tableCell}>
+              {formatteCurrency(supply?.total_cost ?? 0, "XAF", "fr-FR")}
+            </Text>
+          </View>
+        </View>
+        <View>
+          {Object.keys(packagingDetails).length > 0 && (
+            <>
+              <Text style={[styles.subtitle, { marginTop: 5 }]}>
+                {t("pdf.packaging")}
+              </Text>
+              <View style={[styles.tableRow, styles.tableHeader]}>
+                <Text style={styles.tableCell}>{t("bills.columns.article")}</Text>
+                <Text style={styles.tableCell}>{t("pdf.packaging_item")}</Text>
+                <Text style={styles.tableCell}>{t("pdf.missing")}</Text>
+                <Text style={styles.tableCell}>{t("pdf.price")}</Text>
+                <Text style={styles.tableCell}>{t("bills.columns.total")}</Text>
+              </View>
+              {Object.keys(packagingDetails).map((obj) => {
+                const packaging = packagingDetails[obj];
+                return (
+                  <View key={obj} style={styles.tableRow}>
+                    <Text style={styles.tableCell}>{obj}</Text>
+                    <Text style={styles.tableCell}>{packaging.name}</Text>
+                    <Text style={styles.tableCell}>
+                      {packaging.missing_quantity}
+                    </Text>
+                    <Text style={styles.tableCell}>
+                      {Number(packaging.packaging_cost)}
+                    </Text>
+                    <Text style={styles.tableCell}>
+                      {formatteCurrency(
+                        Number(packaging.packaging_cost) *
+                        packaging.missing_quantity,
+                        "XAF",
+                        "fr-FR"
+                      )}
+                    </Text>
+                  </View>
+                );
+              })}
+              <View style={styles.tableRow}>
+                <Text style={styles.tableCell}></Text>
+                <Text style={[styles.tableCell, { fontWeight: "bold" }]}>{t("pdf.total")}</Text>
+                <Text style={styles.tableCell}>
+                  {Number(
+                    Object.values(packagingDetails).reduce((acc, curr) => {
+                      return (acc += Number(curr.missing_quantity));
+                    }, 0)
+                  )}
+                </Text>
+                <Text style={styles.tableCell}>-</Text>
+                <Text style={styles.tableCell}>
+                  {formatteCurrency(totalPackagings)}
+                </Text>
+              </View>
+            </>
+          )}
+        </View>
+        <View>
+          {Number(taxDetails?.total_tax_amount) > 0 && (
+            <>
+              <Text style={[styles.subtitle, { marginTop: 5 }]}>{t("pdf.taxes")}: </Text>
+              {taxDetails?.breakdown?.map((obj, i) => {
+                return (
+                  <View
+                    key={i}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 5,
+                      alignSelf: "flex-end",
+                      width: "18%",
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.tableCell,
+                        { textAlign: "right", borderBottom: 0 },
+                      ]}
+                    >
+                      {obj.tax_name} :{"     "}
+                    </Text>
+                    <Text style={{ flex: 3, fontSize: 8 }}>
+                      {formatteCurrency(obj.tax_amount)}
+                    </Text>
+                  </View>
+                );
+              })}
+              <Text
+                style={[
+                  styles.tableCell,
+                  {
+                    textAlign: "right",
+                    borderBottom: 0,
+                    fontWeight: "bold",
+                    marginTop: 5,
+                  },
+                ]}
+              >
+                {t("pdf.total")} :{"    "}
+                {formatteCurrency(Number(taxDetails?.total_tax_amount))}
+              </Text>
+            </>
+          )}
+        </View>
+        <View>
+          {Number(feeDetails?.total_fee_amount) > 0 && (
+            <View style={{ marginTop: 15 }}>
+              <Text style={[styles.subtitle, { marginTop: 5 }]}>
+                {t("pdf.additional_fees")} :{" "}
+              </Text>
+              {feeDetails?.breakdown?.map((obj, i) => {
+                return (
+                  <View key={i} style={{}}>
+                    <Text
+                      style={[
+                        styles.tableCell,
+                        {
+                          textAlign: "right",
+                          // borderWidth: 0,
+                        },
+                      ]}
+                    >
+                      {obj.fee_name} :{"     "}
+                      {formatteCurrency(obj.fee_amount, "XAF", "fr-FR").replace(
+                        "/",
+                        ""
+                      )}
+                    </Text>
+                  </View>
+                );
+              })}
+              <Text
+                style={[
+                  styles.tableCell,
+                  {
+                    textAlign: "right",
+                    // borderWidth: 0,
+                    fontWeight: "bold",
+                    marginTop: 5,
+                  },
+                ]}
+              >
+                {t("pdf.total")} :{"    "}
+                {formatteCurrency(
+                  Number(feeDetails?.total_fee_amount),
+                  "XAF",
+                  "fr-FR"
+                ).replace("/", "")}
+              </Text>
+            </View>
+          )}
+        </View>
+        <View
+          style={[
+            styles.tableRow,
+            {
+              marginTop: 20,
+              justifyContent: "flex-end",
+              alignItems: "center",
+            },
+          ]}
+        >
+          <Text style={[styles.subtitle]}></Text>
+          <Text style={[styles.subtitle, { marginHorizontal: 5 }]}>
+            {t("pdf.net_to_pay")}:
+          </Text>
+          <Text style={[styles.subtitle]}>
+            {formatteCurrency(
+              Number(supply?.total_cost) +
+              Number(taxDetails?.total_tax_amount) +
+              Number(feeDetails?.total_fee_amount) +
+              totalPackagings,
+              "XAF",
+              "fr-Fr"
+            )}
+          </Text>
+        </View>
+        <View
+          style={[
+            styles.tableRow,
+            {
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 100,
+            },
+          ]}
+        >
+          <Text style={styles.footer}>{new Date().toLocaleString()}</Text>
+          <Text style={styles.footer}>
+            {"\u00a9 2026 InventoryFlow by Interact | "}{t("pdf.all_rights_reserved")}
+          </Text>
+          <Text
+            style={styles.footer}
+            render={({ pageNumber, totalPages }) =>
+              t("pdf.page_count", { page: pageNumber, total: totalPages })
+            }
+          />
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
+export default SupplyPdf;

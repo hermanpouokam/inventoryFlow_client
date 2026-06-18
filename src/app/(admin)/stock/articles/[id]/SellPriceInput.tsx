@@ -1,0 +1,185 @@
+import * as React from "react";
+import {
+useTranslation } from "react-i18next";
+import { CircularProgress,
+TextField } from "@mui/material";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Check,
+CircleAlert,
+Pencil,
+X,
+CheckCircle,
+XCircle,
+} from "lucide-react";
+import { instance } from "@/components/fetch";
+import { toast } from "@/components/ui/app-toast";
+import { usePermission } from "@/context/PermissionContext";
+
+const InputPrice = ({
+  input,
+  isSelected,
+  onSelect,
+  onSetLoading,
+  product,
+  loading,
+}: {
+  input: SellPrice;
+  isSelected: boolean;
+  onSelect: (e: string) => void;
+  onSetLoading: (state: boolean) => void;
+  product: Product;
+  loading: boolean;
+}) => {
+  const [text, setText] = React.useState(Number(input?.price) ?? "");
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const { t } = useTranslation("common");
+  const { hasPermission } = usePermission()
+  React.useEffect(() => {
+    if (isSelected && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isSelected]);
+
+  const handleUpdateProduct = async () => {
+    if (Number(text) == Number(input.price)) {
+      return toast({
+        variant: "warning",
+        title: t("warning"),
+        description: t("product.details.sell_price_unchanged"),
+        icon: <CircleAlert className="size-4" />,
+      });
+    }
+    if (product.sell_prices.find((pr) => Number(pr.price) === Number(text))) {
+      return toast({
+        title: t("warning"),
+        description: t("product.details.sell_price_exists"),
+        variant: "warning",
+        icon: <CircleAlert className="size-4" />,
+      });
+    }
+    if (input.id == 0) {
+      if (Number(text) < Number(product.price)) {
+        return toast({
+          title: t("error"),
+          description: t("product.errors.sell_price_lower_than_buy"),
+          variant: "destructive",
+          icon: <XCircle className="size-4" />,
+        });
+      }
+      const response = await instance.post(
+        `/sell-prices/`,
+        {
+          price: text,
+          product: input.product,
+        },
+        { withCredentials: true }
+      );
+      if (response.status === 201) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+        return toast({
+          title: t("success"),
+          description: t("product.details.sell_price_created"),
+          variant: "success",
+          icon: <CheckCircle className="size-4" />,
+        });
+      }
+    }
+    onSetLoading(true);
+    try {
+      const res = await instance.patch(
+        `/sell-prices/${input.id}/`,
+        {
+          price: text,
+        },
+        { withCredentials: true }
+      );
+      if (res.status === 200) {
+        // setProduct({ ...product, sell_prices: res.data });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+        return toast({
+          title: t("success"),
+          description: t("product.details.sell_price_updated"),
+          variant: "success",
+          icon: <CheckCircle className="size-4" />,
+        });
+      }
+    } catch (error) {
+      return toast({
+        title: t("error"),
+        description: t("errors.retry"),
+        variant: "destructive",
+        icon: <XCircle className="size-4" />,
+      });
+    } finally {
+      onSetLoading(false);
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-7 items-center gap-3 overflow-hidden">
+      <label className="text-sm col-span-2 font-medium text-center">
+        {input.id == 0 ? t("product.details.new_sell_price") : t("product.fields.sell_price", { index: "" })}
+      </label>
+      <div className={cn(isSelected ? "col-span-3" : "col-span-4")}>
+        {isSelected ? (
+          <TextField
+            fullWidth
+            value={text}
+            //@ts-ignore
+            onChange={(el) => setText(el.target.value)}
+            size="small"
+            inputRef={inputRef}
+            type="number"
+          />
+        ) : (
+          <div
+            className={cn(
+              " border border-slate-400 rounded p-2 transition-all duration-300 overflow-hidden w-full"
+            )}
+          >
+            <h4>{Number(input.price)}</h4>
+          </div>
+        )}
+      </div>
+      {hasPermission('edit_product') ? !isSelected ? (
+        <Button
+          variant="secondary"
+          onClick={() => onSelect(`price${input.id}`)} // Sélectionne cet élément et désélectionne les autres
+          className="transition-opacity duration-300"
+        >
+          <Pencil className="w-4 h-4" />
+        </Button>
+      ) : (
+        <div
+          className={cn(
+            "delay-150 duration-150 transition-all flex items-center gap-2",
+            isSelected ? "translate-x-0" : "translate-x-[50%]"
+          )}
+        >
+          <Button onClick={() => onSelect("")} variant="destructive">
+            <X className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="default"
+            disabled={loading}
+            onClick={handleUpdateProduct}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            {loading ? (
+              <CircularProgress size={"small"} />
+            ) : (
+              <Check className="w-4 h-4" />
+            )}
+          </Button>
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
+export default InputPrice;

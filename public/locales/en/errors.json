@@ -1,0 +1,8 @@
+{
+  "invalid amount": "Invalid amount",
+  "invalid price": "Invalid sale price",
+  "invalid date": "Invalid date",
+  "invalid client": "Invalid customer",
+  "invalid product": "Invalid product",
+  "invalid operation type": "Invalid operation type"
+}

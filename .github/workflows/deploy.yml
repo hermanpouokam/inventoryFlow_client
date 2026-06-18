@@ -1,0 +1,110 @@
+name: Deploy to ECS
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  AWS_REGION: eu-north-1
+  ECR_REPOSITORY: nextjs-app
+  ECS_CLUSTER: nextjs-cluster
+  ECS_SERVICE: nextjs-service
+  CONTAINER_NAME: nextjs
+
+jobs:
+  deploy:
+    if: "!contains(github.event.head_commit.message, '[skip-deploy]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag & push image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
+            --build-arg NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }} \
+            --build-arg STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }} \
+            --build-arg STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }} \
+            --build-arg INTERNAL_WEBHOOK_SECRET=${{ secrets.INTERNAL_WEBHOOK_SECRET }} \
+            --build-arg DJANGO_API_URL=${{ secrets.DJANGO_API_URL }} \
+            --build-arg NOTCHPAY_ENV="sandbox" \
+            --build-arg NOTCHPAY_PUBLIC_KEY=${{ secrets.NOTCHPAY_PUBLIC_KEY }} \
+            --build-arg NOTCHPAY_PRIVATE_KEY=${{ secrets.NOTCHPAY_PRIVATE_KEY }} \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Create task definition
+        run: |
+          mkdir -p infra
+          cat > infra/task-definition.json << 'EOF'
+          {
+            "family": "nextjs-app",
+            "networkMode": "awsvpc",
+            "requiresCompatibilities": ["FARGATE"],
+            "cpu": "512",
+            "memory": "1024",
+            "executionRoleArn": "arn:aws:iam::861104818335:role/ecsTaskExecutionRole",
+            "containerDefinitions": [
+              {
+                "name": "nextjs",
+                "image": "861104818335.dkr.ecr.eu-north-1.amazonaws.com/nextjs-app:latest",
+                "portMappings": [{ "containerPort": 3000, "protocol": "tcp" }],
+                "essential": true,
+                "environment": [
+                  { "name": "NODE_ENV", "value": "production" },
+                  { "name": "NOTCHPAY_ENV", "value": "sandbox" },
+                  { "name": "NEXT_PUBLIC_API_URL", "value": "https://api.inventoryflow.site" },
+                  { "name": "NEXT_PUBLIC_STRIPE_PUBLIC_KEY", "value": "${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}" },
+                  { "name": "STRIPE_SECRET_KEY", "value": "${{ secrets.STRIPE_SECRET_KEY }}" },
+                  { "name": "STRIPE_WEBHOOK_SECRET", "value": "${{ secrets.STRIPE_WEBHOOK_SECRET }}" },
+                  { "name": "INTERNAL_WEBHOOK_SECRET", "value": "${{ secrets.INTERNAL_WEBHOOK_SECRET }}" },
+                  { "name": "DJANGO_API_URL", "value": "${{ secrets.DJANGO_API_URL }}" },
+                  { "name": "NOTCHPAY_PUBLIC_KEY", "value": "${{ secrets.NOTCHPAY_PUBLIC_KEY }}" },
+                  { "name": "NOTCHPAY_PRIVATE_KEY", "value": "${{ secrets.NOTCHPAY_PRIVATE_KEY }}" }
+                ],
+                "logConfiguration": {
+                  "logDriver": "awslogs",
+                  "options": {
+                    "awslogs-group": "/ecs/nextjs-app",
+                    "awslogs-region": "eu-north-1",
+                    "awslogs-stream-prefix": "ecs"
+                  }
+                }
+              }
+            ]
+          }
+          EOF
+
+      - name: Update ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: infra/task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true

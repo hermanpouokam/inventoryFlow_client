@@ -1,0 +1,1752 @@
+{
+  "user_permission_text": "This represents the actions the user can perform. If you wish to remove a permission, click the cross.",
+  "user_page_permission_text": "This represents the pages the user can visit. If you wish to remove a permission, click the cross.",
+  "user_type_select_error": "Please select a user type",
+  "sales_point_type_select_error": "Please select a sales point",
+  "username_exists_message": "This username already exists. Please enter another one.",
+  "email_exists_message": "This email is already in use. Please enter another one.",
+  "invalid_phone_number": "Invalid phone number.",
+  "user_creation": "User creation",
+  "adding_permissions": "Adding permissions",
+  "adding_page_permissions": "Adding page permissions",
+  "user_created": "User successfully created",
+  "loading": "loading",
+  "user": "user",
+  "billing_annual": "Year",
+  "no_permission": "no permission",
+  "expense_validation_success_message": "Expense successfully validated",
+  "supplie_packaging_warning": "NB: If for each item with packaging you do not have enough, additional fees will apply at the time of payment.",
+  "confirm_supply_validation": "Are you sure you want to validate this supply? {{total_cost}} will be deducted from the sales point balance.",
+  "add": "Add",
+  "redirecting": "Redirecting",
+  "unexpected_error": "An unexpected error occurred. Check your connection and try again",
+  "continue": "Continue",
+  "edit": "Edit",
+  "delete": "Delete",
+  "name": "Name",
+  "modify": "Modify",
+  "cancel": "Cancel",
+  "surname": "First name",
+  "username": "Username",
+  "email": "Email",
+  "number": "Phone number",
+  "address": "Address",
+  "user_not_found": "No user found",
+  "monthly": "monthly",
+  "annual": "annual",
+  "select_plan": "Select a plan",
+  "error_username_exist": "This username is already taken. Please choose another one.",
+  "unknown_error": "An unexpected error occurred.",
+  "user_update_success": "Information updated successfully.",
+  "btn_save_image": "Save image",
+  "btn_choose_image": "Choose an image",
+  "profile_picture_updated": "Profile picture updated successfully",
+  "image_deleted": "Profile picture deleted successfully",
+  "image_too_large": "File too large",
+  "image_not_found": "Image not found",
+  "unsupported_file_type": "Invalid format",
+  "invalid_image": "The provided file is not an image",
+  "placeholder_password_input": "Enter the {{text}}",
+  "please wait": "Please wait",
+  "email_verification_text": "Verification code",
+  "new_password_text": "Set a password",
+  "not_received_code": "Didn't receive a code?",
+  "invalid_old_password": "Incorrect password.",
+  "invalid_new_password": "This password is too similar to the username, choose another one.",
+  "password_not_match": "Passwords do not match.",
+  "too_soon_password_change_code": "You must wait before requesting another code.",
+  "too_soon_password_reset_code": "Too many attempts. You must wait before requesting another code.",
+  "code_expired": "This code has expired.",
+  "invalid_code": "Invalid code",
+  "forgot_password_text": "Recover your password.",
+  "forgot_password_sub_text": "Enter the email address associated with your account. We will send you a code to reset your password.",
+  "email_input_placeholder": "enter your email address",
+  "recover_password_page_title": "Forgot password",
+  "ask_opt_code_text": "resend code",
+  "timer_sec": "{{time}} seconds",
+  "new_password_sub_text": "Please enter your new password. Make sure your new password is secure enough to protect your account.",
+  "The password is too similar to the username.": "This password is too similar to the username, choose another one.",
+  "email_verification_subtext": "We sent a verification code to {{email}}. Enter it below to confirm your password update.",
+  "billing_monthly": "Month",
+  "subtext_off": "Save {{amount}}",
+  "pricing_card_subtext": "30 days free - No commitment",
+  "pricing_page_subtext": "All plans include a 30-day free trial. No credit card required.",
+  "pricing_card_btn_text": "Start now",
+  "popular": "Popular",
+  "recommended": "Recommended",
+  "invoice": {
+    "success": {
+      "received": "Invoice received successfully",
+      "deleted": "Invoice deleted successfully",
+      "updated": "Invoice updated successfully"
+    },
+    "actions": {
+      "save": "Save invoice"
+    },
+    "contract_number": "Contract No.",
+    "number": "Invoice No.",
+    "consigned": "Consigned",
+    "seller_signature": "Seller signature",
+    "customer_signature": "Customer signature"
+  },
+  "invoices": "{{count}} Invoices",
+  "debts": "Customer debt",
+  "print": "Print",
+  "pay": "Pay",
+  "balance": "Customer balance",
+  "customer details": "Customer details",
+  "buying_total": "Purchase total",
+  "amount_paid": "Amount paid",
+  "amount_due": "Amount due",
+  "search": {
+    "by_name": "Search by name...",
+    "action": "Search"
+  },
+  "bills_client": "Invoice history",
+  "unpaid_client": "Debt history",
+  "no_bills": "No invoices found",
+  "no_debts": "No debts found",
+  "balance_client": "Balance history",
+  "new balance": "New balance",
+  "previous balance": "Previous balance",
+  "paid": "Paid",
+  "bill number": "Invoice number",
+  "amount to pay": "Amount to pay",
+  "created_at": "Date",
+  "amount left": "Amount remaining",
+  "amount": "Amount",
+  "actions": {
+    "print_order": "Print order",
+    "print_invoice": "Print invoice",
+    "print_small": "Print small format",
+    "receive": "Receive",
+    "receive_invoice": "Receive invoice",
+    "packaging_return": "Packaging return",
+    "view_details": "View details",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "title": "Actions",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "buy": "Pay",
+  "debt payments list": "Debt payment list {{bill_number}}",
+  "see details": "See details",
+  "receipt_title": "Cash in invoice {{bill_number}}",
+  "receipt_subtitle": "Enter the amount paid for this invoice and validate",
+  "filter_bill_number": "Filter by invoice number",
+  "filter_reason": "Filter by comment",
+  "comment": "Comment",
+  "date": "Date",
+  "operation type": "Operation type",
+  "operation_debit": "Withdrawal",
+  "operation_credit": "Deposit",
+  "last_update": "Last update {{date}}",
+  "no_transactions": "No transactions",
+  "new transaction": "New transaction",
+  "new_transaction_description": "Enter the details of the transaction you want to add.",
+  "transaction type": "Transaction type",
+  "add transaction": "Add transaction",
+  "select transaction type": "Select transaction type",
+  "no data found": "No data found",
+  "edit customer information": "Edit customer information",
+  "edit_customer_information_description": "Enter the new customer information. Leave fields empty to keep current values.",
+  "customer_information": "Customer information",
+  "success": "Success",
+  "customer information updated successfully": "Customer information updated successfully",
+  "an error occurred while modifying the customer": "An error occurred while updating the customer",
+  "invalid amount": "Invalid amount",
+  "BALANCE_UPDATED": "Balance updated successfully",
+  "INSUFFICIENT_BALANCE": "Insufficient balance for this transaction.\nCurrent balance: {{data}}",
+  "operator": "Operator",
+  "cash-in": "Cash in",
+  "no country found": "No country found",
+  "search country": "Search country",
+  "creating account": "Creating account",
+  "generate": "Generate",
+  "loading_pdf": "Loading PDF...",
+  "pdf_error": "Error loading PDF",
+  "popup_blocked": "Unable to open a new window. Please allow popups.",
+  "pdf_title": "Sales roadmap from {{from}}{{to ? ' to ' + to : ''}}",
+  "plans": {
+    "basic": {
+      "name": "Basic",
+      "name_fr": "Basic",
+      "desc": "For small shops",
+      "features": [
+        "1 store",
+        "500 products",
+        "Basic billing",
+        "1 user",
+        "Email support"
+      ]
+    },
+    "pro": {
+      "name": "Pro",
+      "name_fr": "Pro",
+      "desc": "For growing businesses",
+      "features": [
+        "5 stores",
+        "Unlimited products",
+        "Advanced billing",
+        "10 users",
+        "Supplier management",
+        "Priority support"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "name_fr": "Enterprise",
+      "desc": "For large organizations",
+      "features": [
+        "Unlimited stores",
+        "Unlimited products",
+        "API & integrations",
+        "Unlimited users",
+        "Custom roles",
+        "Dedicated 24/7 support"
+      ]
+    }
+  },
+  "payment": {
+    "status": {
+      "pending": "Pending",
+      "completed": "Completed",
+      "failed": "Failed",
+      "refunded": "Refunded"
+    },
+    "status_label": {
+      "pending": "Pending",
+      "completed": "paid",
+      "failed": "failed",
+      "refunded": "refunded"
+    }
+  },
+  "dashboard": {
+    "period": {
+      "current-week": "This week",
+      "prev-week": "Previous week",
+      "current-month": "This month",
+      "prev-month": "Previous month",
+      "current-year": "This year",
+      "prev-year": "Previous year"
+    },
+    "cash_balance": {
+      "title": "Cash balance",
+      "sub": "Available balance"
+    },
+    "stock_value": {
+      "title": "Stock value",
+      "sub": "{{products}} product(s) and {{packaging}} packaging item(s)"
+    },
+    "pending_orders": {
+      "title": "Uncashed orders",
+      "sub": "{{count}} pending invoice(s)"
+    },
+    "customer_debt": {
+      "title": "Customer debts",
+      "sub": "{{count}} unpaid invoice(s)"
+    },
+    "total_capital": {
+      "title": "Total capital value",
+      "sub": "{{count}} sales point(s)"
+    },
+    "active_clients": {
+      "title": "Active customers",
+      "sub": "{{count}} active customer(s)"
+    },
+    "monthly_sales": {
+      "title": "Monthly sales",
+      "sub": "{{percentage}} compared with previous month"
+    },
+    "monthly_profit": {
+      "title": "Monthly profit",
+      "sub": "{{percentage}} compared with previous month"
+    },
+    "sales_title": "Sales",
+    "sales_with_profit": "Sales - Profit",
+    "period_label": "Periods",
+    "loading": "Please wait...",
+    "no_bills": "You have no received invoices in this period.",
+    "employees": {
+      "title": "Employee list",
+      "count": "{{count}} employee(s) in {{salespoints}} sales point(s)",
+      "empty": "You have no employees"
+    },
+    "last_bills": "Latest invoice updates",
+    "date": {
+      "from_to": "{{start}} - {{end}}"
+    },
+    "date_presets": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "this_week": "This week",
+      "this_month": "This month",
+      "last_month": "Last month",
+      "this_year": "This year",
+      "last_year": "Last year",
+      "select_placeholder": "Periods"
+    },
+    "chart": {
+      "period_jan_jun_2024": "January - June 2024",
+      "trend_up": "Trending up by {{value}} this month",
+      "last_6_months": "Showing total visitors for the last 6 months",
+      "sales": "Sales",
+      "profits": "Profits"
+    },
+    "anomalies_title": "Sales anomalies detected",
+    "last_14_days": "Last 14 days"
+  },
+  "newsell": {
+    "loading": "Please wait...",
+    "customer_select": "Select a customer",
+    "customer_name": "Customer name",
+    "sales_point": "Sales point",
+    "product_select": "Select item",
+    "purchase_price": "Purchase price",
+    "stock": "Stock",
+    "quantity": "Quantity",
+    "package": "Packaging",
+    "sell_price": "Sale price",
+    "add": "Add",
+    "save_invoice": "Save invoice",
+    "filter_articles": "Filter items...",
+    "columns": "Columns",
+    "no_employee": "You have no employees",
+    "employee_list": "Employee list",
+    "employees_count": "{{count}} employee(s) in {{salespoints}} sales point(s)",
+    "invoice_updates": "Latest invoice updates",
+    "no_data": "No data available",
+    "select_sales_point": "Sales point",
+    "default_customer": "Walk-in customer",
+    "select_product": "Select an item",
+    "valid_quantity_error": "Enter a valid quantity",
+    "default_price_question": "Do you want to add \"{{price}}\" as the default price for {{customer}}",
+    "no_price_config": "No price configured for {{product}}",
+    "save_invoice_btn": "Save invoice",
+    "noproduct": "No item found.",
+    "deposit_packaging": "Packaging deposit",
+    "new_invoice": "New invoice",
+    "misc_customer": "Walk-in customer",
+    "errors": {
+      "insufficient_stock": "You do not have enough {{product}} in stock",
+      "missing_packaging": "You did not record packaging for {{product}}",
+      "invalid_packaging_quantity": "The number of recorded packaging items cannot be greater than the product quantity.",
+      "select_sell_price": "Select a selling price"
+    },
+    "success": {
+      "price_added": "Price added successfully"
+    },
+    "order_number": "Order number"
+  },
+  "table": {
+    "columns": {
+      "number": "#",
+      "code": "Code",
+      "article": "Item",
+      "purchase_price": "Purchase price",
+      "sell_price": "Sale price",
+      "quantity": "Qty",
+      "package": "Packaging to deposit",
+      "package_price": "Packaging price",
+      "total_package": "Total packaging",
+      "total": "Total"
+    },
+    "actions": {
+      "label": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "open_menu": "Open menu"
+    },
+    "empty": "No results",
+    "selected_rows": "{{selected}} of {{total}} row(s) selected.",
+    "action": "Action",
+    "open_menu": "Open menu"
+  },
+  "invoice_response": {
+    "create_success_title": "Success",
+    "create_success_message": "Invoice created successfully",
+    "error_title": "Error",
+    "unexpected_error": "An unexpected error occurred. Check your connection and try again.",
+    "default_customer": "Walk-in customer"
+  },
+  "filters": {
+    "sales_points": "Sales points",
+    "no_sales_points": "No sales points",
+    "search_sales_point": "Search sales point",
+    "customers": "Customers",
+    "search": "Search"
+  },
+  "orders": {
+    "to_deliver": "Orders to deliver",
+    "search_placeholder": "Invoice number or customer name..."
+  },
+  "bills": {
+    "columns": {
+      "number": "#",
+      "actions": "Actions",
+      "bill_number": "Invoice number",
+      "sales_point": "Sales point",
+      "customer_name": "Customer name",
+      "packages_count": "Number of packages",
+      "amount": "Amount",
+      "article": "Item",
+      "taxes": "Taxes",
+      "additional_fees": "Additional fees",
+      "total_amount": "Total amount",
+      "benefit": "Profit",
+      "delivery_date": "Delivery date",
+      "total": "Total",
+      "code": "Code",
+      "quantity": "Quantity",
+      "purchase_price": "Purchase price",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "category": "Category",
+      "status": "Status",
+      "received_at": "Delivery date",
+      "supply_number": "Order number",
+      "operator": "Operator",
+      "fees": "Additional fees",
+      "supplier_name": "Supplier name",
+      "abbreviation": "Abbreviation",
+      "created_at": "Created at",
+      "updated_at": "Last update",
+      "open_menu": "Open menu",
+      "details": "Details",
+      "product_name": "Product name",
+      "product_variants": "Product variants",
+      "paid_packaging": "Paid packaging",
+      "yes": "Yes",
+      "no": "No",
+      "action": "Action"
+    },
+    "actions": {
+      "title": "Actions",
+      "view_details": "View details",
+      "delete_bill": "Delete bill"
+    },
+    "pending_title": "Pending invoice"
+  },
+  "billing": {
+    "collect_invoice": "Cash in an invoice",
+    "unpaid_invoices": "Uncashed invoices",
+    "invoice_history": "Invoice history",
+    "invoice_history_caption": "List of your previous invoices.",
+    "invoice_number": "Invoice number",
+    "payment_history": "Payment history",
+    "payment_history_caption": "List of your previous payments.",
+    "transaction_id": "Transaction ID",
+    "method": "Method",
+    "plan": "Plan",
+    "status": {
+      "completed": "Paid",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "no_payments": "No payments recorded.",
+    "columns": {
+      "method": "Method"
+    }
+  },
+  "sales": {
+    "points": "Sales points",
+    "no_points": "No sales points",
+    "select_sales_point_first": "Select a sales point",
+    "export_xlsx": "Export as xlsx",
+    "export_pdf": "Export as PDF",
+    "no_data": "No data generated",
+    "search_point": "Search sales point",
+    "orientation_values": {
+      "asc": "Ascending",
+      "desc": "Descending"
+    },
+    "orientation": "Orientation",
+    "pdf_title": "Sales roadmap from {{from}}{{to ? ' to ' + to : ''}}",
+    "roadmap": {
+      "result_title": "Sales roadmap from {{from}}{{to ? ' to ' + to : ''}}"
+    }
+  },
+  "customers": {
+    "title": "Customers",
+    "empty": "No customers",
+    "search": "Search customer",
+    "filter_placeholder": "Filter by customer...",
+    "add_title": "Add a customer",
+    "subtitle": "Fill in the information",
+    "category": "Customer category",
+    "submit": "Save customer",
+    "of_client": "of the customer",
+    "manage_title": "Manage customers",
+    "add_category": "Add category",
+    "dialog_title": "Add customer category",
+    "dialog_description": "Create customer categories. This lets you classify your customers.",
+    "category_name": "Category name",
+    "category_placeholder": "Ex: wholesale, semi-wholesale, retail",
+    "sales_point": "Sales point",
+    "filter_title": "Filter customers",
+    "list_title": "Customer list",
+    "no_salespoint": "No sales point",
+    "no_category": "No category",
+    "search_salespoint": "Search sales point",
+    "search_category": "Search category",
+    "search_placeholder": "Filter by customer name...",
+    "fields": {
+      "name": "Customer name",
+      "phone": "Customer phone",
+      "email": "Customer email",
+      "address": "Customer address"
+    },
+    "errors": {
+      "select_category": "Select a customer category",
+      "network": "An error occurred. Check your connection and try again"
+    },
+    "success": {
+      "created": "Customer created successfully",
+      "category_created": "Customer category created successfully"
+    },
+    "label": "Customers",
+    "page": "Customers",
+    "rfm": {
+      "champion": "Champion",
+      "loyal": "Loyal",
+      "at_risk": "At risk",
+      "lost": "Lost",
+      "new": "New",
+      "promising": "Promising",
+      "hibernating": "Inactive"
+    }
+  },
+  "roadmap": {
+    "title": "Sales roadmap",
+    "result_title": "Sales roadmap from {{from}}{{to ? ' to ' + to : ''}}",
+    "sales": {
+      "pending_invoices_warning": "You have {{count}} unreceived invoice(s) in this period",
+      "no_received_invoice": "No received invoice for this period"
+    },
+    "buy": {
+      "pending_orders_warning": "You have pending orders in this period",
+      "pdf_title": "Purchase roadmap for {{from}}{{range}}",
+      "csv_title": "Purchase roadmap for {{from}}{{range}} {{salespoint}}"
+    },
+    "csv": {
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "customer_id": "Customer ID: {{id}}",
+      "category": "Category: {{category}}",
+      "product_code": "Product code",
+      "product_name": "Product name",
+      "total_quantity": "Total quantity",
+      "generated_on": "Generated on: {{date}}",
+      "footer": "? 2025 InventoryFlow by Interact | All rights reserved."
+    },
+    "excel": {
+      "customer": "Customer",
+      "total_amount": "Total amount",
+      "total_packages": "Total packages",
+      "total_packages_recorded": "Total packages recorded",
+      "product": "Product",
+      "total_quantity": "Total quantity",
+      "sheet_name": "Data"
+    }
+  },
+  "supply": {
+    "title": "Purchase order",
+    "sales_point": "Sales point",
+    "supplier": "Supplier",
+    "warning": "NB: For every item with packaging, make sure you have the matching empties.",
+    "search_article": "Search item...",
+    "article": "Item",
+    "stock": "Stock",
+    "purchase_price": "Purchase price",
+    "quantity": "Quantity",
+    "add": "Add",
+    "search_articles": "Filter by items...",
+    "save": "Save order",
+    "titles": {
+      "pending_supply_orders": "Pending purchase order",
+      "sales_report_of": "Sales roadmap from"
+    },
+    "warnings": {
+      "supply_packaging": "NB: make sure you have the required empty packaging"
+    },
+    "actions": {
+      "search": "Search",
+      "export_csv": "Export as CSV",
+      "export_pdf": "Export as PDF"
+    },
+    "placeholders": {
+      "sales_points": "Sales points",
+      "search_sales_points": "Search sales point",
+      "search_supply_orders": "Filter purchase orders...",
+      "product_categories": "Product categories",
+      "search_category": "Search category"
+    },
+    "empty": {
+      "product_categories": "No product category",
+      "no_data_generated": "No data generated",
+      "sales_points": "No sales points"
+    },
+    "errors": {
+      "duplicate_product": "This item already exists",
+      "network": "An unexpected error occurred. Check your connection.",
+      "receive": "An error occurred while receiving the order.",
+      "delete": "An error occurred while deleting the order."
+    },
+    "success": {
+      "created": "Invoice created successfully",
+      "received": "Order received successfully",
+      "deleted": "Order deleted successfully"
+    },
+    "labels": {
+      "sales_points": "Sales points"
+    },
+    "common": {
+      "to": "to"
+    },
+    "filters": {
+      "date_range": "Period",
+      "sales_points": "Sales points",
+      "suppliers": "Suppliers",
+      "search": "Search"
+    },
+    "table": {
+      "title": "Purchase history",
+      "filter_placeholder": "Filter by order number",
+      "columns": "Columns",
+      "no_supplier": "No supplier found",
+      "search_supplier": "Search supplier"
+    }
+  },
+  "supplier": {
+    "form": {
+      "name": "Supplier name",
+      "abbreviation": "Abbreviation",
+      "email": "Email",
+      "phone": "Phone number"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "loading": "Please wait",
+      "add_supplier": "Add supplier"
+    },
+    "modal": {
+      "edit_supplier": "Edit supplier",
+      "add_supplier": "Add supplier",
+      "delete_supplier": "Delete supplier"
+    },
+    "toast": {
+      "success_title": "Success",
+      "error_title": "Error",
+      "update_success": "Supplier updated successfully",
+      "update_error": "An error occurred while updating the supplier",
+      "delete_blocked": "Cannot delete the supplier because it is linked to supplies.",
+      "delete_error": "An error occurred while deleting the supplier"
+    },
+    "title": "Suppliers",
+    "list": {
+      "title": "Supplier list"
+    },
+    "filters": {
+      "sales_point": "Sales point",
+      "search_sales_point": "Search sales point",
+      "no_sales_point": "No sales point",
+      "search_supplier": "Filter by supplier name..."
+    },
+    "confirm": {
+      "delete_message": "Do you really want to remove {{name}} from your suppliers?",
+      "delete_warning": "NB: if a supply is linked to this supplier, it cannot be deleted."
+    },
+    "select_sales_point_error": "Select a sales point",
+    "supplier_created_success": "Supplier added successfully",
+    "supplier_create_error": "An error occurred while adding the supplier",
+    "supplier_deleted_success": "Supplier deleted successfully.",
+    "supplier_delete_blocked": "Cannot delete the supplier because it is linked to supplies.",
+    "supplier_delete_error": "An error occurred while deleting the supplier",
+    "singular": "Supplier",
+    "plural": "Suppliers",
+    "empty": "No supplier",
+    "search": "Search a supplier"
+  },
+  "productsList": {
+    "title": "Product list",
+    "stock": "Stock",
+    "add_product_category": "Add item category",
+    "add_product": "Add item",
+    "filter_products": "Filter items",
+    "product_list": "Item list",
+    "sales_point": "Sales point",
+    "search_sales_point": "Search sales point",
+    "no_sales_point": "No sales point",
+    "product_category": "Item category",
+    "search_category": "Search category",
+    "no_product_category": "No category found",
+    "suppliers": "Suppliers",
+    "search_supplier": "Search supplier",
+    "no_supplier_found": "No supplier found",
+    "search": "Search",
+    "select_sales_point": "Select a sales point",
+    "filter_product_placeholder": "Filter by item name or code...",
+    "print_sheet": "Print sheet",
+    "category_name": "Category name",
+    "select_salespoint_pdf": "Select a sales point to print the stock sheet",
+    "pdf_title": "Stock sheet for {{date}} {{#hasFilter}}filtered by{{/hasFilter}} {{#supplier}}supplier{{/supplier}} {{#category}}category{{/category}}",
+    "popup_blocked": "Unable to open a new tab. Allow popups.",
+    "loading_pdf": "Loading PDF...",
+    "pdf_error": "Error loading PDF",
+    "category_abbreviation": "Category abbreviation",
+    "created_success": "Category created successfully",
+    "create_error": "An error occurred while creating the category"
+  },
+  "product": {
+    "fields": {
+      "sales_point": "Sales point",
+      "supplier": "Product supplier",
+      "category": "Product category",
+      "name": "Product name",
+      "code": "Product code",
+      "price": "Purchase price",
+      "with_variant": "Does this product have variants?",
+      "quantity": "Product quantity",
+      "is_beer": "Does this product have paid packaging?",
+      "package": "Product packaging",
+      "sell_price": "Sale price {{index}}"
+    },
+    "errors": {
+      "no_sell_price": "Enter at least one sale price",
+      "select_sales_point": "Please select a sales point",
+      "invalid_price": "Invalid purchase price",
+      "sell_price_lower_than_buy": "The sale price cannot be lower than the purchase price",
+      "invalid_sell_prices": "Enter valid sale prices"
+    },
+    "success": {
+      "created": "Item added successfully"
+    },
+    "add": {
+      "title": "Add an item to stock"
+    },
+    "sections": {
+      "info": "Product information",
+      "sell_prices": "Product sale prices"
+    },
+    "hints": {
+      "with_variant": "Note that if this product has variants, you must add variants before you can add it to invoices.",
+      "packaging": "If this product has paid packaging, check this and select packaging you have already registered."
+    },
+    "details": {
+      "no_change": "No change",
+      "sell_price_unchanged": "The price has not changed",
+      "sell_price_exists": "It looks like this price already exists.",
+      "sell_price_created": "Sale price created successfully",
+      "sell_price_updated": "Price updated successfully",
+      "new_sell_price": "New sale price",
+      "field_unchanged": "The input field has not been changed",
+      "updated": "The product has been updated",
+      "update_error": "An error occurred while updating the product",
+      "variant_name": "Variant name",
+      "variant_created": "The variant has been created",
+      "variant_create_error": "An error occurred while creating the variant",
+      "unavailable": "Unable to display product details",
+      "add_variant": "Add a variant",
+      "title": "Product details",
+      "sell_prices_title": "Sale prices",
+      "add_price": "Add a price",
+      "view_report": "View report"
+    }
+  },
+  "error": "Error",
+  "open_menu": "Open menu",
+  "details": "Details",
+  "export_pdf": "Export as PDF",
+  "payment done": "Payment completed",
+  "date_range": {
+    "select_placeholder": "Select a period"
+  },
+  "select": {
+    "placeholder": "Select",
+    "search_placeholder": "Search...",
+    "no_items": "No items found.",
+    "no_data": "No data found.",
+    "selected_count": "{{count}} selected"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "navigation": {
+    "notifications": "Notifications",
+    "open_main_menu": "Open main menu",
+    "open_user_menu": "Open user menu",
+    "groups": {
+      "dashboard": "Dashboard",
+      "sell": "Sales",
+      "customers": "Customers",
+      "purchases": "Purchases",
+      "stock": "Stock",
+      "finances": "Finances",
+      "enterprise": "Company",
+      "reports": "Reports",
+      "buy": "Purchases",
+      "sales point": "Sales point"
+    },
+    "items": {
+      "sell_new": "New sale",
+      "sell_pending": "Orders to deliver",
+      "sell_receipt": "Cash in an invoice",
+      "sell_roadmap": "Roadmap",
+      "sell_history": "History",
+      "customers_add": "Add customer",
+      "customers_manage": "Manage",
+      "buy_new": "Create order",
+      "buy_in_progress": "Purchase in progress",
+      "buy_roadmap": "Roadmap",
+      "buy_history": "History",
+      "stock_suppliers": "Suppliers",
+      "stock_articles": "Items",
+      "stock_inventory": "Inventory",
+      "stock_packagings": "Packaging",
+      "stock_packaging_inventory": "Packaging inventory",
+      "stock_losses": "Losses",
+      "finances_cash": "My cash register",
+      "finances_expenses": "Expenses",
+      "enterprise_details": "Details",
+      "enterprise_sales_points": "Sales point",
+      "enterprise_payment_info": "Payment information",
+      "enterprise_settings": "Settings",
+      "enterprise_users": "Users",
+      "reports_all": "View"
+    },
+    "close_menu": "Close menu"
+  },
+  "user_menu": {
+    "groups": {
+      "information": "Information"
+    },
+    "account_settings": "Account settings",
+    "sign_out": "Sign out"
+  },
+  "status_values": {
+    "created": "Created",
+    "pending": "Delivered",
+    "success": "Cashed in",
+    "receipt": "Received"
+  },
+  "supply_status": {
+    "pending": "Pending",
+    "receipt": "Received"
+  },
+  "pdf": {
+    "address": "Address",
+    "phone": "Phone",
+    "created_on": "Created on",
+    "printed_on": "Printed on",
+    "items": "Items",
+    "price": "Price",
+    "packaging": "Packaging",
+    "packaging_item": "Packaging",
+    "missing": "Missing",
+    "additional_fees": "Additional fees",
+    "net_to_pay": "Net to pay",
+    "all_rights_reserved": "All rights reserved.",
+    "page_count": "Page {{page}} of {{total}}",
+    "qty": "Qty",
+    "unit_price": "Unit price",
+    "created_by": "Created by",
+    "made_by": "Made by",
+    "taxes": "Taxes",
+    "total": "Total",
+    "email": "Email"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unread_count": "You have {{count}} unread message(s).",
+    "push_title": "Push notifications",
+    "push_description": "Send notifications.",
+    "empty": "No notifications",
+    "mark_all_read": "Mark all as read",
+    "view": "View notifications"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your store configuration",
+    "unsaved_hint": "Changes are only applied after saving.",
+    "save_success_title": "Settings saved",
+    "save_success_description": "Changes saved successfully.",
+    "save_error_description": "Unable to save. Check your internet connection.",
+    "no_settings_found": "No settings found.",
+    "clear_search": "Clear search",
+    "unsaved_changes_count": "{{count}} unsaved change",
+    "unsaved_changes_count_plural": "{{count}} unsaved changes",
+    "choose_file": "Choose a file",
+    "parameters_count": "{{count}} setting(s)",
+    "modified_count": "{{count}} modified",
+    "change_avatar": "Change profile picture",
+    "avatar_hint": "JPG, PNG or WebP — max 2 MB. Click the avatar to change it.",
+    "avatar_updated": "Profile picture updated",
+    "avatar_error": "Upload failed. Please try again.",
+    "change_password": "Change password",
+    "send_code": "Send a verification code by email",
+    "code_sent_hint": "A 6-digit code has been sent to your email. Enter it below along with your old and new password.",
+    "otp_code": "Verification code",
+    "old_password": "Current password",
+    "new_password": "New password",
+    "confirm_password": "Confirm change",
+    "password_changed": "Password changed successfully",
+    "password_code_sent": "Code sent! Check your email inbox.",
+    "password_code_error": "Could not send the code. Please try again.",
+    "password_confirm_error": "Invalid code or password. Please try again.",
+    "required_fields_missing": "Missing required fields",
+    "fill_required_fields": "Please fill in: {{fields}}",
+    "profile_updated": "Profile updated",
+    "saved_changes_count": "{{count}} saved change",
+    "saved_changes_count_plural": "{{count}} saved changes"
+  },
+  "landing": {
+    "nav": {
+      "services": "Our services",
+      "testimonials": "Testimonials",
+      "pricing": "Pricing",
+      "about": "About us",
+      "contact": "Contact us",
+      "features": "Features",
+      "advantages": "Benefits",
+      "faq": "FAQ"
+    },
+    "actions": {
+      "start": "Get started",
+      "start_free": "Start for free",
+      "view_demo": "View demo",
+      "learn_more": "Learn more",
+      "request_demo": "Request a demo"
+    },
+    "hero": {
+      "badge": "Simplified management",
+      "title_prefix": "Simplify your business management with",
+      "description": "Invoices, stock, stores, customers & suppliers - centralize everything in an intuitive platform built for SMBs and large companies."
+    },
+    "stats": {
+      "businesses": "Businesses",
+      "invoices": "Invoices created",
+      "uptime": "Uptime",
+      "satisfaction": "Satisfaction"
+    },
+    "problem": {
+      "section_label": "Problem & Solution",
+      "title": "Move from friction to efficiency",
+      "problem_badge": "The problem",
+      "problem_title": "Manual management slows your growth",
+      "problem_stat": "of SMBs lose time with unsuitable tools",
+      "solution_badge": "The solution",
+      "solution_title": "InventoryFlow automates everything",
+      "solution_stat": "faster than traditional manual management",
+      "problem_points": {
+        "errors": "Frequent entry errors and data loss",
+        "visibility": "No real-time visibility over stock",
+        "multistore": "Difficulty managing multiple stores",
+        "invoicing": "Slow and non-compliant invoicing"
+      },
+      "solution_points": {
+        "stock": "Real-time stock synced across all your stores",
+        "invoices": "Invoices generated in a few clicks, compliant and traceable",
+        "dashboard": "Unified dashboard to manage your activity",
+        "permissions": "Roles and permissions to secure access"
+      }
+    },
+    "features": {
+      "section_label": "Features",
+      "title": "Everything you need in one tool",
+      "description": "InventoryFlow brings together the essential features to run your commercial activity.",
+      "items": {
+        "invoicing": {
+          "title": "Smart invoicing",
+          "desc": "Create, send and track invoices instantly with customizable templates."
+        },
+        "stock": {
+          "title": "Advanced stock management",
+          "desc": "Real-time tracking, threshold alerts and full movement history."
+        },
+        "multistore": {
+          "title": "Multi-store",
+          "desc": "Manage multiple sales points from one centralized interface."
+        },
+        "customers": {
+          "title": "Customer management",
+          "desc": "Enriched customer database with purchase history, balances and communications."
+        },
+        "suppliers": {
+          "title": "Supplier management",
+          "desc": "Orders, receipts and supplier payment tracking made simple."
+        },
+        "permissions": {
+          "title": "Roles & permissions",
+          "desc": "Granular access control for each user on your team."
+        },
+        "customization": {
+          "title": "Full customization",
+          "desc": "Themes, languages and settings adapted to your brand."
+        }
+      },
+      "featured": {
+        "badge": "Popular",
+        "title": "Smart invoicing",
+        "description": "Create professional invoices in a few clicks. Customizable templates, automatic sending, payment tracking and built-in reminders. Legal compliance guaranteed.",
+        "tags": {
+          "templates": "Templates",
+          "auto_send": "Auto-send",
+          "reminders": "Reminders",
+          "pdf_export": "PDF export"
+        },
+        "cta": "Explore invoicing",
+        "recent_invoices": "Recent invoices",
+        "new_count": "3 new",
+        "monthly_revenue": "Monthly revenue",
+        "invoice_status": {
+          "paid": "Paid",
+          "pending": "Pending",
+          "sent": "Sent"
+        },
+        "invoice_label": "Invoice {{number}}"
+      }
+    },
+    "why": {
+      "section_label": "Why us",
+      "title": "The trusted platform for your business",
+      "description": "Built for performance, security and simplicity.",
+      "items": {
+        "performance": {
+          "title": "Performance",
+          "desc": "Ultra-fast interface optimized for productivity."
+        },
+        "security": {
+          "title": "Security",
+          "desc": "Encrypted data, automatic backups and compliance."
+        },
+        "cloud": {
+          "title": "Cloud",
+          "desc": "Accessible everywhere, from any device."
+        },
+        "ease": {
+          "title": "Ease of use",
+          "desc": "Immediate onboarding with no technical training."
+        },
+        "scalable": {
+          "title": "Scalable",
+          "desc": "From 1 to 1,000+ users without compromise."
+        }
+      }
+    },
+    "pricing": {
+      "section_label": "Pricing",
+      "title": "Simple, transparent pricing",
+      "description": "Choose the plan that fits the size of your activity. Upgrade anytime.",
+      "badges": {
+        "starter": "Starter",
+        "custom": "Custom"
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "description": "Everything you need to know to get started with InventoryFlow.",
+      "items": {
+        "trial": {
+          "q": "Can I try InventoryFlow for free?",
+          "a": "Yes, we offer a 14-day free trial on all plans, with no credit card required."
+        },
+        "security": {
+          "q": "Is my data secure?",
+          "a": "Absolutely. We use AES-256 encryption, daily backups and our servers are hosted in Europe."
+        },
+        "multistore": {
+          "q": "Can I manage multiple stores?",
+          "a": "Yes, from the Pro plan you can connect up to 5 stores. The Enterprise plan offers unlimited stores."
+        },
+        "support": {
+          "q": "How does support work?",
+          "a": "Email support on Basic, priority support on Pro, and a dedicated 24/7 account manager on Enterprise."
+        },
+        "import": {
+          "q": "Can I import my existing data?",
+          "a": "Yes, we support CSV/Excel import and offer personalized migration assistance."
+        }
+      },
+      "help": {
+        "title": "Need help?",
+        "description": "Our team is available to answer all your questions and support you.",
+        "quote": "The support team is incredibly responsive. Answer in less than 2 hours!",
+        "cta": "Contact support"
+      }
+    },
+    "cta": {
+      "badge": "Limited offer - 14 days free",
+      "title": "Ready to transform your management?",
+      "description": "Join more than 10,000 businesses that trust InventoryFlow.",
+      "badges": {
+        "ssl": "SSL secured",
+        "gdpr": "GDPR compliant",
+        "setup": "Setup in 5 min"
+      }
+    },
+    "footer": {
+      "description": "The complete solution to manage your commercial activity with ease.",
+      "product": "Product",
+      "company": "Company",
+      "about": "About",
+      "careers": "Careers",
+      "contact": "Contact",
+      "newsletter": "Newsletter",
+      "email_placeholder": "email@example.com",
+      "rights": "All rights reserved.",
+      "privacy": "Privacy",
+      "legal": "Legal notice",
+      "changelog": "Changelog",
+      "blog": "Blog",
+      "press": "Press",
+      "terms": "Terms"
+    }
+  },
+  "auth": {
+    "signup": "Sign up",
+    "signin": "Sign in",
+    "password": "Password",
+    "password_hide": "Hide password",
+    "password_show": "Show password",
+    "terms_privacy": "Terms & Privacy"
+  },
+  "errors": {
+    "retry": "An error occurred, please try again.",
+    "check_connection": "An error occurred. Check your connection and try again.",
+    "invalid_character": "Invalid character!"
+  },
+  "dialogs": {
+    "confirm_delete_invoice": "Do you really want to delete {{number}}?",
+    "delete_invoice_stock_return": "You are about to permanently delete this invoice. All available items will return to your stock.",
+    "confirm_receive_invoice": "Do you really want to receive {{number}}?",
+    "confirm_delete_supply": "Do you really want to delete {{number}}?",
+    "delete_supply_stock_return": "You are about to permanently delete this invoice. All available items will return to your stock.",
+    "confirm_receive_supply": "Do you really want to receive this order?",
+    "packaging_return_invoice": "Packaging return for invoice {{number}}",
+    "irreversible_warning": "This action is irreversible."
+  },
+  "deliverer": {
+    "select": "Select a deliverer",
+    "select_then_validate": "Select a deliverer, then confirm",
+    "label": "Deliverer"
+  },
+  "none": "None",
+  "close": "Close",
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "error": "Error",
+    "success": "Success",
+    "invalid_input": "Invalid input"
+  },
+  "packaging_return": {
+    "success": "Packaging return completed successfully",
+    "cash_note": "NB: the amount for returned packaging will automatically be deducted from the register and credited back to the customer balance.",
+    "items_intro": "You are about to return the following packaging items"
+  },
+  "total": "Total",
+  "sales_points": {
+    "label": "Sales points",
+    "singular": "Sales point",
+    "empty": "No sales point",
+    "search": "Search a sales point",
+    "select_required": "Select a sales point",
+    "actions": {
+      "create": "Create a sales point"
+    },
+    "success": {
+      "employee_created": "Employee created successfully.",
+      "tax_created": "Tax created successfully."
+    },
+    "all": "All sales points",
+    "empty_description": "You do not have any sales point",
+    "dialog_description": "Enter the sales point information and save.",
+    "dialog_warning": "Make sure there are no mistakes in your entries.",
+    "payroll": "Payroll",
+    "count": "{{count}} sales point(s)",
+    "fields": {
+      "name": "Sales point name",
+      "address": "Sales point address",
+      "initial_balance": "Initial balance amount"
+    },
+    "total_capital": "Total capital",
+    "stock_amount": "Stock value"
+  },
+  "empty": {
+    "no_items_found": "No item found.",
+    "no_data_found": "No data found"
+  },
+  "save": "Save",
+  "packaging": {
+    "errors": {
+      "details_unavailable": "Unable to display packaging details",
+      "select_sales_point_for_pdf": "Select a sales point to print the stock sheet",
+      "history_load_failed": "Unable to load packaging history."
+    },
+    "title": "Packaging",
+    "list_title": "Packaging list",
+    "filter_placeholder": "Filter by packaging name...",
+    "filters": {
+      "title": "Filter packaging"
+    },
+    "columns": {
+      "unit_price": "Unit price",
+      "full": "Full packaging",
+      "empty": "Empty packaging",
+      "empty_quantity": "Empty qty",
+      "name": "Packaging",
+      "full_quantity": "Full qty",
+      "total_amount": "Total amount"
+    },
+    "actions": {
+      "add": "Add packaging",
+      "print_sheet": "Print sheet"
+    },
+    "success": {
+      "created": "Packaging created successfully"
+    },
+    "fields": {
+      "empty_quantity_helper": "This quantity is the number of empty packaging items you will start with. The total amount will be deducted from your cash register.",
+      "empty": "Empty packaging"
+    },
+    "pdf": {
+      "stock_title": "Packaging stock sheet from {{date}} {{filtered}}"
+    },
+    "singular": "Packaging",
+    "search": "Search packaging...",
+    "history": {
+      "columns": {
+        "movement": "Movement",
+        "full": "Full",
+        "empty": "Empty",
+        "bill": "Invoice",
+        "performed_by": "Performed by"
+      },
+      "movements": {
+        "full_out": "Full out",
+        "full_in": "Full in",
+        "empty_out": "Empty out",
+        "empty_return": "Empty return",
+        "correction": "Correction"
+      },
+      "filter_placeholder": "Filter by packaging, product, invoice, action...",
+      "event_count": "{{count}} event",
+      "events_count": "{{count}} events"
+    }
+  },
+  "validate": "Validate",
+  "status_filter": {
+    "all": "All",
+    "validated": "Validated",
+    "not_validated": "Not validated"
+  },
+  "inventory": {
+    "title": "Inventories",
+    "list_title": "Inventory list",
+    "filter_placeholder": "Filter by inventory number...",
+    "actions": {
+      "new": "New inventory",
+      "validate": "Validate inventory",
+      "print": "Print inventory",
+      "delete": "Delete inventory",
+      "save": "Save inventory"
+    },
+    "dialogs": {
+      "confirm_delete": "Delete {{number}}?",
+      "delete_description": "You are about to delete this inventory.",
+      "confirm_validate": "Validate {{number}}?",
+      "validate_description": "You are about to validate this inventory."
+    },
+    "pdf_title": "Inventory from {{date}}",
+    "errors": {
+      "validate": "Error while validating the inventory",
+      "delete": "Error while deleting the inventory",
+      "item_exists": "This item already exists"
+    },
+    "columns": {
+      "inventory_number": "Inventory number",
+      "operator": "Operator",
+      "validated_by": "Validated by",
+      "product_count": "Number of products",
+      "created_at": "Creation date",
+      "validated_at": "Validation date",
+      "new_quantity": "New quantity",
+      "difference": "Difference",
+      "previous_quantity": "Previous qty"
+    },
+    "success": {
+      "created": "Inventory created successfully"
+    },
+    "new": {
+      "title": "New inventory",
+      "rules": {
+        "once_per_day": "You can only create one inventory per day, preferably in the morning.",
+        "no_invoice_today": "You can only create an inventory if you have no invoice for the day.",
+        "no_invoice_during_inventory": "You will not be able to create an invoice while an inventory is in progress.",
+        "unvalidated_deleted": "Unvalidated inventories are automatically deleted the next day."
+      }
+    }
+  },
+  "description": "Description",
+  "expenses": {
+    "title": "Expenses",
+    "list_title": "Expense list",
+    "filter_placeholder": "Filter by expense number...",
+    "actions": {
+      "new": "Enter an expense",
+      "validate": "Validate expense",
+      "delete": "Delete expense"
+    },
+    "columns": {
+      "expense_number": "Expense No.",
+      "operator": "Operator",
+      "created_at": "Creation date",
+      "validated_by": "Validated by",
+      "validated_at": "Validation date"
+    },
+    "success": {
+      "created": "Expense created successfully!",
+      "deleted": "Expense deleted successfully"
+    },
+    "errors": {
+      "invalid_amount": "Enter a valid amount",
+      "validate": "Error while validating the expense",
+      "delete": "Error while deleting the expense"
+    }
+  },
+  "filter": "Filter",
+  "confirm": "Confirm",
+  "cash": {
+    "title": "My cash register",
+    "transactions_list": "Transaction list",
+    "filter_placeholder": "Filter by transaction number...",
+    "cards": {
+      "balance": "Cash register amount",
+      "sales_points_count": "sales point(s)",
+      "total_deposits": "Total deposits",
+      "total_withdrawals": "Total withdrawals",
+      "transactions_count": "transaction(s)"
+    },
+    "columns": {
+      "transaction_number": "Transaction number",
+      "transaction_type": "Transaction type",
+      "operator": "Operator",
+      "previous_balance": "Previous balance",
+      "new_balance": "New balance",
+      "created_at": "Creation date",
+      "validated_at": "Validated on",
+      "validated_by": "Validated by"
+    },
+    "types": {
+      "deposit": "Deposit",
+      "withdrawal": "Withdrawal"
+    },
+    "actions": {
+      "deposit": "Deposit funds",
+      "withdrawal": "Withdraw funds"
+    },
+    "errors": {
+      "invalid_amount": "The amount cannot be less than zero.",
+      "reason_too_long": "The text exceeds the character limit."
+    },
+    "success": {
+      "created": "Transaction added successfully.",
+      "deleted": "Transaction deleted successfully.",
+      "validated": "Transaction validated successfully."
+    },
+    "dialogs": {
+      "withdraw_title": "Withdraw funds",
+      "deposit_title": "Deposit funds",
+      "form_description": "You are about to make a fund {{type}}. Fill in the information and validate.",
+      "confirm_delete": "Delete transaction {{number}}",
+      "confirm_validate": "Validate transaction {{number}}",
+      "delete_description": "You are about to delete this transaction.",
+      "validate_description": "You are about to validate this transaction."
+    }
+  },
+  "article": "Item",
+  "quantity": "Quantity",
+  "losses": {
+    "title": "Loss management",
+    "list_title": "Loss list",
+    "filter_placeholder": "Filter by operator...",
+    "fields": {
+      "lost_quantity": "Lost quantity"
+    },
+    "actions": {
+      "new": "Enter a loss",
+      "validate": "Validate loss",
+      "delete": "Delete loss"
+    },
+    "columns": {
+      "operator": "Operator",
+      "validated_by": "Validated by",
+      "created_at": "Creation date",
+      "validated_at": "Validation date"
+    },
+    "success": {
+      "created": "Loss added successfully"
+    },
+    "errors": {
+      "validate": "Error while validating the loss",
+      "delete": "Error while deleting the loss",
+      "select_article": "Select an item.",
+      "invalid_quantity": "The quantity cannot be less than 1.",
+      "create": "An error occurred while adding the loss"
+    }
+  },
+  "total_amount": "Total amount",
+  "purchase_price": "Purchase price",
+  "filtered_by_supplier": "filtered by supplier",
+  "packaging_inventory": {
+    "title": "Packaging inventories",
+    "pdf_title": "Packaging inventory from {{date}}",
+    "columns": {
+      "packaging_count": "Number of packaging items"
+    },
+    "success": {
+      "validated": "Inventory validated successfully"
+    },
+    "errors": {
+      "validate": "Error while validating the packaging inventory",
+      "delete": "Error while deleting the packaging inventory",
+      "item_exists": "This packaging already exists"
+    },
+    "new": {
+      "title": "New packaging inventory",
+      "rules": {
+        "empty_only": "You can only inventory empty packaging because full packaging is automatically adjusted with item inventories."
+      }
+    }
+  },
+  "stock": "Stock",
+  "article_search": "Search an item...",
+  "article_filter_placeholder": "Filter by items...",
+  "columns": "Columns",
+  "warning": "Warning",
+  "receipt": {
+    "paid_amount": "Paid amount",
+    "success": {
+      "collected": "Invoice collected successfully"
+    },
+    "actions": {
+      "collect": "Collect",
+      "collect_invoice": "Collect invoice",
+      "print_a4": "Print A4",
+      "print_small": "Print small format"
+    },
+    "dialogs": {
+      "collect_title": "Collect invoice {{number}}",
+      "collect_description": "Enter the amount paid for this invoice and validate"
+    }
+  },
+  "customer": "Customer",
+  "customer_code": "Customer code",
+  "created_on": "Created on",
+  "printed_on": "Printed on",
+  "products": "Products",
+  "price": "Price",
+  "titles": {
+    "sales_report_of": "Roadmap for"
+  },
+  "users": {
+    "list_title": "User list",
+    "full_name": "Full name",
+    "role": "Role",
+    "salary": "Salary",
+    "add_employee_description": "You are about to add a new employee. Enter the information and continue",
+    "empty": "No employee",
+    "empty_registered": "No registered user",
+    "user_information": "User information",
+    "user_permissions": "User permissions",
+    "actions": {
+      "add_user": "Add user",
+      "add_user_submit": "Add user",
+      "add_employee": "Add employee"
+    },
+    "user_type": "User type",
+    "employees_count_label": "Employees count"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "view_all": "View all",
+  "taxes": {
+    "title": "Taxes",
+    "type": "Type",
+    "value": "Value",
+    "application": "Application",
+    "add_description": "You are about to add a tax. Enter the information and continue",
+    "actions": {
+      "add": "Add tax"
+    },
+    "types": {
+      "percentage": "Percentage",
+      "flat": "Flat"
+    },
+    "applications": {
+      "bill": "Sale",
+      "supply": "Purchase"
+    }
+  },
+  "email_verification": {
+    "success_title": "Email verified",
+    "success_message": "Your email address has been confirmed successfully. You will be redirected in {{time}}",
+    "error_title": "Error",
+    "error_message": "The verification link is invalid or has expired.",
+    "invalid_title": "Invalid email",
+    "invalid_message": "Please try again later."
+  },
+  "auth_signin": {
+    "welcome": "Welcome back",
+    "subtitle": "Sign in to your workspace",
+    "forgot_password": "Forgot password?",
+    "loading": "Signing in...",
+    "submit": "Sign in",
+    "no_account": "No account yet?",
+    "create_account": "Create an account"
+  },
+  "checkout": {
+    "payment_success": "Payment successful!",
+    "payment_confirmed": "Payment confirmed!",
+    "payment_failed": "Payment failed",
+    "redirect_message": "{{message}} you will be redirected to your dashboard in {{time}} sec",
+    "title": "Checkout",
+    "continue_without_payment": "Continue without paying",
+    "user_information": "User information",
+    "payment_method": "Payment method",
+    "payment_method_description": "Select your payment method and continue",
+    "credit_card": "Credit card",
+    "payment_information": "Payment information",
+    "unavailable": "Unavailable for now",
+    "select_payment_method": "Select a payment method",
+    "purchase_details": "Purchase details",
+    "designation": "Designation",
+    "due_date": "Due date",
+    "duration": "Duration",
+    "expiration_date": "Expiration date",
+    "offer_details": "Offer details",
+    "terms_acceptance": "By validating this payment, you accept our terms and conditions and privacy policy",
+    "plan_already_active": "You already have an active plan",
+    "months": "Months"
+  },
+  "plan_invoice": {
+    "tagline": "Billing & subscriptions",
+    "payment": "Payment",
+    "payment_date": "Payment date",
+    "next_due_date": "Next due date",
+    "reference": "Reference",
+    "payment_id": "Payment ID",
+    "subtotal_excl_tax": "Subtotal excl. tax",
+    "vat": "VAT ({{rate}})",
+    "total_incl_tax": "Total incl. tax",
+    "notes": "Notes",
+    "subscription": "{{plan}} subscription",
+    "issued_valid": "Invoice issued on {{date}} - Valid for {{days}} days",
+    "generated_automatically": "Automatically generated",
+    "company_address": "300 charles street, Toronto ON M5R 2X6",
+    "company_email": "info@inventoryflow.com",
+    "company_phone": "+1 (237) 123 456 789"
+  },
+  "settings_config": {
+    "parametres_generaux": "General settings",
+    "nom_du_magasin": "Store name",
+    "logo": "Logo",
+    "description": "Description",
+    "email_de_contact": "Contact email",
+    "telephone": "Phone",
+    "adresse": "Address",
+    "numero_de_contribuable": "Taxpayer number",
+    "finances": "Finances",
+    "devise_principale": "Main currency",
+    "euro": "Euro (?)",
+    "dollar": "Dollar ($)",
+    "dirham_mad": "Dirham (MAD)",
+    "dinar_dzd": "Dinar (DZD)",
+    "position_du_symbole": "Symbol position",
+    "apres_100": "After (100 ?)",
+    "avant_100": "Before (? 100)",
+    "facturation": "Billing",
+    "prefixe_facture": "Invoice prefix",
+    "envoi_automatique": "Automatic sending",
+    "notes_par_defaut": "Default notes",
+    "logo_sur_les_factures_pdf": "Logo on PDF invoices",
+    "produits": "Products",
+    "sku_automatique": "Automatic SKU",
+    "prefixe_sku": "SKU prefix",
+    "seuil_stock_bas": "Low stock threshold",
+    "suivi_des_stocks": "Inventory tracking",
+    "notifications": "Notifications",
+    "notifications_par_email": "Email notifications",
+    "alerte_stock_bas": "Low stock alert",
+    "nouvelle_commande": "New order",
+    "paiement_recu": "Payment received",
+    "rapport_quotidien": "Daily report",
+    "securite": "Security",
+    "expiration_de_session_min": "Session timeout (min)",
+    "filtrage_ip": "IP filtering",
+    "journal_d_activite": "Activity log",
+    "informations_du_magasin": "Store information",
+    "devise": "Currency",
+    "parametres_de_facturation": "Billing settings",
+    "parametres_produits": "Product settings",
+    "preferences_de_notification": "Notification preferences",
+    "parametres_de_securite": "Security settings",
+    "configurez_les_informations_de_base_de_votre_entreprise": "Configure your company basic information.",
+    "format_recommande_png_512x512px": "Recommended format: PNG, 512x512px",
+    "envoyer_la_facture_par_email_automatiquement": "Send the invoice by email automatically",
+    "generer_automatiquement_les_codes_sku": "Automatically generate SKU codes",
+    "alerte_quand_le_stock_descend_en_dessous": "Alert when stock goes below the threshold",
+    "recevoir_un_resume_journalier_par_email": "Receive a daily summary by email",
+    "restreindre_l_acces_a_certaines_adresses_ip": "Restrict access to specific IP addresses",
+    "enregistrer_toutes_les_actions_utilisateurs": "Record all user actions",
+    "nom_de_votre_boutique": "Your store name",
+    "decrivez_votre_activite": "Describe your activity...",
+    "email_exemple_com": "email@example.com",
+    "adresse_complete": "Full address",
+    "notes_affichees_en_bas_de_facture": "Notes displayed at the bottom of the invoice",
+    "merci_pour_votre_confiance": "Thank you for your trust."
+  },
+  "user_config": {
+    "profil": "Profile",
+    "prenom": "First name",
+    "nom": "Last name",
+    "adresse_email": "Email address",
+    "photo_de_profil": "Profile photo",
+    "poste": "Job title",
+    "service": "Department",
+    "direction": "Management",
+    "ventes": "Sales",
+    "comptabilite": "Accounting",
+    "support": "Support",
+    "mot_de_passe_actuel": "Current password",
+    "nouveau_mot_de_passe": "New password",
+    "confirmer_le_mot_de_passe": "Confirm password",
+    "activer_la_2fa": "Enable 2FA",
+    "methode": "Method",
+    "email": "Email",
+    "sms": "SMS",
+    "deconnexion_automatique_min": "Automatic logout (min)",
+    "limiter_a_une_session": "Limit to one session",
+    "preferences": "Preferences",
+    "theme": "Theme",
+    "clair": "Light",
+    "sombre": "Dark",
+    "systeme": "System",
+    "langue": "Language",
+    "francais": "French",
+    "english": "English",
+    "espanol": "Español",
+    "format_de_date": "Date format",
+    "jj_mm_aaaa": "JJ/MM/AAAA",
+    "mm_jj_aaaa": "MM/JJ/AAAA",
+    "aaaa_mm_jj": "AAAA-MM-JJ",
+    "factures": "Invoices",
+    "paiements": "Payments",
+    "rapports_hebdomadaires": "Weekly reports",
+    "alertes_de_securite": "Security alerts",
+    "activer_les_notifications_push": "Enable push notifications",
+    "son_de_notification": "Notification sound",
+    "frequence": "Frequency",
+    "quotidien": "Daily",
+    "hebdomadaire": "Weekly",
+    "mensuel": "Monthly",
+    "jamais": "Never",
+    "informations_personnelles": "Personal information",
+    "role_and_organisation": "Role & Organization",
+    "mot_de_passe": "Password",
+    "authentification_a_deux_facteurs": "Two-factor authentication",
+    "sessions_actives": "Active sessions",
+    "affichage": "Display",
+    "parametres_regionaux": "Regional settings",
+    "notifications_push": "Push notifications",
+    "frequence_des_resumes": "Summary frequency",
+    "vos_informations_de_base_visibles_par_les_autres_membres": "Your basic information visible to other members.",
+    "changez_votre_mot_de_passe_regulierement_pour_plus_de_securi": "Changez votre mot de passe régulièrement pour plus de sécurité.",
+    "ajoutez_une_couche_de_securite_supplementaire_a_votre_compte": "Add an extra layer of security to your account.",
+    "delai_d_inactivite_avant_deconnexion_automatique": "Inactivity delay before automatic logout.",
+    "deconnecter_les_autres_sessions_a_la_connexion": "Disconnect other sessions on login.",
+    "personnalisez_l_apparence_de_votre_interface": "Customize the appearance of your interface.",
+    "choisissez_quelles_notifications_recevoir_par_email": "Choose which notifications to receive by email.",
+    "recevoir_un_email_a_chaque_nouvelle_facture": "Receive an email for each new invoice.",
+    "etre_notifie_des_paiements_recus": "Be notified of received payments.",
+    "resume_des_ventes_chaque_lundi": "Sales summary every Monday.",
+    "connexions_suspectes_changements_de_mot_de_passe": "Suspicious logins, password changes.",
+    "votre_prenom": "Your first name",
+    "votre_nom": "Your last name",
+    "ex_directeur_caissier": "Ex: Director, Cashier...",
+    "telephone": "Phone",
+    "gerant": "Manager",
+    "securite": "Security",
+    "changez_votre_mot_de_passe_regulierement_pour_plus_de_securite": "Change your password regularly for better security."
+  },
+  "important": "Important",
+  "preview": "Preview",
+  "daily_closure": {
+    "title": "Daily closing",
+    "select_date": "Select a date",
+    "cash_balance": "Cash balance",
+    "daily_sales": "Daily sales",
+    "daily_profit": "Daily profit",
+    "compared_to_previous_period": "{{percent}}% compared to the previous period",
+    "profit_change": "{{percent}}% {{direction}} compared to the previous period",
+    "more": "more",
+    "less": "less"
+  },
+  "enterprise_information": {
+    "general_title": "General",
+    "currency": "Currency",
+    "save_information": "Save information",
+    "payment_method": "Payment method",
+    "payment_cycle": "Payment cycle",
+    "current_period": "Current period",
+    "next_due_date": "Next due date",
+    "debt_balance": "Debt balance",
+    "expires_on": "Expires on",
+    "popup_blocked": "Failed to open a new tab. Please allow popups for this site.",
+    "loading_pdf": "Loading PDF...",
+    "pdf_load_failed": "Failed to load the PDF."
+  },
+  "all": "All",
+  "fees": {
+    "actions": {
+      "add": "Add additional fees"
+    }
+  },
+  "sell": {
+    "filter_articles": "Filter by items..."
+  },
+  "otp": {
+    "enter_code": "Enter verification code"
+  },
+  "upgrade_banner": {
+    "title": "This feature requires the {{plan}} plan",
+    "subtitle": "Upgrade to the {{plan}} plan to unlock this feature and much more.",
+    "cta": "Upgrade to {{plan}}",
+    "cta_short": "Upgrade",
+    "compact_default": "Available on the {{plan}} plan"
+  },
+  "report": {
+    "title": "Report — {{name}}",
+    "last_30_days": "Last 30 days",
+    "sales_chart": "Sales trend",
+    "kpi": {
+      "revenue": "Revenue",
+      "profit": "Net profit",
+      "quantity_sold": "Units sold",
+      "avg_ticket": "Average order"
+    }
+  },
+  "footer": {
+    "by": "by",
+    "made_by": "Made by"
+  }
+}

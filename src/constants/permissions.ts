@@ -1,0 +1,63 @@
+// constants/permissions.ts
+
+export const PERMISSIONS = {
+  add_product: "Ajouter un article",
+  edit_product: "Modifier un article",
+  delete_product: "Supprimer un article",
+  view_products: "Voir les articles",
+  add_packaging: "Ajouter un emballage",
+  modifiy_packaging: "Modifier un emballage",
+  delete_packaging: "Supprimer un emballage",
+  back_packaging: "Récupérer un emballage",
+  add_supplier: "Ajouter un fournisseur",
+  edit_supplier: "Modifier un fournisseur",
+  delete_supplier: "Supprimer un fournisseur",
+  view_suppliers: "Voir les fournisseurs",
+  edit_invoice: "Modifier une facture",
+  delete_invoice: "Supprimer une facture",
+  view_invoices: "Voir les factures",
+  view_daily_report: "Voir le rapport journalier",
+  view_monthly_report: "Voir le rapport mensuel",
+  add_user: "Ajouter un utilisateur",
+  edit_user: "Modifier un utilisateur",
+  delete_user: "Supprimer un utilisateur",
+  assign_roles: "Assigner des rôles",
+  add_customer: "Ajouter un client",
+  edit_customer: "Modifier un client",
+  delete_customer: "Supprimer un client",
+  view_customer: "Voir le client",
+  add_employee: "Ajouter un employé",
+  edit_employee: "Modifier un employé",
+  delete_employee: "Supprimer un employé",
+  view_employee: "Voir l'employé",
+  cash_in_invoices: "Encaisser une facture",
+  validate_supply: "Valider une commande",
+  delete_supply: "Supprimer une commande",
+  validate_bill: "Valider une facture",
+  delete_bill: "Supprimer une facture",
+  receipt_bill: "Réceptionner une facture",
+  create_bill: "Créer une facture",
+  view_users: "Voir les utilisateurs",
+  add_expense: "Ajouter une dépense",
+  validate_expense: "Valider une dépense",
+  delete_expense: "Supprimer une dépense",
+  manage_cash: "Gérer la caisse",
+  add_inventory: "Ajouter un inventaire",
+  delete_inventory: "Supprimer un inventaire",
+  validate_inventory: "Valider un inventaire",
+  add_packaging_inventory: "Ajouter un inventaire d'emballage",
+  delete_packaging_inventory: "Supprimer un inventaire d'emballage",
+  validate_packaging_inventory: "Valider un inventaire d'emballage",
+  add_loss: "Ajouter une perte",
+  validate_loss: "Valider une perte",
+  delete_loss: "Supprimer une perte",
+  modify_bill: "Modifier une facture",
+  add_transaction: "Ajouter une transaction",
+  validate_transaction: "Valider une transaction"
+} as const;
+
+export type Permission = keyof typeof PERMISSIONS;
+
+export function sanitizePermissions(rawPerms: string[]): Permission[] {
+  return rawPerms?.filter((p): p is Permission => p in PERMISSIONS);
+}
