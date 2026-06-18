@@ -9,6 +9,7 @@ import type {
   SalesPoint,
   ColumnValidationResponse,
 } from "./types";
+import { instance } from "@/components/fetch";
 import API_URL from "@/config";
 
 // ── SecureLS (côté client uniquement) ─────────────────────────────
@@ -172,7 +173,6 @@ export function createImportWebSocket(jobId: string): WebSocket {
 }
 
 import { useTranslation } from "react-i18next";
-import { instance } from "@/components/fetch";
 
 export function useTemplateDownload() {
   const { t } = useTranslation();
