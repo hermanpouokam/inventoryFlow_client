@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import SecureLS from "secure-ls";
-import { instance } from "@/lib/api";
 import type { UserType } from "@/lib/types";
+import { instance } from "@/components/fetch";
 
 let ls: SecureLS | null = null;
 if (typeof window !== "undefined") {

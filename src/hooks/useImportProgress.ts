@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { ImportJob, ProgressEvent } from "@/lib/types";
 import type { PreflightReport } from "@/components/import/Preflightdialog";
-import { createImportWebSocket, getImportJob, instance as api } from "@/lib/api";
+import { createImportWebSocket, getImportJob } from "@/lib/api";
+import { instance as api } from "@/components/fetch"
 
 interface UseImportProgressOptions {
   jobId: string | null;
@@ -20,12 +21,12 @@ export function useImportProgress({
   const [connected, setConnected] = useState(false);
   const [preflightReport, setPreflightReport] = useState<PreflightReport | null>(null);
 
-  const wsRef       = useRef<WebSocket | null>(null);
-  const retryRef    = useRef(0);
-  const jobIdRef    = useRef<string | null>(null);
-  const stoppedRef  = useRef(false); // ← verrou : empêche tout retry/callback après terminal
+  const wsRef = useRef<WebSocket | null>(null);
+  const retryRef = useRef(0);
+  const jobIdRef = useRef<string | null>(null);
+  const stoppedRef = useRef(false); // ← verrou : empêche tout retry/callback après terminal
   const onCompleteRef = useRef(onComplete); // ← refs stables pour éviter de recréer connect
-  const onErrorRef    = useRef(onError);
+  const onErrorRef = useRef(onError);
 
   // Maintenir les refs à jour sans recréer connect
   useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
@@ -115,8 +116,8 @@ export function useImportProgress({
 
     // Reset du verrou à chaque nouveau jobId
     stoppedRef.current = false;
-    retryRef.current   = 0;
-    jobIdRef.current   = jobId;
+    retryRef.current = 0;
+    jobIdRef.current = jobId;
 
     getImportJob(jobId)
       .then((fullJob) => {
