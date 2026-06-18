@@ -9,9 +9,7 @@ import type {
   SalesPoint,
   ColumnValidationResponse,
 } from "./types";
-
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+import API_URL from "@/config";
 
 // ── SecureLS (côté client uniquement) ─────────────────────────────
 let ls: SecureLS | null = null;
@@ -23,57 +21,6 @@ if (typeof window !== "undefined") {
   });
 }
 
-// ── Instance Axios partagée ────────────────────────────────────────
-export const instance = axios.create({
-  baseURL: API_BASE,
-});
-
-// Intercepteur requêtes — injection du Bearer token
-instance.interceptors.request.use(
-  (config) => {
-    if (typeof window !== "undefined" && ls) {
-      const token = ls.get("accessToken");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// Intercepteur réponses — refresh automatique sur 401
-instance.interceptors.response.use(
-  (response) => response,
-  async (error: AxiosError) => {
-    if (typeof window !== "undefined" && ls) {
-      const originalRequest = error.config as typeof error.config & {
-        _retry?: boolean;
-      };
-
-      if (error.response?.status === 401 && !originalRequest?._retry) {
-        originalRequest!._retry = true;
-
-        try {
-          const refreshToken = ls.get("refreshToken");
-          if (!refreshToken) throw new Error("No refresh token found");
-
-          const { data } = await instance.post("/token/refresh/", {
-            refresh: refreshToken,
-          });
-
-          ls.set("accessToken", data.access);
-          originalRequest!.headers!["Authorization"] = `Bearer ${data.access}`;
-
-          return instance(originalRequest!);
-        } catch (err) {
-          console.error("Refresh token failed:", err);
-        }
-      }
-    }
-    return Promise.reject(error);
-  }
-);
 
 // ── Helpers token publics (pour le WebSocket) ──────────────────────
 export function getAccessToken(): string | null {
@@ -211,7 +158,7 @@ export async function resolveConflict(
 }
 
 export function getTemplateUrl(dataType: DataType): string {
-  return `${API_BASE}/import/template/${dataType}/`;
+  return `${API_URL}/import/template/${dataType}/`;
 }
 
 export function createImportWebSocket(jobId: string): WebSocket {
@@ -225,6 +172,7 @@ export function createImportWebSocket(jobId: string): WebSocket {
 }
 
 import { useTranslation } from "react-i18next";
+import { instance } from "@/components/fetch";
 
 export function useTemplateDownload() {
   const { t } = useTranslation();
