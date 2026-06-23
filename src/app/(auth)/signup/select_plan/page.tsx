@@ -19,9 +19,9 @@ import { formatteCurrency } from "@/app/(admin)/stock/functions";
 import { cn } from "@/lib/utils";
 import { encryptParam } from "@/utils/encryptURL";
 import { clearStorageAndCookies } from "../functions";
-import { Pricing } from "@/app/page";
 import { parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from "react-i18next";
+import { Pricing } from "@/app/temps";
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);
