@@ -187,7 +187,7 @@ export default function Signin() {
             <a href="https://www.interact.com" target="_blank" className="text-muted-foreground font-medium uppercase hover:underline">© {new Date().getFullYear()} Interact inc</a>
           </p>
           <p className="text-center text-[0.775rem] text-zinc-500 mt-6">
-            <a href="/terms" className="text-muted-foreground font-medium uppercase hover:underline">{tCommon("auth.terms_privacy")}</a>
+            <a href="/privacy" className="text-muted-foreground font-medium uppercase hover:underline">{tCommon("auth.terms_privacy")}</a>
           </p>
         </div>
 

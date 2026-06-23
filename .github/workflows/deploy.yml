@@ -72,7 +72,7 @@ jobs:
                 "environment": [
                   { "name": "NODE_ENV", "value": "production" },
                   { "name": "NOTCHPAY_ENV", "value": "sandbox" },
-                  { "name": "NEXT_PUBLIC_API_URL", "value": "https://api.inventoryflow.site" },
+                  { "name": "NEXT_PUBLIC_API_URL", "value": "https://api.inventoryflow.site/api" },
                   { "name": "NEXT_PUBLIC_WS_URL", "value": "wss://api.inventoryflow.site" },
                   { "name": "NEXT_PUBLIC_STRIPE_PUBLIC_KEY", "value": "${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}" },
                   { "name": "STRIPE_SECRET_KEY", "value": "${{ secrets.STRIPE_SECRET_KEY }}" },
