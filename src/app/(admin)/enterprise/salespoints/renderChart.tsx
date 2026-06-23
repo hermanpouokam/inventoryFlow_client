@@ -21,17 +21,21 @@ import {
 
 const chartConfig = {
     desktop: {
-        label: "Desktop",
+        label: "desktop",
         color: "hsl(var(--chart-1))",
     },
     mobile: {
-        label: "Mobile",
+        label: "mobile",
         color: "hsl(var(--chart-2))",
     },
 } satisfies ChartConfig
 
 export function SaleProfitChart({ chartData }: { chartData: any }) {
     const { t } = useTranslation("common")
+    const translatedChartConfig = {
+        desktop: { ...chartConfig.desktop, label: t("chart.devices.desktop") },
+        mobile: { ...chartConfig.mobile, label: t("chart.devices.mobile") },
+    } satisfies ChartConfig
 
     return (
         <>
@@ -40,7 +44,7 @@ export function SaleProfitChart({ chartData }: { chartData: any }) {
                 <CardDescription>{t("dashboard.chart.period_jan_jun_2024")}</CardDescription>
             </CardHeader>
             <CardContent className="my-5 px-0">
-                <ChartContainer config={chartConfig}>
+                <ChartContainer config={translatedChartConfig}>
                     <LineChart
                         accessibilityLayer
                         data={chartData}

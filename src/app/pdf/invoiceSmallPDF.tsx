@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import i18n from "i18next";
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
 import { formatteCurrency } from "../(admin)/stock/functions";
 import JsBarcode from "jsbarcode";
 import { useTranslation } from "react-i18next";
+import { generateQRCodeBase64 } from "./invoiceA4Pdf";
 
 const styles = StyleSheet.create({
   page: {
@@ -97,6 +98,12 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
 
   const { t } = useTranslation('common');
   const pageHeight = calculateHeight(bill);
+
+  const [qrImage, setQrImage] = useState<string | null>(null)
+
+  useEffect(() => {
+    generateQRCodeBase64(bill?.sales_point_details?.id).then(setQrImage)
+  }, [bill?.sales_point_details?.id])
 
   const barcodeImage = generateBarcodeBase64(
     bill?.bill_number ?? "000000"
@@ -339,26 +346,29 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
           <Text style={styles.signature}>{t("invoice.customer_signature")}</Text>
         </View>
         <View
-          style={[
-            styles.tableRow,
-            {
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 60,
-              position: 'absolute',
-              bottom: 30,
-              left: 40,
-              right: 40,
-              fontSize: 10,
-            },
-          ]}
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            left: 10,
+            right: 10,
+          }}
         >
-          {/* <Text style={styles.footer}></Text> */}
-          <Text style={styles.footer}>
-            {t("pdf.made_by")}
-            <Text style={{ fontWeight: "extrabold" }}>{" "}inventoryFlow</Text>
-          </Text>
-          <Text style={styles.footer}>{new Date().toLocaleString()}</Text>
+          {/* QR Code centré */}
+          {qrImage && (
+            <View style={{ alignItems: "flex-end", marginBottom: -5 }}>
+              <Image src={qrImage} style={{ width: 30, height: 30 }} />
+              <Text style={[styles.footer, { marginTop: 2, fontSize: 5 }]}>
+                Faites une remarque
+              </Text>
+            </View>
+          )}
+
+          {/* Copyright */}
+          <View style={[styles.tableRow, { justifyContent: "flex-start" }]}>
+            <Text style={styles.footer}>
+              {new Date().toLocaleString()} {`\u00a9 ${new Date().getFullYear()} InventoryFlow by Interact | `}{t("pdf.all_rights_reserved")}
+            </Text>
+          </View>
         </View>
       </Page>
     </Document>

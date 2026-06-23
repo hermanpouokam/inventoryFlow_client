@@ -32,7 +32,7 @@ import {
 import React, { } from 'react'
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { getActionsPermissions, getPermissions, getRoles, registerEmployee } from '../function';
+import { getActionsPermissions, getPermissions, getRoles, registerEmployee } from '../../function';
 import { useTranslation } from 'react-i18next';
 import { toast } from "@/components/ui/app-toast";
 import { usePermission } from '@/context/PermissionContext';
@@ -95,12 +95,6 @@ export default function Page() {
                 name: "name",
                 required: true,
                 label: tCommon("name"),
-                type: "text",
-            },
-            {
-                name: "surname",
-                required: true,
-                label: tCommon("surname"),
                 type: "text",
             },
             {
@@ -396,7 +390,7 @@ export default function Page() {
                                     : <p className='text-base text-center font-normal w-full'>{tCommon('loading')}...</p>}
                             </div>
                             <Divider className='uppercase my-5 space-x-1'>
-                                {"Permissions de page de l'utilisateur"}
+                                Permissions de page de l'utilisateur
                             </Divider>
                             <p className='mb-5 text-accent-foreground text-sm font-medium'>{tCommon('user_page_permission_text')}</p>
                             <div className='flex flex-wrap gap-2'>

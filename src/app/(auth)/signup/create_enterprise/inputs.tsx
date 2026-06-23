@@ -1,19 +1,18 @@
-
 export const inputs = [
-    {
-        name: 'name',
-        label: 'Nom',
-    },
-    {
-        name: 'phone',
-        label: 'Numero',
-    },
-    {
-        name: 'email',
-        label: 'Email',
-    },
-    {
-        name: 'address',
-        label: 'Adresse',
-    },
-]
+  {
+    name: "name",
+    label: "enterprise.name",
+  },
+  {
+    name: "phone",
+    label: "enterprise.phone",
+  },
+  {
+    name: "email",
+    label: "enterprise.email",
+  },
+  {
+    name: "address",
+    label: "enterprise.address",
+  },
+];

@@ -53,7 +53,7 @@ export default function ProductReportDrawer({ productId, productName, pickedDate
       .then((res) => {
         setReport(res.data)
       })
-      .catch(() => setError("Impossible de charger le rapport."))
+      .catch(() => setError(t("report.product.load_error")))
       .finally(() => setLoading(false));
   };
 
@@ -115,7 +115,7 @@ export default function ProductReportDrawer({ productId, productName, pickedDate
               />
               <KPICard
                 label={t("report.kpi.quantity_sold")}
-                value={`${report.summary.total_quantity_sold} unités`}
+                value={`${report.summary.total_quantity_sold} ${t("units")}`}
               />
               <KPICard
                 label={t("report.kpi.sold")}
@@ -127,9 +127,7 @@ export default function ProductReportDrawer({ productId, productName, pickedDate
             {evolution !== null && (
               <div className={`flex items-center gap-2 text-sm ${evolutionColor}`}>
                 <EvolutionIcon className="h-4 w-4" />
-                <span>
-                  {evolution > 0 ? "+" : ""}{evolution.toFixed(1)}% vs période précédente
-                </span>
+                <span>{t("report.evolution_vs_previous_period", { value: `${evolution > 0 ? "+" : ""}${evolution.toFixed(1)}` })}</span>
               </div>
             )}
 

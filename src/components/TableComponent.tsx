@@ -127,11 +127,11 @@ export function DataTableDemo<T extends object>({
             ))}
           </TableHeader>
 
-          <TableBody className="bg-card">
+          <TableBody className="bg-card dark:bg-[#212121]">
             {rows?.length ? (
               rows.map((row) => (
                 <TableRow
-                  className="group border-b border-background/50 transition-colors hover:bg-muted/40 data-[state=selected]:bg-primary/5 last:border-0"
+                  className="group border-b border-border transition-colors hover:bg-background/40 hover:dark:bg-primary/15 data-[state=selected]:bg-primary/5 last:border-0"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

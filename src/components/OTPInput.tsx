@@ -126,9 +126,6 @@ const OTPInput: React.FC<OTPInputProps> = ({ length = 6, onComplete }) => {
   const [otp, setOtp] = useState<string[]>(Array(length).fill(""));
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // useEffect(() => {
-  //   inputRef.current?.focus();
-  // }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value;
@@ -184,7 +181,12 @@ const OTPInput: React.FC<OTPInputProps> = ({ length = 6, onComplete }) => {
       />
 
       {otp.map((digit, i) => (
-        <div key={i} className={`otp-box ${digit ? "filled" : ""}`}>
+        <div key={i} className={`otp-box ${digit ? "filled" : ""}  bg-neutral-500/5 dark:bg-white/5 border border-zinc-500/10 text-black dark:text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-transparent
+                        transition-all duration-200
+                        [:-webkit-autofill]:shadow-[0_0_0px_1000px_rgba(255,255,255,0.05)_inset]
+                        dark:[:-webkit-autofill]:shadow-[0_0_0px_1000px_rgba(255,255,255,0.05)_inset]
+                        [:-webkit-autofill]:text-black
+                        dark:[:-webkit-autofill]:text-white`}>
           {digit}
         </div>
       ))}

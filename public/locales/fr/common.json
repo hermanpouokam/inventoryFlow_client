@@ -841,7 +841,7 @@
     "selected_count": "{{count}} sélectionnés"
   },
   "pagination": {
-    "previous": "Prcdent",
+    "previous": "Précédent",
     "next": "Suivant"
   },
   "navigation": {
@@ -858,7 +858,8 @@
       "enterprise": "Entreprise",
       "reports": "Plaintes",
       "buy": "Achats",
-      "sales point": "Point de vente"
+      "sales point": "Point de vente",
+      "data": "Données"
     },
     "items": {
       "sell_new": "Nouvelle vente",
@@ -886,7 +887,9 @@
       "enterprise_settings": "Paramètre",
       "enterprise_users": "Utilisateurs",
       "reports_all": "Consulter",
-      "upload": "Ajouter des données"
+      "upload": "Ajouter des données",
+      "import": "Importer",
+      "history": "Historique"
     },
     "close_menu": "Fermer le menu"
   },
@@ -895,7 +898,8 @@
       "information": "Information"
     },
     "account_settings": "Paramètres de compte",
-    "sign_out": "Se dconnecter"
+    "sign_out": "Se dconnecter",
+    "profile_picture_alt": "Photo de profil utilisateur"
   },
   "status_values": {
     "created": "Cre",
@@ -971,7 +975,23 @@
     "fill_required_fields": "Veuillez remplir : {{fields}}",
     "profile_updated": "Profil mis à jour",
     "saved_changes_count": "{{count}} modification sauvegardée",
-    "saved_changes_count_plural": "{{count}} modifications sauvegardées"
+    "saved_changes_count_plural": "{{count}} modifications sauvegardées",
+    "password_cooldown_title": "Vous avez récemment changer votre mot de passe",
+    "password_cooldown_description": "Vous avez récemment changé votre mot de passe. Réessayez dans {{days}} jours.",
+    "too_many_attempts_title": "Trop de tentatives",
+    "too_many_attempts_description": "Compte bloqué pendant {{days}} jours suite à trop de tentatives échouées.",
+    "username_cooldown_title": "Vous avez récemment changer votre nom d'utilisateur",
+    "email_not_verified_error": "Vérifiez votre email avant de continuer",
+    "new_username_required": "Veuillez entrer un nouveau nom d'utilisateur",
+    "username_already_taken": "Ce nom d'utilisateur est déjà pris",
+    "too_soon": "Veuillez attendre avant de faire une nouvelle demande",
+    "invalid_code": "Code invalide",
+    "code_expired": "Code expiré, faites une nouvelle demande",
+    "invalid_old_password": "Ancien mot de passe incorrect",
+    "invalid_new_password": "Le nouveau mot de passe ne respecte pas les critères requis",
+    "retry_in_hours": "Réessayez dans {{hours}} heures.",
+    "retry_in_hour": "Réessayez dans {{hours}} heure.",
+    "retry_in_days": "Réessayez dans {{days}} jours."
   },
   "landing": {
     "nav": {
@@ -1174,6 +1194,9 @@
       "blog": "Blog",
       "press": "Presse",
       "terms": "CGU"
+    },
+    "social_proof": {
+      "trusted_by": "Utilis? par +10 000 commerces en Afrique"
     }
   },
   "auth": {
@@ -1555,6 +1578,9 @@
       "add_user_submit": "Ajouter l'utilisateur",
       "add_employee": "Ajouter un employé"
     },
+    "types": {
+      "manager": "Manager"
+    },
     "user_type": "Type d'utilisateur",
     "employees_count_label": "Nombre d'employés"
   },
@@ -1620,7 +1646,13 @@
     "offer_details": "Détails d'offre",
     "terms_acceptance": "En validant ce paiement vous acceptez nos termes et conditions ainsi que notre politique de confidentialité",
     "plan_already_active": "Vous avez déjà un plan en cours",
-    "months": "Mois"
+    "months": "Mois",
+    "mobile_money": "Mobile Money",
+    "mobile_phone_hint": "Entrez votre numéro {{method}} pour recevoir une demande de paiement.",
+    "mobile_phone_placeholder": "6XX XXX XXX",
+    "mobile_verification_pending": "Vérification en cours... Veuillez valider le paiement sur votre téléphone.",
+    "mobile_request_sent": "Demande envoyée - réf : {{reference}}...",
+    "sandbox_hint": "Mode sandbox actif - utilisez vos numéros de test NotchPay."
   },
   "plan_invoice": {
     "tagline": "Facturation & abonnements",
@@ -1808,6 +1840,7 @@
     },
     "add_description": "Vous allez ajouter des frais supplémentaires. Entrez les informations et continuez",
     "type": "Type",
+    "title": "Frais supplémentaires",
     "types": {
       "percentage": "Pourcentage",
       "flat": "Fixe"
@@ -1861,7 +1894,12 @@
       "total_orders": "Commandes",
       "avg_order": "Panier moyen",
       "last_order": "Dernier achat",
-      "favorite_products": "Produits favoris"
+      "favorite_products": "Produits favoris",
+      "load_error": "Impossible de charger le rapport client."
+    },
+    "evolution_vs_previous_period": "{{value}}% vs période précédente",
+    "product": {
+      "load_error": "Impossible de charger le rapport."
     }
   },
   "reorder": {
@@ -1929,10 +1967,229 @@
         "is_beer": "Emballage payant",
         "packaging": "Emballage"
       }
+    },
+    "page": {
+      "subtitle": "Importez vos données CSV ou XLSX",
+      "new_import": "Nouvel import"
+    },
+    "data_types": {
+      "category": {
+        "label": "Catégories",
+        "description": "Catégories de produits (ex: Boissons, Alimentaire)"
+      },
+      "client_category": {
+        "label": "Catégories clients",
+        "description": "Types de clients (ex: Grossiste, Détaillant)"
+      },
+      "supplier": {
+        "label": "Fournisseurs",
+        "description": "Fournisseurs et leurs coordonnées"
+      },
+      "packaging": {
+        "label": "Emballages",
+        "description": "Emballages avec prix et quantités"
+      },
+      "client": {
+        "label": "Clients",
+        "description": "Clients avec contacts et catégories"
+      },
+      "product": {
+        "label": "Produits",
+        "description": "Catalogue produits avec prix et stocks"
+      },
+      "product_variant": {
+        "label": "Variantes produits",
+        "description": "Variantes de produits existants"
+      }
+    },
+    "sales_point": {
+      "load_error": "Impossible de charger les points de vente",
+      "select_required": "Veuillez sélectionner un point de vente.",
+      "search": "Rechercher un point de vente...",
+      "choose": "Choisir un point de vente...",
+      "import_to": "Import dans :",
+      "required": "Sélectionnez un point de vente pour continuer."
+    },
+    "wizard": {
+      "select_type": "Sélectionnez le type de données à importer",
+      "file": "Fichier",
+      "import_button": "Importer {{type}}",
+      "upload_title": "Envoi du fichier",
+      "incompatible_columns": "Colonnes incompatibles",
+      "expected_columns": "Colonnes attendues",
+      "retry": "Réessayer",
+      "action_required": "Action requise",
+      "processing": "Traitement en cours",
+      "paused_hint": "L'import est en pause - consultez le rapport ci-dessous.",
+      "realtime_tracking": "Suivi en temps réel",
+      "done_title": "Import terminé !",
+      "done_description": "{{count}} entrées importées avec succès",
+      "done_errors": "{{count}} erreur",
+      "done_errors_plural": "{{count}} erreurs"
+    },
+    "toast": {
+      "error_title": "Erreur",
+      "import_done": "Import terminé - {{success}} lignes importées",
+      "import_error": "Erreur : {{error}}",
+      "cancelled": "Import annulé.",
+      "creating_dependencies": "Création des dépendances en cours...",
+      "entry_replaced": "Entrée remplacée",
+      "row_skipped": "Ligne ignorée"
+    },
+    "file": {
+      "errors": {
+        "unsupported": "Seuls les fichiers .csv et .xlsx sont acceptés",
+        "too_large": "Le fichier dépasse la limite de {{size}}"
+      },
+      "drop_prompt": "Glisser-déposer ou",
+      "browse": "parcourir",
+      "accepted": "CSV ou XLSX - max {{size}}"
+    },
+    "template": {
+      "title": "Template {{type}}",
+      "description": "CSV avec en-têtes et exemple de ligne",
+      "download": "Télécharger"
+    },
+    "upload": {
+      "error": "Erreur lors de l'upload",
+      "done": "Fichier envoyé avec succès",
+      "in_progress": "Upload en cours...",
+      "s3": "Upload en cours",
+      "steps": {
+        "preparing": {
+          "label": "Préparation"
+        },
+        "uploading": {
+          "label": "Envoi en cours"
+        },
+        "starting": {
+          "label": "Démarrage"
+        },
+        "done": {
+          "label": "Traitement"
+        }
+      }
+    },
+    "status": {
+      "pending": "En attente",
+      "processing": "En cours",
+      "completed": "Terminé",
+      "failed": "Échoué",
+      "paused": "En pause"
+    },
+    "dashboard": {
+      "successful_imports": "Imports réussis",
+      "imported_rows": "Lignes importées",
+      "failures": "Échecs",
+      "total_conflicts": "Conflits totaux"
+    },
+    "history": {
+      "all": "Tous",
+      "empty": "Aucun import trouvé",
+      "lines": "lignes"
+    },
+    "live": {
+      "realtime_connected": "Temps réel connecté",
+      "disconnected": "Déconnecté",
+      "rows": "lignes",
+      "success": "Succès",
+      "errors": "Erreurs",
+      "conflicts": "Conflits",
+      "conflict_pending": "{{count}} conflit en attente",
+      "conflict_pending_plural": "{{count}} conflits en attente",
+      "conflict_description": "Des entrées existent déjà avec le même nom. Résolvez chaque conflit ci-dessous.",
+      "steps": "Étapes",
+      "errors_title": "Erreurs ({{count}})",
+      "row_prefix": "L{{row}}"
+    },
+    "conflicts": {
+      "title": "Conflits à résoudre",
+      "pending": "{{count}} en attente",
+      "row": "Ligne {{row}} - {{name}}",
+      "resolved": "Résolu",
+      "field": "Champ",
+      "new_value": "Nouvelle valeur",
+      "existing": "Existant (ID : {{id}})",
+      "replace_existing": "Remplacer l'existant",
+      "skip_row": "Ignorer cette ligne",
+      "resolved_count": "{{count}} conflit résolu",
+      "resolved_count_plural": "{{count}} conflits résolus"
+    },
+    "preflight": {
+      "type_labels": {
+        "category": "Catégorie",
+        "client_category": "Catégorie client",
+        "supplier": "Fournisseur",
+        "packaging": "Emballage",
+        "product": "Produit"
+      },
+      "title": "Analyse des dépendances - action requise",
+      "description": "Le fichier référence des données qui n'existent pas encore. Consultez le rapport ci-dessous et choisissez comment procéder.",
+      "auto_create_title": "Seront créés automatiquement",
+      "blocking_title": "Éléments bloquants - ne peuvent pas être créés",
+      "invalid_values_title": "Valeurs invalides dans le fichier",
+      "used_in_line": "Utilisé en ligne",
+      "used_in_lines": "Utilisé en lignes",
+      "line": "Ligne",
+      "lines": "Lignes",
+      "row_short": "L.{{row}}",
+      "create_continue": "Créer et continuer",
+      "cancel_import": "Annuler l'import",
+      "close_and_fix": "Fermer et corriger le fichier",
+      "fix_and_retry": "Corrigez les problèmes ci-dessus dans votre fichier et relancez l'import."
+    },
+    "service": {
+      "errors": {
+        "too_large": "Fichier trop volumineux (max 10 Mo). Taille actuelle : {{size}} Mo",
+        "unsupported_format": "Format non supporté. Utilisez un fichier .csv ou .xlsx",
+        "empty_file": "Le fichier est vide ou ne contient pas d'en-têtes.",
+        "unknown_data_type": "Type de données inconnu",
+        "missing_column": "Colonne obligatoire manquante : \"{{column}}\"",
+        "empty_required": "Champ obligatoire vide : \"{{field}}\"",
+        "invalid_number": "\"{{field}}\" doit être un nombre, valeur reçue : \"{{value}}\"",
+        "suspicious_value": "Valeur suspecte (possible injection) dans \"{{field}}\" : \"{{value}}\"",
+        "presigned_url": "Erreur lors de la génération de l'URL d'upload",
+        "upload_s3": "Erreur upload upload : {{status}} {{statusText}}",
+        "start_import": "Erreur lors du démarrage de l'import",
+        "websocket_lost": "Connexion WebSocket perdue",
+        "download_template": "Impossible de télécharger le template",
+        "unexpected": "Erreur inattendue"
+      }
     }
   },
   "footer": {
     "by": "par",
     "made_by": "Réalisé par"
+  },
+  "time": {
+    "relative": {
+      "now": "À l'instant",
+      "minutes": "Il y a {{count}} min",
+      "hours": "Il y a {{count}} h",
+      "days": "Il y a {{count}} j"
+    }
+  },
+  "units": "unités",
+  "pages": {
+    "actions": {
+      "back": "Revenir en arrière",
+      "home": "Retourner à la page d'accueil"
+    },
+    "not_found": {
+      "image_alt": "Illustration page introuvable",
+      "title": "Cette page n'existe pas",
+      "description": "Vous essayez d'accéder à une page qui n'existe pas. Revenez en arrière ou retournez à la page d'accueil pour continuer votre navigation."
+    },
+    "unauthorized": {
+      "image_alt": "Illustration accès refusé",
+      "title": "Accès refusé",
+      "description": "Vous essayez d'accéder à une page non autorisée. Revenez en arrière ou retournez à la page d'accueil pour continuer votre navigation."
+    }
+  },
+  "chart": {
+    "devices": {
+      "desktop": "Bureau",
+      "mobile": "Mobile"
+    }
   }
 }

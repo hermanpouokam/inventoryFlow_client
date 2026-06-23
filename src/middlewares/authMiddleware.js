@@ -73,7 +73,7 @@ export async function authMiddleware(req) {
                 }
             }
             // If refresh fails or no refresh token, redirect to signin
-            if (pathname === ("/signin") || pathname === ("/signup")) {
+            if (pathname === ("/signin") || pathname === ("/signup") || pathname === ('/forgot-password')) {
                 return NextResponse.next();
             }
             // Redirect to signin with "next" parameter to return to requested page after login
@@ -83,7 +83,7 @@ export async function authMiddleware(req) {
         }
     } catch (err) {
         // On error (ex: network), redirect to signin (unless already on signin/signup)
-        if (pathname === ("/signin") || pathname === ("/signup")) {
+        if (pathname === ("/signin") || pathname === ("/signup") || pathname === ('/forgot-password')) {
             return NextResponse.next();
         }
         const signInUrl = new URL("/signin", req.url);

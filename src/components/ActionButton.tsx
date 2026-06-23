@@ -32,8 +32,8 @@ const ActionsDropdown: React.FC<ActionsDropdownProps> = ({ actions }) => {
           <EllipsisVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>{t("actions")}</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="dark:bg-[#212121] bg-card">
+        <DropdownMenuLabel>{t("actions.title")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {actions
           .filter((action) => action.visible !== false)

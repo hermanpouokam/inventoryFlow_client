@@ -7,9 +7,10 @@ import {
   FileSpreadsheet,
   Clock,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { getImportHistory } from "@/lib/api";
 import type { ImportJob, DataType } from "@/lib/types";
-import { DATA_TYPE_LABELS } from "@/lib/types";
+import { DATA_TYPE_LABEL_KEYS } from "@/lib/types";
 import { cn, STATUS_CONFIG, formatRelativeTime, formatFileSize } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,10 @@ interface HistoryTableProps {
   refreshTick?: number;
 }
 
+const DATA_TYPES = Object.keys(DATA_TYPE_LABEL_KEYS) as DataType[];
+
 export function HistoryTable({ onSelectJob, refreshTick }: HistoryTableProps) {
+  const { t } = useTranslation("common");
   const [jobs, setJobs] = useState<ImportJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<DataType | "all">("all");
@@ -33,8 +37,7 @@ export function HistoryTable({ onSelectJob, refreshTick }: HistoryTableProps) {
       );
       setJobs(data);
     } catch {
-      // silently fail — demo mock data below
-      // setJobs(MOCK_JOBS);
+      setJobs([]);
     } finally {
       setLoading(false);
     }
@@ -44,11 +47,8 @@ export function HistoryTable({ onSelectJob, refreshTick }: HistoryTableProps) {
     load();
   }, [load, refreshTick]);
 
-  const DATA_TYPES = Object.keys(DATA_TYPE_LABELS) as DataType[];
-
   return (
     <div className="space-y-4 mt-3">
-      {/* Filters */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
         <button
           onClick={() => setFilter("all")}
@@ -59,20 +59,20 @@ export function HistoryTable({ onSelectJob, refreshTick }: HistoryTableProps) {
               : "bg-muted text-muted-foreground hover:text-foreground"
           )}
         >
-          Tous
+          {t("import.history.all")}
         </button>
-        {DATA_TYPES.map((t) => (
+        {DATA_TYPES.map((dataType) => (
           <button
-            key={t}
-            onClick={() => setFilter(t)}
+            key={dataType}
+            onClick={() => setFilter(dataType)}
             className={cn(
               "shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors",
-              filter === t
+              filter === dataType
                 ? "bg-primary text-primary-foreground"
                 : "bg-muted text-muted-foreground hover:text-foreground"
             )}
           >
-            {DATA_TYPE_LABELS[t]}
+            {t(DATA_TYPE_LABEL_KEYS[dataType])}
           </button>
         ))}
         <Button
@@ -86,20 +86,16 @@ export function HistoryTable({ onSelectJob, refreshTick }: HistoryTableProps) {
         </Button>
       </div>
 
-      {/* Table */}
       {loading && jobs.length === 0 ? (
         <div className="space-y-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-16 animate-shimmer shimmer-bg rounded-lg"
-            />
+            <div key={i} className="h-16 animate-shimmer shimmer-bg rounded-lg" />
           ))}
         </div>
       ) : jobs.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
           <Clock size={28} className="text-muted-foreground/40" />
-          <p className="text-sm text-muted-foreground">Aucun import trouvé</p>
+          <p className="text-sm text-muted-foreground">{t("import.history.empty")}</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -118,10 +114,7 @@ export function HistoryTable({ onSelectJob, refreshTick }: HistoryTableProps) {
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <FileSpreadsheet
-                      size={14}
-                      className="shrink-0 text-muted-foreground"
-                    />
+                    <FileSpreadsheet size={14} className="shrink-0 text-muted-foreground" />
                     <span className="truncate text-sm font-medium text-foreground">
                       {job.original_filename}
                     </span>
@@ -139,7 +132,7 @@ export function HistoryTable({ onSelectJob, refreshTick }: HistoryTableProps) {
                       }
                     >
                       <span className={cn("h-1.5 w-1.5 rounded-full", cfg.dot)} />
-                      {cfg.label}
+                      {t(cfg.labelKey)}
                     </Badge>
                     <ExternalLink
                       size={13}
@@ -149,12 +142,12 @@ export function HistoryTable({ onSelectJob, refreshTick }: HistoryTableProps) {
                 </div>
 
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span>{DATA_TYPE_LABELS[job.data_type]}</span>
-                  <span>·</span>
-                  <span>{job.total_rows.toLocaleString()} lignes</span>
-                  <span>·</span>
+                  <span>{t(DATA_TYPE_LABEL_KEYS[job.data_type])}</span>
+                  <span>-</span>
+                  <span>{job.total_rows.toLocaleString()} {t("import.history.lines")}</span>
+                  <span>-</span>
                   <span>{formatFileSize(job.file_size)}</span>
-                  <span className="ml-auto">{formatRelativeTime(job.created_at)}</span>
+                  <span className="ml-auto">{formatRelativeTime(job.created_at, t)}</span>
                 </div>
 
                 {(job.status === "processing" || job.status === "completed") && (

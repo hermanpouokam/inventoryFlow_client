@@ -184,7 +184,7 @@ const CountryDropdown = forwardRef<CountryDropdownRef, {
                 </Button>
             </PopoverTrigger>
 
-            <PopoverContent className="w-64 p-0 z-[999999] bg-card shadow">
+            <PopoverContent className="w-64 p-0 z-[999999] bg-card shadow-lg">
                 <Command className="bg-card">
                     <CommandInput
                         ref={searchRef}

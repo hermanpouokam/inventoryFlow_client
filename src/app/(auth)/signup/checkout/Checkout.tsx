@@ -339,7 +339,7 @@ export default function Checkout() {
                       <p className="text-xs font-semibold">{user?.name} {user?.surname}</p>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-muted-foreground">email:</p>
+                      <p className="text-xs font-semibold text-muted-foreground">{t("email")}:</p>
                       <span className="text-xs font-semibold truncate w-full">{user?.email}</span>
                     </div>
                     <div>
@@ -377,7 +377,7 @@ export default function Checkout() {
                       <span className="bg-blue-600 text-white px-3 rounded-full mr-1 py-1">
                         M<span className="text-yellow-500">T</span>N
                       </span>
-                      Mobile Money
+                      {t("checkout.mobile_money")}
                     </Button>
 
                     <Button
@@ -386,7 +386,7 @@ export default function Checkout() {
                       onClick={() => { setMethod("orange"); setMobilePhone(""); setNotchPayReference(null); }}
                       className={cn("bg-orange-500 text-white hover:bg-orange-400", method === "orange" && "ring-2 ring-black")}
                     >
-                      Orange Money
+                      {t("payment_method_modal.method_orange_title")}
                     </Button>
                   </div>
                 </CardBodyContent>
@@ -404,7 +404,7 @@ export default function Checkout() {
                   ) : method === "mtn" || method === "orange" ? (
                     <div className="space-y-3 pt-2">
                       <p className="text-xs text-muted-foreground">
-                        Entrez votre numéro {method === "orange" ? "Orange Money" : "MTN Mobile Money"} pour recevoir une demande de paiement.
+                        {t("checkout.mobile_phone_hint", { method: method === "orange" ? t("payment_method_modal.method_orange_title") : t("payment_method_modal.method_mtn_title") })}
                       </p>
 
                       {/* Champ numéro */}
@@ -414,7 +414,7 @@ export default function Checkout() {
                         </span>
                         <input
                           type="tel"
-                          placeholder="6XX XXX XXX"
+                          placeholder={t("checkout.mobile_phone_placeholder")}
                           value={mobilePhone}
                           onChange={(e) => setMobilePhone(e.target.value.replace(/\D/g, ""))}
                           className="flex-1 px-3 py-2 text-sm outline-none bg-transparent"
@@ -426,21 +426,19 @@ export default function Checkout() {
                       {mobilePolling && (
                         <div className="flex items-center gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">
                           <div className="w-3 h-3 rounded-full border-2 border-amber-600 border-t-transparent animate-spin shrink-0" />
-                          <span>
-                            Vérification en cours... Veuillez valider le paiement sur votre téléphone.
-                          </span>
+                          <span>{t("checkout.mobile_verification_pending")}</span>
                         </div>
                       )}
 
                       {/* Confirmation référence envoyée */}
                       {notchPayReference && !mobilePolling && !error && (
                         <p className="text-xs text-green-600 bg-green-50 border border-green-200 rounded p-2">
-                          ✓ Demande envoyée — réf : {notchPayReference.slice(0, 8)}...
+                          {t("checkout.mobile_request_sent", { reference: notchPayReference.slice(0, 8) })}
                         </p>
                       )}
 
                       <p className="text-xs text-muted-foreground pt-1">
-                        Mode sandbox actif — utilise tes numéros de test NotchPay.
+                        {t("checkout.sandbox_hint")}
                       </p>
                     </div>
 

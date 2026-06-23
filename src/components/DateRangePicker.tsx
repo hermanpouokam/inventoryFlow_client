@@ -77,7 +77,7 @@ export function DateRangePicker({
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className="w-auto p-3 gap-4 bg-card dark:bg-background" align="start">
+        <PopoverContent className="w-auto p-3 gap-4 bg-card shadow-[0_16px_40px_0px_rgba(0,0,0,0.7)] dark:bg-[#212121]" align="start">
           <div className=" max-w-[18rem] ml-5">
             <Select
               onValueChange={(value) => {
@@ -90,7 +90,7 @@ export function DateRangePicker({
                 <SelectValue placeholder={tCommon("date_range.select_placeholder")} />
               </SelectTrigger>
 
-              <SelectContent>
+              <SelectContent className="bg-card shadow-[0_16px_40px_0px_rgba(0,0,0,0.7)] dark:bg-[#212121]">
                 {datesData.map((preset) => (
                   <SelectItem key={preset.name} value={preset.name}>
                     {preset.name}

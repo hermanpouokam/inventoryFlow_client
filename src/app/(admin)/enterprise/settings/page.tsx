@@ -1,18 +1,22 @@
 'use client'
 import {
-  useState,
-  useMemo,
-  useCallback,
-  useEffect } from "react";
-import { motion,
-  AnimatePresence } from "framer-motion";
-import { Save,
-  Menu,
-  X,
-  RotateCcw,
-  Check,
-  XCircle,
-  CheckCircle,
+    useState,
+    useMemo,
+    useCallback,
+    useEffect
+} from "react";
+import {
+    motion,
+    AnimatePresence
+} from "framer-motion";
+import {
+    Save,
+    Menu,
+    X,
+    RotateCcw,
+    Check,
+    XCircle,
+    CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SettingCategory, settingsConfig } from "@/lib/settings-config";
@@ -24,17 +28,20 @@ import { useEnterpriseSettings } from "./useEnterpriseSettings";
 import { toast } from "@/components/ui/app-toast";
 import { useTranslation } from "react-i18next";
 import { PlanGate } from "@/components/PlanGate";
+import { useQueryState } from "nuqs";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 // Catégories dont l'affichage est réservé au plan Pro
 const PRO_CATEGORIES = new Set(["invoicing"]);
 
 export default function Settings() {
     const { t } = useTranslation("common");
-    const [activeCategory, setActiveCategory] = useState(settingsConfig[0].id);
+    const [activeCategory, setActiveCategory] = useQueryState("tab", { defaultValue: settingsConfig[0].id });
     const [searchQuery, setSearchQuery] = useState("");
     const [mobileOpen, setMobileOpen] = useState(false);
     const { userMode, changeMode } = useThemeMode();
     const { values: enterpriseValues, setValues: setEnterpriseValues, loading, formatValues, formatFlatValues } = useEnterpriseSettings();
+    const [saving, setSaving] = useState(false)
 
     function buildInitialValues(settingsConfig: SettingCategory[], backendData?: Record<string, any>) {
         const map: Record<string, string | number | boolean> = {};
@@ -90,7 +97,6 @@ export default function Settings() {
     }, []);
 
     const handleSave = async () => {
-
         const { enterprisePayload, settingsPayload } = formatValues(values)
         const finalPayload = {
             ...enterprisePayload,
@@ -98,6 +104,7 @@ export default function Settings() {
         };
 
         try {
+            setSaving(true)
             const response = await instance.patch('/settings/', finalPayload, {
                 withCredentials: true
             })
@@ -107,7 +114,11 @@ export default function Settings() {
             if (values.theme) {
                 changeMode(values.theme as any);
             }
-            setSavedValues({ ...buildInitialValues(settingsConfig, flatValues), theme: userMode });
+
+            const newSaved = { ...buildInitialValues(settingsConfig, flatValues), theme: userMode };
+            setSavedValues(newSaved);
+            setValues(newSaved); // ← ajoute cette ligne
+
             toast({
                 variant: "success",
                 title: t("settings.save_success_title"),
@@ -122,8 +133,9 @@ export default function Settings() {
                 variant: "destructive",
                 icon: <XCircle className="size-4" />,
             });
+        } finally {
+            setSaving(false)
         }
-
     };
 
 
@@ -163,6 +175,12 @@ export default function Settings() {
 
     return (
         <div className="overflow-hidden">
+            <Backdrop
+                sx={{ color: "#8b5cf6", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={saving}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div className="flex h-[calc(100vh-90px)] w-full overflow-hidden bg-background p-0">
                 {/* Desktop sidebar */}
                 <div className="hidden w-72 shrink-0 md:block">
@@ -229,15 +247,15 @@ export default function Settings() {
                                             feature={PRO_CATEGORIES.has(activeCategory) ? "advanced_billing" : undefined}
                                             bannerSize="full"
                                         >
-                                        {filteredSections.map((section) => (
-                                            <SettingsSection
-                                                key={section.id}
-                                                section={section}
-                                                values={values}
-                                                modifiedFields={modifiedFields}
-                                                onChange={handleChange}
-                                            />
-                                        ))}
+                                            {filteredSections.map((section) => (
+                                                <SettingsSection
+                                                    key={section.id}
+                                                    section={section}
+                                                    values={values}
+                                                    modifiedFields={modifiedFields}
+                                                    onChange={handleChange}
+                                                />
+                                            ))}
                                         </PlanGate>
                                     ) : (
                                         <div className="flex flex-col items-center justify-center py-20 text-center">

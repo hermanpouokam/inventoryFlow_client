@@ -78,9 +78,11 @@ export default function Page() {
     error: clientsError,
   } = useSelector((state: RootState) => state.clients);
 
+  const { hasPermission, user, isAdmin } = usePermission()
+
   const [selectedSalesPoints, setSelectedSalesPoints] = React.useState<
     number[]
-  >([]);
+  >(isAdmin() ? [] : [user?.sales_point]);
   const [selectedCategories, setSelectedCategories] = React.useState<number[]>(
     []
   );
@@ -89,7 +91,6 @@ export default function Page() {
   const [open, setOpen] = React.useState(false);
   const [table, setTable] = React.useState(null);
   const [salesPoint, setSalesPoint] = React.useState<SalesPoint | null>(null);
-  const { hasPermission, user, isAdmin } = usePermission()
 
   const handleChange = (event: any) => {
     const sp = salespoints.find(sp => sp.id === event.target.value)
@@ -305,14 +306,10 @@ export default function Page() {
     if (clientsStatus === "idle") {
       dispatch(fetchClients({ categories: [], sales_points: isAdmin() ? [] : [user?.sales_point] }));
     }
-    if (clientsStatus === "idle") {
-      dispatch(fetchClientCat({ sales_points: [user?.sales_point] }));
-    }
-    if (status === "idle") {
+    if (salespointsStatus === "idle") {
       dispatch(fetchSalesPoints());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [salespointsStatus, status, clientsStatus, dispatch]);
+  }, [salespointsStatus, clientsStatus, dispatch]);
 
   const handleSelectCategories = (id: number) => {
     if (selectedCategories.includes(id)) {
@@ -323,12 +320,12 @@ export default function Page() {
   };
 
   const handleSelect = (id: number) => {
-    if (selectedSalesPoints.includes(id)) {
-      setSelectedSalesPoints(selectedSalesPoints.filter((s) => s != id));
-    } else {
-      setSelectedSalesPoints((prev) => [...prev, id]);
-    }
-    dispatch(fetchClientCat({ sales_points: [...selectedSalesPoints, id] }));
+    const newSelectedSalesPoints = selectedSalesPoints.includes(id)
+      ? selectedSalesPoints.filter((s) => s != id)
+      : [...selectedSalesPoints, id];
+
+    setSelectedSalesPoints(newSelectedSalesPoints);
+    dispatch(fetchClientCat({ sales_points: newSelectedSalesPoints }));
     setSelectedCategories([]);
   };
 
@@ -397,7 +394,6 @@ export default function Page() {
             </Button>
           )}
 
-          {/* DIALOG */}
           <Dialog
             open={open}
             TransitionComponent={Transition}
@@ -471,7 +467,6 @@ export default function Page() {
         </div>
       </CardBodyContent>
 
-      {/* FILTER */}
       <CardBodyContent className="w-full p-5 ">
         <h2 className="font-medium text-base mb-3">
           {t("customers.filter_title")}
@@ -496,13 +491,13 @@ export default function Page() {
           )}
 
           <SelectPopover
-            items={data}
+            items={selectedSalesPoints.length < 1 ? [] : data}
             getOptionLabel={(option) => option.name}
             onSelect={(item) => handleSelectCategories(item.id)}
             selectedItems={selectedCategories.map((c) =>
               data.find((el) => el.id === c)
             )}
-            noItemText={t("customers.no_category")}
+            noItemText={selectedSalesPoints.length < 1 ? t("sales_points.select_required") : t("customers.no_category")}
             placeholder={t("customers.category")}
             searchPlaceholder={t("customers.search_category")}
           />

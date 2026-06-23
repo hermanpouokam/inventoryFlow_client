@@ -2,11 +2,12 @@
 
 import { useCallback, useState, useRef } from "react";
 import { UploadCloud, FileSpreadsheet, X, AlertCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn, formatFileSize } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const ACCEPTED = [".csv", ".xlsx"];
-const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+const MAX_SIZE = 10 * 1024 * 1024;
 
 interface FileDropzoneProps {
   file: File | null;
@@ -21,18 +22,24 @@ export function FileDropzone({
   onClear,
   disabled,
 }: FileDropzoneProps) {
+  const { t } = useTranslation("common");
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const validate = useCallback((f: File): string | null => {
-    const ext = f.name.split(".").pop()?.toLowerCase();
-    if (!["csv", "xlsx"].includes(ext || ""))
-      return "Seuls les fichiers .csv et .xlsx sont acceptés";
-    if (f.size > MAX_SIZE)
-      return `Le fichier dépasse la limite de ${formatFileSize(MAX_SIZE)}`;
-    return null;
-  }, []);
+  const validate = useCallback(
+    (f: File): string | null => {
+      const ext = f.name.split(".").pop()?.toLowerCase();
+      if (!["csv", "xlsx"].includes(ext || "")) {
+        return t("import.file.errors.unsupported");
+      }
+      if (f.size > MAX_SIZE) {
+        return t("import.file.errors.too_large", { size: formatFileSize(MAX_SIZE) });
+      }
+      return null;
+    },
+    [t]
+  );
 
   const handleFile = useCallback(
     (f: File) => {
@@ -68,7 +75,7 @@ export function FileDropzone({
   if (file) {
     const ext = file.name.split(".").pop()?.toLowerCase();
     return (
-      <div className="flex items-center gap-3 rounded-lg border border-primary/30 bg-accent/50 p-4">
+      <div className="flex items-center gap-3 rounded-lg border-2 border-dashed border-primary/50 bg-background/70 p-4">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary">
           <FileSpreadsheet size={20} />
         </div>
@@ -77,7 +84,7 @@ export function FileDropzone({
             {file.name}
           </p>
           <p className="text-xs text-muted-foreground">
-            {ext?.toUpperCase()} · {formatFileSize(file.size)}
+            {ext?.toUpperCase()} - {formatFileSize(file.size)}
           </p>
         </div>
         {!disabled && (
@@ -107,7 +114,7 @@ export function FileDropzone({
         onDragLeave={() => setDragging(false)}
         onDrop={onDrop}
         className={cn(
-          "group relative flex w-full flex-col items-center justify-center bg-card gap-3 rounded-xl border-2 border-dashed py-10 transition-all duration-150 focus:outline-none",
+          "group relative flex w-full flex-col items-center justify-center bg-background/70 gap-3 rounded-xl border-2 border-dashed py-10 transition-all duration-150 focus:outline-none",
           dragging
             ? "border-primary bg-accent/60 scale-[1.01]"
             : "border-border hover:border-primary/50 hover:bg-muted/50",
@@ -117,20 +124,22 @@ export function FileDropzone({
         <div
           className={cn(
             "flex h-12 w-12 items-center justify-center rounded-full transition-colors",
-            dragging ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground group-hover:text-foreground"
+            dragging
+              ? "bg-primary/20 text-primary"
+              : "bg-muted text-muted-foreground group-hover:text-foreground"
           )}
         >
           <UploadCloud size={22} />
         </div>
         <div className="text-center">
           <p className="text-sm font-medium text-foreground">
-            Glisser-déposer ou{" "}
+            {t("import.file.drop_prompt")}{" "}
             <span className="text-primary underline-offset-2 hover:underline">
-              parcourir
+              {t("import.file.browse")}
             </span>
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            CSV ou XLSX · max {formatFileSize(MAX_SIZE)}
+            {t("import.file.accepted", { size: formatFileSize(MAX_SIZE) })}
           </p>
         </div>
         <input

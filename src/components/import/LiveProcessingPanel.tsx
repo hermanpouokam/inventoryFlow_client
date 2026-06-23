@@ -10,11 +10,13 @@ import {
   WifiOff,
   FileSpreadsheet,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn, STATUS_CONFIG, formatDate } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import type { ImportJob, TimelineStep } from "@/lib/types";
-import { DATA_TYPE_LABELS } from "@/lib/types";
+import { DATA_TYPE_LABEL_KEYS } from "@/lib/types";
+import Spinner from "../Spinner";
 
 interface LiveProcessingPanelProps {
   job: ImportJob;
@@ -29,20 +31,14 @@ function TimelineStepRow({ step }: { step: TimelineStep }) {
         <div
           className={cn(
             "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all",
-            status === "done" &&
-              "border-success/40 bg-success/10 text-success",
-            status === "active" &&
-              "border-primary/50 bg-primary/10 text-primary",
-            status === "pending" &&
-              "border-border bg-muted text-muted-foreground",
-            status === "failed" &&
-              "border-destructive/40 bg-destructive/10 text-destructive"
+            status === "done" && "border-success/40 bg-success/10 text-success",
+            status === "active" && "border-primary/50 bg-primary/10 text-primary",
+            status === "pending" && "border-border bg-muted text-muted-foreground",
+            status === "failed" && "border-destructive/40 bg-destructive/10 text-destructive"
           )}
         >
           {status === "done" && <CheckCircle2 size={13} />}
-          {status === "active" && (
-            <Loader2 size={13} className="animate-spin" />
-          )}
+          {status === "active" && <Spinner />}
           {status === "pending" && <Circle size={13} />}
           {status === "failed" && <XCircle size={13} />}
         </div>
@@ -73,6 +69,7 @@ export function LiveProcessingPanel({
   job,
   connected,
 }: LiveProcessingPanelProps) {
+  const { t } = useTranslation("common");
   const cfg = STATUS_CONFIG[job.status];
   const pct = job.total_rows > 0
     ? Math.round((job.processed_rows / job.total_rows) * 100)
@@ -87,12 +84,11 @@ export function LiveProcessingPanel({
     typeof job.pending_conflicts === "number"
       ? job.pending_conflicts
       : Array.isArray(job.pending_conflicts)
-      ? job.pending_conflicts.length
-      : 0;
+        ? job.pending_conflicts.length
+        : 0;
 
   return (
     <div className="space-y-4">
-      {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -103,13 +99,12 @@ export function LiveProcessingPanel({
               {job.original_filename}
             </p>
             <p className="text-xs text-muted-foreground">
-              {DATA_TYPE_LABELS[job.data_type]}
+              {t(DATA_TYPE_LABEL_KEYS[job.data_type])}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {/* WebSocket indicator */}
-          <span title={connected ? "Temps réel connecté" : "Déconnecté"}>
+          <span title={connected ? t("import.live.realtime_connected") : t("import.live.disconnected")}>
             {connected ? (
               <Wifi size={13} className="text-success" />
             ) : (
@@ -121,24 +116,22 @@ export function LiveProcessingPanel({
               job.status === "completed"
                 ? "success"
                 : job.status === "failed"
-                ? "destructive"
-                : job.status === "processing"
-                ? "default"
-                : "outline"
+                  ? "destructive"
+                  : job.status === "processing"
+                    ? "default"
+                    : "outline"
             }
           >
             <span className={cn("h-1.5 w-1.5 rounded-full", cfg.dot)} />
-            {cfg.label}
+            {t(cfg.labelKey)}
           </Badge>
         </div>
       </div>
 
-      {/* Progress */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">
-            {job.processed_rows.toLocaleString()} /{" "}
-            {job.total_rows.toLocaleString()} lignes
+            {job.processed_rows.toLocaleString()} / {job.total_rows.toLocaleString()} {t("import.live.rows")}
           </span>
           <span className="font-mono font-medium text-foreground">{pct}%</span>
         </div>
@@ -149,58 +142,38 @@ export function LiveProcessingPanel({
             job.status === "failed"
               ? "bg-destructive"
               : job.status === "completed"
-              ? "bg-success"
-              : undefined
+                ? "bg-success"
+                : undefined
           }
         />
       </div>
 
-      {/* Stats grid */}
       <div className="grid grid-cols-3 gap-2">
-        <StatCell
-          label="Succès"
-          value={job.success_rows}
-          color="text-success"
-          bg="bg-success/10"
-        />
-        <StatCell
-          label="Erreurs"
-          value={job.error_rows}
-          color="text-destructive"
-          bg="bg-destructive/10"
-        />
-        <StatCell
-          label="Conflits"
-          value={conflictCount}
-          color="text-warning"
-          bg="bg-warning/10"
-        />
+        <StatCell label={t("import.live.success")} value={job.success_rows} color="text-success" bg="bg-success/10" />
+        <StatCell label={t("import.live.errors")} value={job.error_rows} color="text-destructive" bg="bg-destructive/20" />
+        <StatCell label={t("import.live.conflicts")} value={conflictCount} color="text-warning" bg="bg-warning/10" />
       </div>
 
-      {/* Conflicts warning */}
       {hasConflicts && job.status !== "completed" && (
         <div className="flex items-start gap-2.5 rounded-lg border border-warning/30 bg-warning/10 p-3">
           <AlertTriangle size={14} className="mt-0.5 shrink-0 text-warning" />
           <div>
             <p className="text-xs font-semibold text-warning">
-              {conflictCount} conflit{conflictCount > 1 ? "s" : ""} en attente
+              {t(conflictCount > 1 ? "import.live.conflict_pending_plural" : "import.live.conflict_pending", { count: conflictCount })}
             </p>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Des entrées existent déjà avec le même nom. Résolvez chaque
-              conflit ci-dessous.
+              {t("import.live.conflict_description")}
             </p>
           </div>
         </div>
       )}
 
-      {/* Timeline */}
       {job.timeline && job.timeline.length > 0 && (
         <div className="rounded-lg border border-border bg-muted/30 p-4">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Étapes
+            {t("import.live.steps")}
           </p>
           <div className="relative">
-            {/* vertical line */}
             <div className="absolute left-3.5 top-0 h-full w-px bg-border" />
             <div className="space-y-0">
               {job.timeline.map((step) => (
@@ -211,17 +184,16 @@ export function LiveProcessingPanel({
         </div>
       )}
 
-      {/* Errors list */}
       {job.errors && job.errors.length > 0 && (
         <div className="space-y-1.5">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Erreurs ({job.errors.length})
+            {t("import.live.errors_title", { count: job.errors.length })}
           </p>
           <div className="max-h-36 space-y-1 overflow-y-auto rounded-lg border border-destructive/20 bg-destructive/5 p-3">
             {job.errors.map((err, i) => (
               <div key={i} className="flex items-start gap-2 text-xs">
                 <span className="shrink-0 font-mono text-muted-foreground">
-                  {err.row != null ? `L${err.row}` : "—"}
+                  {err.row != null ? t("import.live.row_prefix", { row: err.row }) : "-"}
                 </span>
                 <span className="text-destructive">{err.message}</span>
               </div>

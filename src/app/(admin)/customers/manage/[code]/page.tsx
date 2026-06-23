@@ -703,12 +703,12 @@ export default function Page({ params }: { params: React.Usable<{ code: string; 
                                         })}
                                     </div>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel onClick={resetFormM} ref={closeButtonRef}>
-                                            {tCommon("cancel")}
-                                        </AlertDialogCancel>
                                         <Button type="submit" variant={'primary'} disabled={load}>
                                             {!load ? tCommon("modify") : tCommon("loading")}
                                         </Button>
+                                        <AlertDialogCancel onClick={resetFormM} ref={closeButtonRef}>
+                                            {tCommon("cancel")}
+                                        </AlertDialogCancel>
                                     </AlertDialogFooter>
                                 </form>
                             </AlertDialogContent>
@@ -791,12 +791,12 @@ export default function Page({ params }: { params: React.Usable<{ code: string; 
                                     })}
                                 </div>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel onClick={resetForm} ref={closeButtonTransRef}>
-                                        {tCommon("cancel")}
-                                    </AlertDialogCancel>
                                     <Button type="submit" variant={'primary'} disabled={loading}>
                                         {!load ? tCommon("add transaction") : `${tCommon("loading")}...`}
                                     </Button>
+                                    <AlertDialogCancel onClick={resetForm} ref={closeButtonTransRef}>
+                                        {tCommon("cancel")}
+                                    </AlertDialogCancel>
                                 </AlertDialogFooter>
                             </form>
                         </AlertDialogContent>

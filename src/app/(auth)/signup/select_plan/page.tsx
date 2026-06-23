@@ -27,7 +27,7 @@ export default function Page() {
   const [user, setUser] = useState<User | null>(null);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [duration, setDuration] = useQueryState('duration', parseAsString.withDefault('monthly'))
-  const { t } = useTranslation()
+  const { t: tAuth } = useTranslation("auth");
   const getUser = async () => {
     const res: User = await getUserData();
     setUser(res);
@@ -37,7 +37,7 @@ export default function Page() {
     const res = await getPlans();
     setPlans(res);
   };
-  const { t: tCommon } = useTranslation('common')
+  const { t: tCommon } = useTranslation("common");
   useLayoutEffect(() => {
     getUser();
     fetchPlans();
@@ -83,9 +83,7 @@ export default function Page() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={clearStorageAndCookies}>
-                    Deconnecter
-                    <DropdownMenuShortcut>
+                  <DropdownMenuItem onClick={clearStorageAndCookies}>{tAuth("disconnect")}<DropdownMenuShortcut>
                       <LogOut className="w-4 h-4" />
                     </DropdownMenuShortcut>
                   </DropdownMenuItem>

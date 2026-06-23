@@ -65,6 +65,10 @@ instance.interceptors.response.use(
   }
 );
 
+export const publicInstance = axios.create({
+  baseURL: API_URL,
+})
+
 export const getAllProducts = async () => {
   try {
     const response = await instance.get("/user-products/");
@@ -290,6 +294,106 @@ export const createSupply = async (supplyData: any) => {
     return response;
   } catch (error) {
     console.error("Error creating supply:", error);
+    throw error;
+  }
+};
+
+// ─── Gestion des utilisateurs (comptes de connexion) par l'admin ──────────
+
+export const getEnterpriseUser = async (id: number) => {
+  try {
+    const response = await instance.get(`/users/${id}/`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching user:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const updateEnterpriseUser = async (id: number, data: any) => {
+  try {
+    // PATCH uniquement : POST/PUT/DELETE sont désactivés sur /users/ côté
+    // backend (suppression interdite, voir politique de sécurité).
+    const response = await instance.patch(`/users/${id}/`, data);
+    return response;
+  } catch (error) {
+    console.error("Error updating user:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const assignUserPermissions = async (id: number, permissionIds: number[]) => {
+  try {
+    const response = await instance.post(`/users/${id}/permissions/`, {
+      permission_ids: permissionIds,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error assigning permissions:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const assignUserActionPermissions = async (id: number, permissionIds: number[]) => {
+  try {
+    const response = await instance.post(`/users/${id}/action-permissions/`, {
+      permission_ids: permissionIds,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error assigning action permissions:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const getAllPermissions = async () => {
+  try {
+    const response = await instance.get("/permissions/");
+    return response;
+  } catch (error) {
+    console.error("Error fetching permissions:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const getAllActionPermissions = async () => {
+  try {
+    const response = await instance.get("/action-permission/");
+    return response;
+  } catch (error) {
+    console.error("Error fetching action permissions:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// ─── Gestion des employés (fiches paie) par l'admin/manager ───────────────
+
+export const getEmployee = async (id: number) => {
+  try {
+    const response = await instance.get(`/employees/${id}/`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching employee:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const updateEmployee = async (id: number, data: any) => {
+  try {
+    const response = await instance.patch(`/employees/${id}/`, data);
+    return response;
+  } catch (error) {
+    console.error("Error updating employee:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const deleteEmployee = async (id: number) => {
+  try {
+    const response = await instance.delete(`/employees/${id}/`);
+    return response;
+  } catch (error) {
+    console.error("Error deleting employee:", error.response?.data || error.message);
     throw error;
   }
 };

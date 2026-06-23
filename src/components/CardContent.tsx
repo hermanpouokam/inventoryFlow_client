@@ -12,7 +12,7 @@ const CardBodyContent = React.forwardRef<
             ref={ref}
             className={
                 cn(
-                    'w-full p-5 shadow border border-border rounded-lg bg-card',
+                    'w-full p-5 shadow border border-border rounded-xl bg-card',
                     className
                 )
             }

@@ -24,6 +24,7 @@ import {
   ChevronDown,
   CircleDollarSignIcon,
   DollarSign,
+  Eye,
   Grid2x2X,
   Package,
   Plus,
@@ -66,17 +67,12 @@ const fields = [
     type: "text",
     required: false,
   },
-  {
-    name: "balance",
-    labelKey: "sales_points.fields.initial_balance",
-    type: "number",
-    required: false,
-  },
 ];
 
 import { useSearchParams } from "next/navigation";
 import { fetchPackagings } from "@/redux/packagingsSlicer";
 import { fetchEmployees } from "@/redux/employeesSlicer";
+import { fetchUsers } from "@/redux/usersSlicer";
 import {
   Table,
   TableBody,
@@ -139,6 +135,11 @@ function SalesPoint() {
     status: statusEmployees,
     error: errorEmployee,
   } = useSelector((state: RootState) => state.employees);
+  const {
+    data: users,
+    status: statusUsers,
+    error: errorUsers,
+  } = useSelector((state: RootState) => state.users);
   const { data: clients, status: statusClient } = useSelector(
     (state: RootState) => state.clients
   );
@@ -194,6 +195,9 @@ function SalesPoint() {
     }
     if (statusEmployees === "idle") {
       dispatch(fetchEmployees({ sales_point: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
+    }
+    if (statusUsers === "idle") {
+      dispatch(fetchUsers({ sales_point: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
     }
     if (taxesStatus === "idle") {
       dispatch(fetchTaxes({ sales_point: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
@@ -744,8 +748,8 @@ function SalesPoint() {
             )}
           </>
         )}
-        {statusEmployees != "succeeded" ? (
-          <div>{errorEmployee}</div>
+        {statusUsers != "succeeded" ? (
+          <div>{errorUsers}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <CardBodyContent className="col-span-1 md:col-span-2">
@@ -760,7 +764,7 @@ function SalesPoint() {
                     <UserPlus2 className="w-4 h-4 ml-1" />
                   </Button>
                 </div>
-                <Button variant={"link"}>{t("view_all")}</Button>
+                {/* <Button variant={"link"}>{t("view_all")}</Button> */}
               </div>
               { }
               <Table className="mt-5">
@@ -768,50 +772,97 @@ function SalesPoint() {
                   <TableRow>
                     <TableHead className="w-[10px]">#</TableHead>
                     <TableHead className="w-[100px]">{t("users.full_name")}</TableHead>
-                    <TableHead className="w-[80px]">{t("username")}</TableHead>
-                    <TableHead className="w-[80px]">{t("users.role")}</TableHead>
+                    <TableHead className="w-[130px]">{t("username")}</TableHead>
+                    <TableHead className="w-[40px]">{t("users.role")}</TableHead>
                     <TableHead className="w-[40px]">{t("bills.columns.status")}</TableHead>
                     <TableHead className="w-[20px]">{t("table.action")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody >
-                  {employees.length > 0 ? (
+                  {users.length > 0 ? (
                     [
-                      ...employees.map((el, index) => {
-                        return { number: index + 1, ...el };
+                      ...users.map((el, index) => {
+                        return { count: index + 1, ...el };
                       }),
-                    ]
-                      .slice(0, 9)
-                      .map((el, index) => (
-                        <TableRow key={el.id}>
-                          <TableCell className="font-medium">
-                            {el.number}
-                          </TableCell>
-                          <TableCell className="font-medium capitalize truncate">
-                            {el.name} {el.surname}
-                          </TableCell>
-                          <TableCell className="font-medium capitalize">
-                            {el.role}
-                          </TableCell>
-                          <TableCell className="truncate">
-                            {formatteCurrency(el.salary)}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {el.is_active ? (
-                              <div className="flex justify-left items-center gap-1">
-                                <div className="pulse w-3 h-3" />
-                                <p className="text-green-800 font-medium">{t("status.active")}</p>
-                              </div>
-                            ) : (
-                              <div className="flex justify-left items-center gap-1">
-                                <div className="bg-muted-foreground w-2 h-2 rounded-full" />
-                                <p className="text-muted-foreground font-medium">{t("status.inactive")}</p>
-                              </div>
-                            )}
-                          </TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      ))
+                    ].filter(el => el.id != user?.id)
+                      // .slice(0, 9)
+                      .map((el, index) => {
+                        const isSelf = el.id === user?.id;
+                        const encryptId = encryptParam(String(el.id))
+                        const canToggleStatus =
+                          isAdmin() || user?.user_type === "manager";
+                        const userActions = [
+                          {
+                            label: t("actions.view_details"),
+                            icon: Eye,
+                            onClick: () => {
+                              window.location.assign(
+                                `/enterprise/salespoints/user/${encryptId}`
+                              );
+                            },
+                          },
+                          ...(canToggleStatus
+                            ? [
+                              {
+                                label: el.is_active
+                                  ? t("actions.deactivate")
+                                  : t("actions.activate"),
+                                icon: RotateCcwSquare,
+                                onClick: async () => {
+                                  try {
+                                    const res = await instance.patch(
+                                      `/users/${el.id}/`,
+                                      { is_active: !el.is_active }
+                                    );
+                                    if (res.status === 200) {
+                                      showSuccessToast(
+                                        res.data?.detail ?? t("success")
+                                      );
+                                      getData();
+                                      dispatch(fetchUsers({ sales_point: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
+                                    }
+                                  } catch (error) {
+                                    showErrorToast(error, t("errors.retry"));
+                                  }
+                                },
+                              },
+                            ]
+                            : []),
+                        ];
+
+                        return (
+                          <TableRow key={el.id}>
+                            <TableCell className="font-medium">
+                              {el.count - 1}
+                            </TableCell>
+                            <TableCell className="font-medium capitalize truncate">
+                              {el.name} {el.surname}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {el.username}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {t(`users.types.${el.user_type}`)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {el.is_active ? (
+                                <div className="flex justify-left items-center gap-1">
+                                  <div className="pulse w-3 h-3" />
+                                  <p className="text-green-800 font-medium">{t("status.active")}</p>
+                                </div>
+                              ) : (
+                                <div className="flex justify-left items-center gap-1">
+                                  <div className="bg-muted-foreground w-2 h-2 rounded-full" />
+                                  <p className="text-muted-foreground font-medium">{t("status.inactive")}</p>
+                                </div>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <ActionsDropdown actions={userActions} />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
                   ) : (
                     <TableRow>
                       <TableCell
@@ -835,11 +886,10 @@ function SalesPoint() {
                   >{t("add")}<UserPlus2 className="w-4 h-4 ml-1" />
                   </Button>
                 </div>
-                <Button variant={"link"}>{t("view_all")}</Button>
+                {/* <Button variant={"link"}>{t("view_all")}</Button> */}
               </div>
               { }
               <Table className="mt-5">
-                {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[10px]">#</TableHead>
@@ -854,40 +904,77 @@ function SalesPoint() {
                   {employees.length > 0 ? (
                     [
                       ...employees.map((el, index) => {
-                        return { number: index + 1, ...el };
+                        return { count: index + 1, ...el };
                       }),
                     ]
-                      .slice(0, 9)
-                      .map((el, index) => (
-                        <TableRow key={el.id}>
-                          <TableCell className="font-medium">
-                            {el.number}
-                          </TableCell>
-                          <TableCell className="font-medium capitalize truncate">
-                            {el.name} {el.surname}
-                          </TableCell>
-                          <TableCell className="font-medium capitalize">
-                            {el.role}
-                          </TableCell>
-                          <TableCell className="truncate">
-                            {formatteCurrency(el.salary)}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {el.is_active ? (
-                              <div className="flex justify-left items-center gap-1">
-                                <div className="pulse w-3 h-3" />
-                                <p className="text-green-800 font-medium">{t("status.active")}</p>
-                              </div>
-                            ) : (
-                              <div className="flex justify-left items-center gap-1">
-                                <div className="bg-muted-foreground w-2 h-2 rounded-full" />
-                                <p className="text-muted-foreground font-medium">{t("status.inactive")}</p>
-                              </div>
-                            )}
-                          </TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      ))
+                      // .slice(0, 9)
+                      .map((el, index) => {
+                        const encryptId = encryptParam(String(el.id))
+                        const employeeActions = [
+                          {
+                            label: t("view_details"),
+                            icon: Eye,
+                            onClick: () => {
+                              window.location.assign(
+                                `/enterprise/salespoints/employee/${encryptId}`
+                              );
+                            },
+                          },
+                          {
+                            label: el.is_active
+                              ? t("actions.deactivate")
+                              : t("actions.activate"),
+                            icon: RotateCcwSquare,
+                            onClick: async () => {
+                              try {
+                                const res = await instance.patch(
+                                  `/employees/${el.id}/`,
+                                  { is_active: !el.is_active }
+                                );
+                                if (res.status === 200) {
+                                  showSuccessToast(t("success"));
+                                  dispatch(fetchEmployees({ sales_point: isAdmin() ? salespoint ? [salespoint] : [] : [user?.sales_point] }));
+                                }
+                              } catch (error) {
+                                showErrorToast(error, t("errors.retry"));
+                              }
+                            },
+                          },
+                        ];
+
+                        return (
+                          <TableRow key={el.id}>
+                            <TableCell className="font-medium">
+                              {el.number}
+                            </TableCell>
+                            <TableCell className="font-medium capitalize truncate">
+                              {el.name} {el.surname}
+                            </TableCell>
+                            <TableCell className="font-medium capitalize">
+                              {el.role}
+                            </TableCell>
+                            <TableCell className="truncate">
+                              {formatteCurrency(el.salary)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {el.is_active ? (
+                                <div className="flex justify-left items-center gap-1">
+                                  <div className="pulse w-3 h-3" />
+                                  <p className="text-green-800 font-medium">{t("status.active")}</p>
+                                </div>
+                              ) : (
+                                <div className="flex justify-left items-center gap-1">
+                                  <div className="bg-muted-foreground w-2 h-2 rounded-full" />
+                                  <p className="text-muted-foreground font-medium">{t("status.inactive")}</p>
+                                </div>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <ActionsDropdown actions={employeeActions} />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
                   ) : (
                     <TableRow>
                       <TableCell
@@ -898,12 +985,6 @@ function SalesPoint() {
                     </TableRow>
                   )}
                 </TableBody>
-                {/* <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className="text-right">$2,500.00</TableCell>
-                  </TableRow>
-                </TableFooter> */}
               </Table>
             </CardBodyContent>
             <CardBodyContent className="col-span-2">
@@ -916,11 +997,8 @@ function SalesPoint() {
                   >{t("add")}<Plus className="w-4 h-4 ml-1" />
                   </Button>
                 </div>
-                {/* <Button variant={"link"}>{t("view_all")}</Button> */}
               </div>
-              { }
               <Table className="mt-5">
-                {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[10px]">#</TableHead>
@@ -1024,12 +1102,6 @@ function SalesPoint() {
                     </TableRow>
                   )}
                 </TableBody>
-                {/* <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className="text-right">$2,500.00</TableCell>
-                  </TableRow>
-                </TableFooter> */}
               </Table>
             </CardBodyContent>
 
@@ -1275,9 +1347,7 @@ function SalesPoint() {
                 <Button
                   variant="primary"
                   type="submit"
-                >
-                  Ajouter
-                </Button>
+                >{t("add")}</Button>
               </DialogActions>
             </form>
           ) : null}
@@ -1417,9 +1487,7 @@ function SalesPoint() {
                 <Button
                   className="hover:bg-green-600 transition bg-green-500"
                   type="submit"
-                >
-                  Ajouter
-                </Button>
+                >{t("add")}</Button>
               </DialogActions>
             </form>
           ) : null}
@@ -1545,9 +1613,7 @@ function SalesPoint() {
                 <Button
                   className="hover:bg-green-600 transition bg-green-500"
                   type="submit"
-                >
-                  Ajouter
-                </Button>
+                >{t("add")}</Button>
               </DialogActions>
             </form>
           ) : null}

@@ -34,14 +34,14 @@ interface RfmData {
   score: number;
 }
 
-const RFM_SEGMENT: Record<string, { label: string; color: string }> = {
-  champion:    { label: "Champion",    color: "text-purple-700 bg-purple-50 border-purple-200" },
-  loyal:       { label: "Fidèle",      color: "text-blue-700 bg-blue-50 border-blue-200" },
-  at_risk:     { label: "À risque",    color: "text-amber-700 bg-amber-50 border-amber-200" },
-  lost:        { label: "Perdu",       color: "text-red-600 bg-red-50 border-red-200" },
-  new:         { label: "Nouveau",     color: "text-green-700 bg-green-50 border-green-200" },
-  promising:   { label: "Prometteur",  color: "text-teal-700 bg-teal-50 border-teal-200" },
-  hibernating: { label: "Inactif",     color: "text-gray-500 bg-gray-50 border-gray-200" },
+const RFM_SEGMENT: Record<string, { labelKey: string; color: string }> = {
+  champion: { labelKey: "customers.rfm.champion", color: "text-purple-700 bg-purple-50 border-purple-200" },
+  loyal: { labelKey: "customers.rfm.loyal", color: "text-blue-700 bg-blue-50 border-blue-200" },
+  at_risk: { labelKey: "customers.rfm.at_risk", color: "text-amber-700 bg-amber-50 border-amber-200" },
+  lost: { labelKey: "customers.rfm.lost", color: "text-red-600 bg-red-50 border-red-200" },
+  new: { labelKey: "customers.rfm.new", color: "text-green-700 bg-green-50 border-green-200" },
+  promising: { labelKey: "customers.rfm.promising", color: "text-teal-700 bg-teal-50 border-teal-200" },
+  hibernating: { labelKey: "customers.rfm.hibernating", color: "text-gray-500 bg-gray-50 border-gray-200" },
 };
 
 interface Props {
@@ -65,7 +65,7 @@ export default function ClientReportDrawer({ clientId, clientName, rfm, open, on
     instance
       .get(`/reports/client/${clientId}/`)
       .then((res) => setReport(res.data))
-      .catch(() => setError("Impossible de charger le rapport client."))
+      .catch(() => setError(t("report.client.load_error")))
       .finally(() => setLoading(false));
   }, [open, clientId]);
 
@@ -76,7 +76,7 @@ export default function ClientReportDrawer({ clientId, clientName, rfm, open, on
     );
   };
 
-  const rfmStyle = rfm?.segment ? (RFM_SEGMENT[rfm.segment] ?? { label: rfm.segment, color: "text-gray-500 bg-gray-50 border-gray-200" }) : null;
+  const rfmStyle = rfm?.segment ? (RFM_SEGMENT[rfm.segment] ?? { labelKey: rfm.segment, color: "text-gray-500 bg-gray-50 border-gray-200" }) : null;
 
   return (
     <AnimatePresence>
@@ -124,7 +124,7 @@ export default function ClientReportDrawer({ clientId, clientName, rfm, open, on
                 <div className={cn("rounded-xl border p-4 flex items-start gap-4", rfmStyle.color)}>
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold">{t("report.rfm.segment")} : {rfmStyle.label}</span>
+                      <span className="text-sm font-semibold">{t("report.rfm.segment")} : {RFM_SEGMENT[rfm.segment] ? t(rfmStyle.labelKey) : rfm.segment}</span>
                     </div>
                     <div className="flex gap-4 text-xs mt-2">
                       <span><strong>{t("report.rfm.recency")}</strong> : {rfm.recency_days}j</span>
@@ -172,7 +172,7 @@ export default function ClientReportDrawer({ clientId, clientName, rfm, open, on
                         {report.favorite_products.slice(0, 5).map((p, i) => (
                           <div key={i} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-sm">
                             <span className="text-foreground">{p.name}</span>
-                            <span className="text-xs text-muted-foreground">{p.quantity} unités</span>
+                            <span className="text-xs text-muted-foreground">{p.quantity} {t("units")}</span>
                           </div>
                         ))}
                       </div>

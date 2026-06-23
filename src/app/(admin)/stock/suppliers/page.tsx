@@ -373,9 +373,9 @@ export default function Page() {
               <DropdownMenuItem
                 className="w-full"
                 onSelect={(e) => {
-                  e.preventDefault();        // empêche Radix de fermer/refocus avant l'ouverture du dialog
-                  setMenuOpen(false);         // ferme le dropdown explicitement
-                  setEditOpen(true);          // ouvre le dialog d'édition
+                  e.preventDefault();
+                  setMenuOpen(false);
+                  setEditOpen(true);
                 }}
               >
                 {tCommon("edit")}
@@ -439,6 +439,9 @@ export default function Page() {
               </div>
 
               <AlertDialogFooter>
+                <Button type="submit" disabled={load} variant={'primary'}>
+                  {load ? tCommon("supplier.actions.loading") : tCommon("supplier.actions.confirm")}
+                </Button>
                 <AlertDialogCancel
                   onClick={() => {
                     resetFormM();
@@ -448,10 +451,6 @@ export default function Page() {
                 >
                   {tCommon("supplier.actions.cancel")}
                 </AlertDialogCancel>
-
-                <Button type="submit" disabled={load} variant={'primary'}>
-                  {load ? tCommon("supplier.actions.loading") : tCommon("supplier.actions.confirm")}
-                </Button>
               </AlertDialogFooter>
             </form>
           </AlertDialogContent>
@@ -656,16 +655,15 @@ export default function Page() {
           filterAttributes={["name",]}
           searchText={searchText}
           columns={columns}
-          data={suppliers
-            .map((el, index) => ({
-              ...el,
-              number: index + 1,
-            }))
-            .sort(
-              (a, b) =>
-                new Date(b.last_update).getTime() -
-                new Date(a.last_update).getTime()
-            )}
+          data={[...suppliers].sort(
+            (a, b) =>
+              new Date(b.last_update).getTime() -
+              new Date(a.last_update).getTime()
+          ).map((el, index) => ({
+            ...el,
+            number: index + 1,
+          }))
+          }
         >
           <div className="flex items-center justify-between py-4">
             <Input
@@ -684,7 +682,7 @@ export default function Page() {
         aria-describedby="dialog-description"
       >
         {open === "add" && (
-          <DialogContent className="max-w-lg bg-card dark:bg-background">
+          <DialogContent className="max-w-lg bg-card dark:bg-[#212121]">
             <DialogTitle>{tCommon("supplier.modal.add_supplier")}</DialogTitle>
 
             <form
@@ -746,6 +744,11 @@ export default function Page() {
               </div>
 
               <DialogActions>
+                <Button type="submit" disabled={loading} variant={'primary'}>
+                  {!loading
+                    ? tCommon("add")
+                    : `${tCommon("please wait")}...`}
+                </Button>
                 <Button
                   onClick={() => {
                     resetForm();
@@ -755,19 +758,14 @@ export default function Page() {
                 >
                   {tCommon("cancel")}
                 </Button>
-
-                <Button type="submit" disabled={loading} variant={'primary'}>
-                  {!loading
-                    ? tCommon("add")
-                    : `${tCommon("please wait")}...`}
-                </Button>
               </DialogActions>
+
             </form>
           </DialogContent>
         )}
 
         {open === "delete" && (
-          <DialogContent className="max-w-lg bg-card dark:bg-background">
+          <DialogContent className="max-w-lg bg-card dark:bg-[#212121]">
             <DialogTitle>
               {tCommon("supplier.modal.delete_supplier")}
             </DialogTitle>
@@ -784,6 +782,16 @@ export default function Page() {
 
             <DialogActions>
               <MuiButton
+                disabled={loading}
+                color="success"
+                onClick={handleDeleteSupplier}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                {loading
+                  ? tCommon("please wait")
+                  : tCommon("delete")}
+              </MuiButton>
+              <MuiButton
                 color="error"
                 className="bg-red-600 hover:bg-red-700"
                 onClick={() => {
@@ -794,16 +802,6 @@ export default function Page() {
                 {tCommon("cancel")}
               </MuiButton>
 
-              <MuiButton
-                disabled={loading}
-                color="success"
-                onClick={handleDeleteSupplier}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                {loading
-                  ? tCommon("please wait")
-                  : tCommon("delete")}
-              </MuiButton>
             </DialogActions>
           </DialogContent>
         )}

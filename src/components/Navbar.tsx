@@ -49,7 +49,7 @@ export default function Navbar() {
   }, [status, dispatch]);
 
   return (
-    <nav className="backdrop-blur-md z-50 bg-card/50 shadow fixed w-full">
+    <nav className="backdrop-blur-md z-50 bg-card/80 shadow fixed w-full">
       <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8 3xl:px-0">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
@@ -97,7 +97,7 @@ export default function Navbar() {
                       <img
                         className="h-8 w-8 rounded-full"
                         src={user.img ? user.img : profile.src}
-                        alt="user profile picture"
+                        alt={t("user_menu.profile_picture_alt")}
                       />
                     </button>
                   </div>
@@ -163,7 +163,7 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors dark:hover:bg-slate-600/80 hover:bg-slate-200/80  hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors dark:hover:bg-primary/15 hover:bg-slate-200/80  hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
           {...props}
@@ -180,10 +180,15 @@ ListItem.displayName = "ListItem";
 
 const MenuItem = ({ menuItem }: { menuItem: Menu }) => {
   const { t } = useTranslation("common");
+  const [open, setOpen] = React.useState(false);
+
   return (
-    <NavigationMenu>
+    <NavigationMenu
+      value={open ? "item" : ""}
+      onValueChange={(val) => setOpen(val === "item")}
+    >
       <NavigationMenuList>
-        <NavigationMenuItem>
+        <NavigationMenuItem value="item">
           {menuItem.link && (
             <NavigationMenuLink
               href={menuItem.link}
@@ -194,16 +199,25 @@ const MenuItem = ({ menuItem }: { menuItem: Menu }) => {
           )}
           {menuItem.menu && (
             <>
-              <NavigationMenuTrigger className="bg-transparent capitalize">
+              <NavigationMenuTrigger
+                className="bg-transparent capitalize"
+                onClick={() => setOpen((prev) => !prev)}
+                onPointerMove={(e) => e.preventDefault()}
+                onPointerLeave={(e) => e.preventDefault()}
+              >
                 {t(`navigation.groups.${menuItem.name}`)}
               </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="p-2 md:min-w-[100px] select-none lg:min-w-[200px] ">
+              <NavigationMenuContent
+                onPointerEnter={(e) => e.preventDefault()}
+                onPointerLeave={(e) => e.preventDefault()}
+              >
+                <ul className="p-2 md:min-w-[100px] select-none lg:min-w-[200px]">
                   {menuItem.menu.map((component) => (
                     <ListItem
                       key={component.text}
                       title={component.text}
                       href={component.link}
+                      onClick={() => setOpen(false)}
                     />
                   ))}
                 </ul>

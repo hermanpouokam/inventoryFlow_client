@@ -10,9 +10,11 @@ interface SettingsSectionProps {
     values: Record<string, string | number | boolean>;
     modifiedFields: Set<string>;
     onChange: (id: string, value: string | number | boolean) => void;
+    extraValues?: Record<string, string | number | boolean>;
+    onSendVerification?: () => void;
 }
 
-export function SettingsSection({ section, values, modifiedFields, onChange }: SettingsSectionProps) {
+export function SettingsSection({ section, values, modifiedFields, onChange, extraValues, onSendVerification }: SettingsSectionProps) {
     const [open, setOpen] = useState(true);
     const modifiedCount = section.fields.filter((f) => modifiedFields.has(f.id)).length;
     const { t } = useTranslation('common')
@@ -55,6 +57,8 @@ export function SettingsSection({ section, values, modifiedFields, onChange }: S
                                     value={values[field.id] ?? field.value}
                                     onChange={onChange}
                                     isModified={modifiedFields.has(field.id)}
+                                    extraValues={extraValues}
+                                    onSendVerification={onSendVerification}
                                 />
                             ))}
                         </div>

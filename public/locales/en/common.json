@@ -792,7 +792,8 @@
       "enterprise": "Company",
       "reports": "Reports",
       "buy": "Purchases",
-      "sales point": "Sales point"
+      "sales point": "Sales point",
+      "data": "Data"
     },
     "items": {
       "sell_new": "New sale",
@@ -819,7 +820,9 @@
       "enterprise_payment_info": "Payment information",
       "enterprise_settings": "Settings",
       "enterprise_users": "Users",
-      "reports_all": "View"
+      "reports_all": "View",
+      "import": "Import",
+      "history": "History"
     },
     "close_menu": "Close menu"
   },
@@ -828,7 +831,8 @@
       "information": "Information"
     },
     "account_settings": "Account settings",
-    "sign_out": "Sign out"
+    "sign_out": "Sign out",
+    "profile_picture_alt": "User profile picture"
   },
   "status_values": {
     "created": "Created",
@@ -1107,6 +1111,9 @@
       "blog": "Blog",
       "press": "Press",
       "terms": "Terms"
+    },
+    "social_proof": {
+      "trusted_by": "Used by 10,000+ businesses in Africa"
     }
   },
   "auth": {
@@ -1536,7 +1543,13 @@
     "offer_details": "Offer details",
     "terms_acceptance": "By validating this payment, you accept our terms and conditions and privacy policy",
     "plan_already_active": "You already have an active plan",
-    "months": "Months"
+    "months": "Months",
+    "mobile_money": "Mobile Money",
+    "mobile_phone_hint": "Enter your {{method}} number to receive a payment request.",
+    "mobile_phone_placeholder": "6XX XXX XXX",
+    "mobile_verification_pending": "Verification in progress... Please approve the payment on your phone.",
+    "mobile_request_sent": "Request sent - ref: {{reference}}...",
+    "sandbox_hint": "Sandbox mode active - use your NotchPay test numbers."
   },
   "plan_invoice": {
     "tagline": "Billing & subscriptions",
@@ -1743,10 +1756,238 @@
       "profit": "Net profit",
       "quantity_sold": "Units sold",
       "avg_ticket": "Average order"
+    },
+    "evolution_vs_previous_period": "{{value}}% vs previous period",
+    "product": {
+      "load_error": "Unable to load the report."
+    },
+    "client": {
+      "load_error": "Unable to load the customer report."
     }
   },
   "footer": {
     "by": "by",
     "made_by": "Made by"
+  },
+  "time": {
+    "relative": {
+      "now": "Just now",
+      "minutes": "{{count}} min ago",
+      "hours": "{{count}} h ago",
+      "days": "{{count}} d ago"
+    }
+  },
+  "import": {
+    "page": {
+      "subtitle": "Import your CSV or XLSX data",
+      "new_import": "New import"
+    },
+    "data_types": {
+      "category": {
+        "label": "Categories",
+        "description": "Product categories (ex: Drinks, Food)"
+      },
+      "client_category": {
+        "label": "Customer categories",
+        "description": "Customer types (ex: Wholesaler, Retailer)"
+      },
+      "supplier": {
+        "label": "Suppliers",
+        "description": "Suppliers and their contact details"
+      },
+      "packaging": {
+        "label": "Packaging",
+        "description": "Packaging with prices and quantities"
+      },
+      "client": {
+        "label": "Customers",
+        "description": "Customers with contacts and categories"
+      },
+      "product": {
+        "label": "Products",
+        "description": "Product catalog with prices and stock"
+      },
+      "product_variant": {
+        "label": "Product variants",
+        "description": "Variants of existing products"
+      }
+    },
+    "sales_point": {
+      "load_error": "Unable to load sales points",
+      "select_required": "Please select a sales point.",
+      "search": "Search for a sales point...",
+      "choose": "Choose a sales point...",
+      "import_to": "Import to:",
+      "required": "Select a sales point to continue."
+    },
+    "wizard": {
+      "select_type": "Select the type of data to import",
+      "file": "File",
+      "import_button": "Import {{type}}",
+      "upload_title": "Uploading file",
+      "incompatible_columns": "Incompatible columns",
+      "expected_columns": "Expected columns",
+      "retry": "Retry",
+      "action_required": "Action required",
+      "processing": "Processing",
+      "paused_hint": "The import is paused - review the report below.",
+      "realtime_tracking": "Real-time tracking",
+      "done_title": "Import completed!",
+      "done_description": "{{count}} entries imported successfully",
+      "done_errors": "{{count}} error",
+      "done_errors_plural": "{{count}} errors"
+    },
+    "toast": {
+      "error_title": "Error",
+      "import_done": "Import completed - {{success}} rows imported",
+      "import_error": "Error: {{error}}",
+      "cancelled": "Import cancelled.",
+      "creating_dependencies": "Creating dependencies...",
+      "entry_replaced": "Entry replaced",
+      "row_skipped": "Row skipped"
+    },
+    "file": {
+      "errors": {
+        "unsupported": "Only .csv and .xlsx files are accepted",
+        "too_large": "The file exceeds the {{size}} limit"
+      },
+      "drop_prompt": "Drag and drop or",
+      "browse": "browse",
+      "accepted": "CSV or XLSX - max {{size}}"
+    },
+    "template": {
+      "title": "{{type}} template",
+      "description": "CSV with headers and an example row",
+      "download": "Download"
+    },
+    "upload": {
+      "error": "Upload error",
+      "done": "File uploaded successfully",
+      "in_progress": "Upload in progress...",
+      "s3": "S3 upload",
+      "steps": {
+        "preparing": {
+          "label": "Preparing"
+        },
+        "uploading": {
+          "label": "Sending to S3"
+        },
+        "starting": {
+          "label": "Starting"
+        },
+        "done": {
+          "label": "Processing"
+        }
+      }
+    },
+    "status": {
+      "pending": "Pending",
+      "processing": "In progress",
+      "completed": "Completed",
+      "failed": "Failed",
+      "paused": "Paused"
+    },
+    "dashboard": {
+      "successful_imports": "Successful imports",
+      "imported_rows": "Imported rows",
+      "failures": "Failures",
+      "total_conflicts": "Total conflicts"
+    },
+    "history": {
+      "all": "All",
+      "empty": "No import found",
+      "lines": "rows"
+    },
+    "live": {
+      "realtime_connected": "Real-time connected",
+      "disconnected": "Disconnected",
+      "rows": "rows",
+      "success": "Success",
+      "errors": "Errors",
+      "conflicts": "Conflicts",
+      "conflict_pending": "{{count}} pending conflict",
+      "conflict_pending_plural": "{{count}} pending conflicts",
+      "conflict_description": "Entries already exist with the same name. Resolve each conflict below.",
+      "steps": "Steps",
+      "errors_title": "Errors ({{count}})",
+      "row_prefix": "R{{row}}"
+    },
+    "conflicts": {
+      "title": "Conflicts to resolve",
+      "pending": "{{count}} pending",
+      "row": "Row {{row}} - {{name}}",
+      "resolved": "Resolved",
+      "field": "Field",
+      "new_value": "New value",
+      "existing": "Existing (ID: {{id}})",
+      "replace_existing": "Replace existing",
+      "skip_row": "Skip this row",
+      "resolved_count": "{{count}} conflict resolved",
+      "resolved_count_plural": "{{count}} conflicts resolved"
+    },
+    "preflight": {
+      "type_labels": {
+        "category": "Category",
+        "client_category": "Customer category",
+        "supplier": "Supplier",
+        "packaging": "Packaging",
+        "product": "Product"
+      },
+      "title": "Dependency analysis - action required",
+      "description": "The file references data that does not exist yet. Review the report below and choose how to proceed.",
+      "auto_create_title": "Will be created automatically",
+      "blocking_title": "Blocking items - cannot be created",
+      "invalid_values_title": "Invalid values in the file",
+      "used_in_line": "Used on row",
+      "used_in_lines": "Used on rows",
+      "line": "Row",
+      "lines": "Rows",
+      "row_short": "R.{{row}}",
+      "create_continue": "Create and continue",
+      "cancel_import": "Cancel import",
+      "close_and_fix": "Close and fix the file",
+      "fix_and_retry": "Fix the issues above in your file and run the import again."
+    },
+    "service": {
+      "errors": {
+        "too_large": "File too large (max 10 MB). Current size: {{size}} MB",
+        "unsupported_format": "Unsupported format. Use a .csv or .xlsx file",
+        "empty_file": "The file is empty or does not contain headers.",
+        "unknown_data_type": "Unknown data type",
+        "missing_column": "Missing required column: \"{{column}}\"",
+        "empty_required": "Required field is empty: \"{{field}}\"",
+        "invalid_number": "\"{{field}}\" must be a number, received: \"{{value}}\"",
+        "suspicious_value": "Suspicious value (possible injection) in \"{{field}}\": \"{{value}}\"",
+        "presigned_url": "Error while generating the upload URL",
+        "upload_s3": "S3 upload error: {{status}} {{statusText}}",
+        "start_import": "Error while starting the import",
+        "websocket_lost": "WebSocket connection lost",
+        "download_template": "Unable to download the template",
+        "unexpected": "Unexpected error"
+      }
+    }
+  },
+  "units": "units",
+  "pages": {
+    "actions": {
+      "back": "Go back",
+      "home": "Return to home page"
+    },
+    "not_found": {
+      "image_alt": "Page not found illustration",
+      "title": "This page does not exist",
+      "description": "You are trying to access a page that does not exist. Go back or return to the home page to continue browsing."
+    },
+    "unauthorized": {
+      "image_alt": "Access denied illustration",
+      "title": "Access denied",
+      "description": "You are trying to access an unauthorized page. Go back or return to the home page to continue browsing."
+    }
+  },
+  "chart": {
+    "devices": {
+      "desktop": "Desktop",
+      "mobile": "Mobile"
+    }
   }
 }

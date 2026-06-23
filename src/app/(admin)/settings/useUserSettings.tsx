@@ -26,12 +26,14 @@ function mapBackendToSettings(user: any) {
         user_lastname: user.surname,
         user_email: user.email,
         user_avatar: user.img,
-        user_number: user.number,
+        username: user.username,
+        user_phone: `${user.country}|${user.number}`,
 
         // ===== CONFIG =====
         user_theme: user.user_configurations_details?.theme,
         user_language: user.user_configurations_details?.language,
         user_date_format: user.user_configurations_details?.date_format,
+        user_email_verified: user.user_configurations_details?.email_verified ?? false,
 
         user_notif_invoices:
             user.user_configurations_details?.notif_invoices,
@@ -69,14 +71,18 @@ function mapBackendToSettings(user: any) {
 }
 
 function mapSettingsToBackend(values: Record<string, SettingValue>) {
+    const [country, number] = typeof values.user_phone === "string"
+        ? values.user_phone.split("|")
+        : ["CI", ""];
+
     return {
         // ===== USER =====
         name: values.user_firstname,
         surname: values.user_lastname,
         email: values.user_email,
         img: values.user_avatar,
-        number: values.user_number,
-
+        country,
+        number,
         // ===== CONFIG =====
         user_configurations: {
             theme: values.user_theme,
@@ -119,8 +125,6 @@ export function useUserSettings() {
 
                 const backendValues = mapBackendToSettings(res.data);
 
-                console.log('backendValues', backendValues)
-
                 setValues({
                     ...backendValues
                 });
@@ -151,14 +155,19 @@ export function useUserSettings() {
             setSaving(true);
 
             const payload = mapSettingsToBackend(data);
-
             const res = await instance.patch(
                 "/user/update-info/",
                 payload
             );
-            console.log("Settings sauvegardés", res.data);
+            if (res.data?.pending_email) {
+                return { pendingEmail: true };
+            }
+            if (res.data?.pending_email) {
+                return { pendingEmail: true };
+            }
         } catch (err) {
-            console.error("Erreur sauvegarde", err);
+            const message = err?.response?.data?.error;
+            throw new Error(message);
         } finally {
             setSaving(false);
         }

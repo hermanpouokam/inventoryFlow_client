@@ -1,0 +1,320 @@
+{
+  "nav": {
+    "legalCenter": "Centre légal",
+    "terms": "CGU",
+    "privacy": "Confidentialité"
+  },
+  "common": {
+    "lastUpdatedLabel": "Dernière mise à jour",
+    "footerNote": "© 2026 InventoryFlow SAS. Tous droits réservés.",
+    "footerContact": "contact@inventoryflow.site",
+    "onThisPage": "Sur cette page",
+    "backToTop": "Retour en haut"
+  },
+  "terms": {
+    "title": "Conditions Générales d'Utilisation",
+    "subtitle": "Plateforme InventoryFlow — gestion d'inventaire, de facturation et de point de vente",
+    "lastUpdated": "21 juin 2026",
+    "intro": [
+      "Les présentes Conditions Générales d'Utilisation (les « CGU ») régissent l'accès et l'utilisation de la plateforme InventoryFlow (le « Service »), éditée par [Raison sociale de la société], [forme juridique], immatriculée au RCCM sous le numéro [numéro RCCM], dont le siège social est situé [adresse complète], ci-après « InventoryFlow », « nous ».",
+      "En créant un compte ou en utilisant le Service, l'entreprise cliente et ses utilisateurs (ci-après « vous », « l'Utilisateur ») acceptent sans réserve les présentes CGU. Si vous n'acceptez pas ces conditions, vous ne devez pas utiliser le Service."
+    ],
+    "sections": [
+      {
+        "id": "objet",
+        "number": "1",
+        "heading": "Objet",
+        "paragraphs": [
+          "Les présentes CGU ont pour objet de définir les modalités et conditions dans lesquelles InventoryFlow met à disposition des entreprises clientes une plateforme logicielle de gestion d'inventaire, de facturation, de point de vente, de suivi de caisse et de pilotage assisté par intelligence artificielle, ainsi que les droits et obligations des parties dans ce cadre.",
+          "Elles s'appliquent à l'exclusion de toute autre condition, sauf accord contractuel particulier signé entre InventoryFlow et l'entreprise cliente."
+        ]
+      },
+      {
+        "id": "definitions",
+        "number": "2",
+        "heading": "Définitions",
+        "paragraphs": [
+          "« Compte Entreprise » désigne le compte principal créé par une entreprise cliente, auquel sont rattachés un ou plusieurs Points de Vente et Utilisateurs.",
+          "« Utilisateur » désigne toute personne physique autorisée par l'entreprise cliente à accéder au Service, notamment ses dirigeants, employés ou mandataires.",
+          "« Données Client » désigne l'ensemble des données saisies, importées ou générées par l'entreprise cliente dans le cadre de l'utilisation du Service (produits, stocks, ventes, clients, employés, transactions)."
+        ]
+      },
+      {
+        "id": "acceptation",
+        "number": "3",
+        "heading": "Acceptation des CGU",
+        "paragraphs": [
+          "L'acceptation des CGU intervient lors de la création du Compte Entreprise, par cochage de la case prévue à cet effet ou par tout usage effectif du Service.",
+          "L'entreprise cliente est responsable de l'acceptation des CGU par les Utilisateurs qu'elle habilite à accéder au Service et garantit qu'ils en respectent les termes."
+        ]
+      },
+      {
+        "id": "compte",
+        "number": "4",
+        "heading": "Création de compte et inscription",
+        "paragraphs": [
+          "L'accès au Service nécessite la création d'un Compte Entreprise au moyen d'informations exactes, complètes et à jour (raison sociale, adresse, contact, pays, devise de facturation).",
+          "L'entreprise cliente est seule responsable de la confidentialité des identifiants de connexion de ses Utilisateurs et de toute activité réalisée depuis son Compte Entreprise.",
+          "Toute suspicion d'utilisation non autorisée du Compte Entreprise doit être signalée sans délai à InventoryFlow."
+        ]
+      },
+      {
+        "id": "description-service",
+        "number": "5",
+        "heading": "Description du Service",
+        "paragraphs": [
+          "Le Service comprend notamment les fonctionnalités suivantes, dont la disponibilité peut varier selon le plan d'abonnement souscrit :"
+        ],
+        "list": [
+          "Gestion multi-points de vente du stock, des produits, fournisseurs et conditionnements ;",
+          "Facturation, devis et historique des transactions ;",
+          "Suivi de la caisse, des dépenses et de la trésorerie par point de vente ;",
+          "Gestion des clients, y compris le suivi du crédit et des dettes ;",
+          "Modules d'analyse et de prévision assistés par intelligence artificielle (prévision de ventes, réapprovisionnement, détection d'anomalies, segmentation client) ;",
+          "Gestion des utilisateurs, des rôles et des permissions au sein de l'entreprise cliente."
+        ]
+      },
+      {
+        "id": "abonnements",
+        "number": "6",
+        "heading": "Abonnements, tarifs et facturation",
+        "paragraphs": [
+          "L'accès au Service est soumis à la souscription d'un plan d'abonnement payant, dont les caractéristiques (fonctionnalités incluses, nombre de points de vente, durée) sont décrites sur la page tarifs du Service.",
+          "Les tarifs sont exprimés dans la devise choisie par l'entreprise cliente lors de son inscription et peuvent être révisés par InventoryFlow moyennant un préavis raisonnable.",
+          "Un essai gratuit peut être proposé une seule fois par entreprise cliente, selon les conditions affichées au moment de l'inscription."
+        ]
+      },
+      {
+        "id": "paiement",
+        "number": "7",
+        "heading": "Paiement et moyens de paiement",
+        "paragraphs": [
+          "Le règlement des abonnements peut s'effectuer par les moyens de paiement proposés sur la plateforme, notamment par Mobile Money via les opérateurs partenaires, ou par carte bancaire via un prestataire de paiement tiers.",
+          "InventoryFlow ne stocke aucune donnée bancaire complète ; ces opérations sont traitées par des prestataires de paiement tiers soumis à leurs propres conditions et obligations de sécurité.",
+          "Tout défaut de paiement à l'échéance peut entraîner, après relance, la suspension temporaire de l'accès au Service jusqu'à régularisation."
+        ]
+      },
+      {
+        "id": "obligations-utilisateur",
+        "number": "8",
+        "heading": "Obligations de l'Utilisateur",
+        "paragraphs": [
+          "L'Utilisateur s'engage à :"
+        ],
+        "list": [
+          "Utiliser le Service conformément à sa destination et aux lois applicables ;",
+          "Ne pas tenter de contourner les mesures de sécurité ou d'accéder à des données ne lui appartenant pas ;",
+          "Ne pas utiliser le Service à des fins frauduleuses, notamment pour falsifier des factures ou dissimuler des transactions ;",
+          "Maintenir à jour les informations relatives à son entreprise et à ses Utilisateurs ;",
+          "Assurer la sauvegarde de toute donnée qu'il considère critique, en complément des sauvegardes assurées par InventoryFlow."
+        ]
+      },
+      {
+        "id": "propriete-intellectuelle",
+        "number": "9",
+        "heading": "Propriété intellectuelle",
+        "paragraphs": [
+          "InventoryFlow demeure seule titulaire de l'ensemble des droits de propriété intellectuelle attachés au Service, à son code, à son interface et à sa documentation.",
+          "L'entreprise cliente conserve l'entière propriété des Données Client qu'elle saisit dans le Service. Elle concède à InventoryFlow une licence limitée et non exclusive, nécessaire à l'hébergement, au traitement et à l'affichage de ces données aux seules fins de l'exécution du Service."
+        ]
+      },
+      {
+        "id": "protection-donnees",
+        "number": "10",
+        "heading": "Protection des données personnelles",
+        "paragraphs": [
+          "Le traitement des données à caractère personnel réalisé dans le cadre du Service est décrit dans la Politique de Confidentialité, qui fait partie intégrante des présentes CGU.",
+          "L'entreprise cliente s'engage à informer ses propres clients et employés dont les données sont traitées via le Service, conformément à la réglementation applicable."
+        ]
+      },
+      {
+        "id": "disponibilite-responsabilite",
+        "number": "11",
+        "heading": "Disponibilité, garanties et responsabilité",
+        "paragraphs": [
+          "InventoryFlow met en œuvre des moyens raisonnables pour assurer la disponibilité, la sécurité et la performance du Service, sans toutefois garantir une disponibilité ininterrompue.",
+          "Les fonctionnalités assistées par intelligence artificielle (prévisions de ventes, suggestions de réapprovisionnement, détection d'anomalies) constituent une aide à la décision et ne sauraient se substituer au jugement professionnel de l'entreprise cliente, qui demeure seule responsable de ses décisions commerciales.",
+          "Dans les limites permises par la loi applicable, la responsabilité d'InventoryFlow ne pourra être engagée qu'en cas de faute prouvée et sera, en tout état de cause, limitée au montant des sommes versées par l'entreprise cliente au titre de son abonnement au cours des douze derniers mois."
+        ]
+      },
+      {
+        "id": "suspension-resiliation",
+        "number": "12",
+        "heading": "Suspension et résiliation",
+        "paragraphs": [
+          "InventoryFlow peut suspendre ou résilier l'accès au Service en cas de manquement grave aux présentes CGU, de défaut de paiement non régularisé ou d'utilisation frauduleuse, après mise en demeure restée infructueuse lorsque la situation le permet.",
+          "L'entreprise cliente peut résilier son abonnement à tout moment selon les modalités prévues dans son espace de gestion ; la résiliation prend effet à la fin de la période d'abonnement en cours.",
+          "À l'issue de la résiliation, les Données Client sont conservées pendant une durée raisonnable permettant leur export, puis supprimées conformément à la Politique de Confidentialité."
+        ]
+      },
+      {
+        "id": "modification-cgu",
+        "number": "13",
+        "heading": "Modification des CGU",
+        "paragraphs": [
+          "InventoryFlow peut modifier les présentes CGU, notamment pour refléter une évolution du Service ou de la réglementation applicable. Les Utilisateurs en seront informés par tout moyen approprié avant leur entrée en vigueur.",
+          "La poursuite de l'utilisation du Service après l'entrée en vigueur des CGU modifiées vaut acceptation de celles-ci."
+        ]
+      },
+      {
+        "id": "droit-applicable",
+        "number": "14",
+        "heading": "Droit applicable et juridiction compétente",
+        "paragraphs": [
+          "Les présentes CGU sont soumises au droit [pays à préciser, par ex. camerounais / de l'OHADA], sans préjudice des dispositions impératives éventuellement applicables au lieu de résidence de l'entreprise cliente.",
+          "Tout différend relatif à la validité, à l'interprétation ou à l'exécution des présentes CGU sera, à défaut de résolution amiable, soumis aux juridictions compétentes du ressort du siège social d'InventoryFlow."
+        ]
+      },
+      {
+        "id": "contact",
+        "number": "15",
+        "heading": "Contact",
+        "paragraphs": [
+          "Pour toute question relative aux présentes CGU, l'entreprise cliente peut contacter InventoryFlow à l'adresse legal@inventoryflow.app ou par courrier à [adresse postale]."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Politique de Confidentialité",
+    "subtitle": "Traitement des données personnelles dans le cadre du Service InventoryFlow",
+    "lastUpdated": "21 juin 2026",
+    "intro": [
+      "InventoryFlow attache une grande importance à la protection des données personnelles des entreprises clientes, de leurs Utilisateurs et, le cas échéant, des personnes dont les données sont traitées via le Service (clients, employés des entreprises clientes).",
+      "La présente Politique de Confidentialité décrit les données collectées, leurs finalités, leur durée de conservation ainsi que les droits dont disposent les personnes concernées."
+    ],
+    "sections": [
+      {
+        "id": "responsable-traitement",
+        "number": "1",
+        "heading": "Responsable du traitement",
+        "paragraphs": [
+          "Le responsable du traitement des données collectées via le Service est [Raison sociale de la société éditrice d'InventoryFlow], dont le siège social est situé [adresse complète], joignable à l'adresse legal@inventoryflow.app.",
+          "Pour les Données Client saisies dans le Service (informations relatives aux clients et employés de l'entreprise cliente), l'entreprise cliente agit en qualité de responsable du traitement et InventoryFlow en qualité de sous-traitant, dans les conditions précisées par le contrat liant les parties."
+        ]
+      },
+      {
+        "id": "donnees-collectees",
+        "number": "2",
+        "heading": "Données collectées",
+        "paragraphs": [
+          "Selon l'usage du Service, InventoryFlow est amenée à collecter les catégories de données suivantes :"
+        ],
+        "list": [
+          "Données d'identification et de contact de l'entreprise cliente et de ses Utilisateurs (nom, prénom, adresse e-mail, numéro de téléphone, fonction) ;",
+          "Données de connexion et d'usage du Service (journaux de connexion, adresse IP, actions réalisées) ;",
+          "Données commerciales saisies dans le Service (produits, stocks, ventes, factures, clients, fournisseurs, employés) ;",
+          "Données de paiement limitées (méthode de paiement utilisée, statut de la transaction), à l'exclusion des données bancaires complètes traitées directement par les prestataires de paiement ;",
+          "Données techniques nécessaires au fonctionnement du Service (cookies, identifiants de session)."
+        ]
+      },
+      {
+        "id": "finalites",
+        "number": "3",
+        "heading": "Finalités du traitement",
+        "paragraphs": [
+          "Les données collectées sont utilisées pour :"
+        ],
+        "list": [
+          "Fournir, exploiter et sécuriser le Service ;",
+          "Gérer la création et l'administration des Comptes Entreprise et des abonnements ;",
+          "Traiter les paiements et établir la facturation ;",
+          "Fournir une assistance et répondre aux demandes des Utilisateurs ;",
+          "Améliorer le Service et développer les fonctionnalités d'intelligence artificielle (prévision de ventes, réapprovisionnement, détection d'anomalies, segmentation client), sur la base de données agrégées et, lorsque cela est nécessaire, anonymisées ;",
+          "Respecter les obligations légales et réglementaires applicables, notamment en matière comptable et fiscale."
+        ]
+      },
+      {
+        "id": "base-legale",
+        "number": "4",
+        "heading": "Base légale des traitements",
+        "paragraphs": [
+          "Les traitements réalisés par InventoryFlow reposent, selon les cas, sur l'exécution du contrat d'abonnement conclu avec l'entreprise cliente, sur le respect d'obligations légales, sur l'intérêt légitime d'InventoryFlow à sécuriser et améliorer le Service, ou sur le consentement de la personne concernée lorsque celui-ci est requis, notamment pour certains cookies non essentiels."
+        ]
+      },
+      {
+        "id": "destinataires",
+        "number": "5",
+        "heading": "Destinataires et sous-traitants",
+        "paragraphs": [
+          "Les données sont accessibles aux équipes habilitées d'InventoryFlow, dans la limite de leurs fonctions, ainsi qu'aux prestataires techniques nécessaires à la fourniture du Service, notamment d'hébergement, de paiement (opérateurs de Mobile Money, prestataires de paiement par carte) et d'envoi de communications.",
+          "Ces prestataires sont sélectionnés pour les garanties qu'ils présentent en matière de sécurité et de confidentialité et n'utilisent les données que pour les finalités définies par InventoryFlow."
+        ]
+      },
+      {
+        "id": "transferts",
+        "number": "6",
+        "heading": "Transferts de données",
+        "paragraphs": [
+          "Les données sont hébergées et traitées prioritairement dans des centres de données situés en [région d'hébergement à préciser]. Lorsqu'un transfert hors de ce périmètre est nécessaire, notamment auprès de certains prestataires techniques, InventoryFlow s'assure que des garanties appropriées sont mises en place conformément à la réglementation applicable."
+        ]
+      },
+      {
+        "id": "duree-conservation",
+        "number": "7",
+        "heading": "Durée de conservation",
+        "paragraphs": [
+          "Les Données Client sont conservées pendant toute la durée du Compte Entreprise, puis pendant une durée raisonnable après résiliation permettant leur export par l'entreprise cliente, avant suppression ou anonymisation.",
+          "Les données nécessaires au respect d'obligations légales, notamment comptables et fiscales, sont conservées pendant les durées de prescription applicables."
+        ]
+      },
+      {
+        "id": "securite",
+        "number": "8",
+        "heading": "Sécurité des données",
+        "paragraphs": [
+          "InventoryFlow met en œuvre des mesures techniques et organisationnelles raisonnables pour protéger les données contre tout accès non autorisé, perte, altération ou divulgation, notamment le chiffrement des communications, le contrôle des accès par rôle et la journalisation des actions sensibles.",
+          "En cas de violation de données susceptible d'engendrer un risque pour les personnes concernées, InventoryFlow en informera les entreprises clientes concernées et, le cas échéant, les autorités compétentes, dans les délais prévus par la réglementation applicable."
+        ]
+      },
+      {
+        "id": "cookies",
+        "number": "9",
+        "heading": "Cookies et traceurs",
+        "paragraphs": [
+          "Le Service utilise des cookies strictement nécessaires à son fonctionnement (authentification, sécurité, préférences de langue) ainsi que, le cas échéant, des cookies de mesure d'audience.",
+          "Les Utilisateurs peuvent configurer leur navigateur pour refuser certains cookies, sous réserve que cela puisse affecter le bon fonctionnement du Service."
+        ]
+      },
+      {
+        "id": "droits",
+        "number": "10",
+        "heading": "Droits des personnes concernées",
+        "paragraphs": [
+          "Sous réserve des conditions prévues par la réglementation applicable, toute personne concernée dispose des droits suivants :"
+        ],
+        "list": [
+          "Droit d'accès à ses données et d'obtention d'une copie ;",
+          "Droit de rectification des données inexactes ou incomplètes ;",
+          "Droit à l'effacement, dans les limites des obligations légales de conservation d'InventoryFlow ;",
+          "Droit à la portabilité des données qu'elle a fournies ;",
+          "Droit d'opposition et de limitation du traitement, dans les cas prévus par la réglementation applicable."
+        ]
+      },
+      {
+        "id": "mineurs",
+        "number": "11",
+        "heading": "Données des mineurs",
+        "paragraphs": [
+          "Le Service est destiné à un usage professionnel et n'est pas conçu pour être utilisé par des personnes mineures. InventoryFlow ne collecte pas sciemment de données concernant des mineurs."
+        ]
+      },
+      {
+        "id": "modification-politique",
+        "number": "12",
+        "heading": "Modification de la présente politique",
+        "paragraphs": [
+          "InventoryFlow peut modifier la présente Politique de Confidentialité pour refléter une évolution du Service, de ses pratiques ou de la réglementation applicable. La date de dernière mise à jour figure en haut de ce document."
+        ]
+      },
+      {
+        "id": "contact-dpo",
+        "number": "13",
+        "heading": "Contact",
+        "paragraphs": [
+          "Pour toute question relative à la présente Politique de Confidentialité ou pour exercer vos droits, vous pouvez contacter InventoryFlow à l'adresse legal@inventoryflow.app ou par courrier à [adresse postale]. Ces droits peuvent également être exercés directement auprès de l'entreprise cliente lorsqu'elle est responsable du traitement de vos données."
+        ]
+      }
+    ]
+  }
+}

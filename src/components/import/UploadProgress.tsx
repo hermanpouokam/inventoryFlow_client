@@ -1,8 +1,10 @@
 "use client";
 
 import { CheckCircle2, Circle, Loader2, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
+import Spinner from "../Spinner";
 
 type UploadPhase = "idle" | "preparing" | "uploading" | "starting" | "done" | "error";
 
@@ -12,27 +14,11 @@ interface UploadProgressProps {
   error: string | null;
 }
 
-const STEPS: { id: UploadPhase[]; label: string; activeLabel: string }[] = [
-  {
-    id: ["preparing"],
-    label: "Préparation",
-    activeLabel: "Génération de l'URL sécurisée…",
-  },
-  {
-    id: ["uploading"],
-    label: "Envoi vers S3",
-    activeLabel: "Upload en cours…",
-  },
-  {
-    id: ["starting"],
-    label: "Démarrage",
-    activeLabel: "Création du job d'import…",
-  },
-  {
-    id: ["done"],
-    label: "Traitement",
-    activeLabel: "Prêt",
-  },
+const STEP_CONFIG: { id: UploadPhase[]; labelKey: string }[] = [
+  { id: ["preparing"], labelKey: "import.upload.steps.preparing.label" },
+  { id: ["uploading"], labelKey: "import.upload.steps.uploading.label" },
+  { id: ["starting"], labelKey: "import.upload.steps.starting.label" },
+  { id: ["done"], labelKey: "import.upload.steps.done.label" },
 ];
 
 function getStepStatus(
@@ -53,6 +39,8 @@ export function UploadProgress({
   uploadProgress,
   error,
 }: UploadProgressProps) {
+  const { t } = useTranslation("common");
+
   if (phase === "idle") return null;
 
   return (
@@ -67,46 +55,41 @@ export function UploadProgress({
         )}
         <p className="text-sm font-medium">
           {phase === "error"
-            ? "Erreur lors de l'upload"
+            ? t("import.upload.error")
             : phase === "done"
-            ? "Fichier envoyé avec succès"
-            : "Upload en cours…"}
+              ? t("import.upload.done")
+              : t("import.upload.in_progress")}
         </p>
       </div>
 
-      {/* Phase steps */}
       <div className="flex items-center gap-1">
-        {STEPS.map((step, i) => {
+        {STEP_CONFIG.map((step, i) => {
           const status = getStepStatus(step.id, phase);
           return (
-            <div key={i} className="flex flex-1 items-center gap-1">
+            <div key={step.labelKey} className="flex flex-1 items-center gap-1">
               <div className="flex flex-col items-center gap-1 min-w-0">
                 <div
                   className={cn(
                     "flex h-6 w-6 items-center justify-center rounded-full border transition-all",
-                    status === "done" &&
-                      "border-success/40 bg-success/15 text-success",
-                    status === "active" &&
-                      "border-primary/40 bg-primary/15 text-primary",
-                    status === "pending" &&
-                      "border-border bg-muted text-muted-foreground",
-                    status === "error" &&
-                      "border-destructive/40 bg-destructive/15 text-destructive"
+                    status === "done" && "border-success/40 bg-success/15 text-success",
+                    status === "active" && "border-primary/40 bg-primary/15 text-primary",
+                    status === "pending" && "border-border bg-muted text-muted-foreground",
+                    status === "error" && "border-destructive/40 bg-destructive/15 text-destructive"
                   )}
                 >
                   {status === "done" ? (
                     <CheckCircle2 size={12} />
                   ) : status === "active" ? (
-                    <Loader2 size={12} className="animate-spin" />
+                    <Spinner />
                   ) : (
                     <Circle size={12} />
                   )}
                 </div>
                 <span className="text-[10px] text-muted-foreground whitespace-nowrap">
-                  {step.label}
+                  {t(step.labelKey)}
                 </span>
               </div>
-              {i < STEPS.length - 1 && (
+              {i < STEP_CONFIG.length - 1 && (
                 <div
                   className={cn(
                     "mb-3 h-px flex-1 transition-colors",
@@ -119,18 +102,16 @@ export function UploadProgress({
         })}
       </div>
 
-      {/* Upload progress bar */}
       {phase === "uploading" && (
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>Upload S3</span>
+            <span>{t("import.upload.s3")}</span>
             <span>{uploadProgress}%</span>
           </div>
           <Progress value={uploadProgress} />
         </div>
       )}
 
-      {/* Error message */}
       {phase === "error" && error && (
         <p className="text-xs text-destructive">{error}</p>
       )}

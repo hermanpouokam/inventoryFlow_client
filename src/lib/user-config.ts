@@ -39,11 +39,9 @@ export const userSettingsConfig: UserSettingCategory[] = [
         title: "user_config.informations_personnelles",
         description: "user_config.vos_informations_de_base_visibles_par_les_autres_membres",
         fields: [
-          { id: "user_firstname", label: "user_config.prenom", type: "string", value: "Jean", defaultValue: "Jean", placeholder: "user_config.votre_prenom", required: true },
-          { id: "user_lastname", label: "user_config.nom", type: "string", value: "Dupont", defaultValue: "Dupont", placeholder: "user_config.votre_nom", required: true },
-          { id: "user_email", label: "user_config.adresse_email", type: "string", value: "jean@entreprise.com", defaultValue: "jean@entreprise.com", placeholder: "settings_config.email_exemple_com", required: true, important: true },
-          { id: "user_number", label: "settings_config.telephone", type: "string", value: "", defaultValue: "", placeholder: "+237 6 00 00 00 00" },
-          { id: "user_avatar", label: "user_config.photo_de_profil", type: "image", value: "", defaultValue: "" },
+          { id: "user_firstname", label: "user_config.prenom", type: "string", value: "John Doe", defaultValue: "John Doe", placeholder: "user_config.votre_prenom", required: true },
+          { id: "user_email", label: "user_config.adresse_email", type: "string", value: "Johndoe@email.com", defaultValue: "Johndoe@email.com", placeholder: "settings_config.email_exemple_com", required: true, important: true },
+          { id: "user_phone", label: "settings_config.telephone", type: "number", value: "CM|600000000", defaultValue: "CM|600000000", placeholder: "6 00 00 00 00" },
         ],
       },
     ],
@@ -53,16 +51,6 @@ export const userSettingsConfig: UserSettingCategory[] = [
     label: "settings_config.securite",
     icon: Shield,
     sections: [
-      {
-        id: "password",
-        title: "user_config.mot_de_passe",
-        description: "user_config.changez_votre_mot_de_passe_regulierement_pour_plus_de_securi",
-        fields: [
-          { id: "user_current_password", label: "user_config.mot_de_passe_actuel", type: "string", value: "", defaultValue: "", placeholder: "••••••••", required: true },
-          { id: "user_new_password", label: "user_config.nouveau_mot_de_passe", type: "string", value: "", defaultValue: "", placeholder: "••••••••", required: true },
-          { id: "user_confirm_password", label: "user_config.confirmer_le_mot_de_passe", type: "string", value: "", defaultValue: "", placeholder: "••••••••", required: true },
-        ],
-      },
       {
         id: "two-factor",
         title: "user_config.authentification_a_deux_facteurs",

@@ -14,7 +14,12 @@ export function useEnterpriseSettings() {
         // Enterprise fields
         flatValues["store_name"] = data.name;
         flatValues["store_email"] = data.email;
-        flatValues["store_phone"] = data.phone;
+        const country = data.country || "CI";
+        flatValues["country"] = country;
+        // Combine country + phone dans le format attendu par le PhoneField
+        flatValues["store_phone"] = data.phone
+            ? `${country}|${data.phone}`
+            : `${country}|`;
         flatValues["store_address"] = data.address;
         flatValues["currency"] = data.currency;
         flatValues["country"] = data.country;
@@ -44,7 +49,8 @@ export function useEnterpriseSettings() {
                     break;
 
                 case "store_phone":
-                    enterprisePayload["phone"] = value;
+                    const phoneParts = typeof value === "string" ? value.split("|") : [];
+                    enterprisePayload["phone"] = phoneParts[1] || null;
                     break;
 
                 case "store_address":
@@ -90,5 +96,5 @@ export function useEnterpriseSettings() {
         fetchSettings();
     }, []);
 
-    return { values, setValues, loading,formatValues, formatFlatValues };
+    return { values, setValues, loading, formatValues, formatFlatValues };
 }

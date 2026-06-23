@@ -75,7 +75,7 @@ export function Combobox<T>({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={cn("justify-between bg-transparent border border-zinc-600 hover:border-primary hover:bg-transparent", open && "border-primary hover:border-primary text-primary hover:text-[text-primary ")}
+            className={cn("justify-between bg-transparent border hover:border-zinc-600 dark:hover:border-primary border-zinc-600/50 hover:bg-transparent", open && "border-primary hover:border-primary text-primary hover:text-[text-primary ")}
           >
             <span className="truncate">
               {value ? getOptionLabel(value) : buttonLabel ?? t("select.placeholder")}
@@ -84,10 +84,10 @@ export function Combobox<T>({
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className={cn("px-1 py-2 popover-content-width-full z-[9999] bg-card p-0 border-0 shadow-lg", className)}
+          className={cn("px-1 py-2 popover-content-width-full z-[9999] bg-card p-0 border-0 shadow-[0_16px_40px_0px_rgba(0,0,0,0.7)]", className)}
           align="start"
         >
-          <Command className="bg-card dark:bg-background">
+          <Command className="bg-card dark:bg-[#212121]">
             <CommandInput placeholder={placeholder ?? t("select.search_placeholder")} className="p-4" />
             <CommandList>
               <CommandEmpty>{emptyStateMessage ?? t("select.no_data")}</CommandEmpty>

@@ -98,6 +98,7 @@ export async function uploadToS3(
  * Valide les colonnes d'un fichier déjà uploadé sur S3.
  * Utile pour un retour d'erreur immédiat avant de démarrer le traitement.
  */
+
 export async function validateColumns(
   dataType: DataType,
   s3Key: string
@@ -109,11 +110,7 @@ export async function validateColumns(
   return data;
 }
 
-/**
- * Démarre le job d'import.
- * - admin   : sales_point_id obligatoire
- * - manager : sales_point_id ignoré côté backend
- */
+
 export async function startImport(
   dataType: DataType,
   s3Key: string,

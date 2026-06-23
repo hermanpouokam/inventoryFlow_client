@@ -1,4 +1,4 @@
-// redux/yourSlice.ts
+// redux/emplyeeSlicer.ts
 import { instance } from "@/components/fetch";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -24,7 +24,7 @@ export const fetchEmployees = createAsyncThunk(
     const params = new URLSearchParams();
     sales_point?.forEach((sp, index) => {
       if (sp) {
-        params.append(`sales_point`, sp);
+        params.append(`sales_point`, sp as unknown as string);
       }
     });
     const query = params.toString();

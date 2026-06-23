@@ -16,6 +16,8 @@ import greetingsFr from './../../public/locales/fr/greetings.json';
 import greetingsEn from './../../public/locales/en/greetings.json';
 import authFr from './../../public/locales/fr/auth.json';
 import authEn from './../../public/locales/en/auth.json';
+import legalEn from './../../public/locales/en/legal.json';
+import legalFr from './../../public/locales/fr/legal.json';
 
 const resources = {
     fr: {
@@ -25,6 +27,7 @@ const resources = {
         error: errorsFr,
         greetings: greetingsFr,
         auth: authFr,
+        legal: legalFr,
     },
     en: {
         common: commonEn,
@@ -33,6 +36,7 @@ const resources = {
         greetings: greetingsEn,
         words: wordsEn,
         auth: authEn,
+        legal: legalEn,
     },
 };
 

@@ -73,7 +73,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
           <div className="flex justify-around items-center gap-5">
             <p className="font-semibold uppercase">
-              E-MAIL: {bill?.sales_point_details?.email ?? "N/A"}
+              {tCommon("email")}: {bill?.sales_point_details?.email ?? "N/A"}
             </p>
             <p className="font-semibold uppercase">
               {tCommon("number")}: {bill?.sales_point_details.number ?? "N/A"}

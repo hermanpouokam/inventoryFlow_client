@@ -20,9 +20,9 @@ import moment from "moment";
 
 type RawMenu = {
   name: string;
-  link: PagePermission | null;
+  link: PagePermission | string | null;
   icon: any; // ou React.ComponentType si les icônes sont des composants
-  menu: { text: string; link: PagePermission }[] | null;
+  menu: { text: string; link: PagePermission | string }[] | null;
 };
 export function useMenuItems(): Menu[] {
   const { hasPagePermission, isAdmin } = usePermission();
@@ -95,8 +95,8 @@ export function useMenuItems(): Menu[] {
       icon: LandmarkIcon,
       menu: [
         { text: !isAdmin() ? t("navigation.items.enterprise_details") : t("navigation.items.enterprise_sales_points"), link: "/enterprise/salespoints" },
-        { text: t("navigation.items.enterprise_payment_info"), link: "/enterprise/informations" },
-        { text: t("navigation.items.enterprise_settings"), link: "/enterprise/settings" },
+        ...(isAdmin() ? [{ text: t("navigation.items.enterprise_payment_info"), link: "/enterprise/informations" }] : []),
+        ...(isAdmin() ? [{ text: t("navigation.items.enterprise_settings"), link: "/enterprise/settings" }] : []),
         { text: t("navigation.items.upload"), link: "/enterprise/upload" },
         // { text: t("navigation.items.enterprise_users"), link: "/enterprise/users" },
       ],
@@ -114,12 +114,13 @@ export function useMenuItems(): Menu[] {
   const filteredMenu: Menu[] = rawMenu
     .map((item) => {
       if (item.menu === null) {
-        return hasPagePermission(item.link!)
+        // ensure item.link is a PagePermission before calling hasPagePermission
+        return item.link && hasPagePermission(item.link as PagePermission)
           ? { ...item, menu: null }
           : null;
       } else {
         const filteredSubmenu = item.menu.filter((sub) =>
-          hasPagePermission(sub.link)
+          hasPagePermission(sub.link as PagePermission)
         );
         return filteredSubmenu.length > 0
           ? { ...item, menu: filteredSubmenu }

@@ -146,7 +146,7 @@ export default function Page() {
                 src={logo.src}
                 className="w-auto h-6 mx-auto"
             />
-            <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight">
+            <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-foreground">
                 {tCommon('forgot_password_text')}
             </h2>
             <h2 className="text-center mt-2  text-sm tracking-tight  text-muted-foreground">
@@ -172,7 +172,7 @@ export default function Page() {
             <WormsCanvas />
 
             <div className="relative w-full max-w-md z-10">
-                <div className="sm:p-5 rounded-2xl backdrop-blur-sm bg-card/20 dark:bg-card/10 shadow-[1px_2px_38px_5px_rgba(0,0,0,0.20)] dark:shadow-[1px_2px_38px_5px_rgba(0,0,0,0.4)] border border-white/10">
+                <div className="rounded-2xl p-8 backdrop-blur-sm bg-card/20 dark:bg-card/60 shadow-[1px_2px_38px_5px_rgba(0,0,0,0.20)] dark:shadow-[1px_2px_38px_5px_rgba(0,0,0,0.4)] border border-white/10">
                     {error && (
                         <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
                             <svg className="w-4 h-4 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -247,7 +247,7 @@ export default function Page() {
                             </div>
                             <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
                                 <div className="space-y-5">
-                                    <h2 className="text-3xl font-semibold text-[#222f3e] text-center">{tCommon('email_verification_text')}</h2>
+                                    <h2 className="text-3xl font-semibold text-foreground text-center">{tCommon('email_verification_text')}</h2>
                                     <span className="text-muted-foreground text-sm font-normal block text-center">{capitalizeFirstLetter(tCommon('email_verification_subtext', { email: maskEmail(decryptParam(email) || '') }))}</span>
                                     <OTPInput length={6} onComplete={handleComplete} />
                                     <div className="flex items-center justify-start flex-wrap gap-0">

@@ -25,12 +25,14 @@ function groupBySupplierAndCategory(data) {
       const productName = product.product_details.name;
       const productCode = product.product_details.product_code;
       const productQuantity = product.quantity;
+      const productPrice = product.price;
 
       // Initialize the product entry if it doesn't exist
       if (!acc[supplierName][categoryName][productName]) {
         acc[supplierName][categoryName][productName] = {
           code: productCode,
           quantity: 0,
+          price: productPrice,
         };
       }
 
@@ -88,7 +90,8 @@ const generateCSV = ({ groupedData, title, salespoint }) => {
   // Génération CSV avec papaparse
   const csvString = unparse(rows, {
     quotes: true,
-    skipEmptyLines: false
+    skipEmptyLines: false,
+    
   });
 
   // BOM pour Excel

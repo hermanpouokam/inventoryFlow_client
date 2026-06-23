@@ -196,7 +196,6 @@ export default function Page() {
       >
         {/* @ts-ignore */}
         {({ blob }) => {
-          console.log("blob", blob);
           if (blob) {
             const blobUrl = URL.createObjectURL(blob);
             newWindow.location.href = blobUrl;

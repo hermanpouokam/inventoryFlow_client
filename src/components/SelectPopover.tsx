@@ -41,7 +41,7 @@ const SelectPopover = <T extends Record<string, any>>({
           variant="outline"
           role="combobox"
           className={cn(
-            "justify-between bg-transparent hover:bg-transparent hover:border-primary border-zinc-600 data-[state=open]:border-primary data-[state=open]:text-primary",
+            "justify-between bg-transparent hover:bg-transparent hover:border-zinc-600 dark:hover:border-primary border-zinc-600/40  data-[state=open]:border-primary data-[state=open]:text-primary",
             selectedItems.length < 1 && "text-muted-foreground"
           )}
         >
@@ -57,7 +57,7 @@ const SelectPopover = <T extends Record<string, any>>({
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="popover-content-width-full px-1 py-2 bg-white dark:bg-background p-0 border-none shadow-lg"
+        className="popover-content-width-full px-1 py-2 bg-white dark:bg-[#212121] border-0 p-0 shadow-[0_16px_40px_0px_rgba(0,0,0,0.7)] "
       >
         <Command>
           <CommandInput placeholder={searchPlaceholder ?? t("select.search_placeholder")} />
@@ -66,7 +66,7 @@ const SelectPopover = <T extends Record<string, any>>({
             <CommandGroup className="">
               {items.map((item) => (
                 <CommandItem
-                  value={`${getOptionLabel(item)} ${item.id}`}
+                  value={`${getOptionLabel(item)}-${item.id}`}
                   key={item.id}
                   onSelect={() => onSelect(item)}
                   className="py-2"

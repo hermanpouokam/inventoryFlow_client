@@ -46,8 +46,8 @@ const createVariant = async (params: {
   return res;
 };
 
-function formatNumber(number: number, divider: "," | " " = ","): string {
-  if (!Number.isFinite(number)) return "Invalid number";
+function formatNumber(number: number, divider: "," | " " = " "): string {
+  if (!Number.isFinite(number)) return "NaN";
 
   const hasDecimals = number % 1 !== 0;
   const decimals = hasDecimals ? number.toString().split(".")[1].length : 0;

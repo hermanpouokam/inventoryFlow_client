@@ -120,8 +120,8 @@ export default function Page() {
 
             {message && (
               <div
-                className={`${message.type == "success" ? "bg-green-600/20" : "bg-red-200"
-                  } text-center rounded-sm p-3 self-center max-w-[100%] mb-5`}
+                className={`${message.type == "success" ? "bg-green-600/20 border-green-600" : "bg-red-600/20 border-red-600"
+                  } text-center rounded-sm p-3 self-center max-w-[100%] mb-5 border`}
               >
                 <p
                   className={`${message.type == "success"

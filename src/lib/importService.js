@@ -1,3 +1,5 @@
+import i18n from "i18next";
+
 /**
  * importService.js
  *
@@ -21,6 +23,7 @@ const SCHEMA = {
 
 const NUMERIC_FIELDS = ["price", "quantity", "sell_price", "full_quantity", "empty_quantity"];
 const MAX_FILE_SIZE  = 10 * 1024 * 1024; // 10 Mo
+const tt = (key, options = {}) => i18n.t(`common:${key}`, options);
 
 
 // ─── Parsing local (SheetJS) ──────────────────────────────────────────────────
@@ -32,12 +35,12 @@ const MAX_FILE_SIZE  = 10 * 1024 * 1024; // 10 Mo
  */
 export async function parseFile(file) {
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error(`Fichier trop volumineux (max 10 Mo). Taille actuelle : ${(file.size / 1024 / 1024).toFixed(2)} Mo`);
+    throw new Error(tt("import.service.errors.too_large", { size: (file.size / 1024 / 1024).toFixed(2) }));
   }
 
   const ext = file.name.split(".").pop().toLowerCase();
   if (!["csv", "xlsx"].includes(ext)) {
-    throw new Error("Format non supporté. Utilisez un fichier .csv ou .xlsx");
+    throw new Error(tt("import.service.errors.unsupported_format"));
   }
 
   const buffer = await file.arrayBuffer();
@@ -46,7 +49,7 @@ export async function parseFile(file) {
   const rawRows  = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
 
   if (rawRows.length < 2) {
-    throw new Error("Le fichier est vide ou ne contient pas d'en-têtes.");
+    throw new Error(tt("import.service.errors.empty_file"));
   }
 
   // Ignore les lignes de commentaires (commencent par #)
@@ -79,14 +82,14 @@ export async function parseFile(file) {
  */
 export function validateRows(rows, headers, dataType) {
   const schema = SCHEMA[dataType];
-  if (!schema) return { valid: false, errors: [{ row: 0, field: "data_type", message: "Type de données inconnu" }] };
+  if (!schema) return { valid: false, errors: [{ row: 0, field: "data_type", message: tt("import.service.errors.unknown_data_type") }] };
 
   const errors = [];
 
   // Vérification des colonnes requises dans les headers
   for (const col of schema.required) {
     if (!headers.includes(col)) {
-      errors.push({ row: 0, field: col, message: `Colonne obligatoire manquante : "${col}"` });
+      errors.push({ row: 0, field: col, message: tt("import.service.errors.missing_column", { column: col }) });
     }
   }
   if (errors.length > 0) return { valid: false, errors };
@@ -98,14 +101,14 @@ export function validateRows(rows, headers, dataType) {
     // Champs obligatoires non vides
     for (const col of schema.required) {
       if (!row[col] || row[col] === "") {
-        errors.push({ row: rowNum, field: col, message: `Champ obligatoire vide : "${col}"` });
+        errors.push({ row: rowNum, field: col, message: tt("import.service.errors.empty_required", { field: col }) });
       }
     }
 
     // Validation des champs numériques
     for (const col of NUMERIC_FIELDS) {
       if (col in row && row[col] !== "" && isNaN(Number(row[col]))) {
-        errors.push({ row: rowNum, field: col, message: `"${col}" doit être un nombre, valeur reçue : "${row[col]}"` });
+        errors.push({ row: rowNum, field: col, message: tt("import.service.errors.invalid_number", { field: col, value: row[col] }) });
       }
     }
 
@@ -113,7 +116,7 @@ export function validateRows(rows, headers, dataType) {
     const injectionPrefixes = ["=", "+", "-", "@"];
     for (const [col, val] of Object.entries(row)) {
       if (injectionPrefixes.some(p => String(val).startsWith(p))) {
-        errors.push({ row: rowNum, field: col, message: `Valeur suspecte (possible injection) dans "${col}" : "${String(val).substring(0, 20)}"` });
+        errors.push({ row: rowNum, field: col, message: tt("import.service.errors.suspicious_value", { field: col, value: String(val).substring(0, 20) }) });
       }
     }
   });
@@ -151,7 +154,7 @@ export async function uploadToS3(file, dataType, apiBase, authToken) {
 
   if (!presignedRes.ok) {
     const err = await presignedRes.json();
-    throw new Error(err.error || "Erreur lors de la génération de l'URL d'upload");
+    throw new Error(err.error || tt("import.service.errors.presigned_url"));
   }
 
   const { upload_url, fields, s3_key } = await presignedRes.json();
@@ -167,7 +170,7 @@ export async function uploadToS3(file, dataType, apiBase, authToken) {
   });
 
   if (!s3Res.ok) {
-    throw new Error(`Erreur upload S3 : ${s3Res.status} ${s3Res.statusText}`);
+    throw new Error(tt("import.service.errors.upload_s3", { status: s3Res.status, statusText: s3Res.statusText }));
   }
 
   return s3_key;
@@ -196,7 +199,7 @@ export async function startImport(s3Key, dataType, originalFilename, apiBase, au
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error || "Erreur lors du démarrage de l'import");
+    throw new Error(err.error || tt("import.service.errors.start_import"));
   }
 
   const { job_id } = await res.json();
@@ -253,7 +256,7 @@ export function watchImportJob(jobId, wsBase, callbacks) {
   };
 
   ws.onerror = (e) => {
-    callbacks.onError?.("Connexion WebSocket perdue");
+    callbacks.onError?.(tt("import.service.errors.websocket_lost"));
   };
 
   ws.onclose = () => {
@@ -285,7 +288,7 @@ export async function downloadTemplate(dataType, apiBase, authToken) {
   const res = await fetch(`${apiBase}/import/template/${dataType}/`, {
     headers: { "Authorization": `Bearer ${authToken}` },
   });
-  if (!res.ok) throw new Error("Impossible de télécharger le template");
+  if (!res.ok) throw new Error(tt("import.service.errors.download_template"));
 
   const blob = await res.blob();
   const url  = URL.createObjectURL(blob);
@@ -352,7 +355,7 @@ export async function runImport(params) {
     return { jobId, watcher };
 
   } catch (err) {
-    onError?.(err.message || "Erreur inattendue");
+    onError?.(err.message || tt("import.service.errors.unexpected"));
     return null;
   }
 }

@@ -9,9 +9,10 @@ import {
   Box,
   Layers,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import type { DataType } from "@/lib/types";
-import { DATA_TYPE_LABELS, DATA_TYPE_DESCRIPTIONS } from "@/lib/types";
+import { DATA_TYPE_LABEL_KEYS, DATA_TYPE_DESCRIPTION_KEYS } from "@/lib/types";
 
 const ICONS: Record<DataType, React.ElementType> = {
   category: Tag,
@@ -28,9 +29,11 @@ interface DataTypeSelectorProps {
   onChange: (type: DataType) => void;
 }
 
-const DATA_TYPES = Object.keys(DATA_TYPE_LABELS) as DataType[];
+const DATA_TYPES = Object.keys(DATA_TYPE_LABEL_KEYS) as DataType[];
 
 export function DataTypeSelector({ value, onChange }: DataTypeSelectorProps) {
+  const { t } = useTranslation("common");
+
   return (
     <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
       {DATA_TYPES.map((type) => {
@@ -44,7 +47,7 @@ export function DataTypeSelector({ value, onChange }: DataTypeSelectorProps) {
               "group relative flex flex-col items-start gap-2 rounded-lg border p-3.5 text-left transition-all duration-150",
               selected
                 ? "border-primary/60 bg-accent glow-primary"
-                : "border-border bg-card hover:border-border/80 hover:bg-muted"
+                : "border-border bg-background/70 hover:border-border/80 hover:bg-muted"
             )}
           >
             <div
@@ -64,10 +67,10 @@ export function DataTypeSelector({ value, onChange }: DataTypeSelectorProps) {
                   selected ? "text-foreground" : "text-foreground/80"
                 )}
               >
-                {DATA_TYPE_LABELS[type]}
+                {t(DATA_TYPE_LABEL_KEYS[type])}
               </p>
               <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
-                {DATA_TYPE_DESCRIPTIONS[type]}
+                {t(DATA_TYPE_DESCRIPTION_KEYS[type])}
               </p>
             </div>
             {selected && (

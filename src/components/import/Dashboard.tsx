@@ -6,60 +6,59 @@ import {
   CheckCircle2,
   XCircle,
   GitMerge,
-  FileSpreadsheet,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { getImportHistory } from "@/lib/api";
 import type { ImportJob } from "@/lib/types";
-import { DATA_TYPE_LABELS } from "@/lib/types";
-import { cn, formatRelativeTime } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { STATUS_CONFIG } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function Dashboard() {
+  const { t } = useTranslation("common");
   const [jobs, setJobs] = useState<ImportJob[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  
+
   useEffect(() => {
     getImportHistory()
       .then(setJobs)
-      .catch((e) => { setError(e) })
+      .catch(() => setJobs([]))
       .finally(() => setLoading(false));
   }, []);
 
-  const completed = jobs.filter((j) => j.status === "completed");
-  const failed = jobs.filter((j) => j.status === "failed");
-  const totalRows = jobs.reduce((s, j) => s + j.success_rows, 0);
-  const totalConflicts = jobs.reduce((s, j) => {
-    const c = typeof j.pending_conflicts === "number" ? j.pending_conflicts : (j.pending_conflicts as unknown[]).length;
-    return s + c;
+  const completed = jobs.filter((job) => job.status === "completed");
+  const failed = jobs.filter((job) => job.status === "failed");
+  const totalRows = jobs.reduce((sum, job) => sum + job.success_rows, 0);
+  const totalConflicts = jobs.reduce((sum, job) => {
+    const conflicts = typeof job.pending_conflicts === "number"
+      ? job.pending_conflicts
+      : job.pending_conflicts.length;
+    return sum + conflicts;
   }, 0);
 
   const stats = [
     {
-      label: "Imports réussis",
+      label: t("import.dashboard.successful_imports"),
       value: completed.length,
       icon: CheckCircle2,
       color: "text-success",
       bg: "bg-success/10",
     },
     {
-      label: "Lignes importées",
+      label: t("import.dashboard.imported_rows"),
       value: totalRows.toLocaleString(),
       icon: TrendingUp,
       color: "text-primary",
       bg: "bg-primary/10",
     },
     {
-      label: "Échecs",
+      label: t("import.dashboard.failures"),
       value: failed.length,
       icon: XCircle,
       color: "text-destructive",
       bg: "bg-destructive/10",
     },
     {
-      label: "Conflits totaux",
+      label: t("import.dashboard.total_conflicts"),
       value: totalConflicts,
       icon: GitMerge,
       color: "text-warning",
@@ -79,18 +78,17 @@ export function Dashboard() {
 
   return (
     <div className="space-y-5">
-      {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        {stats.map((s) => (
-          <Card key={s.label}>
+        {stats.map((stat) => (
+          <Card key={stat.label}>
             <CardContent className="pt-4">
-              <div className={cn("mb-3 inline-flex h-8 w-8 items-center justify-center rounded-lg", s.bg)}>
-                <s.icon size={16} className={s.color} />
+              <div className={cn("mb-3 inline-flex h-8 w-8 items-center justify-center rounded-lg", stat.bg)}>
+                <stat.icon size={16} className={stat.color} />
               </div>
-              <p className={cn("text-2xl font-bold tabular-nums", s.color)}>
-                {s.value}
+              <p className={cn("text-2xl font-bold tabular-nums", stat.color)}>
+                {stat.value}
               </p>
-              <p className="text-xs text-muted-foreground">{s.label}</p>
+              <p className="text-xs text-muted-foreground">{stat.label}</p>
             </CardContent>
           </Card>
         ))}

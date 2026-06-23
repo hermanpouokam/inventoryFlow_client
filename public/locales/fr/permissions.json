@@ -73,6 +73,7 @@
   "/enterprise/users": "Utilisateurs de l'entreprise",
   "/reports/all": "Rapports",
   "/enterprise/settings": "Paramètres de l'entreprise",
+  "/enterprise/upload": "Ajouter des données",
   "/buy/new": "Nouvel achat",
   "/buy/in_progress": "Achat en cours",
   "/buy/roadmap": "Feuille de route d'achat",

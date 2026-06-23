@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import {
@@ -22,10 +20,12 @@ const ThemeContext = createContext<{
   userMode: UserMode;
   resolvedMode: ResolvedMode;
   changeMode: (mode: UserMode) => void;
+  previewMode: (mode: ResolvedMode | null) => void;
 }>({
   userMode: 'system',
   resolvedMode: 'light',
   changeMode: () => { },
+  previewMode: () => { },
 });
 
 export const useThemeMode = () => useContext(ThemeContext);
@@ -49,7 +49,10 @@ export default function ThemeProviderClient({
   const [resolvedMode, setResolvedMode] =
     useState<ResolvedMode>('light');
 
-  // Resolve mode
+  const [override, setOverride] = useState<ResolvedMode | null>(null);
+
+  const effectiveMode = override ?? resolvedMode;
+
   useEffect(() => {
     if (userMode === 'system') {
       setResolvedMode(getSystemMode());
@@ -58,7 +61,6 @@ export default function ThemeProviderClient({
     }
   }, [userMode]);
 
-  // Listen system change ONLY if system mode
   useEffect(() => {
     if (userMode !== 'system') return;
 
@@ -71,19 +73,18 @@ export default function ThemeProviderClient({
     return () => media.removeEventListener('change', listener);
   }, [userMode]);
 
-  // Sync Tailwind
   useEffect(() => {
     document.documentElement.classList.toggle(
       'dark',
-      resolvedMode === 'dark'
+      effectiveMode === 'dark'
     );
-  }, [resolvedMode]);
+  }, [effectiveMode]);
 
   const theme = useMemo(
     () =>
       createTheme({
         palette: {
-          mode: resolvedMode,
+          mode: effectiveMode,
 
           primary: {
             main: `hsl(var(--primary))`,
@@ -96,7 +97,7 @@ export default function ThemeProviderClient({
           background: {
             default: `hsl(var(--background))`,
             paper:
-              resolvedMode === "dark"
+              effectiveMode === "dark"
                 ? `hsl(var(--background))`
                 : `hsl(var(--card))`,
           },
@@ -118,7 +119,7 @@ export default function ThemeProviderClient({
                     backdropFilter: "blur(5px)",
                     WebkitBackdropFilter: "blur(5px)",
                     backgroundColor:
-                      resolvedMode === "dark"
+                      effectiveMode === "dark"
                         ? "rgba(0,0,0,0.4)"
                         : "rgba(0,0,0,0.3)",
                   },
@@ -128,8 +129,8 @@ export default function ThemeProviderClient({
             styleOverrides: {
               paper: {
                 backgroundColor:
-                  resolvedMode === "dark"
-                    ? "hsl(var(--background))"
+                  effectiveMode === "dark"
+                    ? "#212121"
                     : "hsl(var(--card))",
                 backgroundImage: "none",
               },
@@ -140,8 +141,8 @@ export default function ThemeProviderClient({
             styleOverrides: {
               paper: {
                 backgroundColor:
-                  resolvedMode === "dark"
-                    ? "hsl(var(--background))"
+                  effectiveMode === "dark"
+                    ? "#212121"
                     : "hsl(var(--card))",
                 backgroundImage: "none",
               },
@@ -152,8 +153,8 @@ export default function ThemeProviderClient({
             styleOverrides: {
               paper: {
                 backgroundColor:
-                  resolvedMode === "dark"
-                    ? "hsl(var(--background))"
+                  effectiveMode === "dark"
+                    ? "#212121"
                     : "hsl(var(--card))",
                 backgroundImage: "none",
               },
@@ -210,8 +211,8 @@ export default function ThemeProviderClient({
             styleOverrides: {
               paper: {
                 backgroundColor:
-                  resolvedMode === "dark"
-                    ? "hsl(var(--background))"
+                  effectiveMode === "dark"
+                    ? "#212121"
                     : "hsl(var(--card))",
               },
               option: {
@@ -239,7 +240,7 @@ export default function ThemeProviderClient({
           },
         },
       }),
-    [resolvedMode]
+    [effectiveMode]
   );
 
   const changeMode = async (mode: UserMode) => {
@@ -255,9 +256,18 @@ export default function ThemeProviderClient({
     });
   };
 
+  const previewMode = (mode: ResolvedMode | null) => {
+    setOverride(mode);
+  };
+
   return (
     <ThemeContext.Provider
-      value={{ userMode, resolvedMode, changeMode }}
+      value={{
+        userMode,
+        resolvedMode: effectiveMode,
+        changeMode,
+        previewMode,
+      }}
     >
       <ThemeProvider theme={theme}>
         <CssBaseline />

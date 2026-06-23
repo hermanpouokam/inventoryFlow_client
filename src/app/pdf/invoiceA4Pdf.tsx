@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import i18n from "i18next";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import { formatteCurrency } from "../(admin)/stock/functions";
@@ -6,6 +6,7 @@ import Barcode from "react-barcode";
 import JsBarcode from "jsbarcode";
 import { Image } from "@react-pdf/renderer";
 import { useTranslation } from "react-i18next";
+import QRCode from "qrcode"
 
 const styles = StyleSheet.create({
   page: {
@@ -80,9 +81,33 @@ const generateBarcodeBase64 = (value: string) => {
   return canvas.toDataURL("image/png");
 };
 
+
+export const generateQRCodeBase64 = async (salesPointId: number | undefined): Promise<string | null> => {
+  if (!salesPointId) return null
+  try {
+    // URL vers la page publique de plainte
+    const url = `${window.location.origin}/complaints/${salesPointId}`
+    // qrcode génère directement un dataURL png
+    const dataUrl = await QRCode.toDataURL(url, {
+      width: 120,
+      margin: 1,
+      color: { dark: "#1e293b", light: "#ffffff" },
+    })
+    return dataUrl
+  } catch {
+    return null
+  }
+}
+
+
 const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
 
   const { t } = useTranslation('common');
+  const [qrImage, setQrImage] = useState<string | null>(null)
+
+  useEffect(() => {
+    generateQRCodeBase64(bill?.sales_point_details?.id).then(setQrImage)
+  }, [bill?.sales_point_details?.id])
 
   const barcodeImage = generateBarcodeBase64(
     bill?.bill_number ?? "000000"
@@ -317,16 +342,27 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
             styles.tableRow,
             {
               justifyContent: "space-between",
-              alignItems: "center",
+              alignItems: "flex-end",
               marginTop: 100,
             },
           ]}
         >
-          <Text style={styles.footer}></Text>
-          <Text style={styles.footer}>
-            {"\u00a9 2025 InventoryFlow by Interact | "}{t("pdf.all_rights_reserved")}
-          </Text>
-          <Text style={styles.footer}>{new Date().toLocaleString()}</Text>
+          {/* Copyright à gauche */}
+          <View>
+            <Text style={styles.footer}>
+              {new Date().toLocaleString()} {`\u00a9 ${new Date().getFullYear()} InventoryFlow by Interact | `}{t("pdf.all_rights_reserved")}
+            </Text>
+          </View>
+
+          {/* QR Code + label à droite */}
+          {qrImage && (
+            <View style={{ alignItems: "center" }}>
+              <Image src={qrImage} style={{ width: 45, height: 45 }} />
+              <Text style={[styles.footer, { marginTop: 3, fontSize: 6 }]}>
+                Faites une remarque
+              </Text>
+            </View>
+          )}
         </View>
       </Page>
     </Document>

@@ -10,18 +10,22 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Upload } from "lucide-react";
+import { AlertCircle, CheckCircle, Upload } from "lucide-react";
 import type { SettingField } from "@/lib/settings-config";
 import { useTranslation } from "react-i18next";
+import { PhoneInput } from "../phoneInput";
+import { CountryCode } from "libphonenumber-js/types";
 
 interface SettingsFieldProps {
     field: SettingField;
     value: string | number | boolean;
     onChange: (id: string, value: string | number | boolean) => void;
     isModified: boolean;
+    extraValues?: Record<string, string | number | boolean>;
+    onSendVerification?: () => void;
 }
 
-export function SettingsField({ field, value, onChange, isModified }: SettingsFieldProps) {
+export function SettingsField({ field, value, onChange, isModified, extraValues, onSendVerification }: SettingsFieldProps) {
     const [imagePreview, setImagePreview] = useState<string | null>(
         field.type === "image" && typeof value === "string" && value ? value : null
     );
@@ -39,10 +43,11 @@ export function SettingsField({ field, value, onChange, isModified }: SettingsFi
         }
     };
     const { t } = useTranslation('common')
+    const { t: tAuth } = useTranslation('auth')
 
     return (
         <div className={`group relative flex flex-col gap-2 rounded-xl border p-4 transition-all duration-200 ${isModified
-            ? "border-primary/30 bg-primary/[0.02] shadow-sm"
+            ? "border-primary/50 bg-primary/[0.02] shadow-sm"
             : "border-border bg-card hover:border-border/80"
             }`}>
             {/* top row: label + badges */}
@@ -53,11 +58,11 @@ export function SettingsField({ field, value, onChange, isModified }: SettingsFi
                 {field.required && (
                     <span className="text-xs text-destructive">*</span>
                 )}
-                {field.important && (
+                {/* {field.important && (
                     <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
                         {t("important")}
                     </Badge>
-                )}
+                )} */}
                 {isModified && (
                     <span className="ml-auto inline-flex h-2 w-2 rounded-full bg-primary animate-pulse" />
                 )}
@@ -69,25 +74,58 @@ export function SettingsField({ field, value, onChange, isModified }: SettingsFi
 
             {/* field rendering */}
             {field.type === "string" && (
-                <Input
-                    id={field.id}
-                    value={value as string}
-                    placeholder={field.placeholder ? t(field.placeholder) : undefined}
-                    onChange={(e) => onChange(field.id, e.target.value)}
-                    maxLength={120}
-                    className="bg-background max-w-xs"
-                />
+                <div className="flex flex-col gap-1.5">
+                    <Input
+                        id={field.id}
+                        value={value as string}
+                        placeholder={field.placeholder ? t(field.placeholder) : undefined}
+                        onChange={(e) => onChange(field.id, e.target.value)}
+                        maxLength={120}
+                        className="bg-background max-w-xs"
+                    />
+                    {/* Badge vérification email */}
+                    {field.id === "user_email" && (
+                        <div className="flex items-center gap-2">
+                            {extraValues?.user_email_verified ? (
+                                <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
+                                    <CheckCircle className="w-3.5 h-3.5" />
+                                    {t("settings.email_verified")}
+                                </span>
+                            ) : (
+                                <div className="flex items-center gap-2">
+                                    <span className="inline-flex items-center gap-1 text-xs text-amber-500 font-medium">
+                                        <AlertCircle className="w-3.5 h-3.5" />
+                                        {t("settings.email_not_verified")}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        onClick={() => onSendVerification?.()}
+                                        className="text-xs text-primary underline underline-offset-2 hover:opacity-80"
+                                    >
+                                        {t("settings.send_verification")}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             )}
 
-            {field.type === "number" && (
-                <Input
-                    id={field.id}
-                    type="number"
-                    value={value as number}
-                    placeholder={field.placeholder ? t(field.placeholder) : undefined}
-                    onChange={(e) => onChange(field.id, Number(e.target.value))}
-                    className="bg-background max-w-[200px]"
-                />
+            {(field.type === "number") && (
+                <div key={field.id} className="max-w-xs">
+                    <PhoneInput
+                        label={tAuth("phone number")}
+                        name={field.id}
+                        defaultCountry={(typeof value === "string" ? value.split("|")[0] : "CI") as unknown as CountryCode || "CI"}
+                        value={typeof value === "string" ? value.split("|")[1] || "" : ""}
+                        required
+                        onChange={(val) => {
+                            if (val?.isValid) {
+                                onChange(field.id, `${val.country}|${val.nationalNumber}`);
+                            }
+                        }}
+                    />
+                </div>
             )}
 
             {field.type === "boolean" && (

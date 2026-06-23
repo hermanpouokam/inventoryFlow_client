@@ -1,4 +1,3 @@
-// redux/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import clientDataReducer from "./customerBillSlicer";
 import clientCatReducer from "./clientCatSlicer";
@@ -19,6 +18,7 @@ import inventoriesReducer from "./inventory";
 import packagingInventoriesReducer from "./packagingInventory";
 import taxesReducer from "./taxesSlicer";
 import additionalFeesReducer from "./additionalFeesSlicer";
+import usersReducer from "./usersSlicer";
 
 const store = configureStore({
   reducer: {
@@ -41,6 +41,7 @@ const store = configureStore({
     packagingInventories: packagingInventoriesReducer,
     taxes: taxesReducer,
     additionalFees: additionalFeesReducer,
+    users: usersReducer,
   },
 });
 

@@ -1,31 +1,33 @@
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-export default function NotFound() {
+import Image from "next/image";
+import { useTranslation } from "react-i18next";
+
+export default function Unauthorized() {
+  const { t } = useTranslation("common");
+
   return (
-    <div className="w-full place-items-center  px-2 sm:px-0">
+    <div className="w-full place-items-center px-2 sm:px-0">
       <div className="flex-col justify-center items-center min-h-screen max-w-lg">
-        <Image alt="404 image" src={"/401.svg"} width={450} height={550} />
+        <Image alt={t("pages.unauthorized.image_alt")} src="/401.svg" width={450} height={550} />
         <h2 className="text-center text-xl sm:text-3xl uppercase font-bold">
-          Accès refusé{" "}
+          {t("pages.unauthorized.title")}
         </h2>
         <h5 className="text-muted-foreground text-center text-md font-normal">
-          {`Vous essayez d'accéder à une page non autorisée. revenez en
-          arrière ou retournez a la page d'accueil pour continuer votre
-          navigation. `}{" "}
+          {t("pages.unauthorized.description")}
         </h5>
         <div className="flex items-center justify-evenly gap-2 mt-10">
           <a
             href="/dashboard"
             className="font-normal text-md w-1/2 py-1 text-center rounded bg-violet-600 text-white"
           >
-            Revenir en arriere
+            {t("pages.actions.back")}
           </a>
           <a
             href="/dashboard"
             className="font-normal text-md w-1/2 py-1 text-center rounded border border-violet-600 text-violet-600 hover:bg-violet-600 hover:text-white transition"
           >
-            {`Retourner a la page d'accueil`}
+            {t("pages.actions.home")}
           </a>
         </div>
       </div>

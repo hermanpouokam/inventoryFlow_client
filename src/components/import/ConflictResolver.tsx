@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GitMerge, SkipForward, ChevronDown, ChevronUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { ConflictItem } from "@/lib/types";
@@ -18,6 +19,7 @@ export function ConflictResolver({
   onResolve,
   resolvedSet,
 }: ConflictResolverProps) {
+  const { t } = useTranslation("common");
   const [expanded, setExpanded] = useState<number | null>(
     conflicts[0]?.row_index ?? null
   );
@@ -31,10 +33,10 @@ export function ConflictResolver({
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Conflits à résoudre
+          {t("import.conflicts.title")}
         </p>
         <Badge variant="warning">
-          {pending.length} en attente
+          {t("import.conflicts.pending", { count: pending.length })}
         </Badge>
       </div>
 
@@ -53,7 +55,6 @@ export function ConflictResolver({
                   : "border-warning/30 bg-warning/5"
               )}
             >
-              {/* Conflict header */}
               <button
                 className="flex w-full items-center justify-between p-3 text-left"
                 onClick={() => setExpanded(isOpen ? null : conflict.row_index)}
@@ -64,11 +65,9 @@ export function ConflictResolver({
                     className={isResolved ? "text-muted-foreground" : "text-warning"}
                   />
                   <span className="text-sm font-medium">
-                    Ligne {conflict.row_index} — {conflict.existing_name}
+                    {t("import.conflicts.row", { row: conflict.row_index, name: conflict.existing_name })}
                   </span>
-                  {isResolved && (
-                    <Badge variant="outline">Résolu</Badge>
-                  )}
+                  {isResolved && <Badge variant="outline">{t("import.conflicts.resolved")}</Badge>}
                 </div>
                 {isOpen ? (
                   <ChevronUp size={13} className="text-muted-foreground" />
@@ -77,22 +76,20 @@ export function ConflictResolver({
                 )}
               </button>
 
-              {/* Expanded */}
               {isOpen && (
                 <div className="border-t border-border px-3 pb-3 pt-3 space-y-3">
-                  {/* Row data table */}
                   <div className="overflow-x-auto rounded-lg border border-border">
                     <table className="w-full text-xs">
                       <thead>
                         <tr className="border-b border-border bg-muted/60">
                           <th className="px-3 py-2 text-left font-medium text-muted-foreground">
-                            Champ
+                            {t("import.conflicts.field")}
                           </th>
                           <th className="px-3 py-2 text-left font-medium text-muted-foreground">
-                            Nouvelle valeur
+                            {t("import.conflicts.new_value")}
                           </th>
                           <th className="px-3 py-2 text-left font-medium text-muted-foreground">
-                            Existant (ID: {conflict.existing_id})
+                            {t("import.conflicts.existing", { id: conflict.existing_id })}
                           </th>
                         </tr>
                       </thead>
@@ -104,7 +101,7 @@ export function ConflictResolver({
                             </td>
                             <td className="px-3 py-2 text-foreground">{v}</td>
                             <td className="px-3 py-2 text-muted-foreground">
-                              {k === "name" ? conflict.existing_name : "—"}
+                              {k === "name" ? conflict.existing_name : "-"}
                             </td>
                           </tr>
                         ))}
@@ -112,7 +109,6 @@ export function ConflictResolver({
                     </table>
                   </div>
 
-                  {/* Action buttons */}
                   {!isResolved && (
                     <div className="flex gap-2">
                       <Button
@@ -121,7 +117,7 @@ export function ConflictResolver({
                         className="flex-1"
                       >
                         <GitMerge size={13} />
-                        Remplacer l'existant
+                        {t("import.conflicts.replace_existing")}
                       </Button>
                       <Button
                         variant="outline"
@@ -130,7 +126,7 @@ export function ConflictResolver({
                         className="flex-1"
                       >
                         <SkipForward size={13} />
-                        Ignorer cette ligne
+                        {t("import.conflicts.skip_row")}
                       </Button>
                     </div>
                   )}
@@ -143,8 +139,7 @@ export function ConflictResolver({
 
       {resolved.length > 0 && (
         <p className="text-xs text-muted-foreground text-center">
-          {resolved.length} conflit{resolved.length > 1 ? "s" : ""} résolu
-          {resolved.length > 1 ? "s" : ""}
+          {t(resolved.length > 1 ? "import.conflicts.resolved_count_plural" : "import.conflicts.resolved_count", { count: resolved.length })}
         </p>
       )}
     </div>

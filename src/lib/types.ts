@@ -56,8 +56,7 @@ export interface ImportJob {
   created_at: string | null;
   updated_at: string | null;
   timeline?: TimelineStep[];
-  preflight_report?: PreflightReport | null; 
-
+  preflight_report?: PreflightReport | null;
 }
 
 export interface ProgressEvent {
@@ -72,42 +71,37 @@ export interface ProgressEvent {
   error?: string;
 }
 
-/** Réponse de POST /api/import/presigned-url/ */
 export interface PresignedUrlResponse {
   upload_url: string;
   fields: Record<string, string>;
   s3_key: string;
-  sales_point_id: number; // renvoyé par le backend pour confirmation
+  sales_point_id: number;
 }
 
-/** Point de vente — utilisé par l'admin pour choisir la destination */
 export interface SalesPoint {
   id: number;
   name: string;
   address?: string | null;
 }
 
-/** Réponse de GET /api/import/sales-points/ */
 export type SalesPointsResponse = SalesPoint[];
 
-/** Réponse de POST /api/import/validate-columns/ */
 export interface ColumnValidationResponse {
   valid: boolean;
   errors: string[];
   expected_columns: Array<{ name: string; label: string; required: boolean }>;
 }
 
-/** user_type exposé par /api/auth/me/ */
 export type UserType = "admin" | "manager" | "employee";
 
-export const DATA_TYPE_LABELS: Record<DataType, string> = {
-  category: "Catégories",
-  client_category: "Catégories clients",
-  supplier: "Fournisseurs",
-  packaging: "Emballages",
-  client: "Clients",
-  product: "Produits",
-  product_variant: "Variantes produits",
+export const DATA_TYPE_LABEL_KEYS: Record<DataType, string> = {
+  category: "import.data_types.category.label",
+  client_category: "import.data_types.client_category.label",
+  supplier: "import.data_types.supplier.label",
+  packaging: "import.data_types.packaging.label",
+  client: "import.data_types.client.label",
+  product: "import.data_types.product.label",
+  product_variant: "import.data_types.product_variant.label",
 };
 
 export const DATA_TYPE_ICONS: Record<DataType, string> = {
@@ -120,12 +114,12 @@ export const DATA_TYPE_ICONS: Record<DataType, string> = {
   product_variant: "layers",
 };
 
-export const DATA_TYPE_DESCRIPTIONS: Record<DataType, string> = {
-  category: "Catégories de produits (ex: Boissons, Alimentaire)",
-  client_category: "Types de clients (ex: Grossiste, Détaillant)",
-  supplier: "Fournisseurs et leurs coordonnées",
-  packaging: "Emballages avec prix et quantités",
-  client: "Clients avec contacts et catégories",
-  product: "Catalogue produits avec prix et stocks",
-  product_variant: "Variantes de produits existants",
+export const DATA_TYPE_DESCRIPTION_KEYS: Record<DataType, string> = {
+  category: "import.data_types.category.description",
+  client_category: "import.data_types.client_category.description",
+  supplier: "import.data_types.supplier.description",
+  packaging: "import.data_types.packaging.description",
+  client: "import.data_types.client.description",
+  product: "import.data_types.product.description",
+  product_variant: "import.data_types.product_variant.description",
 };

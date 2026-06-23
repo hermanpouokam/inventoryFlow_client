@@ -8,7 +8,7 @@ export default function EmailVerificationSuccess() {
 
   const initialTime = 5;
   const onTimerEnd = () => {
-    window.location.assign("/settings/account");
+    window.location.assign("/settings");
   };
   const { timeLeft } = useTimer({
     initialTime,

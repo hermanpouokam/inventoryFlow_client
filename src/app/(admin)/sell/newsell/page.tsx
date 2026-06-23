@@ -529,6 +529,7 @@ export default function Page() {
   };
 
   const handleAddData = () => {
+    if (!product) return
     setData((prev) => {
       return [
         ...prev,
@@ -792,7 +793,7 @@ export default function Page() {
               required
               autoComplete="off"
               size="small"
-              value={formatteCurrency(Number(product?.price)) ?? ""}
+              value={product ? formatteCurrency(Number(product?.price)) : ""}
               id="outlined-basic"
               label={t("newsell.purchase_price")}
               variant="outlined"

@@ -3,6 +3,7 @@ import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import moment from "moment";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
+import { formatNumber } from "../(admin)/stock/functions";
 const styles = StyleSheet.create({
   page: {
     padding: 20,
@@ -113,6 +114,7 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
 }) => {
 
   const { t } = useTranslation('common');
+  console.log(groupedData)
 
   return (
     <Document>
@@ -203,7 +205,9 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
                         <View
                           style={[
                             styles.tableRow,
-                            { borderBottom: index == 0 ? 0 : 1 },
+                            {
+                              width: '5%'
+                            }
                           ]}
                           key={index}
                         >
@@ -223,13 +227,35 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
                             style={[
                               styles.tableCell,
                               {
-                                borderRight: 0,
                                 textAlign: "right",
                                 width: "15%",
                               },
                             ]}
                           >
-                            {product?.quantity ?? 0}
+                            {formatNumber(product?.quantity) ?? 0}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.tableCell,
+                              {
+                                textAlign: "right",
+                                width: "15%",
+                              },
+                            ]}
+                          >
+                            {formatNumber(Number(product.price)) ?? 0}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.tableCell,
+                              {
+                                textAlign: "right",
+                                width: "15%",
+                                borderRight: 0
+                              },
+                            ]}
+                          >
+                            {formatNumber(Number(product?.quantity) * Number(product.price))}
                           </Text>
                         </View>
                       )
@@ -253,15 +279,39 @@ const BuyRoadmap: React.FC<GroupedDataPDFProps> = ({
                         style={[
                           styles.tableCell,
                           {
+                            textAlign: "right",
+                            width: "14.5%",
+                          },
+                        ]}
+                      >
+                        {formatNumber((Object.values(catValue as { [k: string]: { quantity: number } })).reduce((acc: number, curr) => {
+                          return acc + (curr.quantity ?? 0);
+                        }, 0))}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.tableCell,
+                          {
+                            textAlign: "center",
+                            width: "14.5%",
+                          },
+                        ]}
+                      >
+                        -
+                      </Text>
+                      <Text
+                        style={[
+                          styles.tableCell,
+                          {
                             borderRight: 0,
                             textAlign: "right",
                             width: "14.5%",
                           },
                         ]}
                       >
-                        {(Object.values(catValue as { [k: string]: { quantity: number } })).reduce((acc: number, curr) => {
-                          return acc + (curr.quantity ?? 0);
-                        }, 0)}
+                        {formatNumber((Object.values(catValue as { [k: string]: { quantity: number } })).reduce((acc: number, curr) => {
+                          return acc + ((curr.quantity * curr.price) ?? 0);
+                        }, 0))}
                       </Text>
                     </View>
                   </>
