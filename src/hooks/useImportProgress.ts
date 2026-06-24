@@ -51,6 +51,8 @@ export function useImportProgress({
         const event: ProgressEvent & { preflightReport?: PreflightReport } =
           JSON.parse(e.data);
 
+        if (event.type === 'ping') return;
+        
         setJob((prev) => ({
           id: event.jobId,
           data_type: prev?.data_type ?? ("" as ImportJob["data_type"]),
