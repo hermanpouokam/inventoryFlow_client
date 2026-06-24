@@ -60,8 +60,9 @@ export function useImportProgress({
           sales_point_name: prev?.sales_point_name ?? null,
           created_at: prev?.created_at ?? null,
           updated_at: prev?.updated_at ?? null,
-          errors: prev?.errors ?? [],
-          pending_conflicts: prev?.pending_conflicts ?? [],
+          // errors et pending_conflicts sont maintenant inclus dans chaque payload WS
+          errors: event.errors ?? prev?.errors ?? [],
+          pending_conflicts: event.pendingConflicts ?? prev?.pending_conflicts ?? 0,
           status: event.status,
           progress: event.progress ?? prev?.progress ?? 0,
           total_rows: event.totalRecords ?? prev?.total_rows ?? 0,

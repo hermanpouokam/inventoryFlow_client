@@ -122,7 +122,7 @@ export function LiveProcessingPanel({
                     : "outline"
             }
           >
-            {/* <span className={cn("h-1.5 w-1.5 rounded-full", cfg.dot)} /> */}
+            <span className={cn("h-1.5 w-1.5 rounded-full", cfg.dot)} />
             {t(cfg?.labelKey)}
           </Badge>
         </div>

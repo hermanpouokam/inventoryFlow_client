@@ -160,8 +160,9 @@ export function getTemplateUrl(dataType: DataType): string {
 }
 
 export function createImportWebSocket(jobId: string): WebSocket {
-  const wsBase =
-    process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8080";
+  // NEXT_PUBLIC_WS_URL est la seule source de vérité pour l'URL WebSocket.
+  // WS_URL (ws.js) n'est pas importé ici — on lit directement la variable d'env.
+  const wsBase = process.env.NEXT_PUBLIC_WS_URL ?? "wss://api.inventoryflow.site";
   const token = getAccessToken();
   const url = token
     ? `${wsBase}/ws/import/${jobId}/?token=${token}`
