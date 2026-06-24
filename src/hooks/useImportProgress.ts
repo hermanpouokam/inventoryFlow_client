@@ -52,7 +52,7 @@ export function useImportProgress({
           JSON.parse(e.data);
 
         if (event.type === 'ping') return;
-        
+
         setJob((prev) => ({
           id: event.jobId,
           data_type: prev?.data_type ?? ("" as ImportJob["data_type"]),
@@ -159,9 +159,17 @@ export function useImportProgress({
   const sendPreflightDecision = useCallback(
     async (decision: "auto_create" | "cancel") => {
       if (!jobIdRef.current) return;
+
+      // Réinitialiser le verrou pour permettre les mises à jour
+      stoppedRef.current = false;
+      retryRef.current = 0;
+
       await api.post(`/import/${jobIdRef.current}/preflight-decision/`, { decision });
+
+      // Reconnecter immédiatement le WS pour capter les messages de resume_import_job
+      connect(jobIdRef.current);
     },
-    []
+    [connect]  // ← ajouter connect comme dépendance
   );
 
   return { job, connected, preflightReport, sendResolveConflict, sendPreflightDecision };
