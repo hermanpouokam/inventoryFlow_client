@@ -183,7 +183,8 @@
     "deactivate": "Désactiver",
     "title": "Actions",
     "edit": "Modifier",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "packaging_return_single": "Retour un emballage"
   },
   "buy": "Payer",
   "debt payments list": "Liste de payment de dette {{bill_number}}",
@@ -348,7 +349,8 @@
       "livreur": "Livreur"
     },
     "anomalies_title": "Anomalies de ventes détectées",
-    "last_14_days": "14 derniers jours"
+    "last_14_days": "14 derniers jours",
+    "title": "Tableau de bord"
   },
   "newsell": {
     "loading": "Veuillez patienter...",
@@ -658,7 +660,8 @@
       "duplicate_product": "Cet article existe déjà",
       "network": "Une erreur inattendue est survenue. Vérifiez votre connexion.",
       "receive": "Une erreur est survenue pendant la réception.",
-      "delete": "Une erreur est survenue pendant la suppression."
+      "delete": "Une erreur est survenue pendant la suppression.",
+      "check_warnings": "Impossible de vérifier les avertissements de cette commande."
     },
     "success": {
       "created": "Facture créée avec succès",
@@ -831,7 +834,16 @@
   "export_pdf": "Exporter en PDF",
   "payment done": "Paiement effectué",
   "date_range": {
-    "select_placeholder": "Sélectionner une période"
+    "select_placeholder": "Sélectionner une période",
+    "presets": {
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "this_week": "Cette semaine",
+      "this_month": "Ce mois-ci",
+      "last_month": "Le mois dernier",
+      "this_year": "Cette année",
+      "last_year": "L'année dernière"
+    }
   },
   "select": {
     "placeholder": "Sélectionner",
@@ -931,7 +943,8 @@
     "made_by": "Réalisé par",
     "taxes": "Taxes",
     "total": "Total",
-    "email": "Email"
+    "email": "Email",
+    "remark_prompt": "Faites une remarque"
   },
   "notifications": {
     "title": "Notifications",
@@ -991,7 +1004,17 @@
     "invalid_new_password": "Le nouveau mot de passe ne respecte pas les critères requis",
     "retry_in_hours": "Réessayez dans {{hours}} heures.",
     "retry_in_hour": "Réessayez dans {{hours}} heure.",
-    "retry_in_days": "Réessayez dans {{days}} jours."
+    "retry_in_days": "Réessayez dans {{days}} jours.",
+    "load_error": "Impossible de charger les paramètres",
+    "password_invalid": "Le nouveau mot de passe ne respecte pas les critères requis.",
+    "email_pending_title": "Vérification de l'email requise",
+    "email_pending_description": "Un email de vérification a été envoyé. Validez-le pour finaliser la modification.",
+    "verification_sent": "Email de vérification envoyé",
+    "username_code_sent": "Code de changement de nom d'utilisateur envoyé",
+    "username_changed": "Nom d'utilisateur modifié",
+    "change_username": "Modifier le nom d'utilisateur",
+    "new_username": "Nouveau nom d'utilisateur",
+    "username_code_hint": "Entrez le code envoyé à votre adresse email pour confirmer le changement."
   },
   "landing": {
     "nav": {
@@ -1165,7 +1188,10 @@
         "title": "Besoin d'aide ",
         "description": "Notre équipe est disponible pour répondre à toutes vos questions et vous accompagner.",
         "quote": "L'équipe support est incroyablement réactive. Réponse en moins de 2h !",
-        "cta": "Contacter le support"
+        "cta": "Contacter le support",
+        "avatar_initial": "M",
+        "person_name": "Marie L.",
+        "person_company": "· ModaBoutique"
       }
     },
     "cta": {
@@ -1193,7 +1219,8 @@
       "changelog": "Changelog",
       "blog": "Blog",
       "press": "Presse",
-      "terms": "CGU"
+      "terms": "CGU",
+      "newsletter_submit": "OK"
     },
     "social_proof": {
       "trusted_by": "Utilis? par +10 000 commerces en Afrique"
@@ -1220,7 +1247,8 @@
     "delete_supply_stock_return": "Vous allez supprimer dfinitivement cette facture. Tous les articles disponibles retourneront dans votre stock.",
     "confirm_receive_supply": "Voulez-vous vraiment rceptionner cette commande ",
     "packaging_return_invoice": "Retour emballage de la facture {{number}}",
-    "irreversible_warning": "Cette action est irrversible."
+    "irreversible_warning": "Cette action est irrversible.",
+    "packaging_return_single": "Retour emballage - Facture {{number}}"
   },
   "deliverer": {
     "select": "Sélectionner un livreur",
@@ -1239,7 +1267,8 @@
   "packaging_return": {
     "success": "Retour emballage effectu avec succès",
     "cash_note": "NB: le montant des emballages retourns sera automatiquement dduit de la caisse et revers dans le solde du client.",
-    "items_intro": "Vous allez effectuer le retour des emballages suivants"
+    "items_intro": "Vous allez effectuer le retour des emballages suivants",
+    "select_single": "Sélectionnez l'emballage à retourner :"
   },
   "total": "Total",
   "sales_points": {
@@ -1622,7 +1651,13 @@
     "loading": "Connexion en cours",
     "submit": "Se connecter",
     "no_account": "Pas encore de compte ?",
-    "create_account": "Créer un compte"
+    "create_account": "Créer un compte",
+    "errors": {
+      "user_not_found": "Cet utilisateur n'existe pas.",
+      "incorrect_password": "Nom d'utilisateur ou mot de passe incorrect.",
+      "inactive_user": "Vous avez été désactivé(e). Veuillez contacter votre administrateur.",
+      "default": "Connexion impossible. Veuillez réessayer."
+    }
   },
   "checkout": {
     "payment_success": "Paiement réussi !",
@@ -2191,5 +2226,319 @@
       "desktop": "Bureau",
       "mobile": "Mobile"
     }
-  }
+  },
+  "landing_v2": {
+    "auto": {
+      "pourquoi": "Pourquoi",
+      "plateforme": "Plateforme",
+      "import": "Import",
+      "dashboard": "Dashboard",
+      "18_vs_hier": "+18% vs hier",
+      "produits_a_risque": "Produits à risque",
+      "a_commander_avant_vendredi": "à commander avant vendredi",
+      "ecart_de_caisse": "Écart de caisse",
+      "controle_normal": "contrôle normal",
+      "stock_faible": "Stock faible",
+      "akwa_bonaberi": "Akwa + Bonabéri",
+      "caisse_cloturee": "Caisse clôturée",
+      "reapprovisionnement": "Réapprovisionnement",
+      "commande_prete": "commande prête",
+      "acacia_market": "Acacia Market",
+      "kora_depot": "Kora Depot",
+      "mboa_retail": "Mboa Retail",
+      "pharmaplus": "PharmaPlus",
+      "urbanstock": "UrbanStock",
+      "pour_comprendre_le_jour": "pour comprendre le jour",
+      "ventes_stock_caisse": "ventes, stock, caisse",
+      "dans_le_pilotage_quotidien": "dans le pilotage quotidien",
+      "acces_cloud_securise": "acces cloud securise",
+      "vente_encaissee": "Vente encaissée",
+      "pos_akwa": "POS Akwa",
+      "stock_ajuste": "Stock ajusté",
+      "entrepot_bonaberi": "Entrepôt Bonabéri",
+      "caisse_rapprochee": "Caisse rapprochée",
+      "finance": "Finance",
+      "decision_suggeree": "Décision suggérée",
+      "ia_operationnelle": "IA opérationnelle",
+      "ruptures_invisibles": "Ruptures invisibles",
+      "quels_produits_necessitent_mon_attention": "Quels produits nécessitent mon attention ?",
+      "inventoryflow_remonte_les_seuils_critiques_a": "InventoryFlow remonte les seuils critiques avant que les ventes ne s'arrêtent.",
+      "caisse_difficile_a_suivre": "Caisse difficile à suivre",
+      "ou_va_mon_argent": "Où va mon argent ?",
+      "chaque_vente_depense_et_solde_client_est_rel": "Chaque vente, dépense et solde client est relié au point de vente concerné.",
+      "points_de_vente_disperses": "Points de vente dispersés",
+      "que_se_passe_t_il_dans_mon_entreprise_aujour": "Que se passe-t-il dans mon entreprise aujourd'hui ?",
+      "les_magasins_entrepots_et_equipes_remontent_": "Les magasins, entrepôts et équipes remontent dans une vue consolidée.",
+      "suivi_manuel_trop_lent": "Suivi manuel trop lent",
+      "combien_ai_je_vendu": "Combien ai-je vendu ?",
+      "pos_factures_retours_et_recus_mettent_a_jour": "POS, factures, retours et reçus mettent à jour les chiffres en temps réel.",
+      "vendre_vite_sans_perdre_la_trace": "Vendre vite, sans perdre la trace.",
+      "vente_rapide_scanner_code_barres_remises_rec": "Vente rapide, scanner code-barres, remises, reçus et historique complet restent synchronisés avec le stock.",
+      "pour_finaliser_une_vente_simple": "pour finaliser une vente simple",
+      "paiements_multiples": "Paiements multiples",
+      "retours_produit": "Retours produit",
+      "annulations_controlees": "Annulations contrôlées",
+      "savoir_quoi_commander_quand_et_pour_quel_poi": "Savoir quoi commander, quand et pour quel point.",
+      "entrees_sorties_ajustements_transferts_et_in": "Entrées, sorties, ajustements, transferts et inventaires physiques deviennent lisibles par décision.",
+      "produits_sous_seuil_aujourd_hui": "produits sous seuil aujourd'hui",
+      "mouvements_de_stock": "Mouvements de stock",
+      "transferts_entre_entrepots": "Transferts entre entrepôts",
+      "valorisation_du_stock": "Valorisation du stock",
+      "relier_les_ventes_les_depenses_et_la_tresore": "Relier les ventes, les dépenses et la trésorerie.",
+      "les_dirigeants_suivent_revenus_depenses_sold": "Les dirigeants suivent revenus, dépenses, soldes clients, dettes fournisseurs et résultats sans tableurs parallèles.",
+      "ecart_de_caisse_detecte": "écart de caisse détecté",
+      "journal_financier": "Journal financier",
+      "depenses_par_point": "Dépenses par point",
+      "credit_client": "Crédit client",
+      "equipes": "Équipes",
+      "donner_le_bon_niveau_d_acces_a_chaque_role": "Donner le bon niveau d'accès à chaque rôle.",
+      "vendeurs_managers_et_finance_travaillent_dan": "Vendeurs, managers et finance travaillent dans le même système avec permissions et historique d'activité.",
+      "roles_operationnels_prets": "rôles opérationnels prêts",
+      "permissions": "Permissions",
+      "comptes_employes": "Comptes employés",
+      "variantes": "Variantes",
+      "template_pret": "Template prêt",
+      "chaque_type_de_donnee_dispose_de_son_modele_": "Chaque type de donnée dispose de son modèle CSV pour éviter les colonnes improvisées.",
+      "csv_ou_xlsx": "CSV ou XLSX",
+      "les_equipes_deposent_un_fichier_jusqu_a_10_m": "Les équipes déposent un fichier jusqu'à 10 Mo, puis l'import est lancé sur le bon point de vente.",
+      "validation_avant_ecriture": "Validation avant écriture",
+      "colonnes_requises_valeurs_numeriques_et_lign": "Colonnes requises, valeurs numériques et lignes suspectes sont contrôlées avant la création.",
+      "conflits_maitrises": "Conflits maîtrisés",
+      "les_doublons_dependances_manquantes_et_erreu": "Les doublons, dépendances manquantes et erreurs de ligne sont résolus sans bloquer toute l'opération.",
+      "riz_premium_25kg": "Riz premium 25kg",
+      "huile_vegetale_5l": "Huile végétale 5L",
+      "cree": "créé",
+      "lait_concentre": "Lait concentré",
+      "savon_carton": "Savon carton",
+      "marge_estimee": "Marge estimée",
+      "commandes_ouvertes": "Commandes ouvertes",
+      "a_traiter": "à traiter",
+      "meilleur_magasin": "Meilleur magasin",
+      "produits_faibles": "Produits faibles",
+      "benefice_estime": "Bénéfice estimé",
+      "commandes_en_attente": "Commandes en attente",
+      "prevision_des_ventes": "Prévision des ventes",
+      "anticipez_les_pics_par_produit_par_magasin_e": "Anticipez les pics par produit, par magasin et par période avant de lancer vos achats.",
+      "alertes_de_rupture": "Alertes de rupture",
+      "reperez_les_produits_qui_vont_manquer_selon_": "Repérez les produits qui vont manquer selon la vitesse réelle des ventes.",
+      "reapprovisionnement_conseille": "Réapprovisionnement conseillé",
+      "transformez_les_seuils_ventes_et_delais_four": "Transformez les seuils, ventes et délais fournisseurs en listes d'achat concrètes.",
+      "anomalies_operationnelles": "Anomalies opérationnelles",
+      "detectez_ecarts_de_caisse_retours_suspects_e": "Détectez écarts de caisse, retours suspects et mouvements inhabituels sans fouiller les journaux.",
+      "avant_inventoryflow_nos_magasins_envoyaient_": "Avant InventoryFlow, nos magasins envoyaient leurs chiffres trop tard. Maintenant je vois les ruptures, la caisse et les ventes le même jour.",
+      "aissatou_k": "Aissatou K.",
+      "directrice_reseau_distribution_alimentaire": "Directrice réseau, distribution alimentaire",
+      "le_produit_parle_comme_un_outil_de_direction": "Le produit parle comme un outil de direction, pas comme un simple stock. Les managers savent quoi corriger avant la fermeture.",
+      "daniel_m": "Daniel M.",
+      "gerant_chaine_de_pharmacies": "Gérant, chaîne de pharmacies",
+      "la_valeur_est_dans_la_clarte_un_vendeur_peut": "La valeur est dans la clarté. Un vendeur peut encaisser, un responsable peut piloter, et la finance garde le contrôle.",
+      "nadia_t": "Nadia T.",
+      "responsable_operations_grossiste": "Responsable opérations, grossiste",
+      "fr_fr": "fr-FR",
+      "inventoryflow_home": "InventoryFlow home",
+      "douala": "Douala",
+      "yaounde": "Yaoundé",
+      "bafoussam": "Bafoussam",
+      "garoua": "Garoua",
+      "akwa": "Akwa",
+      "2_84m_fcfa": "2,84M FCFA",
+      "bonaberi": "Bonabéri",
+      "12_ruptures": "12 ruptures",
+      "24_commandes": "24 commandes",
+      "navigation_principale": "Navigation principale",
+      "connexion": "Connexion",
+      "chiffre_d_affaires_consolide": "Chiffre d'affaires consolidé",
+      "2_840_000_fcfa": "2 840 000 FCFA",
+      "pilotez_votre_activite_en_temps_reel": "Pilotez votre activité en temps réel.",
+      "ventes_inventaire_finances_et_equipes_reunis": "Ventes, inventaire, finances et équipes réunis dans une seule plateforme.",
+      "inventoryflow_aide_boutiques_pharmacies_gros": "InventoryFlow aide boutiques, pharmacies, grossistes, dépôts et réseaux de magasins à prendre de meilleures décisions chaque jour.",
+      "voir_la_demonstration": "Voir la démonstration",
+      "vente_rapide": "vente rapide",
+      "seuils_critiques": "seuils critiques",
+      "caisse_claire": "caisse claire",
+      "pense_pour_les_operations_reelles": "Pensé pour les opérations réelles",
+      "boutiques_supermarches_pharmacies_grossistes": "Boutiques, supermarchés, pharmacies, grossistes, distributeurs.",
+      "chaque_action_terrain_devient_un_signal_de_p": "Chaque action terrain devient un signal de pilotage.",
+      "quand_une_vente_est_encaissee_le_stock_la_ca": "Quand une vente est encaissée, le stock, la caisse, les alertes et les décisions se mettent à jour dans le même mouvement.",
+      "la_plupart_des_entreprises_ne_manquent_pas_d": "La plupart des entreprises ne manquent pas de données. Elles manquent de visibilité au bon moment.",
+      "inventoryflow_transforme_les_operations_quot": "InventoryFlow transforme les opérations quotidiennes en réponses métier lisibles, sans complexité inutile.",
+      "decision": "décision",
+      "une_architecture_pensee_pour_piloter_pas_seu": "Une architecture pensée pour piloter, pas seulement enregistrer.",
+      "chaque_module_repond_a_une_question_operatio": "Chaque module répond à une question opérationnelle. Moins d'écrans inutiles, plus de signaux qui aident à décider.",
+      "flux_quotidien": "Flux quotidien",
+      "recevoir": "Recevoir",
+      "achats_fournisseurs_entrepots": "achats, fournisseurs, entrepôts",
+      "vendre": "Vendre",
+      "pos_factures_paiements": "POS, factures, paiements",
+      "controler": "Contrôler",
+      "stock_caisse_equipes": "stock, caisse, équipes",
+      "decider": "Décider",
+      "rapports_alertes_ia": "rapports, alertes, IA",
+      "signal_cle": "Signal clé",
+      "import_de_donnees": "Import de données",
+      "products_june_xlsx_8_420_lignes": "products-june.xlsx - 8 420 lignes",
+      "8_420_lignes_7_8_mo": "8 420 lignes - 7,8 Mo",
+      "validation_en_direct": "Validation en direct",
+      "telecharger_template": "Télécharger template",
+      "deposer_fichier": "Déposer fichier",
+      "csv_ou_xlsx_10_mo_max": "CSV ou XLSX, 10 Mo max",
+      "valider_colonnes": "Valider colonnes",
+      "name_category_supplier_price": "name, category, supplier, price",
+      "resoudre_conflits": "Résoudre conflits",
+      "18_lignes_demandent_une_decision": "18 lignes demandent une décision",
+      "preflight_intelligent": "Préflight intelligent",
+      "les_categories_fournisseurs_ou_emballages_ma": "Les catégories, fournisseurs ou emballages manquants peuvent être détectés avant l'import complet.",
+      "demarrez_avec_vos_donnees_existantes_sans_re": "Démarrez avec vos données existantes, sans reprise manuelle.",
+      "inventoryflow_importe_les_fichiers_csv_et_xl": "InventoryFlow importe les fichiers CSV et XLSX que les entreprises utilisent déjà, puis les transforme en données propres pour le pilotage quotidien.",
+      "un_centre_de_controle_pour_savoir_quoi_corri": "Un centre de contrôle pour savoir quoi corriger aujourd'hui.",
+      "le_dashboard_priorise_chiffre_d_affaires_ben": "Le dashboard priorise chiffre d'affaires, bénéfice, produits faibles, commandes et alertes au lieu d'empiler des widgets.",
+      "lecture_en_moins_de_3_secondes": "Lecture en moins de 3 secondes",
+      "commander_les_produits_faibles_du_magasin_ak": "Commander les produits faibles du magasin Akwa avant vendredi pour éviter une rupture sur les meilleures ventes.",
+      "de_l_ia_utile_reliee_a_vos_ventes_stocks_et_": "De l'IA utile, reliée à vos ventes, stocks et finances.",
+      "pas_de_buzzwords_inventoryflow_transforme_le": "Pas de buzzwords. InventoryFlow transforme les données existantes en alertes, prévisions et recommandations exploitables.",
+      "resume_automatique_du_jour": "Résumé automatique du jour",
+      "les_ventes_progressent_a_akwa_mais_12_produi": "\"Les ventes progressent à Akwa, mais 12 produits à forte rotation seront sous seuil avant vendredi.\"",
+      "le_logiciel_doit_inspirer_confiance_avant_me": "Le logiciel doit inspirer confiance avant même la première formation.",
+      "inventoryflow_est_concu_pour_des_equipes_qui": "InventoryFlow est conçu pour des équipes qui veulent vendre, contrôler et décider sans se perdre dans la complexité.",
+      "prenez_le_controle_de_votre_activite": "Prenez le contrôle de votre activité.",
+      "commencez_avec_une_plateforme_qui_relie_vos_": "Commencez avec une plateforme qui relie vos ventes, votre inventaire, vos finances et vos équipes dès le premier jour.",
+      "creer_mon_compte": "Créer mon compte",
+      "acceder_au_dashboard": "Accéder au dashboard",
+      "mise_en_route_rapide": "Mise en route rapide",
+      "acces_par_roles": "Accès par rôles",
+      "donnees_en_temps_reel": "Données en temps réel",
+      "inventoryflow_plateforme_operationnelle_pour": "InventoryFlow. Plateforme opérationnelle pour entreprises africaines.",
+      "mailto_contact_inventoryflow_site": "mailto:contact@inventoryflow.site",
+      "contact_inventoryflow_site": "contact@inventoryflow.site",
+      "ai_short": "IA",
+      "live": "live",
+      "metric_12_products": "12 produits",
+      "metric_04_variance": "0,4% écart",
+      "metric_24_lines": "24 lignes",
+      "suffix_seconds": " sec",
+      "suffix_view": " vue",
+      "suffix_spreadsheet": " tableur",
+      "flow_minus_24_units": "-24 unités",
+      "flow_order": "Commander",
+      "pos_short": "POS",
+      "module_metric_8_sec": "8 sec",
+      "column_supplier_name": "supplier_name",
+      "column_category": "category",
+      "column_price": "price",
+      "column_quantity": "quantity",
+      "status_to_fix": "corriger",
+      "status_stable": "stable",
+      "done": "fait"
+    }
+  },
+  "complaints": {
+    "public": {
+      "validation_required": "Veuillez remplir votre code client et votre message.",
+      "image_upload_failed": "Échec de l'upload de l'image",
+      "generic_error": "Une erreur est survenue.",
+      "sales_point_not_found": "Point de vente introuvable",
+      "invalid_qr": "Le QR code scanné n'est plus valide.",
+      "success_title": "Plainte envoyée !",
+      "success_received_prefix": "Votre message a bien été reçu par",
+      "success_follow_up": "Notre équipe vous contactera dans les meilleurs délais.",
+      "intro": "Une expérience à signaler ? Décrivez-nous votre problème ci-dessous.",
+      "client_code_placeholder": "Ex : AB12XY",
+      "client_code_help": "Votre code client figure sur votre facture.",
+      "your_message": "Votre message",
+      "message_placeholder": "Décrivez votre problème en détail...",
+      "photos_label": "Photos (facultatif, max 2)",
+      "add_photo": "Ajouter photo",
+      "sending": "Envoi en cours...",
+      "submit": "Envoyer ma plainte"
+    },
+    "detail": {
+      "title": "Détail de la plainte",
+      "attached_photos": "Photos jointes",
+      "loading_images": "Chargement des images...",
+      "no_images": "Aucune image disponible",
+      "photo_alt": "Photo {{number}}"
+    },
+    "fields": {
+      "message": "Message",
+      "photos": "Photos",
+      "details": "Détails"
+    },
+    "stats": {
+      "total": "Total plaintes",
+      "with_photos": "Avec photos",
+      "sales_points": "Points de vente",
+      "sales_points_sub": "Concernés par des plaintes",
+      "unique_clients": "Clients uniques",
+      "unique_clients_sub": "Codes clients distincts"
+    },
+    "table": {
+      "photo": "photo",
+      "photos": "photos"
+    },
+    "actions": {
+      "view": "Voir"
+    },
+    "admin": {
+      "title": "Plaintes clients",
+      "count_one": "{{count}} plainte",
+      "count_other": "{{count}} plaintes",
+      "list_title": "Liste des plaintes",
+      "search_placeholder": "Rechercher par code client ou point de vente..."
+    }
+  },
+  "user_page_permissions": "Permissions de page de l'utilisateur",
+  "packagings": {
+    "details_title": "Détails d'emballage"
+  },
+  "auth_signup": {
+    "errors": {
+      "username_already_exist": "Ce nom d'utilisateur est déjà pris. Veuillez en choisir un autre.",
+      "email_already_exist": "Un compte avec cet email existe déjà.",
+      "default": "Inscription impossible. Veuillez réessayer."
+    }
+  },
+  "fields": {
+    "number": "numéro",
+    "taxpayer_number": "Numéro de contribuable"
+  },
+  "dates": {
+    "months": {
+      "january": "janvier",
+      "february": "février",
+      "march": "mars",
+      "april": "avril",
+      "may": "mai",
+      "june": "juin",
+      "july": "juillet",
+      "august": "août",
+      "september": "septembre",
+      "october": "octobre",
+      "november": "novembre",
+      "december": "décembre"
+    },
+    "weekdays": {
+      "monday": "lundi",
+      "tuesday": "mardi",
+      "wednesday": "mercredi",
+      "thursday": "jeudi",
+      "friday": "vendredi",
+      "saturday": "samedi",
+      "sunday": "dimanche"
+    }
+  },
+  "metadata": {
+    "root": {
+      "description": "Gestion d'inventaire multi-points de vente"
+    },
+    "landing": {
+      "title": "InventoryFlow - Pilotez votre activité en temps réel",
+      "description": "Ventes, inventaire, finances et équipes réunis dans une seule plateforme opérationnelle pour les entreprises africaines."
+    },
+    "auth": {
+      "signup_title": "InventoryFlow - Inscription",
+      "create_enterprise_title": "InventoryFlow - Créer votre entreprise",
+      "description": "Votre gestionnaire d'inventaire"
+    }
+  },
+  "please_wait": "Veuillez patienter"
 }

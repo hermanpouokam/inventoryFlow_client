@@ -16,7 +16,7 @@ export default function Signin() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const { t: tCommon } = useTranslation('common')
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -57,7 +57,7 @@ export default function Signin() {
       }
     } catch (error: any) {
       const code = error.response.data.code as keyof typeof userErrors;
-      setError(userErrors[code] as any);
+      setError(tCommon(userErrors[code] ?? "auth_signin.errors.default"));
       setLoading(false);
     } finally {
     }
@@ -71,7 +71,7 @@ export default function Signin() {
         <div className="text-center mb-10">
           <a href="/">
             <div className="inline-flex items-center justify-center  rounded-2xl mb-4  ">
-              <Image src={logo.src} alt="Logo Interact" width={150} height={32} />
+              <Image src={logo.src} alt={tCommon("settings_config.logo")} width={150} height={32} />
             </div>
           </a>
           <h1 className="text-2xl font-semibold tracking-tight">{tCommon("auth_signin.welcome")}</h1>

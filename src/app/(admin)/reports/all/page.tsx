@@ -129,7 +129,7 @@ function ComplaintDetailPanel({
             >
                 <div className="flex items-start justify-between px-6 py-5 border-b border-border shrink-0">
                     <div>
-                        <h2 className="text-base font-semibold text-foreground">Détail de la plainte</h2>
+                        <h2 className="text-base font-semibold text-foreground">{t('complaints.detail.title')}</h2>
                         <p className="text-xs text-muted-foreground mt-0.5">
                             {format(new Date(detail.created_at), 'dd MMMM yyyy à HH:mm', { locale: fr })}
                         </p>
@@ -150,14 +150,14 @@ function ComplaintDetailPanel({
                         <div className="rounded-xl border border-border bg-background/50 p-4">
                             <div className="flex items-center gap-1.5 text-muted-foreground mb-2">
                                 <User className="size-3.5" />
-                                <span className="text-[10px] font-semibold uppercase tracking-wider">Code client</span>
+                                <span className="text-[10px] font-semibold uppercase tracking-wider">{t('customer_code')}</span>
                             </div>
                             <p className="text-sm font-bold text-foreground font-mono">{detail.client_code}</p>
                         </div>
                         <div className="rounded-xl border border-border bg-background/50 p-4">
                             <div className="flex items-center gap-1.5 text-muted-foreground mb-2">
                                 <MapPin className="size-3.5" />
-                                <span className="text-[10px] font-semibold uppercase tracking-wider">Point de vente</span>
+                                <span className="text-[10px] font-semibold uppercase tracking-wider">{t('sales_points.singular')}</span>
                             </div>
                             <p className="text-sm font-semibold text-foreground">{detail.sales_point_name}- {detail.sales_point_address}</p>
                         </div>
@@ -168,7 +168,7 @@ function ComplaintDetailPanel({
                         <div className="rounded-xl border border-border bg-background/50 p-4 text-sm text-foreground leading-relaxed whitespace-pre-wrap">
                             <div className="flex items-center gap-1.5 text-muted-foreground mb-2">
                                 <MessageSquare className="size-3.5" />
-                                <span className="text-[10px] font-semibold uppercase tracking-wider">Message</span>
+                                <span className="text-[10px] font-semibold uppercase tracking-wider">{t('complaints.fields.message')}</span>
                             </div>
                             {detail.message}
                         </div>
@@ -179,12 +179,12 @@ function ComplaintDetailPanel({
                         <div>
                             <div className="flex items-center gap-1.5 text-muted-foreground mb-2">
                                 <ImageIcon className="size-3.5" />
-                                <span className="text-[10px] font-semibold uppercase tracking-wider">Photos jointes</span>
+                                <span className="text-[10px] font-semibold uppercase tracking-wider">{t('complaints.detail.attached_photos')}</span>
                             </div>
                             {loadingUrls ? (
                                 <div className="flex items-center gap-2 text-muted-foreground text-sm">
                                     <Loader2 className="size-4 animate-spin" />
-                                    <span className="text-xs">Chargement des images…</span>
+                                    <span className="text-xs">{t('complaints.detail.loading_images')}</span>
                                 </div>
                             ) : images.length > 0 ? (
                                 <div className="grid grid-cols-2 gap-3">
@@ -196,7 +196,7 @@ function ComplaintDetailPanel({
                                         >
                                             <img
                                                 src={url}
-                                                alt={`Photo ${i + 1}`}
+                                                alt={t('complaints.detail.photo_alt', { number: i + 1 })}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                             />
                                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition flex items-center justify-center">
@@ -206,7 +206,7 @@ function ComplaintDetailPanel({
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-xs text-muted-foreground">Aucune image disponible</p>
+                                <p className="text-xs text-muted-foreground">{t('complaints.detail.no_images')}</p>
                             )}
                         </div>
                     )}
@@ -318,7 +318,7 @@ export default function ComplaintsPage() {
     // Stats cards
     const cards = React.useMemo(() => [
         {
-            title: 'Total plaintes',
+            title: tCommon('complaints.stats.total'),
             value: complaints.length,
             icon: MessageSquare,
             color: 'bg-indigo-100 text-indigo-800',
@@ -327,7 +327,7 @@ export default function ComplaintsPage() {
             subColor: 'text-muted-foreground',
         },
         {
-            title: 'Avec photos',
+            title: tCommon('complaints.stats.with_photos'),
             value: complaints.filter(c => c.image_1_key || c.image_2_key).length,
             icon: ImageIcon,
             color: 'bg-violet-100 text-violet-800',
@@ -336,24 +336,24 @@ export default function ComplaintsPage() {
             subColor: 'text-muted-foreground',
         },
         {
-            title: 'Points de vente',
+            title: tCommon('complaints.stats.sales_points'),
             value: new Set(complaints.map(c => c.sales_point)).size,
             icon: MapPin,
             color: 'bg-blue-100 text-blue-800',
             iconColor: 'bg-blue-200 text-blue-900',
-            sub: 'Concernés par des plaintes',
+            sub: tCommon('complaints.stats.sales_points_sub'),
             subColor: 'text-muted-foreground',
         },
         {
-            title: 'Clients uniques',
+            title: tCommon('complaints.stats.unique_clients'),
             value: new Set(complaints.map(c => c.client_code)).size,
             icon: User,
             color: 'bg-amber-100 text-amber-800',
             iconColor: 'bg-amber-200 text-amber-900',
-            sub: 'Codes clients distincts',
+            sub: tCommon('complaints.stats.unique_clients_sub'),
             subColor: 'text-muted-foreground',
         },
-    ], [complaints])
+    ], [complaints, tCommon])
 
     // Colonnes table
     const columns: ColumnDef<Complaint>[] = [
@@ -373,7 +373,7 @@ export default function ComplaintsPage() {
         },
         {
             accessorKey: 'sales_point_name',
-            header: () => <div className='w-[140px] text-center'>Point de vente</div>,
+            header: () => <div className='w-[140px] text-center'>{t('sales_points.singular')}</div>,
             cell: ({ row }) => (
                 <div className="flex items-center gap-1.5 text-sm">
                     {row.getValue('sales_point_name')} - {row.original.sales_point_address}
@@ -382,7 +382,7 @@ export default function ComplaintsPage() {
         },
         {
             accessorKey: 'message',
-            header: () => <div className='text-center w-[460px]'>Message</div>,
+            header: () => <div className='text-center w-[460px]'>{t('complaints.fields.message')}</div>,
             cell: ({ row }) => (
                 <p className="truncate text-center text-sm text-muted-foreground">
                     {row.getValue('message')}
@@ -391,7 +391,7 @@ export default function ComplaintsPage() {
         },
         {
             accessorKey: 'image_1_key',
-            header: () => <div className="text-center w-[120px]">Photos</div>,
+            header: () => <div className="text-center w-[120px]">{tCommon('complaints.fields.photos')}</div>,
             cell: ({ row }) => {
                 const c = row.original
                 const count = [c.image_1_key, c.image_2_key].filter(Boolean).length
@@ -399,7 +399,7 @@ export default function ComplaintsPage() {
                     <div className="flex justify-center">
                         {count > 0 ? (
                             <span className="text-xs bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 px-2 py-0.5 rounded-full font-medium">
-                                {count} photo{count > 1 ? 's' : ''}
+                                {count} {count > 1 ? tCommon('complaints.table.photos') : tCommon('complaints.table.photo')}
                             </span>
                         ) : (
                             <span className="text-xs text-muted-foreground">—</span>
@@ -420,7 +420,7 @@ export default function ComplaintsPage() {
         {
             id: 'actions',
             enableHiding: false,
-            header: () => <div className="text-center w-[120px]">Détails</div>,
+            header: () => <div className="text-center w-[120px]">{tCommon('complaints.fields.details')}</div>,
             cell: ({ row }) => (
                 <div className="flex justify-center">
                     <Button
@@ -430,7 +430,7 @@ export default function ComplaintsPage() {
                         onClick={() => setSelected(row.original)}
                     >
                         <Eye className="size-4" />
-                        Voir
+                        {tCommon('complaints.actions.view')}
                     </Button>
                 </div>
             ),
@@ -449,9 +449,9 @@ export default function ComplaintsPage() {
             {/* Header */}
             <CardBodyContent className="flex items-center justify-between">
                 <div>
-                    <h2 className="font-medium text-base">Plaintes clients</h2>
+                    <h2 className="font-medium text-base">{tCommon('complaints.admin.title')}</h2>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                        {loading ? 'Chargement…' : `${complaints.length} plainte${complaints.length !== 1 ? 's' : ''}`}
+                        {loading ? tCommon('loading') : tCommon('complaints.admin.count', { count: complaints.length })}
                     </p>
                 </div>
             </CardBodyContent>
@@ -522,7 +522,7 @@ export default function ComplaintsPage() {
 
             {/* Table + filtres */}
             <CardBodyContent className="shadow border select-none rounded-lg p-5">
-                <h3 className="font-medium text-base mb-4">Liste des plaintes</h3>
+                <h3 className="font-medium text-base mb-4">{tCommon('complaints.admin.list_title')}</h3>
                 <DataTableDemo
                     setTableData={setTableInstance}
                     columns={columns}
@@ -533,7 +533,7 @@ export default function ComplaintsPage() {
                     <div className="flex flex-wrap items-center gap-3 py-4">
                         {/* Recherche texte */}
                         <Input
-                            placeholder="Rechercher par code client ou point de vente…"
+                            placeholder={tCommon('complaints.admin.search_placeholder')}
                             value={searchText}
                             onChange={e => setSearchText(e.target.value)}
                             className="max-w-xs"

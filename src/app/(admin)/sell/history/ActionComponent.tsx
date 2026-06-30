@@ -438,7 +438,7 @@ export const ActionComponent = ({
               {returnablePackages.length > 0 && (
                 <DropdownMenuItem onClick={() => setOpenSinglePopup(true)}>
                   <RotateCcw className="mr-3" size={14} />
-                  {tCommon("actions.packaging_return_single") ?? "Retour un emballage"}
+                  {tCommon("actions.packaging_return_single")}
                 </DropdownMenuItem>
               )}
             </>
@@ -504,7 +504,7 @@ export const ActionComponent = ({
         onClose={() => { setOpenSinglePopup(false); setSelectedPpbId(null); }}
       >
         <MuiDialogTitle>
-          {tCommon("dialogs.packaging_return_single") ?? `Retour emballage — Facture ${bill.bill_number}`}
+          {tCommon("dialogs.packaging_return_single", { number: bill.bill_number })}
         </MuiDialogTitle>
         <MuiDialogContent>
           <div className="space-y-3 pt-1">
@@ -512,7 +512,7 @@ export const ActionComponent = ({
               {tCommon("packaging_return.cash_note")}
             </p>
             <p className="text-sm font-medium">
-              {tCommon("packaging_return.select_single") ?? "Sélectionnez l'emballage à retourner :"}
+              {tCommon("packaging_return.select_single")}
             </p>
             <div className="space-y-2 pl-1">
               {returnablePackages.map((pkg) => (

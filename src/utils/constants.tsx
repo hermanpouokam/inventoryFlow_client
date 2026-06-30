@@ -170,49 +170,56 @@ export const LONG_LIFE_DURATION = 10 * 365 * 24 * 60 * 60;
 
 export const datesData = [
   {
-    name: "Aujourd'hui",
+    name: "today",
+    i18nKey: "date_range.presets.today",
     value: {
       from: moment().format("llll"),
       to: moment().format("llll"),
     },
   },
   {
-    name: "Hier",
+    name: "yesterday",
+    i18nKey: "date_range.presets.yesterday",
     value: {
       from: moment().subtract(1, "days").format("llll"),
       to: moment().subtract(1, "days").format("llll"),
     },
   },
   {
-    name: "Cette semaine",
+    name: "this_week",
+    i18nKey: "date_range.presets.this_week",
     value: {
       from: moment().startOf("isoWeek").format("llll"),
       to: moment().endOf("isoWeek").format("llll"),
     },
   },
   {
-    name: "Ce mois-ci",
+    name: "this_month",
+    i18nKey: "date_range.presets.this_month",
     value: {
       from: moment().startOf("month").format("llll"),
       to: moment().endOf("month").format("llll"),
     },
   },
   {
-    name: "Le mois dernier",
+    name: "last_month",
+    i18nKey: "date_range.presets.last_month",
     value: {
       from: moment().subtract(1, "month").startOf("month").format("llll"),
       to: moment().subtract(1, "month").endOf("month").format("llll"),
     },
   },
   {
-    name: "Cette année",
+    name: "this_year",
+    i18nKey: "date_range.presets.this_year",
     value: {
       from: moment().startOf("year").format("llll"),
       to: moment().endOf("year").format("llll"),
     },
   },
   {
-    name: "L'année dernière",
+    name: "last_year",
+    i18nKey: "date_range.presets.last_year",
     value: {
       from: moment().subtract(1, "year").startOf("year").format("llll"),
       to: moment().subtract(1, "year").endOf("year").format("llll"),
@@ -287,43 +294,42 @@ export const plansDataTranslate = {
 };
 
 export const userErrors = {
-  "USER NOT FOUND": "Cet utilisateur n'existe pas.",
-  "INCORRECT PASSWORD": "Nom d'utilisateur ou mot de passe incorrect.",
-  "INACTIVE USER":
-    "Vous avez été désactivé(e). Veuillez contacter votre administrateur.",
+  "USER NOT FOUND": "auth_signin.errors.user_not_found",
+  "INCORRECT PASSWORD": "auth_signin.errors.incorrect_password",
+  "INACTIVE USER": "auth_signin.errors.inactive_user",
 };
 
 export const userRegErrors = {
-  "USERNAME_ALREADY_EXIST":
-    "Ce nom d'utilisateur est déjà pris. Veuillez en choisir un autre.",
-  "EMAIL_ALREADY_EXIST": "Un compte avec cet email existe déjà.",
+  "USERNAME_ALREADY_EXIST": "auth_signup.errors.username_already_exist",
+  "EMAIL_ALREADY_EXIST": "auth_signup.errors.email_already_exist",
 };
 
 export const translate = {
-  percentage: "pourcentage",
-  supply: "achat",
-  bill: "vente",
-  flat: "fixe",
-  plan_id: "plan",
-  name: "nom",
-  address: "adresse",
-  number: "numéro",
-  phone: "numéro",
-  currency: "devise",
+  percentage: "taxes.types.percentage",
+  supply: "taxes.applications.supply",
+  bill: "taxes.applications.bill",
+  flat: "taxes.types.flat",
+  plan_id: "billing.plan",
+  name: "name",
+  address: "address",
+  number: "fields.number",
+  phone: "phone",
+  currency: "enterprise_information.currency",
   email: "email",
-  nc: "Numéro de contribuable",
+  nc: "fields.taxpayer_number",
 };
 
-export const mois = [
-  "janvier",
-  "février",
-  "mars",
-  "avril",
-  "mai",
-  "juin",
-  "juillet",
-  "août",
-  "octobre",
-  "novembre",
-  "décembre",
+export const monthKeys = [
+  "dates.months.january",
+  "dates.months.february",
+  "dates.months.march",
+  "dates.months.april",
+  "dates.months.may",
+  "dates.months.june",
+  "dates.months.july",
+  "dates.months.august",
+  "dates.months.september",
+  "dates.months.october",
+  "dates.months.november",
+  "dates.months.december",
 ];

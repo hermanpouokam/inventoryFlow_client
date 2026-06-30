@@ -118,7 +118,7 @@ export default function Page() {
 
     } catch (error) {
       const code = error?.response?.data?.code;
-      setError(userRegErrors[code]);
+      setError(tCommon(userRegErrors[code] ?? "auth_signup.errors.default"));
       if (code === 'user_not_found') {
         console.log(tAuth("signup.retrying_creation"));
         clearStorageAndCookies('/signup');
@@ -166,7 +166,7 @@ export default function Page() {
         <div className="text-center mb-3">
           <a href="">
             <div className="inline-flex items-center justify-center  rounded-2xl mb-4">
-              <Image src={logo.src} alt="Logo Interact" width={150} height={32} />
+              <Image src={logo.src} alt={tCommon("settings_config.logo")} width={150} height={32} />
             </div>
           </a>
           <p className="text-xl font-semibold tracking-tight">

@@ -359,7 +359,7 @@ const InvoicePDF = ({ bill }: { bill: Bill | null }) => {
             <View style={{ alignItems: "center" }}>
               <Image src={qrImage} style={{ width: 45, height: 45 }} />
               <Text style={[styles.footer, { marginTop: 3, fontSize: 6 }]}>
-                Faites une remarque
+                {t("pdf.remark_prompt")}
               </Text>
             </View>
           )}

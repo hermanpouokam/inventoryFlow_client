@@ -117,7 +117,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <h3 className="text-lg font-semibold">{product?.name}</h3>
       </CardBodyContent>
       <CardBodyContent className="space-y-5">
-        <Divider>{"DETAILS D'EMBALLAGE"} </Divider>
+        <Divider>{t("packagings.details_title")}</Divider>
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-3">
           {inputData.map((input) => {
             if (input?.name != "supplier") {

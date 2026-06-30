@@ -358,7 +358,7 @@ const InvoiceSmallPDF = ({ bill }: { bill: Bill | null }) => {
             <View style={{ alignItems: "flex-end", marginBottom: -5 }}>
               <Image src={qrImage} style={{ width: 30, height: 30 }} />
               <Text style={[styles.footer, { marginTop: 2, fontSize: 5 }]}>
-                Faites une remarque
+                {t("pdf.remark_prompt")}
               </Text>
             </View>
           )}

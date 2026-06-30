@@ -95,7 +95,7 @@ function Navbar() {
       <div className="container mx-auto flex max-w-[1440px] items-center justify-between px-4 py-4 sm:px-6">
         <a href="#" className="flex items-center gap-2 text-xl font-bold text-hero-foreground">
           {/* <Package className="h-7 w-7 text-primary" /> */}
-          <img src={logo.src} alt="logo" className="w-32 h-auto" />
+          <img src={logo.src} alt={tCommon("settings_config.logo")} className="w-32 h-auto" />
         </a>
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((l) => (
@@ -808,7 +808,7 @@ function FAQ() {
       <div className="pointer-events-none absolute -right-10 bottom-1/4 h-40 w-2 rounded-full gradient-primary opacity-10" />
 
       <div className="relative text-center">
-        <SectionLabel>FAQ</SectionLabel>
+        <SectionLabel>{tCommon('landing.nav.faq')}</SectionLabel>
         <h2 className="mt-4 text-3xl font-bold text-foreground sm:text-4xl">
           {tCommon('landing.faq.title')}
         </h2>
@@ -880,9 +880,9 @@ function FAQ() {
             <div className="mt-6 rounded-xl border border-primary/10 bg-card/50 p-4">
               <p className="text-xs italic text-muted-foreground">{tCommon('landing.faq.help.quote')}</p>
               <div className="mt-3 flex items-center gap-2">
-                <div className="h-6 w-6 rounded-full gradient-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground">M</div>
-                <span className="text-xs font-medium text-foreground">Marie L.</span>
-                <span className="text-[10px] text-muted-foreground">· ModaBoutique</span>
+                <div className="h-6 w-6 rounded-full gradient-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground">{tCommon("landing.faq.help.avatar_initial")}</div>
+                <span className="text-xs font-medium text-foreground">{tCommon("landing.faq.help.person_name")}</span>
+                <span className="text-[10px] text-muted-foreground">{tCommon("landing.faq.help.person_company")}</span>
               </div>
             </div>
           </div>
@@ -1037,7 +1037,7 @@ function Footer() {
               <p className="text-xs font-medium text-hero-foreground mb-2">{tCommon('landing.footer.newsletter')}</p>
               <div className="flex gap-2">
                 <input placeholder={tCommon('landing.footer.email_placeholder')} className="flex-1 rounded-lg border border-hero-foreground/10 bg-transparent px-3 py-1.5 text-xs text-hero-foreground placeholder:text-hero-muted focus:outline-none focus:border-primary/40" />
-                <button className="rounded-lg gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">OK</button>
+                <button className="rounded-lg gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">{tCommon('landing.footer.newsletter_submit')}</button>
               </div>
             </div>
           </div>

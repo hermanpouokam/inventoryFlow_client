@@ -390,7 +390,7 @@ export default function Page() {
                                     : <p className='text-base text-center font-normal w-full'>{tCommon('loading')}...</p>}
                             </div>
                             <Divider className='uppercase my-5 space-x-1'>
-                                Permissions de page de l'utilisateur
+                                {tCommon('user_page_permissions')}
                             </Divider>
                             <p className='mb-5 text-accent-foreground text-sm font-medium'>{tCommon('user_page_permission_text')}</p>
                             <div className='flex flex-wrap gap-2'>

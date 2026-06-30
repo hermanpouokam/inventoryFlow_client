@@ -29,37 +29,43 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  title: "InventoryFlow",
-  description: "Multi-POS inventory management",
-  applicationName: "InventoryFlow",
-  manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
+export async function generateMetadata(): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const lng = cookieStore.get('i18next')?.value || fallbackLng;
+  const i18n = await initI18nServer(lng, 'common');
+
+  return {
     title: "InventoryFlow",
-  },
-  icons: {
-    icon: [
-      { url: "/icons/favicon.ico", sizes: "any" },
-      { url: "/icons/icon.svg", type: "image/svg+xml" },
-      { url: "/icons/icon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [
-      { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
-    other: [
-      { rel: "mask-icon", url: "/icons/icon.svg", color: "#5b21b6" },
-    ],
-  },
-  openGraph: {
-    title: "InventoryFlow",
-    description: "Multi-POS inventory management",
-    images: [{ url: "/icons/icon-512x512.png" }],
-  },
-};
+    description: i18n.t("common:metadata.root.description"),
+    applicationName: "InventoryFlow",
+    manifest: "/manifest.json",
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "black-translucent",
+      title: "InventoryFlow",
+    },
+    icons: {
+      icon: [
+        { url: "/icons/favicon.ico", sizes: "any" },
+        { url: "/icons/icon.svg", type: "image/svg+xml" },
+        { url: "/icons/icon-32x32.png", sizes: "32x32", type: "image/png" },
+        { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+        { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
+      ],
+      apple: [
+        { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      ],
+      other: [
+        { rel: "mask-icon", url: "/icons/icon.svg", color: "#5b21b6" },
+      ],
+    },
+    openGraph: {
+      title: "InventoryFlow",
+      description: i18n.t("common:metadata.root.description"),
+      images: [{ url: "/icons/icon-512x512.png" }],
+    },
+  };
+}
 
 
 export default async function RootLayout({

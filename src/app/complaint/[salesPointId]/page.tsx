@@ -9,6 +9,7 @@ import * as React from 'react';
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import CardBodyContent from "@/components/CardContent"
+import { useTranslation } from "react-i18next"
 
 interface SalesPointInfo {
     id: number
@@ -26,19 +27,21 @@ async function getPresignedUrl(filename: string, contentType: string) {
 
 async function uploadToS3(
     file: File,
-    presigned: { upload_url: string; fields: Record<string, string>; s3_key: string }
+    presigned: { upload_url: string; fields: Record<string, string>; s3_key: string },
+    uploadFailedMessage: string
 ) {
     // Upload direct vers S3 — pas via notre backend, donc fetch natif
     const form = new FormData()
     Object.entries(presigned.fields).forEach(([k, v]) => form.append(k, v))
     form.append("file", file)
     const res = await fetch(presigned.upload_url, { method: "POST", body: form })
-    if (!res.ok) throw new Error("Échec de l'upload de l'image")
+    if (!res.ok) throw new Error(uploadFailedMessage)
     return presigned.s3_key
 }
 
 export default function ComplaintPage({ params }: { params: React.Usable<{ salesPointId: string; }> }) {
     const { salesPointId: salesPointSlug } = React.use(params);
+    const { t } = useTranslation("common")
 
     const [salesPoint, setSalesPoint] = useState<SalesPointInfo | null>(null)
     const [loadingInfo, setLoadingInfo] = useState(true)
@@ -89,7 +92,7 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
         setError(null)
 
         if (!clientCode.trim() || !message.trim()) {
-            setError("Veuillez remplir votre code client et votre message.")
+            setError(t("complaints.public.validation_required"))
             return
         }
 
@@ -100,11 +103,11 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
 
             if (images[0]) {
                 const p = await getPresignedUrl(images[0].name, images[0].type)
-                image_1_key = await uploadToS3(images[0], p)
+                image_1_key = await uploadToS3(images[0], p, t("complaints.public.image_upload_failed"))
             }
             if (images[1]) {
                 const p = await getPresignedUrl(images[1].name, images[1].type)
-                image_2_key = await uploadToS3(images[1], p)
+                image_2_key = await uploadToS3(images[1], p, t("complaints.public.image_upload_failed"))
             }
 
             await publicInstance.post(`/complaints/submit/${salesPointSlug}/`, {
@@ -116,7 +119,7 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
 
             setSuccess(true)
         } catch (err: any) {
-            setError(err.response?.data?.error || err.message || "Une erreur est survenue.")
+            setError(err.response?.data?.error || err.message || t("complaints.public.generic_error"))
         } finally {
             setUploading(false)
         }
@@ -136,8 +139,8 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
                 <div className="text-center">
-                    <p className="text-2xl font-bold text-gray-800">Point de vente introuvable</p>
-                    <p className="text-gray-500 mt-2 text-sm">Le QR code scanné n'est plus valide.</p>
+                    <p className="text-2xl font-bold text-gray-800">{t("complaints.public.sales_point_not_found")}</p>
+                    <p className="text-gray-500 mt-2 text-sm">{t("complaints.public.invalid_qr")}</p>
                 </div>
             </div>
         )
@@ -152,11 +155,11 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
                             <CheckCircle className="size-10 text-green-500" />
                         </div>
                     </div>
-                    <h2 className="text-xl font-semibold mb-2">Plainte envoyée !</h2>
+                    <h2 className="text-xl font-semibold mb-2">{t("complaints.public.success_title")}</h2>
                     <p className="text-muted-foreground text-sm">
-                        Votre message a bien été reçu par{" "}
+                        {t("complaints.public.success_received_prefix")}{" "}
                         <span className="font-medium">{salesPoint?.name}</span>.
-                        Notre équipe vous contactera dans les meilleurs délais.
+                        {" "}{t("complaints.public.success_follow_up")}
                     </p>
                 </CardBodyContent>
             </div>
@@ -172,13 +175,13 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
                 {/* En-tête */}
                 <div className="mb-8 text-center">
                     <h1 className="text-2xl font-bold">
-                        {salesPoint?.name ?? "Point de vente"}
+                        {salesPoint?.name ?? t("sales_points.singular")}
                     </h1>
                     {salesPoint?.address && (
                         <p className="text-sm text-muted-foreground mt-1">{salesPoint.address}</p>
                     )}
                     <p className="text-sm text-muted-foreground mt-4">
-                        Une expérience à signaler ? Décrivez-nous votre problème ci-dessous.
+                        {t("complaints.public.intro")}
                     </p>
                 </div>
 
@@ -196,30 +199,30 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
                     {/* Code client */}
                     <div>
                         <Label className="block text-sm font-medium mb-1">
-                            Code client <span className="text-red-500">*</span>
+                            {t("customer_code")} <span className="text-red-500">*</span>
                         </Label>
                         <Input
                             type="text"
                             value={clientCode}
                             onChange={e => setClientCode(e.target.value.toUpperCase())}
-                            placeholder="Ex : AB12XY"
+                            placeholder={t("complaints.public.client_code_placeholder")}
                             className=""
                         />
                         <p className="text-xs text-gray-400 mt-1">
-                            Votre code client figure sur votre facture.
+                            {t("complaints.public.client_code_help")}
                         </p>
                     </div>
 
                     {/* Message */}
                     <div>
                         <Label className="block text-sm font-medium mb-1">
-                            Votre message <span className="text-red-500">*</span>
+                            {t("complaints.public.your_message")} <span className="text-red-500">*</span>
                         </Label>
                         <textarea
                             value={message}
                             onChange={e => setMessage(e.target.value)}
                             rows={5}
-                            placeholder="Décrivez votre problème en détail..."
+                            placeholder={t("complaints.public.message_placeholder")}
                             className={
                                 `w-full px-4 py-3 text-sm rounded-xl bg-neutral-500/5 dark:bg-white/5 border border-zinc-500/10 text-black dark:text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-transparent
                                     transition-all duration-200
@@ -235,7 +238,7 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
                     {/* Images */}
                     <div>
                         <Label className="block text-sm font-medium mb-2">
-                            Photos (facultatif, max 2)
+                            {t("complaints.public.photos_label")}
                         </Label>
                         <div className="grid grid-cols-2 gap-3">
                             {[0, 1].map(idx => (
@@ -258,7 +261,7 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
                                             className="w-full aspect-video rounded-xl border-2 border-dashed border-muted-foreground flex flex-col items-center text-muted-foreground justify-center gap-1 hover:border-primary hover:text-primary transition cursor-pointer"
                                         >
                                             <Upload className="size-5" />
-                                            <span className="text-xs">Ajouter photo</span>
+                                            <span className="text-xs">{t("complaints.public.add_photo")}</span>
                                         </button>
                                     )}
                                     <input
@@ -282,10 +285,10 @@ export default function ComplaintPage({ params }: { params: React.Usable<{ sales
                     >
                         {uploading ? (
                             <span className="flex items-center gap-2">
-                                <Loader2 className="size-4 animate-spin" /> Envoi en cours...
+                                <Loader2 className="size-4 animate-spin" /> {t("complaints.public.sending")}
                             </span>
                         ) : (
-                            "Envoyer ma plainte"
+                            t("complaints.public.submit")
                         )}
                     </Button>
                 </form>

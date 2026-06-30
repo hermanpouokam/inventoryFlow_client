@@ -79,7 +79,7 @@ const GeneralInformations = React.memo(() => {
             return (
               <div key={key} className="grid grid-cols-2 sm:grid-cols-3">
                 <label className="text-base font-semibold first-letter:capitalize">
-                  {translate[key]}:
+                  {t(translate[key] ?? key)}:
                 </label>
                 <PhoneNumberField
                   key={enterprise?.phone}
@@ -93,7 +93,7 @@ const GeneralInformations = React.memo(() => {
             return (
               <div key={key} className="grid grid-cols-2 sm:grid-cols-3">
                 <label className="text-base font-semibold first-letter:capitalize">
-                  {translate[key]}:
+                  {t(translate[key] ?? key)}:
                 </label>
                 <Combobox
                   options={["USD", "EUR", "GBP", "XAF"]}
@@ -113,7 +113,7 @@ const GeneralInformations = React.memo(() => {
           return (
             <div key={key} className="grid grid-cols-2 sm:grid-cols-3">
               <label className="text-base font-semibold first-letter:capitalize">
-                {translate[key]} :
+                {t(translate[key] ?? key)} :
               </label>
               <TextField
                 type="text"

@@ -1,7 +1,7 @@
 "use client";
 import { instance } from "@/components/fetch";
 import { Button } from "@/components/ui/button";
-import { mois } from "@/utils/constants";
+import { monthKeys } from "@/utils/constants";
 import { CircularProgress } from "@mui/material";
 import { CheckCircle, CircleAlert, Ellipsis, Pencil, Printer, Wallet } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
@@ -166,7 +166,7 @@ const PaymentInformations = React.memo(() => {
             {t("enterprise_information.next_due_date")}:{" "}
             <span className="capitalize">
               {moment(subscription.expires_at).format("DD")}{" "}
-              {mois[moment(subscription.expires_at).month()]}{" "}
+              {t(monthKeys[moment(subscription.expires_at).month()])}{" "}
               {moment(subscription.expires_at).format("YYYY")}
             </span>
           </p>

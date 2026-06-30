@@ -385,7 +385,7 @@ export default function UserSettings() {
 
     const activeCat = userSettingsConfig.find((c) => c.id === activeTab);
 
-    if (loading || !values) return <div className="w-full h-screen ">loading...</div>;
+    if (loading || !values) return <div className="w-full h-screen ">{tCommon("loading")}</div>;
 
     return (
         <div className="min-h-screen">

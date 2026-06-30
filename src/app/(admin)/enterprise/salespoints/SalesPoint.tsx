@@ -1064,13 +1064,13 @@ function SalesPoint() {
                               {el.tax_name}
                             </TableCell>
                             <TableCell className="font-medium capitalize">
-                              {translate[el.tax_type]}
+                              {t(translate[el.tax_type] ?? el.tax_type)}
                             </TableCell>
                             <TableCell className="truncate">
                               {Number(el.value)}
                             </TableCell>
                             <TableCell className="font-medium capitalize">
-                              {translate[el.tax_application]}
+                              {t(translate[el.tax_application] ?? el.tax_application)}
                             </TableCell>
                             <TableCell className="text-right">
                               {el.is_active ? (
@@ -1183,16 +1183,16 @@ function SalesPoint() {
                               {el.name}
                             </TableCell>
                             <TableCell className="font-medium capitalize">
-                              {translate[el.fee_type] ?? el.fee_type}
+                              {t(translate[el.fee_type] ?? el.fee_type)}
                             </TableCell>
                             <TableCell className="truncate">
                               {Number(el.amount)}
                             </TableCell>
                             <TableCell className="font-medium capitalize">
-                              {translate[el.fee_application] ?? el.fee_application}
+                              {t(translate[el.fee_application] ?? el.fee_application)}
                             </TableCell>
                             <TableCell className="font-medium capitalize">
-                              {translate[el.application_order] ?? el.application_order}
+                              {t(translate[el.application_order] ?? el.application_order)}
                             </TableCell>
                             <TableCell className="text-right">
                               {el.is_active ? (

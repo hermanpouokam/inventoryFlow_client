@@ -1,10 +1,12 @@
 import { instance } from "@/components/fetch";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 
 
 
 export function useEnterpriseSettings() {
+    const { t } = useTranslation("common");
     const [values, setValues] = useState<Record<string, any> | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -79,7 +81,7 @@ export function useEnterpriseSettings() {
             try {
                 const res = await instance.get('/settings/', { withCredentials: true })
 
-                if (!res) throw new Error("Impossible de charger les paramètres");
+                if (!res) throw new Error(t("settings.load_error"));
 
                 const data = res.data;
 
@@ -94,7 +96,7 @@ export function useEnterpriseSettings() {
         };
 
         fetchSettings();
-    }, []);
+    }, [t]);
 
     return { values, setValues, loading, formatValues, formatFlatValues };
 }

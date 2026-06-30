@@ -54,36 +54,36 @@ function groupBillsBy(
   }, {});
 }
 
-const monthsInFrench = [
-  "janvier",
-  "février",
-  "mars",
-  "avril",
-  "mai",
-  "juin",
-  "juillet",
-  "aout",
-  "septembre",
-  "octobre",
-  "novembre",
-  "décembre",
+const dashboardMonthKeys = [
+  "dates.months.january",
+  "dates.months.february",
+  "dates.months.march",
+  "dates.months.april",
+  "dates.months.may",
+  "dates.months.june",
+  "dates.months.july",
+  "dates.months.august",
+  "dates.months.september",
+  "dates.months.october",
+  "dates.months.november",
+  "dates.months.december",
 ];
 
-const weeksInFrench = [
-  "lundi",
-  "mardi",
-  "mercredi",
-  "jeudi",
-  "vendredi",
-  "samedi",
-  "dimanche",
+const dashboardWeekdayKeys = [
+  "dates.weekdays.monday",
+  "dates.weekdays.tuesday",
+  "dates.weekdays.wednesday",
+  "dates.weekdays.thursday",
+  "dates.weekdays.friday",
+  "dates.weekdays.saturday",
+  "dates.weekdays.sunday",
 ];
 
 const translateRole = {
   "deliverer": "livreur",
   "secretary": "sécrétaire"
 }
-export { groupBillsBy, monthsInFrench, weeksInFrench, translateRole };
+export { groupBillsBy, dashboardMonthKeys, dashboardWeekdayKeys, translateRole };
 
 
 export const getPeriods = () => {

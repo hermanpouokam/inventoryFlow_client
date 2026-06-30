@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: eu-north-1
+  AWS_REGION: eu-west-3
   ECR_REPOSITORY: nextjs-app
   ECS_CLUSTER: nextjs-cluster
   ECS_SERVICE: nextjs-service
@@ -27,7 +27,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::861104818335:role/github-actions-oidc-role
+          role-to-assume: arn:aws:iam::725652782419:role/github-actions-oidc-role
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
@@ -65,11 +65,11 @@ jobs:
             "requiresCompatibilities": ["FARGATE"],
             "cpu": "512",
             "memory": "1024",
-            "executionRoleArn": "arn:aws:iam::861104818335:role/ecsTaskExecutionRole",
+            "executionRoleArn": "arn:aws:iam::725652782419:role/ecsTaskExecutionRole",
             "containerDefinitions": [
               {
                 "name": "nextjs",
-                "image": "861104818335.dkr.ecr.eu-north-1.amazonaws.com/nextjs-app:latest",
+                "image": "725652782419.dkr.ecr.eu-west-3.amazonaws.com/nextjs-app:latest",
                 "portMappings": [{ "containerPort": 3000, "protocol": "tcp" }],
                 "essential": true,
                 "environment": [
@@ -89,7 +89,7 @@ jobs:
                   "logDriver": "awslogs",
                   "options": {
                     "awslogs-group": "/ecs/nextjs-app",
-                    "awslogs-region": "eu-north-1",
+                    "awslogs-region": "eu-west-3",
                     "awslogs-stream-prefix": "ecs"
                   }
                 }

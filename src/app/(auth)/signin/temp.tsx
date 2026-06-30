@@ -17,7 +17,7 @@ export default function Signin() {
     const [loading, setLoading] = useState(false);
     const [inputsValue, setInputsValue] = useState();
     const { t: tCommon } = useTranslation('common')
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     const router = useRouter();
 
@@ -58,8 +58,8 @@ export default function Signin() {
 
             }
         } catch (error) {
-            const code = error.response.data.code;
-            setError(userErrors[code]);
+            const code = error.response.data.code as keyof typeof userErrors;
+            setError(tCommon(userErrors[code] ?? "auth_signin.errors.default"));
             setLoading(false);
         } finally {
         }
@@ -72,7 +72,7 @@ export default function Signin() {
             <div className="relative w-full max-w-md z-10">
                 <div className="text-center mb-10">
                     <div className="inline-flex items-center justify-center  rounded-2xl mb-4  ">
-                        <Image src={logo.src} alt="Logo Interact" width={150} height={32} />
+                        <Image src={logo.src} alt={tCommon("settings_config.logo")} width={150} height={32} />
                     </div>
                     <h1 className="text-2xl font-semibold tracking-tight">{tCommon("auth_signin.welcome")}</h1>
                     <p className="text-sm text-muted-foreground mt-1">{tCommon("auth_signin.subtitle")}</p>

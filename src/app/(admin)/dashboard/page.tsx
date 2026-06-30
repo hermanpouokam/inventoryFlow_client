@@ -45,8 +45,8 @@ import {
 import {
   getPeriods,
   groupBillsBy,
-  monthsInFrench,
-  weeksInFrench,
+  dashboardMonthKeys,
+  dashboardWeekdayKeys,
 } from "./functions";
 import CardBodyContent from "@/components/CardContent";
 import { fetchEmployees } from "@/redux/employeesSlicer";
@@ -490,6 +490,7 @@ export default function Page() {
     productsError,
     billsStatus,
     billsError,
+    tCommon,
   ]);
 
   const periods = getPeriods();
@@ -498,7 +499,7 @@ export default function Page() {
   const [loadingData, setLoadingData] = React.useState(false);
 
   useEffect(() => {
-    document.title = "Tableau de bord";
+    document.title = tCommon("dashboard.title");
     setLoadingData(true);
     const groupedBills = groupBillsBy(
       bills.filter((bill) => bill.state !== "created"),
@@ -510,11 +511,11 @@ export default function Page() {
       const date = moment(key);
       switch (groupBy) {
         case "day":
-          return weeksInFrench[date.day() - 1]?.slice(0, 3);
+          return tCommon(dashboardWeekdayKeys[date.isoWeekday() - 1]).slice(0, 3);
         case "day-number":
-          return `${date.format("D")} ${monthsInFrench[date.month()].slice(0, 3)}`;
+          return `${date.format("D")} ${tCommon(dashboardMonthKeys[date.month()]).slice(0, 3)}`;
         case "month":
-          return `${monthsInFrench[date.month()].slice(0, 3)}`;
+          return `${tCommon(dashboardMonthKeys[date.month()]).slice(0, 3)}`;
         default:
           return "";
       }

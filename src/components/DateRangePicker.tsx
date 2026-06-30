@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 
 type DatePreset = {
   name: string;
+  i18nKey?: string;
   value: DateRange;
 };
 
@@ -93,7 +94,7 @@ export function DateRangePicker({
               <SelectContent className="bg-card shadow-[0_16px_40px_0px_rgba(0,0,0,0.7)] dark:bg-[#212121]">
                 {datesData.map((preset) => (
                   <SelectItem key={preset.name} value={preset.name}>
-                    {preset.name}
+                    {tCommon(preset.i18nKey ?? preset.name)}
                   </SelectItem>
                 ))}
               </SelectContent>
