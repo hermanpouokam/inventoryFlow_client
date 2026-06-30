@@ -436,10 +436,10 @@ export default function Checkout() {
                           {t("checkout.mobile_request_sent", { reference: notchPayReference.slice(0, 8) })}
                         </p>
                       )}
-
+{/* 
                       <p className="text-xs text-muted-foreground pt-1">
                         {t("checkout.sandbox_hint")}
-                      </p>
+                      </p> */}
                     </div>
 
                   ) : (
